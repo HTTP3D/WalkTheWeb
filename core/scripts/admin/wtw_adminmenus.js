@@ -203,7 +203,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.copyMyCommunity();
 						break;
 					case 'wtw_admincommunitydelete':
-						WTW.openConfirmation('2');
+						WTW.openConfirmation('Delete 3D Community');
 						break;
 					case 'wtw_admincommunityshare':
 						WTW.hideAdminMenu();
@@ -237,11 +237,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
-					case 'wtw_admincommunityaddbuilding':
-						WTW.hideAdminMenu();
-						wtw3dinternet.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
-						WTW.show('wtw_adminmenu27');
-						break;
 					case 'wtw_admincommunityaddthing':
 						WTW.hideAdminMenu();
 						WTW.getAddThingList();
@@ -261,18 +256,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 					case 'wtw_cancel27':	
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu26');
-						break;
-					case 'wtw_bback29':
-					case 'wtw_cancel29':	
-						WTW.hideAdminMenu();
-						WTW.saveShareCommunityForm();
-						WTW.show('wtw_adminmenu24');
-						break;
-					case 'wtw_bsharecommunitytemp':
-						WTW.saveShareCommunityForm();
-						if (dGet('wtw_bsharecommunitytemp').innerHTML.indexOf('Share 3D Community as Template') > -1) {
-							WTW.openConfirmation('5');
-						}
 						break;
 					case 'wtw_adminlandscapesky':
 						WTW.hideAdminMenu();
@@ -422,7 +405,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.copyMyBuilding();
 						break;
 					case 'wtw_adminbuildingdelete':
-						WTW.openConfirmation('1');
+						WTW.openConfirmation('Delete 3D Building');
 						break;
 					case 'wtw_adminbuildingshare':
 						WTW.hideAdminMenu();
@@ -445,22 +428,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.hideAdminMenu();
 						WTW.submitBuildingForm(-1);
 						WTW.backToTools();
-						break;
-					case 'wtw_bback9':
-						WTW.hideAdminMenu();
-						WTW.saveShareBuildingForm();
-						WTW.show('wtw_adminmenu4');
-						break;
-					case 'wtw_bsharebuildingtemp':
-						WTW.saveShareBuildingForm();
-						if (dGet('wtw_bsharebuildingtemp').innerHTML.indexOf('Share 3D Building as Template') > -1) {
-							WTW.openConfirmation('4');
-						}
-						break;
-					case 'wtw_adminmenubuildsharecancel':
-						WTW.hideAdminMenu();
-						WTW.saveShareBuildingForm();
-						WTW.show('wtw_adminmenu4');
 						break;
 					case 'wtw_adminbuildingsnapshot':	
 						WTW.hideAdminMenu();
@@ -503,7 +470,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.copyMyThing();
 						break;
 					case 'wtw_adminthingdelete':
-						WTW.openConfirmation('6');
+						WTW.openConfirmation('Delete 3D Thing');
 						break;
 					case 'wtw_adminthingshare':
 						WTW.hideAdminMenu();
@@ -545,22 +512,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.hideAdminMenu();
 						WTW.openRecoverItems();
 						WTW.show('wtw_adminmenu16');
-						break;
-					case 'wtw_bback39':
-						WTW.hideAdminMenu();
-						WTW.saveShareThingForm();
-						WTW.show('wtw_adminmenu34');
-						break;
-					case 'wtw_bsharethingtemplate':
-						WTW.saveShareThingForm();
-						if (dGet('wtw_bsharethingtemplate').innerHTML.indexOf('Share 3D Thing as Template') > -1) {
-							WTW.openConfirmation('7');
-						}
-						break;
-					case 'wtw_cancel39':	
-						WTW.hideAdminMenu();
-						WTW.saveShareThingForm();
-						WTW.show('wtw_adminmenu34');
 						break;
 					case 'wtw_adminthingsnapshot':	
 						WTW.hideAdminMenu();
@@ -700,22 +651,12 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.copyMyAvatar();
 						break;
 					case 'wtw_adminavatardelete':
-						WTW.openConfirmation('8');
+						WTW.openConfirmation('Delete 3D Avatar');
 						break;
 					case 'wtw_adminavatarshare':
 						WTW.hideAdminMenu();
 						WTW.openShareAvatarForm();
 						WTW.show('wtw_adminShareAvatarDiv');
-						break;
-					case 'wtw_bbackwtw_adminShareAvatarDiv':
-					case 'wtw_cancelshareavatar':
-						WTW.hideAdminMenu();
-						WTW.saveShareAvatarForm();
-						WTW.backToTools();
-						break;
-					case 'wtw_bshareavatartemplate':
-						WTW.saveShareAvatarForm();
-						WTW.openConfirmation('9');
 						break;
 					case 'wtw_adminsettingsavatar':
 						WTW.hideAdminMenu();
@@ -894,6 +835,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 				}
 			}
 		}
+		WTW.pluginsAdminMenuItemSelected(zobj);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmenus.js-adminMenuItemSelected=' + ex.message);
 	}
@@ -1925,3 +1867,54 @@ WTWJS.prototype.toggleAdvanced = function(thisdiv, sectiondiv) {
 	}
 }
 
+WTWJS.prototype.checkForUpdates = async function(zshow, zfilter) {
+	/* check for updates for WalkTheWeb, 3D Plugins, 3D Communities, 3D Buildings, 3D Things, and 3D Avatars */
+	try {
+		if (zshow == undefined) {
+			zshow = '1';
+		}
+		if (zfilter == undefined) {
+			zfilter = 'All 3D Plugins';
+		}
+		WTW.pluginsCheckForUpdates(zshow, zfilter);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminmenus.js-checkForUpdates=' + ex.message);
+	}
+}
+
+WTWJS.prototype.updateBadges = async function() {
+	/* update the display badges in the admin menu */
+	/* to fully check for updates, use the 3D Internet Plugin function: WTW.checkForUpdates('1'); */
+	try {
+		var ztotaldashboardupdates = 0;
+		var ztotalupdates = 0;
+		WTW.hide('wtw_admindashboardbadge');
+		WTW.hide('wtw_adminmenudashboardbadge');
+		WTW.hide('wtw_adminmenuupdatesbadge');
+		WTW.hide('wtw_adminmenufeedbackbadge');
+		if (dGet('wtw_adminmenufeedbackbadge') != null) {
+			if (dGet('wtw_adminmenufeedbackbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminmenufeedbackbadge').innerHTML)) {
+					if (Number(dGet('wtw_adminmenufeedbackbadge').innerHTML) > 0) {
+						ztotaldashboardupdates += Number(dGet('wtw_adminmenufeedbackbadge').innerHTML);
+						WTW.showInline('wtw_adminmenufeedbackbadge');
+					}
+				}
+			}
+		}
+		dGet('wtw_tbadgesupdates').value = ztotalupdates;
+		dGet('wtw_tbadges').value = ztotaldashboardupdates;
+		if (ztotalupdates > 0 && dGet('wtw_adminmenuupdatesbadge') != null) {
+			dGet('wtw_adminmenuupdatesbadge').innerHTML = ztotalupdates;
+			WTW.showInline('wtw_adminmenuupdatesbadge');
+		}
+		if (ztotaldashboardupdates > 0 && dGet('wtw_admindashboardbadge') != null) {
+			dGet('wtw_admindashboardbadge').innerHTML = ztotaldashboardupdates;
+			WTW.showInline('wtw_admindashboardbadge');
+		}
+		/* allow plugins to add to the totals of the update badges */
+		WTW.pluginsUpdateBadges(ztotalupdates, ztotaldashboardupdates);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminmenus.js-updateBadges=' + ex.message);
+	}
+}

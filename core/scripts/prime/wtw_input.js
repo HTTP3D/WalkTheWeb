@@ -2500,7 +2500,7 @@ WTWJS.prototype.onMicrophoneGranted = async function(zstream) {
 			/* Creating AudioWorkletNode sending context and name of processor registered in worker script */
 			WTW.audioSend.audioNode = new AudioWorkletNode(WTW.audioSend, 'voicechatsend')
 			
-			let recordBuffer;
+			let zrecordbuffer;
 			
 			/* Listing any message from AudioWorkletProcessor in its process method here where you can know the volume level */
 			WTW.audioSend.audioNode.port.onmessage = zevent => {
@@ -2510,18 +2510,8 @@ WTWJS.prototype.onMicrophoneGranted = async function(zstream) {
 					zvolume = zevent.data.volume;
 				}
 				WTW.onMicVolumeChange((zvolume * 100) / zsensibility);
-				
-				if (WTW.micMute == false) {
-					if (zevent.data.eventType === 'buffer') {
-						recordBuffer = new Float32Array(zevent.data.buffer);
-					}
-					if (zevent.data.eventType === 'data' && WTW.micMute == false) {
-//          	        socket.volatile.emit('voice', { id: socket.id, buffer: recordBuffer.slice(zevent.data.start, zevent.data.end).buffer });
-						wtw3dinternet.streamAudio(recordBuffer.slice(zevent.data.start, zevent.data.end).buffer);
-//						wtw3dinternet.streamAudio(zstream);
-					}
-				}
-				
+				/* allow plugins to add code to mic events */
+				WTW.pluginsOnMicrophoneGrantedOnMessage(zevent, zrecordbuffer);
 			}
 			
 			WTW.audioSend.microphone.connect(WTW.audioSend.audioNode);

@@ -46,13 +46,6 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				WTW.show('wtw_dashboardpage');
 				WTW.openDashboardForm();
 				break;
-			case 'updates':
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Updates') + "</div>";
-				WTW.show('wtw_showfilepage');
-				WTW.show('wtw_updatespage');
-				wtw3dinternet.checkForUpdates('1');
-				wtw3dinternet.loadArchiveUpdates();
-				break;
 			case 'feedback':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Feedback') + "</div>";
 				WTW.show('wtw_showfilepage');
@@ -81,70 +74,6 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				WTW.show('wtw_showfilepage');
 				WTW.openMediaPageForm(zitem);
 				break;
-			case 'importpage':
-				if (WTW.adminView == 1) {
-					dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);\">" + WTW.__('Media Library') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__('WalkTheWeb Downloads') + "</div>";
-					WTW.hide('searchcommunitiesdiv');
-					WTW.hide('searchbuildingsdiv');
-					WTW.hide('searchthingsdiv');
-					WTW.hide('searchavatarsdiv');
-					WTW.hide('searchpluginsdiv');
-					WTW.hide('wtw_commtempsearchresults');
-					WTW.hide('wtw_buildtempsearchresults');
-					WTW.hide('wtw_thingtempsearchresults');
-					WTW.hide('wtw_avatartempsearchresults');
-					WTW.showInline('wtw_menumedialibrary');
-					WTW.showInline('wtw_menuwtwcommunities');
-					WTW.showInline('wtw_menuwtwbuildings');
-					WTW.showInline('wtw_menuwtwthings');
-					WTW.showInline('wtw_menuwtwavatars');
-					WTW.showInline('wtw_menuwtwplugins');
-					WTW.show('wtw_showimportpage');
-					WTW.show('wtw_selectwebform');
-					dGet('wtw_menuwtwcommunities').className = 'wtw-menutabtop';
-					dGet('wtw_menuwtwbuildings').className = 'wtw-menutabtop';
-					dGet('wtw_menuwtwthings').className = 'wtw-menutabtop';
-					dGet('wtw_menuwtwavatars').className = 'wtw-menutabtop';
-					dGet('wtw_menuwtwplugins').className = 'wtw-menutabtop';
-					switch (zsetcategory) {
-						case 'communities':
-							WTW.showInline('searchcommunitiesdiv');
-							dGet('wtw_menuwtwcommunities').className = 'wtw-menutabtopselected';
-							dGet('wtw_commtempsearchresults').style.height = (WTW.sizeY - 175) + 'px';
-							WTW.communitySearch('');
-							WTW.show('wtw_commtempsearchresults');
-							break;
-						case 'buildings':
-							WTW.showInline('searchbuildingsdiv');
-							dGet('wtw_menuwtwbuildings').className = 'wtw-menutabtopselected';
-							dGet('wtw_buildtempsearchresults').style.height = (WTW.sizeY - 175) + 'px';
-							WTW.buildingSearch('');
-							WTW.show('wtw_buildtempsearchresults');
-							break;
-						case 'things':
-							WTW.showInline('searchthingsdiv');
-							dGet('wtw_menuwtwthings').className = 'wtw-menutabtopselected';
-							dGet('wtw_thingtempsearchresults').style.height = (WTW.sizeY - 175) + 'px';
-							WTW.thingSearch('');
-							WTW.show('wtw_thingtempsearchresults');
-							break;
-						case 'avatars':
-							WTW.showInline('searchavatarsdiv');
-							dGet('wtw_menuwtwavatars').className = 'wtw-menutabtopselected';
-							dGet('wtw_avatartempsearchresults').style.height = (WTW.sizeY - 175) + 'px';
-							WTW.avatarSearch('');
-							WTW.show('wtw_avatartempsearchresults');
-							break;
-						case 'plugins':
-							WTW.showInline('searchpluginsdiv');
-							dGet('wtw_menuwtwplugins').className = 'wtw-menutabtopselected';
-							dGet('wtw_plugintempsearchresults').style.height = (WTW.sizeY - 175) + 'px';
-							WTW.pluginSearch('');
-							WTW.show('wtw_plugintempsearchresults');
-							break;
-					}
-				}
-				break;
 			case 'users':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Users') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
 				WTW.show('wtw_showfilepage');
@@ -156,11 +85,6 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 						WTW.openAllUsers(zsetcategory);
 						break;
 				}
-				break;
-			case 'plugins':
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('3D Plugins') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
-				WTW.show('wtw_showfilepage');
-				wtw3dinternet.checkForUpdates('2', zsetcategory);
 				break;
 			case 'settings':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Settings') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
@@ -203,7 +127,10 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				}
 				break;
 			default:
-				WTW.hide('wtw_fullpageform');
+				if (WTW.pluginsOpenFullPageForm(zpageid, zsetcategory, zitem, zitemname, zitemnamepath, zpreviewname) == false) {
+					/* return false means the zpageid is not found in the plugins */
+					WTW.hide('wtw_fullpageform');
+				}
 				break;
 		}
 	} catch (ex) {
@@ -345,7 +272,7 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 		if (dGet('wtw_adminmenufeedbackbadge') != null) {
 			dGet('wtw_adminmenufeedbackbadge').innerHTML = znewfeedback;
 		}
-		wtw3dinternet.updateBadges();
+		WTW.updateBadges();
 		
 		if (dGet('wtw_feedbackpagescroll') != null) {
 			dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
@@ -373,7 +300,6 @@ WTWJS.prototype.toggleFeedback = async function(zfeedbackid) {
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note zresponse.serror would contain any errors */
-							
 							/* update badges */
 							if (dGet('wtw_adminmenufeedbackbadge').innerHTML != '') {
 								if (WTW.isNumeric(dGet('wtw_adminmenufeedbackbadge').innerHTML)) {
@@ -382,7 +308,7 @@ WTWJS.prototype.toggleFeedback = async function(zfeedbackid) {
 									}
 								}
 							}
-							wtw3dinternet.updateBadges();
+							WTW.updateBadges();
 						}
 					);
 					dGet('wtw_feedback-status-' + zfeedbackid).innerHTML = 'Open';
@@ -653,7 +579,8 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 							if (i == 0) {
 								if (zresponse[i].downloads != undefined) {
 									if (zresponse[i].downloads.length > 0) {
-										WTW.getDownloadsInfo(zresponse[i].downloads, zshow);
+										/* if there is a downloads array, allow parsing by plugins */
+										WTW.pluginsOpenDashboardFormDownloads(zresponse[i].downloads, zshow);
 									}
 								}
 							}
@@ -1889,7 +1816,7 @@ WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 										if (zresponse[i].stock != '1') {
 											zpreviewdiv += "<div id='wtw_uploadobjectdelete' class='wtw-redbuttonleft' onclick=\"WTW.deleteUploadObject('" + zresponse[i].uploadobjectid + "',0);\">Delete 3D Model</div> This button will mark the record Deleted and keep the files on the server.\r\n";
 											zpreviewdiv += "<div class='wtw-clear'></div><hr />";
-											zpreviewdiv += "<div id='wtw_uploadobjectpermdelete' class='wtw-redbuttonleft' onclick=\"dGet('wtw_tgroupuploadobjectid').value='" + zresponse[i].uploadobjectid + "';WTW.openConfirmation('10');\">Permanently Delete 3D Model</div> This button will delete the record and related 3D Model files on the server if they are no longer in use by other 3D Models.\r\n";
+											zpreviewdiv += "<div id='wtw_uploadobjectpermdelete' class='wtw-redbuttonleft' onclick=\"dGet('wtw_tgroupuploadobjectid').value='" + zresponse[i].uploadobjectid + "';WTW.openConfirmation('Permanently Delete 3D Model');\">Permanently Delete 3D Model</div> This button will delete the record and related 3D Model files on the server if they are no longer in use by other 3D Models.\r\n";
 										} else {
 											zpreviewdiv += "<br /><span style='color:red;'>Note: Stock items cannot be deleted.</span><br /><br />";
 										}
@@ -3962,11 +3889,11 @@ WTWJS.prototype.setAliasForm = function() {
 	}
 }
 
-WTWJS.prototype.saveAliasForm = async function(w) {
-	/* save web alias url */
+WTWJS.prototype.saveAliasForm = async function(zoption) {
+	/* save changes to web alias url */
 	try {
 		var zwebaliasid = dGet('wtw_twebaliasid').value;
-		switch (w) {
+		switch (zoption) {
 			case 1: /* save */
 				var zdomainname = WTW.getDDLValue('wtw_taliasdomainname');
 				var zcommunitypublishname = dGet('wtw_taliascommunitypublishname').value;
@@ -4043,6 +3970,39 @@ WTWJS.prototype.saveAliasForm = async function(w) {
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
+						var zhostuserid = '';
+						var zwebalias = '';
+						var zfoundfranchiseid = '';
+						var zsiteiconpath = '';
+						var zsitepreview = '';
+						if (zresponse.hostuserid != undefined) {
+							if (zresponse.hostuserid != '') {
+								zhostuserid = zresponse.hostuserid;
+							}
+						}
+						if (zresponse.webalias != undefined) {
+							if (zresponse.webalias != '') {
+								zwebalias = zresponse.webalias;
+							}
+						}
+						if (zresponse.foundfranchiseid != undefined) {
+							if (zresponse.foundfranchiseid != '') {
+								zfoundfranchiseid = zresponse.foundfranchiseid;
+							}
+						}
+						if (zresponse.siteiconpath != undefined) {
+							if (zresponse.siteiconpath != '') {
+								zsiteiconpath = zresponse.siteiconpath;
+							}
+						}
+						if (zresponse.sitepreview != undefined) {
+							if (zresponse.sitepreview != '') {
+								zsitepreview = zresponse.sitepreview;
+							}
+						}
+						
+						WTW.pluginsSaveAliasForm(zoption, zhostuserid, zwebaliasid, zdomainname, zforcehttps, zwebalias, zaliascommunityid, zaliasbuildingid, zaliasthingid, zcommunitypublishname, zbuildingpublishname, zthingpublishname, zfoundfranchiseid, zfranchise, zsiteiconpath, zsitepreview);
+						
 						WTW.clearAliasForm();
 						WTW.hide('wtw_addwebaliasdiv');
 						WTW.show('wtw_addwebalias');

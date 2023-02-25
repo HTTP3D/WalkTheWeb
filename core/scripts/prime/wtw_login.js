@@ -690,7 +690,7 @@ WTWJS.prototype.downloadUserAvatarVersion = function(zobj, zglobaluseravatarid, 
 			'function':'downloadupdateuseravatar'
 		};
 		if (zuseravatarid != '') {
-			WTW.postAsyncJSON('/core/handlers/downloads.php', zrequest, 
+			WTW.postAsyncJSON('/core/handlers/wtw-3dinternet-downloads.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */

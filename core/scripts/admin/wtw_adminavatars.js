@@ -125,7 +125,7 @@ WTWJS.prototype.downloadAvatarVersion = function(zobj, zwebid, zupdatewebid, zve
 			'webtype': zwebtype,
 			'function':'downloadupdateavatar'
 		};
-		WTW.postAsyncJSON('/core/handlers/downloads.php', zrequest, 
+		WTW.postAsyncJSON('/core/handlers/wtw-3dinternet-downloads.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -135,7 +135,7 @@ WTWJS.prototype.downloadAvatarVersion = function(zobj, zwebid, zupdatewebid, zve
 					dGet('wtw_beditavatar-' + zwebid).innerHTML = dGet('wtw_beditavatar-' + zwebid).innerHTML.replace(zoldversion,zversion);
 				}
 				/* update badges */
-				wtw3dinternet.checkForUpdates();
+				WTW.checkForUpdates();
 				window.setTimeout(function(){
 					if (dGet('wtw_beditavatar_update-' + zwebid) != null) {
 						dGet('wtw_beditavatar_update-' + zwebid).remove();
@@ -502,57 +502,6 @@ WTWJS.prototype.changeAvatarVersion = function(zversion, zversiondesc) {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminavatars.js-changeAvatarVersion=' + ex.message);
-	} 
-}
-
-WTWJS.prototype.saveShareAvatarForm = async function() {
-	/* process the share 3D Avatar and Save the settings locally for next Share */
-	try {
-		dGet('wtw_tshareversion').disabled = false;
-		dGet('wtw_tshareversiondesc').disabled = false;
-		var zrequest = {
-			'avatarid': avatarid,
-			'pastavatarid': '',
-			'templatename': btoa(dGet('wtw_tshareavatartempname').value),
-			'description': btoa(dGet('wtw_tshareavatardescription').value),
-			'tags': btoa(dGet('wtw_tshareavatartags').value),
-			'version' : dGet('wtw_tshareversion').value,
-			'versiondesc' : btoa(dGet('wtw_tshareversiondesc').value),
-			'function':'saveavatartemplate'
-		};
-		WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				dGet('wtw_sharehash').value = zresponse.sharehash;
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminthings.js-saveShareThingForm=' + ex.message);
-	}
-}
-
-WTWJS.prototype.shareAvatarTemplate = function() {
-	/* after user is sent to confirm form to make sure they want to Share the 3D Avatar */
-	/* this will process the share */
-	try {
-		var zrequest = {
-			'avatarid': avatarid,
-			'sharehash': dGet('wtw_sharehash').value,
-			'function':'shareavatartemplate'
-		};
-		WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-
-				/* note serror would contain errors */
-				dGet('wtw_shareavatarresponse').innerHTML = zresponse.success + ' ' + zresponse.serror;
-				window.setTimeout(function() {
-					dGet('wtw_shareavatarresponse').innerHTML = '';
-				}, 5000);
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminavatars.js-shareAvatarTemplate=' + ex.message);
 	} 
 }
 

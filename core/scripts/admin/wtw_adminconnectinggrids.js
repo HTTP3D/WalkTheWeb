@@ -70,7 +70,7 @@ WTWJS.prototype.openConnectingGridsForm = function(zconnectinggridind) {
 				WTW.show('wtw_adminmenu14');
 				WTW.show('wtw_adminmenu14b');
 				if (zparentwebtype == 'community' && zchildwebtype == 'building') {
-					dGet('wtw_bdelconnectinggrid').onclick = function() {WTW.openConfirmation('3');};
+					dGet('wtw_bdelconnectinggrid').onclick = function() {WTW.openConfirmation('Delete Building from this Community');};
 				} else if (zparentwebtype == 'community') {
 					dGet('wtw_bdelconnectinggrid').onclick = function() {WTW.submitConnectingGridsForm(0);};
 				} else {

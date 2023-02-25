@@ -720,15 +720,7 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 				break;
 			default:
 				window.setTimeout(function() {
-					if (zmoldname == 'hudlogin-button-loginwtw') {
-						/* login menu */
-						WTW.closeLoginHUD();
-						if (dGet('wtw_tuserid').value == '') {
-							wtw3dinternet.openGlobalLogin();
-						} else {
-							wtw3dinternet.logoutGlobal();
-						}
-					} else if (zmoldname == 'hudlogin-button-loginlocal') {
+					if (zmoldname == 'hudlogin-button-loginlocal') {
 						/* login menu */
 						WTW.closeLoginHUD();
 						if (dGet('wtw_tuserid').value == '') {
@@ -800,6 +792,8 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						WTW.closeLoginHUD();
 						WTW.openLoginHUDLogin();
 					}
+					/* allow plugins to add code */
+					WTW.pluginsHudLoginClick(zmoldname);
 				},1000);
 				break;
 		}

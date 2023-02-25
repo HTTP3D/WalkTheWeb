@@ -626,57 +626,6 @@ WTWJS.prototype.changeWebVersion = function(zwebtype, zversion, zversiondesc) {
 	} 
 }
 
-WTWJS.prototype.saveShareCommunityForm = async function() {
-	/* process the share 3D Community and Save the settings locally for next Share */
-	try {
-		dGet('wtw_tsharecommunityversion').disabled = false;
-		dGet('wtw_tsharecommunityversiondesc').disabled = false;
-		var zrequest = {
-			'communityid': communityid,
-			'communityname': btoa(dGet('wtw_tsharecommunitytempname').value),
-			'description': btoa(dGet('wtw_tsharecommunitydescription').value),
-			'tags': btoa(dGet('wtw_tsharecommunitytags').value),
-			'version' : dGet('wtw_tsharecommunityversion').value,
-			'versiondesc' : btoa(dGet('wtw_tsharecommunityversiondesc').value),
-			'function':'savecommunitytemplate'
-		};
-		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				dGet('wtw_sharehash').value = zresponse.sharehash;
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveShareCommunityForm=' + ex.message);
-	}
-}
-
-WTWJS.prototype.shareCommunityTemplate = async function() {
-	/* after user is sent to confirm form to make sure they want to Share the 3D Community */
-	/* this process the share */
-	try {
-		dGet('wtw_bsharecommunitytemp').innerHTML = 'Shared 3D Community';
-		var zrequest = {
-			'communityid': communityid,
-			'sharehash': dGet('wtw_sharehash').value,
-			'function':'sharecommunitytemplate'
-		};
-		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-
-				/* note serror would contain errors */
-				dGet('wtw_sharecommunityresponse').innerHTML = zresponse.success + ' ' + zresponse.serror;
-				window.setTimeout(function() {
-					dGet('wtw_sharecommunityresponse').innerHTML = '';
-				}, 5000);
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admincommunities.js-shareCommunityTemplate=' + ex.message);
-	}
-}
-
 
 /* 3D Scene Settings */
 
@@ -1279,123 +1228,89 @@ WTWJS.prototype.setGroundWater = function() {
 /* Common functions for 3D Communities, 3D Buildings, and 3D Things */
 
 /* confirmation pages before executing a command */
-WTWJS.prototype.openConfirmation = function(w) {
+WTWJS.prototype.openConfirmation = function(zoption) {
 	/* open confirmation box with warning */
 	try {
 		WTW.showInline('wtw_confirmform');
 		dGet('wtw_confirmform').style.top = (WTW.getScrollY() + 150).toString() + 'px';
 		WTW.showInline('wtw_greyout');
-		dGet('wtw_tconfirmid').value = w;
-		switch (w) {
-			case '1':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Building';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Building?';
-				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Building will Delete all Walls, Floors, and Web Components. It will also remove it from all <b>3D Communities</b>!';
-				dGet('wtw_bconfirm').value = 'Delete 3D Building';
-				break;
-			case '2':
+		dGet('wtw_tconfirmid').value = zoption;
+		switch (zoption) {
+			case 'Delete 3D Community':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Community';
 				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Community?';
 				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Community will also Delete all Terrain, Building Placements, Walls, Floors, and Web Components.';
 				dGet('wtw_bconfirm').value = 'Delete 3D Community';
 				break;
-			case '3':
+			case 'Delete 3D Building':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Building';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Building?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Building will Delete all Walls, Floors, and Web Components. It will also remove it from all <b>3D Communities</b>!';
+				dGet('wtw_bconfirm').value = 'Delete 3D Building';
+				break;
+			case 'Delete Building from this Community':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Building from this Community';
 				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Building from this Community?';
 				dGet('wtw_confirmtext').innerHTML = '<br />The building can always be added again if you change your mind.';
 				dGet('wtw_bconfirm').value = 'Delete 3D Building from 3D Community';
 				break;
-			case '4':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Building';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Building?';
-				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Building. It will not affect your current 3D Building. The Shared Copy cannot be undone once Shared.';
-				dGet('wtw_bconfirm').value = 'Share My 3D Building';
-				break;
-			case '5':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Community';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Community?';
-				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Communities. It will not affect your current 3D Community. The Shared Copy cannot be undone once Shared.';
-				dGet('wtw_bconfirm').value = 'Share My 3D Community';
-				break;
-			case '6':
+			case 'Delete 3D Thing':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Thing';
 				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Thing?';
 				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the 3D Thing will also Delete all parts including Shapes and Web Components.';
 				dGet('wtw_bconfirm').value = 'Delete 3D Thing';
 				break;
-			case '7':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Thing';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Thing?';
-				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Thing. It will not affect your current 3D Thing. The Shared Copy cannot be undone once Shared.';
-				dGet('wtw_bconfirm').value = 'Share My 3D Thing';
-				break;
-			case '8':
+			case 'Delete 3D Avatar':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Avatar';
 				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Avatar?';
 				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the 3D Avatar will also Delete all parts including Animations.';
 				dGet('wtw_bconfirm').value = 'Delete 3D Avatar';
 				break;
-			case '9':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Avatar';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Avatar?';
-				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Avatar. It will not affect your current 3D Avatar. The Shared Copy cannot be undone once Shared.';
-				dGet('wtw_bconfirm').value = 'Share My 3D Avatar';
-				break;
-			case '10':
+			case 'Permanently Delete 3D Model':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Permanently Delete 3D Model';
 				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete this 3D Model?';
 				dGet('wtw_confirmtext').innerHTML = '<br />This will delete the record and related 3D Model files on the server if they are no longer in use by other 3D Models. This cannot be undone once Permanently Deleted.';
 				dGet('wtw_bconfirm').value = 'Permanently Delete My 3D Model';
 				break;
 		}
+		WTW.pluginsOpenConfirmation(zoption);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admincommunities.js-openConfirmation=' + ex.message);
 	}
 }
 
-WTWJS.prototype.completedConfirmation = function(w) {
+WTWJS.prototype.completedConfirmation = function(zoption) {
 	/* if confirmed, continue to process */
 	try {
-		switch (w) {
-			case '1':
-				WTW.submitBuildingForm(0);
-				break;
-			case '2':
+		switch (zoption) {
+			case 'Delete 3D Community':
 				WTW.submitCommunityForm(0);
 				break;
-			case '3':
+			case 'Delete 3D Building':
+				WTW.submitBuildingForm(0);
+				break;
+			case 'Delete Building from this Community':
 				WTW.submitConnectingGridsForm(0);
 				break;
-			case '4':
-				WTW.shareBuildingTemplate();
-				break;
-			case '5':
-				WTW.shareCommunityTemplate();
-				break;
-			case '6':
+			case 'Delete 3D Thing':
 				WTW.submitthingForm(0);
 				break;
-			case '7':
-				WTW.shareThingTemplate();
-				break;
-			case '8':
+			case 'Delete 3D Avatar':
 				WTW.deleteAvatar(0);
 				break;
-			case '9':
-				WTW.shareAvatarTemplate();
-				break;
-			case '10':
+			case 'Permanently Delete 3D Model':
 				WTW.deleteUploadObject(dGet('wtw_tgroupuploadobjectid').value,1);
 				dGet('wtw_tgroupuploadobjectid').value = '';
 				break;
 		}
+		WTW.pluginsCompletedConfirmation(zoption);
 		WTW.closeConfirmation();
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admincommunities.js-completedConfirmation=' + ex.message);
 	}
 }
 
-WTWJS.prototype.closeConfirmation = function(w) {
+WTWJS.prototype.closeConfirmation = function(zoption) {
 	/* close confirmation box */
 	try {
 		WTW.hide('wtw_confirmform');

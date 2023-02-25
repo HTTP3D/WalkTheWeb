@@ -109,8 +109,7 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 					WTW.toggleAdminMenu('wtw_adminmenubutton');
 				}
 			}
-			/* check for updates to WalkTheWeb and 3D Plugins */
-			wtw3dinternet.checkForUpdates('1');
+			WTW.pluginsAdminLoadAfterScreen(zhmenu);
 		} else {
 			/* page is returning from a babylon screen shot */
 			/* open the appropriate menu option */
