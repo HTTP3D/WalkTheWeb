@@ -415,7 +415,7 @@ WTW_3DINTERNET.prototype.onClick = function(zpickedname) {
 WTW_3DINTERNET.prototype.keyUp = function(zevent) {
 	/* check for enter key when canvas is focused and avatar is present */
 	try {
-		if (WTW.canvasFocus == 1 && WTW.placeHolder == 0 && zevent.keyCode == 13) {
+		if (WTW.canvasFocus == 1 && zevent.keyCode == 13) {
 			if (document.activeElement.id.indexOf('wtw_chatadd-') == -1) {
 				wtw3dinternet.toggleChatPrompt();
 			}
@@ -545,7 +545,7 @@ WTW_3DINTERNET.prototype.resetHovers = function(zmoldname, zshape) {
 }
 
 WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
-	/* 10 second delay on starting multiplayer so that initial scene is completely loaded. */
+	/* 1 second delay on starting multiplayer so that initial scene is completely loaded. */
 	try {
 		window.setTimeout(function() {
 			wtw3dinternet.initAdminSocket();
@@ -560,7 +560,7 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 			if (wtw3dinternet.masterVoiceChat == '1') {
 				wtw3dinternet.initVoiceChatSocket();
 			}
-		},100);
+		},1000);
 	} catch (ex) {
 		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-loadUserSettingsAfterEngine=' + ex.message);
 	} 

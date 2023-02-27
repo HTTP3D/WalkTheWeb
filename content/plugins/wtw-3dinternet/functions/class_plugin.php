@@ -83,6 +83,7 @@ class wtw3dinternet {
 				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetmultiplayer', $wtwplugins->__('Multiplayer and Chat'), -70, 'wtw_3dinternetmenu', 2, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetmultiplayerpage');wtw3dinternet.serviceCheck('multiplayer');");
 				$wtwplugins->addAdminMenuItem('wtw_admin3dinternettemplates', $wtwplugins->__('Templates and Sharing'), -70, 'wtw_3dinternetmenu', 3, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternettemplatespage');");
 				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetfranchising', $wtwplugins->__('Franchising to the Internet'), -70, 'wtw_3dinternetmenu', 4, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetfranchisingpage');");
+				$wtwplugins->addAdminMenuItem('wtw_adminaddplugins', $wtwplugins->__('Add 3D Plugin'), 50, 'wtw_plugins', 4, 'wtw_allplugins', '', $developerroles, "WTW.openFullPageForm('importpage','plugins');");
 
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
@@ -144,6 +145,7 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("opendashboardform", "wtw3dinternet.openDashboardForm(zshow);");
 			$wtwplugins->addScriptFunction("opendashboardformdownloads", "wtw3dinternet.openDashboardFormDownloads(zdownloads, zshow);");
 			$wtwplugins->addScriptFunction("checkforupdates", "wtw3dinternet.checkForUpdates(zshow, zfilter);");
+			$wtwplugins->addScriptFunction("getplugininfocomplete", "wtw3dinternet.getPluginInfoComplete(zmyplugins, zplugins, zshow, zfilter);");
 			$wtwplugins->addScriptFunction("updatebadges", "wtw3dinternet.updateBadges(ztotalupdates, ztotaldashboardupdates);");
 			$wtwplugins->addScriptFunction("openconfirmation", "wtw3dinternet.openConfirmation(zoption);");
 			$wtwplugins->addScriptFunction("completedconfirmation", "wtw3dinternet.completedConfirmation(zoption);");

@@ -6,72 +6,15 @@
 WTW_3DINTERNET.prototype.checkForUpdates = async function(zshow, zfilter) {
 	/* check for updates for WalkTheWeb, 3D Plugins, 3D Communities, 3D Buildings, 3D Things, and 3D Avatars */
 	try {
-		switch (zshow) {
-			case '1':
-				WTW.show('wtw_loadingupdates');
-				WTW.hide('wtw_updatelist');
-				WTW.hide('wtw_updatepluginlist');
-				dGet('wtw_updatelist').innerHTML = '';
-				break;
-			case '2':
-				WTW.show('wtw_pluginspage');
-				WTW.show('wtw_loadingplugins');
-				WTW.hide('wtw_allplugins');
-				WTW.hide('wtw_pluginslist');
-				dGet('wtw_pluginslist').innerHTML = '';
-				break;
-			default:
-				zshow = '0';
-				break;
-		}
-		var zrequest = {
-			'function':'getplugininfo'
-		};
-		WTW.postAsyncJSON('/core/handlers/pluginloader.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note zresponse.serror would contain any errors */
-				/* process the 3D Plugins information */
-				wtw3dinternet.getPluginInfoComplete(zresponse.plugins, zshow, zfilter);
-			}
-		);
 		wtw3dinternet.checkUpdatesForAllWebs();
-		WTW.openDashboardForm(false);
-		WTW.checkForFeedback('Open Feedback');
 	} catch (ex) {
 		WTW.log('plugins:wtw-3dinternet:scripts-versions.js-checkForUpdates=' + ex.message);
 	}
 }
 
-WTW_3DINTERNET.prototype.getPluginInfoComplete = async function(zmyplugins, zshow, zfilter) {
+WTW_3DINTERNET.prototype.getPluginInfoComplete = async function(zmyplugins, zplugins, zshow, zfilter) {
 	/* process the retrieved 3D Plugins information */
 	try {
-		zplugins = '';
-		zmyplugins = JSON.parse(zmyplugins);
-		zmyplugins[zmyplugins.length] = {
-			'pluginname' : 'walktheweb',
-			'version' : wtw_version,
-			'latestversion' : wtw_version,
-			'title' : 'WalkTheWeb',
-			'author' : 'Aaron Dishno Ed.D.',
-			'authoruserid' : '',
-			'description' : 'WalkTheWeb 3D Internet',
-			'foldername' : '',
-			'filename' : '',
-			'updatedate' : wtw_versiondate,
-			'updateurl' : '',
-			'updateid' : '',
-			'active' : '1'
-		}
-		if (zmyplugins != null) {
-			for (var i=0;i<zmyplugins.length;i++) {
-				if (zmyplugins[i] != null) {
-					if (zmyplugins[i].pluginname != undefined) {
-						zplugins += zmyplugins[i].pluginname.toLowerCase() + ',';
-					}
-				}
-			}
-		}
 		/* get update information for 3D Plugins */
 		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/checkforupdates.php?list=2&pluginnames=' + zplugins, 
 			function(zupdateinfo) {
