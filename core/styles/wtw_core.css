@@ -1814,12 +1814,44 @@ hr.wtw-menuhr {
 	z-index:9000;
 	bottom:0px;
 	left:0px;
-	color:#ffffff;
-	background-color:#111111;
 	vertical-align:middle;
 	text-align:center;
 	width:100%;
 	min-height:32px;
+}
+.wtw-menuexpanded {
+	position:absolute;
+	z-index:9000;
+	bottom:0px;
+	left:0px;
+	padding-left:34px;
+	display:none;
+	visibility:hidden;
+	color:#ffffff;
+	background-color:#111111;
+	width:100%;
+	min-height:32px;
+}
+.wtw-menucollapsed {
+	position:absolute;
+	z-index:9010;
+	bottom:0px;
+	left:0px;
+	background-color:#ffffff;
+	color:#111111;
+	vertical-align:middle;
+	text-align:center;
+	width:32px;
+	height:32px;
+	cursor:pointer;
+}
+.wtw-menucollapsed:hover {
+	color:yellow;
+	cursor:pointer;
+}
+.wtw-indentright {
+	float:right;
+	width:34px;
 }
 .wtw-wtwmessage {
 	position:absolute;

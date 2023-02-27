@@ -731,7 +731,7 @@ class wtw {
 						$zversion = $wtwdb->getSetting("wtw_version","3.4.5");
 						$this->oldversion = $zversion;
 						/* load initial tables form install */
-						$wtwtables->loadInitDbData($zuserid);
+						$wtwtables->loadInitDbData($zuserid, $zpreloaded);
 						if ($zpreloaded == 'default') {
 							$wtwtables->loadInitBuildingCommunity($this->domainname, $this->protocol, $zuserid);
 						}

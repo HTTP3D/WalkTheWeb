@@ -605,6 +605,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsGetPluginInfoComplete = function(zmyplugins, zplugins, zshow, zfilter) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('getplugininfocomplete');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsGetPluginInfoComplete=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsUpdateBadges = function(ztotalupdates, ztotaldashboardupdates) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('updatebadges');

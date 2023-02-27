@@ -656,7 +656,7 @@ class wtwadmin {
 			$zpagedata .= "		<div id='wtw_allplugins' class='wtw-fullpage'>\r\n";
 			$zpagedata .= "			<div class='wtw-dashboardboxleftfull'>\r\n";
 			$zpagedata .= "				<div id='wtw_pluginslisttitle' class='wtw-dashboardboxtitle'><div id='wtw_addplugin' class='wtw-greenbuttonright' onclick='WTW.openFullPageForm('importpage','plugins');'>Add New</div>All 3D Plugins</div>\r\n";
-			$zpagedata .= "				<div class='wtw-roundedbox'><b>3D Plugins</b> add 3D Game and 3D Shopping functionality to your 3D Community Scenes, 3D Buildings, 3D Things, and 3D Avatars.<br /></div>\r\n";
+			$zpagedata .= "				<div class='wtw-roundedbox'><b>3D Plugins</b> add 3D Game and 3D Shopping functionality to your 3D Community Scenes, 3D Buildings, 3D Things, and 3D Avatars. Note that the <b>WalkTheWeb 3D Internet Plugin</b> must be enabled to have the options to download and add more 3D Plugins.<br /></div>\r\n";
 			$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardbox'>\r\n";
 			$zpagedata .= "					<div id='wtw_pluginslist'></div>\r\n";

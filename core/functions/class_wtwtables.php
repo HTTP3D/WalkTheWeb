@@ -1620,7 +1620,7 @@ class wtwtables {
 		}
 	}
 
-	public function loadInitDbData($zuserid) {
+	public function loadInitDbData($zuserid, $zpreloaded) {
 		/* this process is only run for new database setups, populate new tables, or if certain tables are empty */
 		global $wtw;
 		global $wtwdb;
@@ -2351,9 +2351,15 @@ class wtwtables {
 			$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
 				(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 				VALUES 
-				('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0), 
 				('wtw-avatars',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0), 
 				('wtw-shopping',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
+			
+			if ($zpreloaded == 'custom') {
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
+					(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					VALUES 
+					('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0); 
+			}
 			
 			/* add roles */
 			$wtwdb->query("

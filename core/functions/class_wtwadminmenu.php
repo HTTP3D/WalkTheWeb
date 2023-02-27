@@ -89,7 +89,6 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminallplugins', $this->__('All 3D Plugins'), 50, 'wtw_plugins', 1, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminactiveplugins', $this->__('Active 3D Plugins'), 50, 'wtw_plugins', 2, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_admininactiveplugins', $this->__('Inactive 3D Plugins'), 50, 'wtw_plugins', 3, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaddplugins', $this->__('Add 3D Plugin'), 50, 'wtw_plugins', 4, 'wtw_allplugins', '', $developerroles, "WTW.openFullPageForm('importpage','plugins');");
 
 				$wtwdb->checkOptionalUpgrades();
 				if ($wtwdb->isUserInRole("Admin") || $wtwdb->isUserInRole("Developer")) {
