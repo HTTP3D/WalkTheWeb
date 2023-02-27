@@ -546,7 +546,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 										var zavatarcamera = WTW.getMeshOrNodeByID(zavatar.name + '-camera');
 										if (zavatarscale != null && zavatarcenter != null && zavatarcamera != null) {
 											if (zevent.indexOf('jump') > -1) {
-												/* this next code raises the avatar placeholder and adjusts the avatar scaling, camera, and center mass during a jump animation */
+												/* this next code raises the avatar base and adjusts the avatar scaling, camera, and center mass during a jump animation */
 												if (zavatarscale.position.y == 0) {
 													zavatar.position.y += 2;
 													zavatarscale.position.y -= 2;
@@ -554,7 +554,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 													zavatarcamera.position.y -= 2;
 												}
 											} else if (zavatarscale.position.y != 0) {
-													/* return from avatar jump placeholder movement */
+													/* return from avatar jump base movement */
 													zavatar.position.y -= 2;
 													zavatarscale.position.y = 0;
 													zavatarcenter.position.y += 2;
@@ -754,6 +754,64 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 			}
 			WTW.pluginsMoveAvatar(zavatar, zmoveevents);
 		} else {
+			if (zavatar != null && WTW.cameraFocus == 1) {
+				if (zkeyspressed != null) {
+					for (var k=0;k < zkeyspressed.length;k++) {
+						if (zkeyspressed[k] != null) {
+							switch (zkeyspressed[k]) {
+								case 37: //arrow q rotate left
+								case 81: //q rotate left
+								case 1037: //mouse rotate left
+								case 2037: //mouse rotate left
+								case 65: //a strafe left
+								case 1065: //mouse strafe left
+								case 2065: //mouse strafe left
+									zavatar.rotation.y -= WTW.getRadians(70 * WTW.turnSpeed / WTW.fps);
+									break;
+								case 39: //arrow e rotate right
+								case 69: //e rotate right
+								case 1039: //mouse rotate right
+								case 2039: //mouse rotate right
+								case 68: //d strafe right
+								case 1068: //mouse strafe right
+								case 2068: //mouse strafe right
+									zavatar.rotation.y += WTW.getRadians(70 * WTW.turnSpeed / WTW.fps);
+									break;
+								case 1082: //mouse rotate up
+									if (WTW.mouseY == WTW.mouseStartY) {
+										WTW.cameraYOffset -= 400/WTW.sizeY * WTW.turnSpeed;
+									} else if (WTW.isMouseDown == 1) {
+										WTW.cameraYOffset += 100/WTW.sizeY * (WTW.mouseY - WTW.mouseStartY) * WTW.turnSpeed;
+										WTW.mouseStartY = WTW.mouseY;
+									}
+									break;
+								case 1070: //mouse rotate down
+									if (WTW.mouseY == WTW.mouseStartY) {
+										WTW.cameraYOffset += 400/WTW.sizeY * WTW.turnSpeed;
+									} else if (WTW.isMouseDown == 1) {
+										WTW.cameraYOffset -= 100/WTW.sizeY * (WTW.mouseStartY - WTW.mouseY) * WTW.turnSpeed;
+										WTW.mouseStartY = WTW.mouseY;
+									}
+									break;
+								case 82: //r rotate up
+								case 38: //arrow w forward
+								case 87: //w forward
+								case 1038: //arrow w forward
+								case 2038: //arrow w forward
+									WTW.cameraYOffset -= 100/WTW.sizeY * 10 * WTW.turnSpeed;
+									break;
+								case 70: //f rotate down
+								case 40: //arrow s backwards
+								case 83: //s backwards
+								case 1040: //arrow s backwards
+								case 2040: //arrow s backwards
+									WTW.cameraYOffset += 100/WTW.sizeY * 10 * WTW.turnSpeed;
+									break;
+							}
+						}
+					}
+				}
+			}
 			WTW.setMovingCameras(zavatar);
 		}
 	} catch(ex) {

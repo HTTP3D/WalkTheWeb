@@ -264,12 +264,6 @@ WTWJS.prototype.loadLoginSettings = function() {
 		}
 		WTW.getSettings('WTW_globalLogins, WTW_localLogins, WTW_anonymousLogins', 'WTW.responseLoadLoginSettings');
 		/* hook for plugins to be able to intercept the user loading process and add functions to include or replace */
-		var zloaddefault = true;
-		zloaddefault = WTW.pluginsLoadLoginSettings(zloaddefault);
-		if (zloaddefault) {
-			/* if no plugin returns false, continue default loading */
-			WTW.loadLoginAvatarSelect();
-		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-loadLoginSettings=' + ex.message);
 	} 
@@ -294,8 +288,19 @@ WTWJS.prototype.responseLoadLoginSettings = async function(zsettings, zparameter
 				WTW.anonymousLogins = zsetting.WTW_anonymousLogins;					
 			}
 		}
+		/* Check to see if the 3D Internet Plugin is active */
+		if (typeof wtw3dinternet == undefined || typeof wtw3dinternet == 'undefined') {
+			WTW.globalLogins = '0';
+		}
 		if (WTW.globalLogins != '1') {
 			WTW.localLogins = '1';
+		}
+		/* Select if a plugin is going to handle the login and avatar selection process */
+		var zloaddefault = true;
+		zloaddefault = WTW.pluginsLoadLoginSettings(zloaddefault);
+		if (zloaddefault) {
+			/* if no plugin returns false, continue default loading */
+			WTW.loadLoginAvatarSelect();
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-responseLoadLoginSettings=' + ex.message);
@@ -632,6 +637,14 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 		scene.resetLastAnimationTimeFrame();
 		window.setTimeout(function() {
 			WTW.isInitCycle = 0;
+			var zenter = WTW.getMeshOrNodeByID('hudlogin-button-enter');
+			var zentertext = WTW.getMeshOrNodeByID('hudlogin-button-entertext');
+			if (zenter != null) {
+				zenter.isVisible = true;
+			}
+			if (zentertext != null) {
+				zentertext.isVisible = true;
+			}
 			WTW.pluginsLoadUserSettingsAfterEngine();
 			WTW.resetActivityTimer();
 		}, 5000);

@@ -96,6 +96,17 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[3].additionalscript = '';
 				zobjectanimations[3].additionalparameters = '';
 
+				zobjectanimations[3] = WTW.newObjectAnimation();
+				zobjectanimations[3].animationname = 'HUDLOGINbuttonloginenter';
+				zobjectanimations[3].moldevent = 'onclick';
+				zobjectanimations[3].moldnamepart = 'button-enter';
+				zobjectanimations[3].startframe = 100;
+				zobjectanimations[3].endframe = 120;
+				zobjectanimations[3].animationloop = false;
+				zobjectanimations[3].speedratio = 1.00;
+				zobjectanimations[3].additionalscript = '';
+				zobjectanimations[3].additionalparameters = '';
+
 				break;
 			case "User Menu":
 				zobjectfile = 'wtw-usermenu.babylon';
@@ -311,18 +322,44 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 							
 							/* make sure child meshes are pickable */
 							switch (zmeshname) {
+								case 'loginmenubox':
+									if (WTW.isInitCycle == 1) {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+									} else {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = true;
+									}									
+									break;
 								case 'button-loginwtw':
-									if (WTW.globalLogins == '1') {
+									if (WTW.isInitCycle == 1) {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+										WTW.registerMouseOver(zresults.meshes[i]);
+									} else if (WTW.globalLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 										WTW.registerMouseOver(zresults.meshes[i]);
 									} else {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
+									}
+									break;
+								case 'button-loginwtwtext':
+									if (WTW.isInitCycle == 1 || WTW.globalLogins != '1') {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+									} else {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = true;
 									}
 									break;
 								case 'button-loginlocal':
-									if (WTW.localLogins == '1') {
+									if (WTW.isInitCycle == 1) {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+										WTW.registerMouseOver(zresults.meshes[i]);
+									} else if (WTW.localLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 										WTW.registerMouseOver(zresults.meshes[i]);
@@ -331,8 +368,21 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
+								case 'button-loginlocaltext':
+									if (WTW.isInitCycle == 1 || WTW.localLogins != '1') {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+									} else {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = true;
+									}
+									break;
 								case 'button-loginguest':
-									if (WTW.anonymousLogins == '1') {
+									if (WTW.isInitCycle == 1) {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+										WTW.registerMouseOver(zresults.meshes[i]);
+									} else if (WTW.anonymousLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 										WTW.registerMouseOver(zresults.meshes[i]);
@@ -340,6 +390,29 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 									}
+									break;
+								case 'button-loginguesttext':
+									if (WTW.isInitCycle == 1 || WTW.anonymousLogins != '1') {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+									} else {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = true;
+									}
+									break;
+								case 'button-enter':
+									if (WTW.isInitCycle == 1) {
+										zresults.meshes[i].isPickable = true;
+										zresults.meshes[i].isVisible = false;
+										WTW.registerMouseOver(zresults.meshes[i]);
+									} else {
+										zresults.meshes[i].isPickable = false;
+										zresults.meshes[i].isVisible = false;
+									}
+									break;
+								case 'button-entertext':
+									zresults.meshes[i].isPickable = false;
+									zresults.meshes[i].isVisible = false;
 									break;
 								case 'hudlogin-button-editprofile':
 								case 'hudlogin-button-selectmyavatar':
@@ -364,33 +437,6 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									zresults.meshes[i].isPickable = true;
 									zresults.meshes[i].isVisible = true;
 									WTW.registerMouseOver(zresults.meshes[i]);
-									break;
-								case 'button-loginwtwtext':
-									if (WTW.globalLogins == '1') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = true;
-									} else {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									}
-									break;
-								case 'button-loginlocaltext':
-									if (WTW.localLogins == '1') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = true;
-									} else {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									}
-									break;
-								case 'button-loginguesttext':
-									if (WTW.anonymousLogins == '1') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = true;
-									} else {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									}
 									break;
 								case 'invalidlogin':
 								case 'invalidpassword':
@@ -663,6 +709,7 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-create':
 			case 'hudlogin-button-reset':
 			case 'hudlogin-button-login':
+			case 'hudlogin-button-enter':
 				/* larger main buttons */
 				if (zhover == 1) {
 					if (zmatgreen != null && zmold != null) {
@@ -729,6 +776,8 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 							WTW.logout();
 							WTW.openLoginHUD('3D Website Login');
 						}
+					} else if (zmoldname == 'hudlogin-button-enter') {
+						WTW.openLoginHUD("Login Menu");
 					} else if (zmoldname == 'hudlogin-button-loginguest') {
 						/* login menu */
 						WTW.closeLoginHUD();

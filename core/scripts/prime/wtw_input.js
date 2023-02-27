@@ -134,7 +134,7 @@ WTWJS.prototype.touchMoving = function(zevent) {
 	try {
 		if (WTW.canvasFocus == 1) {
 			WTW.setTouchMove(zevent);
-			if (dGet('wtw_itouchleft').style.display == 'block' && WTW.placeHolder == 0) {
+			if (dGet('wtw_itouchleft').style.display == 'block') {
 				dGet('wtw_itouchleft').style.left = (WTW.mouseX - 25) + 'px';
 				dGet('wtw_itouchleft').style.top = (WTW.mouseY - 25) + 'px';
 				WTW.show('wtw_itouchleft');
@@ -211,7 +211,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 		}
 		if (WTW.adminView == 1 && (zctrl || zevent.keyCode == 27)) {
 			WTW.adminMenuQuickKeys(zevent.keyCode);
-		} else if (WTW.canvasFocus == 1) { //  && WTW.placeHolder == 0
+		} else if (WTW.canvasFocus == 1) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
@@ -302,7 +302,7 @@ WTWJS.prototype.keyUp = function(zevent) {
 		WTW.pluginsKeyUp(zevent);
 		if (WTW.adminView == 1 && (zctrl || zevent.keyCode == 27)) {
 			
-		} else if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
+		} else if (WTW.canvasFocus == 1) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
@@ -472,8 +472,6 @@ WTWJS.prototype.mouseClick = function(zevent) {
 							WTW.checkImageClick(zpickedname);
 						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
 							WTW.checkVideoClick(zpickedname);
-//						} else if (zpickedname.indexOf('-createscene') > -1) {
-//							WTW.openIFrame('/core/pages/create3dwebsite.php?useremail='+dGet('wtw_tuseremail').value, .9, .9, 'Create 3D Website');
 						} else if (zpickedname.indexOf('-vehicle') > -1) {
 							WTW.toggleStartVehicle(zpickedname);
 						} else {
@@ -724,7 +722,7 @@ WTWJS.prototype.mouseScroll2 = function(zevent) {
 WTWJS.prototype.mouseScroll = function(zrolled) {
 	/* mouse input - process mouse scrollbar movement */
     try {
-		if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
+		if (WTW.canvasFocus == 1) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}

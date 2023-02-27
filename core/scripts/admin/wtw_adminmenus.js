@@ -1876,9 +1876,199 @@ WTWJS.prototype.checkForUpdates = async function(zshow, zfilter) {
 		if (zfilter == undefined) {
 			zfilter = 'All 3D Plugins';
 		}
+		switch (zshow) {
+			case '1':
+				WTW.show('wtw_loadingupdates');
+				WTW.hide('wtw_updatelist');
+				WTW.hide('wtw_updatepluginlist');
+				dGet('wtw_updatelist').innerHTML = '';
+				break;
+			case '2':
+				WTW.show('wtw_pluginspage');
+				WTW.show('wtw_loadingplugins');
+				WTW.hide('wtw_allplugins');
+				WTW.hide('wtw_pluginslist');
+				dGet('wtw_pluginslist').innerHTML = '';
+				break;
+			default:
+				zshow = '0';
+				break;
+		}
+		var zrequest = {
+			'function':'getplugininfo'
+		};
+		WTW.postAsyncJSON('/core/handlers/pluginloader.php', zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note zresponse.serror would contain any errors */
+				/* process the 3D Plugins information */
+				WTW.getPluginInfoComplete(zresponse.plugins, zshow, zfilter);
+			}
+		);
+		
+		WTW.openDashboardForm(false);
+		WTW.checkForFeedback('Open Feedback');
 		WTW.pluginsCheckForUpdates(zshow, zfilter);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmenus.js-checkForUpdates=' + ex.message);
+	}
+}
+
+WTWJS.prototype.getPluginInfoComplete = async function(zmyplugins, zshow, zfilter) {
+	/* process the retrieved 3D Plugins information */
+	try {
+		zplugins = '';
+		zmyplugins = JSON.parse(zmyplugins);
+		zmyplugins[zmyplugins.length] = {
+			'pluginname' : 'walktheweb',
+			'version' : wtw_version,
+			'latestversion' : wtw_version,
+			'title' : 'WalkTheWeb',
+			'author' : 'Aaron Dishno Ed.D.',
+			'authoruserid' : '',
+			'description' : 'WalkTheWeb 3D Internet',
+			'foldername' : '',
+			'filename' : '',
+			'updatedate' : wtw_versiondate,
+			'updateurl' : '',
+			'updateid' : '',
+			'active' : '1'
+		}
+		if (zmyplugins != null) {
+			for (var i=0;i<zmyplugins.length;i++) {
+				if (zmyplugins[i] != null) {
+					if (zmyplugins[i].pluginname != undefined) {
+						zplugins += zmyplugins[i].pluginname.toLowerCase() + ',';
+					}
+				}
+			}
+		}
+		/* allow plugins to process additional information */
+		WTW.pluginsGetPluginInfoComplete(zmyplugins, zplugins, zshow, zfilter);
+
+		if (dGet('wtw_pluginslisttitle') != null) {
+			dGet('wtw_pluginslisttitle').innerHTML = "<div id='wtw_addplugin' class='wtw-greenbuttonright' onclick=\"WTW.openFullPageForm('importpage','plugins');\" style=\"display:none;visibility:hidden;\">Add New</div>" + zfilter;
+		}
+		var zpluginslist = '';
+		if (zmyplugins != null) {
+			if (zmyplugins.length > 0) {
+				if (zshow == '1') {
+					zpluginslist += "<div class='wtw-dashboardboxleftfull'>";
+					zpluginslist += "<div class='wtw-dashboardboxtitle'>Plugins: Updates Available!</div><div class='wtw-dashboardbox'>";
+				}
+				zpluginslist += "<table class='wtw-table'><tr>";
+				zpluginslist += "<td class='wtw-tablecolumnheading'>&nbsp;</td>";
+				zpluginslist += "<td class='wtw-tablecolumnheading'>Plugin Name</td>";
+				zpluginslist += "<td class='wtw-tablecolumnheading'>Details</td>";
+				zpluginslist += "<td class='wtw-tablecolumnheading'>&nbsp;</td>";
+				zpluginslist += "<td class='wtw-tablecolumnheading'>&nbsp;</td>";
+				zpluginslist += "</tr>";
+				for (var i=0;i < zmyplugins.length;i++) {
+					if (zmyplugins[i] != null) {
+						if (zmyplugins[i].pluginname != undefined && zmyplugins[i].version != undefined && zmyplugins[i].latestversion != undefined) {
+							if (zmyplugins[i].pluginname == 'walktheweb') {
+							} else {
+								if (zmyplugins[i].version != zmyplugins[i].latestversion || zshow == '2') {
+									var zpluginclass = 'wtw-deactive';
+									var ztdclass = 'wtw-tddeactive';
+									if (zmyplugins[i].active == '1') {
+										zpluginclass = 'wtw-active';
+										ztdclass = 'wtw-tdactive';
+									}
+									if (zmyplugins[i].required == '1') {
+										zrequired = ' checked ';
+										zhasrequirements = true;
+										if (zmyplugins[i].active != '1') {
+											ztdclass = 'wtw-tdactiverequired';
+										}
+									}
+									if (zmyplugins[i].optional == '1') {
+										zoptional = ' checked ';
+										zhasrequirements = true;
+										if (zmyplugins[i].active != '1') {
+											ztdclass = 'wtw-tdactiveoptional';
+										}
+									}
+									if (zfilter == 'All 3D Plugins' || (zpluginclass == 'wtw-active' && zfilter == 'Active 3D Plugins') || (zpluginclass == 'wtw-deactive' && zfilter == 'Inactive 3D Plugins')) {
+										zpluginslist += "<tr><td class='wtw-tablecolumns " + ztdclass + "'>";
+										if (zmyplugins[i].imageurl != '') {
+											zpluginslist += "<img src='" + zmyplugins[i].imageurl + "' style='width:75px;height:auto;' />";
+										}
+										zpluginslist += "</td>";
+										zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'>";
+										zpluginslist += " <span class='" + zpluginclass + "'>" + zmyplugins[i].pluginname + "</span><br />Version: " + zmyplugins[i].version + "</td>";
+										zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'><span class='" + zpluginclass + "'>" + zmyplugins[i].title + "</span> : " + zmyplugins[i].author + "<br />" + zmyplugins[i].description + "<br /></td>";
+										zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'>";
+										if (zmyplugins[i].active == '1' && (zmyplugins[i].authoruserid == '' || (dGet('wtw_tuserid').value == zmyplugins[i].authoruserid && zmyplugins[i].version != zmyplugins[i].latestversion))) {
+											zpluginslist += "<div id='wtw_share_" + zmyplugins[i].pluginname + "' class='wtw-greenbuttonright' onclick=\"WTW.openSharePlugin('" + zmyplugins[i].pluginname + "');\" alt='Click to Share' title='Click to Share'>Share</div>";
+										}
+										zpluginslist += "</td><td class='wtw-tablecolumns " + ztdclass + "'>";
+										if (zmyplugins[i].active == '1') {
+											if (WTW.isUserInRole('Admin')) {
+												zpluginslist += "<div id='wtw_activate_" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',0);\" alt='Click to Deactivate' title='Click to Deactivate'>Activated</div>";
+											} else {
+												zpluginslist += "<div id='wtw_activate_" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"console.log('Will Not Deactivate');\" alt='' title=''>Activated</div>";
+											}
+										} else {
+											if (WTW.isUserInRole('Admin')) {
+												zpluginslist += "<div id='wtw_activate_" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',1);\" alt='Click to Activate' title='Click to Activate'>Deactivated</div>";
+											} else {
+												zpluginslist += "<div id='wtw_activate_" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"console.log('Request Activation');\" alt='Click to Request Activate' title='Click to Request Activate'>Deactivated</div>";
+											}
+										}
+										zpluginslist += "</td></tr>";
+										if (zmyplugins[i].active != '1' && zmyplugins[i].websrequired != undefined) {
+											if (zmyplugins[i].websrequired.length > 0) {
+												zpluginslist += "<tr><td></td><td style='text-align:right;vertical-align:top;padding:5px;font-weight:bold;' >Dependents:</td><td class='wtw-tablecolumnheading wtw-tdactiveoptional'>";
+												for (var j=0;j<zmyplugins[i].websrequired.length;j++) {
+													if (zmyplugins[i].websrequired[j] != null) {
+														var zrequiredtext = 'Required';
+														if (zmyplugins[i].websrequired[j].optional == '1') {
+															zrequiredtext = 'Optional';
+														}
+														zpluginslist += "<div><div class='wtw-pluginreqopt'>" + zrequiredtext + "</div><div style='width:150px;display:inline-block;min-height:12px;'>3D " + zmyplugins[i].websrequired[j].webtype + "</div><a href='/admin.php?" + zmyplugins[i].websrequired[j].webtype.toLowerCase() + "id=" + zmyplugins[i].websrequired[j].webid + "'>" + zmyplugins[i].websrequired[j].webname + "</a><div class='wtw-clear'></div></div>";
+													}
+												}
+												zpluginslist += "</td>&nbsp;<td></td><td></td></tr>";
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				zpluginslist += "</table></div>";
+				if (zshow == '1') {
+					zpluginslist += "</div></div>";
+				}
+			}
+		}
+		switch (zshow) {
+			case '1':
+				if (dGet('wtw_updatepluginlist') != null) {
+					dGet('wtw_updatepluginlist').innerHTML = zpluginslist;
+				}
+				WTW.hide('wtw_loadingupdating');
+				WTW.hide('wtw_loadingupdates');
+				break;
+			case '2':
+				if (dGet('wtw_pluginslist') != null) {
+					dGet('wtw_pluginslist').innerHTML = zpluginslist;
+				}
+				WTW.hide('wtw_loadingplugins');
+				WTW.show('wtw_pluginslist');
+				WTW.show('wtw_allplugins');
+				break;
+		}
+		
+		if (dGet('wtw_updatespagescroll') != null) {
+			dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+			dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 170) + 'px';
+		}
+
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminmenus.js-getPluginInfoComplete=' + ex.message);
 	}
 }
 
