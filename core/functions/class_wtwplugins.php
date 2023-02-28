@@ -573,6 +573,14 @@ class wtwplugins {
 			$jsdata .= "		return zshow;\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsOpenFullPageFormMediaLibrary = function(zpageid, zsetcategory, zitem, zitemname, zitemnamepath, zpreviewname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('openfullpageformmedialibrary');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsOpenFullPageFormMediaLibrary=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsOpenDashboardForm = function(zshow) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('opendashboardform');

@@ -34,7 +34,7 @@ class wtwmenus {
 		/* gets the dynamically created browsing menu (bottom of the screen) */
 		global $wtw;
 		global $wtwdb;
-		$mainmenu = "<div id='wtw_wtwmessage' class='wtw-wtwmessage'></div><div id='wtw_menubase' class='wtw-menubase'><div id='wtw_menucollapsed' class='wtw-menucollapsed' onclick=\"WTW.toggle('wtw_menuexpanded');\"><img id='wtw_menucollapseimg' src='/content/system/images/menumobile32.png' title='Toggle Menu' alt='Toggle Menu' onmouseover=\"dGet('wtw_menucollapsed').style.backgroundColor='yellow';\" onmouseout=\"dGet('wtw_menucollapsed').style.backgroundColor='#ffffff';\" /></div><div id='wtw_menuexpanded' class='wtw-menuexpanded'><div class='wtw-indentright'>&nbsp;</div>";
+		$mainmenu = "<div id='wtw_wtwmessage' class='wtw-wtwmessage'></div><div id='wtw_menubase' class='wtw-menubase'><div id='wtw_menucollapsed' class='wtw-menucollapsed' onclick=\"WTW.toggle('wtw_menuexpanded');WTW.hudLoginShowEnter();\"><img id='wtw_menucollapseimg' src='/content/system/images/menumobile32.png' title='Browse Menu' alt='Toggle Menu' onmouseover=\"dGet('wtw_menucollapsed').style.backgroundColor='yellow';\" onmouseout=\"dGet('wtw_menucollapsed').style.backgroundColor='#ffffff';\" /></div><div id='wtw_menuexpanded' class='wtw-menuexpanded'><div class='wtw-indentright'>&nbsp;</div>";
 		try {
 			$zuserid = "";
 			if ($wtwdb->hasValue($_SESSION["wtw_userid"])) {

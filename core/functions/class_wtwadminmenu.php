@@ -55,7 +55,6 @@ class wtwadminmenu {
 				*/
 				$this->addAdminMenuItem('wtw_admindashboard', $this->__('Dashboard'), -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminSubMenu(this);");
 				$this->addAdminMenuItem('wtw_adminmenudashboard', $this->__('Admin Home'), -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminmenuupdates', $this->__('Updates'), -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
 				$this->addAdminMenuItem('wtw_adminmenufeedback', $this->__('Feedback'), -100, 'wtw_dashboard', 3, 'wtw_feedback', '', $adminroles, "WTW.openFullPageForm('feedback','Open Feedback','');");
 				$this->addAdminMenuItem('wtw_adminmenuerrorlog', $this->__('Error Log'), -100, 'wtw_dashboard', 4, 'wtw_errorlog', '', $developerroles, "WTW.openFullPageForm('errorlog','Active Errors','');");
 				
@@ -105,16 +104,16 @@ class wtwadminmenu {
 							and hostuserid='';
 					");
 					if (count($zresultsoptional) > 0 && count($zresultsinvoices) > 0) {
-						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Upgrades and Invoices', 400, 'wtw_invoices', 0, '', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
+						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Upgrades and Invoices', 400, 'wtw_invoices', 0, '', '/content/system/images/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
 						$this->addAdminMenuItem('wtw_adminoptionalupgrades', 'Optional Upgrades', 400, 'wtw_invoices', 1, 'wtw_admininvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Optional Upgrades')."','wtw_optionalpage');");
 						$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 400, 'wtw_invoices', 2, 'wtw_admininvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
 						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_invoices', 3, 'wtw_adminmyinvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
 					} else if (count($zresultsinvoices) > 0) {
-						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Invoices', 400, 'wtw_invoices', 0, '', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
+						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Invoices', 400, 'wtw_invoices', 0, '', '/content/system/images/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
 						$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 400, 'wtw_invoices', 1, 'wtw_admininvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
 						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_invoices', 2, 'wtw_adminmyinvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
 					} else if (count($zresultsoptional) > 0) {
-						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Upgrades', 400, 'wtw_invoices', 0, '', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
+						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Upgrades', 400, 'wtw_invoices', 0, '', '/content/system/images/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
 						$this->addAdminMenuItem('wtw_adminoptionalupgrades', 'Optional Upgrades', 400, 'wtw_invoices', 1, 'wtw_admininvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Optional Upgrades')."','wtw_optionalpage');");
 					}
 				} else {
@@ -134,14 +133,14 @@ class wtwadminmenu {
 								or createuserid='".$wtwdb->userid."');
 					");
 					if (count($zresultsoptional) > 0 && count($zresultsinvoices) > 0) {
-						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'Upgrades and Invoices', 400, 'wtw_invoices', 0, '', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.toggleAdminSubMenu(this);");
+						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'Upgrades and Invoices', 400, 'wtw_invoices', 0, '', '/content/system/images/menuinvoices.png', array('architect','host'), "WTW.toggleAdminSubMenu(this);");
 						$this->addAdminMenuItem('wtw_adminoptionalupgrades', 'Optional Upgrades', 400, 'wtw_invoices', 1, 'wtw_admininvoices', '', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('Optional Upgrades')."','wtw_optionalpage');");
 						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_invoices', 3, 'wtw_adminmyinvoices', '', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
 					} else if (count($zresultsoptional) > 0) {
-						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'Upgrades', 400, 'wtw_invoices', 0, '', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.toggleAdminSubMenu(this);");
+						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'Upgrades', 400, 'wtw_invoices', 0, '', '/content/system/images/menuinvoices.png', array('architect','host'), "WTW.toggleAdminSubMenu(this);");
 						$this->addAdminMenuItem('wtw_adminoptionalupgrades', 'Optional Upgrades', 400, 'wtw_invoices', 1, 'wtw_admininvoices', '', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('Optional Upgrades')."','wtw_optionalpage');");
 					} else if (count($zresultsinvoices) > 0) {
-						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'My Invoices', 400, 'wtw_invoices', 0, 'wtw_myinvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'My Invoices', 400, 'wtw_invoices', 0, 'wtw_myinvoices', '/content/system/images/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
 					}
 				}
 
@@ -159,6 +158,7 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 900, 'wtw_settings', 6, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				
 				$this->addAdminMenuItem('wtw_admindevtools', $this->__('Developer Tools'), 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
+				$this->addAdminMenuItem('wtw_admindevtoolsnote', $this->__('Click F12 to view the Console then click one of the following:'), 998, 'wtw_devtools', 1, 'wtw_toolsnote', '', $developerroles, "WTW.log('');");
 				$this->addAdminMenuItem('wtw_adminlistmeshes', $this->__('List Current Meshes'), 998, 'wtw_devtools', 10, 'wtw_listmeshes', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminlisttransformnodes', $this->__('List Transform Nodes'), 998, 'wtw_devtools', 15, 'wtw_listtransformnodes', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminlistcgs', $this->__('List Connecting Grids'), 998, 'wtw_devtools', 20, 'wtw_listcgs', '', $developerroles, "WTW.adminMenuItemSelected(this);");

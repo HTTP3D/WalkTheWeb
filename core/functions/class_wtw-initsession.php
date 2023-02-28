@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.6.0';
+	public $version = '3.6.1';
 	public $dbversion = '1.2.20';
-	public $versiondate = '2023-1-31';
+	public $versiondate = '2023-2-28';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -2363,6 +2363,7 @@ class wtw {
 			$zmetadata .= "<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1' />\r\n";
 			$zmetadata .= "<meta http-equiv='Pragma' content='no-cache' />\r\n";
 			$zmetadata .= "<meta http-equiv='Expires' content='-1' />\r\n";
+			$zmetadata .= "<meta name='google' content='notranslate'/>\r\n";
 			$zmetadata .= "<link id='wtw_favicon' rel='icon' href='".$zsiteiconpath."' />\r\n";
 			if ($this->hasValue($zsitedescription)) {
 				$zmetadata .= "<meta name='description' content=\"".$zsitedescription."\" />\r\n";
@@ -2569,7 +2570,7 @@ class wtw {
 			$zmainelements .= "<div id='wtw_itooltip'></div>\r\n";
 			$zmainelements .= "<div id='wtw_itouchleft'></div>\r\n";
 			$zmainelements .= "<div id='wtw_itouchright'></div>\r\n";
-			$zmainelements .= "<canvas id='wtw_renderCanvas' touch-action='none'></canvas>\r\n";
+			$zmainelements .= "<canvas id='wtw_renderCanvas' touch-action='none' style='cursor:default;'></canvas>\r\n";
 			$zmainelements .= "<div id='wtw_greyout'></div>\r\n";
 			$zmainelements .= "<div id='wtw_ibrowsediv' class='wtw-browsediv' style='display:none;' onclick='WTW.blockPassThrough();'>\r\n";
 			$zmainelements .= "	<div id='wtw_browseheader' class='wtw-browseheader'>\r\n";

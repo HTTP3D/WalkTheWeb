@@ -1168,7 +1168,7 @@ button {
 	color:#c0c0c0;
 	font-size:.8em;
 }
-.wtw-wtw-animationicondiv:hover {
+.wtw-animationicondiv:hover {
 	border:2px solid yellow;
 	cursor:pointer;
 	color:yellow;
@@ -1818,6 +1818,8 @@ hr.wtw-menuhr {
 	text-align:center;
 	width:100%;
 	min-height:32px;
+	pointer-events:none;
+	touch-action:none; 
 }
 .wtw-menuexpanded {
 	position:absolute;
@@ -1831,6 +1833,8 @@ hr.wtw-menuhr {
 	background-color:#111111;
 	width:100%;
 	min-height:32px;
+	pointer-events:auto;
+	touch-action:auto; 
 }
 .wtw-menucollapsed {
 	position:absolute;
@@ -1844,6 +1848,8 @@ hr.wtw-menuhr {
 	width:32px;
 	height:32px;
 	cursor:pointer;
+	pointer-events:auto;
+	touch-action:auto; 
 }
 .wtw-menucollapsed:hover {
 	color:yellow;

@@ -1435,7 +1435,7 @@ class wtwtables {
 				INSERT INTO ".wtw_tableprefix."buildings 
 				(buildingid, pastbuildingid, hostuserid, versionid, version, versionorder, versiondesc, downloadparentwebid, downloadparentwebtype, analyticsid, buildingname, buildingdescription, userid, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, spawnactionzoneid, gravity, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 				VALUES 
-				('91hwdnqro994biox','91hwdnqro994biox','','xoq6m7wq8mhx87co','1.0.0',1000000,'Initial Version','','','','Coffee Corner Shop - No Product Displays','Small Corner Shop with a Coffee Shop Feel. 2 Entrances, Display Cases, Category Selector, park bench, and animated Cashier Clerk.','24u2nnr0wxpohhfa',-54.85,0.07,89.87,1.00,1.00,1.00,4.47,55.87,0.00,'',1.00,'Coffee Corner Shop - No Product Displays','Small Corner Shop with glass counters, park bench, 2 display windows, and animated Cashier Clerk.','3D Building, coffee shop store, stucco, brown 3d building, cover, awnings, glass tables, counters, 2 doors, small 3D Building','940tq0xhhzpltfk5','','',NULL,'Coffee Shop','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('91hwdnqro994biox','91hwdnqro994biox','','xoq6m7wq8mhx87co','1.0.0',1000000,'Initial Version','','','','Coffee Corner Shop','Small Corner Shop with a Coffee Shop Feel. 2 Entrances, Display Cases, park bench, and animated Cashier Clerk.','24u2nnr0wxpohhfa',-54.85,0.07,89.87,1.00,1.00,1.00,4.47,55.87,0.00,'',1.00,'Coffee Corner Shop','Small Corner Shop with glass counters, park bench, 2 display windows, and animated Cashier Clerk.','3D Building, coffee shop store, stucco, brown 3d building, cover, awnings, glass tables, counters, 2 doors, small 3D Building','940tq0xhhzpltfk5','','',NULL,'Coffee Shop','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				('zhl7krw65kf9a7re','zhl7krw65kf9a7re','','w91tabdryndrg760','1.0.0',1000000,'Initial Version','jumyggpw22bbf0k4','community','','Small Docks','Small Wooden Docks for small boats. Includes working steps and decorative ladders.','24u2nnr0wxpohhfa',-90.74,0.08,86.93,1.00,1.00,1.00,9.16,39.99,0.00,'',1.00,'Small Wooden Docks','Small Wooden Docks for small boats. Includes working steps and decorative ladders.','small wooden docks, pier, boat docks, water, lake, ocean, river, canal, steps, stairs, ladders, pylons, posts','v9gqw63215seqyul','','',NULL,'Docks','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 			");
 
@@ -1492,7 +1492,7 @@ class wtwtables {
 				INSERT INTO ".wtw_tableprefix."thingmolds 
 				(thingmoldid, pastthingmoldid, thingid, loadactionzoneid, unloadactionzoneid, shape, covering, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, special1, special2, uoffset, voffset, uscale, vscale, uploadobjectid, graphiclevel, textureid, texturebumpid, texturehoverid, videoid, videoposterid, diffusecolor, specularcolor, emissivecolor, ambientcolor, heightmapid, mixmapid, texturerid, texturegid, texturebid, texturebumprid, texturebumpgid, texturebumpbid, soundid, soundname, soundattenuation, soundloop, soundmaxdistance, soundrollofffactor, soundrefdistance, soundconeinnerangle, soundconeouterangle, soundconeoutergain, webtext, webstyle, opacity, sideorientation, billboard, waterreflection, receiveshadows, subdivisions, minheight, maxheight, checkcollisions, ispickable, actionzoneid, csgmoldid, csgaction, alttag, jsfunction, jsparameters, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 				VALUES 
-				('auwve8brwvjgfuf3','auwve8brwvjgfuf3','3jvfphhnmallime2','uxmr3lj0byldxobo','','babylonfile','none',0.00,0.00,0.00,1.00,1.00,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,'qq42z6587t3k6kqg',0,'091fla3lpro7hw75','','','','','#ffffff','#ffffff','#000000','#050505','','','','','','','','','','','linear',1,100.00,1.00,1.00,90.00,180.00,0.50,'','',100.00,'default',0,0,0,12,0,30,1,1,'','','','','','','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('1hokjl2g4wbmw12b','auwve8brwvjgfuf3','3jvfphhnmallime2','uxmr3lj0byldxobo','','babylonfile','none',0.00,0.00,0.00,1.00,1.00,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,'qq42z6587t3k6kqg',0,'091fla3lpro7hw75','','','','','#000000','#ffffff','#000000','#000000','','','','','','','','','','','linear',1,100.00,1.00,1.00,90.00,180.00,0.50,'','',100.00,'default',0,0,0,12,0,30,1,1,'','','','','','','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				('nc6muucie2olbkcq','8982452tw7aw6r3i','xwkkn71odqwhloop','79t0x9ru8g3trjxp','','babylonfile','none',0.00,0.00,0.00,1.50,1.50,1.50,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,'6oovpxjqhysq5pza',0,'1uull9zfs1inccux','','','','','#fffefe','#fffefe','#979797','#fffefe','','','','','','','','','','','',1,100.00,1.00,1.00,90.00,180.00,0.50,'','',100.00,'default',0,0,0,12,0,30,1,1,'','','','','','','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				('sx631b9uopsawrvd','78bwm00nietk3dpj','r787yu0jysq20r3b','8nx95ohnqkjgun1b','','babylonfile','none',0.00,0.00,0.00,1.00,1.00,1.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,'8e1pxm3vi7jicfvc',0,'0uobxnd7u02vv6f8','','','','','#ffffff','#686868','#000000','#575757','','','','','','','','','','','',1,100.00,1.00,1.00,90.00,180.00,0.50,'','',100.00,'default',0,0,0,12,0,30,1,1,'','','','','','','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 			");
@@ -2358,7 +2358,7 @@ class wtwtables {
 				$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
 					(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 					VALUES 
-					('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0); 
+					('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0); ");
 			}
 			
 			/* add roles */
@@ -3936,7 +3936,7 @@ class wtwtables {
 						INSERT INTO ".wtw_tableprefix."optionalupgrades 
 						(optionalid, title, instructions, description, serverwide, hostwide, domainwide, subscription, startprice, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 						VALUES 
-						('0dhcad25ljunojk7','3D Internet Services','Admin Menu -&gt; 3D Plugins -&gt;Enable 3D Internet.','Turn on 3D Internet Services to enable Global WalkTheWeb Accounts and find multiplayer options.',1,0,0,0,0.00,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+						('0dhcad25ljunojk7','3D Internet Services','Admin Menu -&gt; 3D Plugins -&gt;Activate 3D Internet.','Turn on 3D Internet Services to enable Global WalkTheWeb Accounts and find multiplayer options.',1,0,0,0,0.00,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 					");			
 				}
 				$zresults = $wtwdb->query("

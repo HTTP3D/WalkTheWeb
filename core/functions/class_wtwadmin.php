@@ -311,7 +311,25 @@ class wtwadmin {
 			$zpagedata .= "		<div id='wtw_loadingdashboard' class='wtw-loadingnotice'>Loading...</div>\r\n";
 			$zpagedata .= "		<div id='wtw_dashboard' style='overflow-y:auto;overflow-x:none;'>\r\n";
 
-			$zpagedata .= "			<div id='wtw_dashboardcol1' style='width:62%;margin:1%;padding:0px;display:inline-block;vertical-align:top;'>\r\n";
+			$zpagedata .= "			<div id='wtw_dashboardcol1' style='width:29%;margin:1%;padding:0px;display:inline-block;vertical-align:top;'>\r\n";
+			$zpagedata .= "				<div id='wtw_serverstats' class='wtw-dashboardboxleftfull'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id='wtw_webcountdivarrow' class='wtw-divarrow'>⯅</div>Server Stats and Information</div>\r\n";
+			$zpagedata .= "					<div id='wtw_webcountdiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
+			$zpagedata .= "						<div id='wtw_serverstatslist'></div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+
+			$zpagedata .= "				<div id='wtw_wtwactivity' class='wtw-dashboardboxleftfull'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_wtwactivitydiv');\"><div id='wtw_wtwactivitydivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Global Latest Activity</div>\r\n";
+			$zpagedata .= "					<div id='wtw_wtwactivitydiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
+			$zpagedata .= "						<div id='wtw_wtwactivitylist'></div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+
+			$zpagedata .= "			<div id='wtw_dashboardcol2' style='width:62%;margin:1%;padding:0px;display:inline-block;vertical-align:top;'>\r\n";
 			$zpagedata .= "				<div id='wtw_videolinks' class='wtw-dashboardboxleftfull wtw-hide'>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id='wtw_videolinksdivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Videos</div>\r\n";
 			$zpagedata .= "					<div id='wtw_videolinksdiv' class='wtw-dashboardboxmax' style='min-height:550px;'>\r\n";
@@ -330,24 +348,6 @@ class wtwadmin {
 			$zpagedata .= "					<div id='wtw_downloadqueuediv' class='wtw-dashboardboxmax'>\r\n";
 			$zpagedata .= "						<div id='wtw_downloadingnoticequeue' class='wtw-hide'></div>\r\n";
 			$zpagedata .= "						<div id='wtw_downloadqueuelist'></div>\r\n";
-			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "					</div>\r\n";
-			$zpagedata .= "				</div>\r\n";
-			$zpagedata .= "			</div>\r\n";
-
-			$zpagedata .= "			<div id='wtw_dashboardcol2' style='width:29%;margin:1%;padding:0px;display:inline-block;vertical-align:top;'>\r\n";
-			$zpagedata .= "				<div id='wtw_serverstats' class='wtw-dashboardboxleftfull'>\r\n";
-			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id='wtw_webcountdivarrow' class='wtw-divarrow'>⯅</div>Server Stats and Information</div>\r\n";
-			$zpagedata .= "					<div id='wtw_webcountdiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
-			$zpagedata .= "						<div id='wtw_serverstatslist'></div>\r\n";
-			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "					</div>\r\n";
-			$zpagedata .= "				</div>\r\n";
-
-			$zpagedata .= "				<div id='wtw_wtwactivity' class='wtw-dashboardboxleftfull'>\r\n";
-			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_wtwactivitydiv');\"><div id='wtw_wtwactivitydivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Global Latest Activity</div>\r\n";
-			$zpagedata .= "					<div id='wtw_wtwactivitydiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
-			$zpagedata .= "						<div id='wtw_wtwactivitylist'></div>\r\n";
 			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					</div>\r\n";
 			$zpagedata .= "				</div>\r\n";
@@ -386,6 +386,8 @@ class wtwadmin {
 			$zpagedata .= "				<div class='wtw-dashboardboxleftfull'>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardboxtitle'>Feedback</div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardbox'>\r\n";
+			$zpagedata .= " 					<div class='wtw-roundedbox'>Feedback or Issues are submitted by the users on the Browse Menu under the Help icon.</div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "						<div id='wtw_feedbacklist'></div>\r\n";
 			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					</div>\r\n";
