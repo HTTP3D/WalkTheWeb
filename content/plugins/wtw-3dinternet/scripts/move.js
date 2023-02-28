@@ -548,6 +548,10 @@ WTW_3DINTERNET.prototype.showAvatar = async function(zavatarname, zsend) {
 					zavatar.WTW.fadetimer = window.setInterval(function() {
 						var zfadedin = true;
 						var zvisibility = 1;
+						if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+							zvisibility = .5;
+						}
+						
 						var znamemold = WTW.getMeshOrNodeByID(zavatarname + '-nameplate-text');
 						var zavatarparent = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 						/* check if avatar is blocked or banned and set max visibility accordingly */

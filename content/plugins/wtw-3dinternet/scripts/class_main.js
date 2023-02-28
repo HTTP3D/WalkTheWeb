@@ -9,11 +9,11 @@ function WTW_3DINTERNET() {
 	this.masterMove = '0'; /* toggle off or on Multiplayer Movement tracking (server level) */
 	this.masterChat = '0'; /* toggle off or on Chat (server level) */
 	this.masterVoiceChat = '0'; /* toggle off or on Voice Chat (server level) */
-	this.masterDownloads = '0'; /* toggle off or on WalkTheWeb Downloads for 3D Webs - 3D Communities, 3D Buildings, 3D Things, and 3D Avatars (server level) */
-	this.masterPlugins = '0'; /* toggle off or on WalkTheWeb Downloads for 3D Plugins (server level) */
-	this.masterSharing = '0'; /* toggle off or on Sharing Templates of 3D Webs - 3D Communities, 3D Buildings, 3D Things, and 3D Avatars (server level) */
-	this.masterFranchising = '0'; /* toggle off or on ability to franchise out your buildings to other server 3D Scenes*/
-	this.masterFranchiseAdditions = '0'; /* toggle off or on ability to add franchised buildings and things to your server 3D Scenes*/
+	this.masterDownloads = '1'; /* toggle off or on WalkTheWeb Downloads for 3D Webs - 3D Communities, 3D Buildings, 3D Things, and 3D Avatars (server level) */
+	this.masterPlugins = '1'; /* toggle off or on WalkTheWeb Downloads for 3D Plugins (server level) */
+	this.masterSharing = '1'; /* toggle off or on Sharing Templates of 3D Webs - 3D Communities, 3D Buildings, 3D Things, and 3D Avatars (server level) */
+	this.masterFranchising = '1'; /* toggle off or on ability to franchise out your buildings to other server 3D Scenes*/
+	this.masterFranchiseAdditions = '1'; /* toggle off or on ability to add franchised buildings and things to your server 3D Scenes*/
 	this.admin = null; /* admin channel object - used for connection and checking multiplayer server settings */
 	this.move = null; /* movement channel object - tracks and sends multiplayer movements */
 	this.chat = null; /* chat channel object - processes all chat to and from your user */
@@ -105,7 +105,7 @@ WTW_3DINTERNET.prototype.openFullPageForm = function(zpageid, zsetcategory, zite
 					}
 					if (wtw3dinternet.masterDownloads == '1' || wtw3dinternet.masterPlugins == '1') {
 						WTW.show('wtw_adminmediawtwdownloads');
-						WTW.show('wtw_menuwtwdownloads');
+						WTW.showInline('wtw_menuwtwdownloads');
 					} else {
 						WTW.hide('wtw_adminmediawtwdownloads');
 						WTW.hide('wtw_menuwtwdownloads');
@@ -170,6 +170,20 @@ WTW_3DINTERNET.prototype.openFullPageForm = function(zpageid, zsetcategory, zite
 	}
 	return zshow;
 }
+
+WTW_3DINTERNET.prototype.openFullPageFormMediaLibrary = async function(zpageid, zsetcategory, zitem, zitemname, zitemnamepath, zpreviewname) {
+	/* this function sets the form page title, sections, menu options, breadcrumbs, etc - in the MEdia Library section */
+	try {
+		if (zsetcategory == '') {
+			if (wtw3dinternet.masterDownloads == '1' || wtw3dinternet.masterPlugins == '1') {
+				WTW.showInline('wtw_menuwtwdownloads');
+			}
+		}
+	} catch (ex) {
+		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-openFullPageFormMediaLibrary=' + ex.message);
+	}
+}
+
 
 
 /* WalkTheWeb and 3D Plugin Updates */
@@ -1090,7 +1104,7 @@ WTW_3DINTERNET.prototype.enableDownloads = async function(zchecked) {
 		}
 		if (wtw3dinternet.masterDownloads == '1' || wtw3dinternet.masterPlugins == '1') {
 			WTW.show('wtw_adminmediawtwdownloads');
-			WTW.show('wtw_menuwtwdownloads');
+			WTW.showInline('wtw_menuwtwdownloads');
 		} else {
 			WTW.hide('wtw_adminmediawtwdownloads');
 			WTW.hide('wtw_menuwtwdownloads');
@@ -1115,7 +1129,7 @@ WTW_3DINTERNET.prototype.enablePlugins = async function(zchecked) {
 		}
 		if (wtw3dinternet.masterDownloads == '1' || wtw3dinternet.masterPlugins == '1') {
 			WTW.show('wtw_adminmediawtwdownloads');
-			WTW.show('wtw_menuwtwdownloads');
+			WTW.showInline('wtw_menuwtwdownloads');
 		} else {
 			WTW.hide('wtw_adminmediawtwdownloads');
 			WTW.hide('wtw_menuwtwdownloads');
@@ -1632,16 +1646,21 @@ WTW_3DINTERNET.prototype.resetActivityTimer = async function() {
 						zmyavatar.WTW.fadetimer = null;
 					}
 					zmyavatar.WTW.fadetimer  = window.setInterval(function(){
+						var zavatarname = 'myavatar-' + dGet('wtw_tinstanceid').value;
 						var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
 						if (zavatarscale != null) {
 							var zavatarparts = zavatarscale.getChildren();
 							var zdone = false;
+							var zmaxvisibility = 1;
+							if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+								zmaxvisibility = .5;
+							}
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
-									if (zavatarparts[i].visibility < 1) {
+									if (zavatarparts[i].visibility < zmaxvisibility) {
 										zavatarparts[i].visibility += .05;
 									} else {
-										zavatarparts[i].visibility = 1;
+										zavatarparts[i].visibility = zmaxvisibility;
 										zdone = true;
 									}
 								}
@@ -1649,7 +1668,7 @@ WTW_3DINTERNET.prototype.resetActivityTimer = async function() {
 							if (zdone) {
 								for (var i=0; i<zavatarparts.length;i++) {
 									if (zavatarparts[i] != null) {
-										zavatarparts[i].visibility = 1;
+										zavatarparts[i].visibility = zmaxvisibility;
 									}
 								} 
 								window.clearInterval(zmyavatar.WTW.fadetimer);
@@ -1799,6 +1818,9 @@ WTW_3DINTERNET.prototype.fadeAvatar = function(zdata) {
 			if (zavatar != null) {
 				if (zavatar.WTW != undefined) {
 					var zfade = 1;
+					if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+						zfade = .5;
+					}
 					var ztimeincrement = 500;
 					if (zdata.fade != undefined) {
 						zfade = Number(zdata.fade);

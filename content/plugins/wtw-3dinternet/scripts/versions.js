@@ -108,7 +108,7 @@ WTW_3DINTERNET.prototype.checkForUpdatesComplete = function(zmyplugins, zupdatei
 									zupdateslist += 'App Name=' + zmyplugins[i].pluginname + '<br />';
 									zupdateslist += 'App Version=' + zmyplugins[i].latestversion + '<br />';
 									zupdateslist += 'App Update=' + zdatestring + '<br />';
-									zupdateslist += 'Backup your files and database before updating!<br />';
+									zupdateslist += 'Backup your files &amp; database before updating!<br />';
 									zupdatewtw += 1;
 								}
 								zupdateslist += "<div id='wtw_loadingupdating' class='wtw-loadingnotice'>Updating...</div>";
