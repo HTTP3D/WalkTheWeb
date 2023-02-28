@@ -145,6 +145,32 @@ Exporter version: 3.3.0, Blender version: 3.3.1
 		num uvs2           :  0
 		num colors         :  0
 		num triangles      :  2
+	processing begun of mesh:  button-enter
+		animation processing begun
+			processing action loginguestAction.001:  in[1 - 120], out[0 - 120]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_loginmenu.Multimaterial#4
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-entertext
+		WARNING: No materials have been assigned: 
+		num positions      :  3015
+		num normals        :  3015
+		num tangents       :  0
+		num uvs            :  6030
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  4800
 	processing begun of light (POINT):  Light
 ========= Writing of JSON file started =========
 	writing mesh:  loginmenubox
@@ -158,6 +184,8 @@ Exporter version: 3.3.0, Blender version: 3.3.1
 	writing mesh:  green
 	writing mesh:  white
 	writing mesh:  yellow
+	writing mesh:  button-enter
+	writing mesh:  button-entertext
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 8.1428 secs
+elapsed time:  0 min, 7.1286 secs
