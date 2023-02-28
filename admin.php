@@ -14,7 +14,7 @@
 	$wtwadminmenu->preloadAdminSubMenu();
 	$wtwpluginloader->getAllPlugins($wtw->contentpath,1); 
 echo "<!DOCTYPE html>";
-echo "<html xmlns='http://www.w3.org/1999/xhtml' xmlns:fb='http://ogp.me/ns/fb#'>";
+echo "<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:fb='http://ogp.me/ns/fb#'>";
 echo "<head>";
 	echo $wtw->loadMetaData(); 
 	echo $wtwadmin->loadCSSAdminData();
