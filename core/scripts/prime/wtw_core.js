@@ -637,14 +637,7 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 		scene.resetLastAnimationTimeFrame();
 		window.setTimeout(function() {
 			WTW.isInitCycle = 0;
-			var zenter = WTW.getMeshOrNodeByID('hudlogin-button-enter');
-			var zentertext = WTW.getMeshOrNodeByID('hudlogin-button-entertext');
-			if (zenter != null) {
-				zenter.isVisible = true;
-			}
-			if (zentertext != null) {
-				zentertext.isVisible = true;
-			}
+			WTW.hudLoginShowEnter();
 			WTW.pluginsLoadUserSettingsAfterEngine();
 			WTW.resetActivityTimer();
 		}, 5000);

@@ -219,8 +219,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 			WTW.show('wtw_menuoptionalanimations');
 			var zmenuwidth = dGet('wtw_menuoptionalanimations').clientWidth;
 			if (dGet('wtw_menuoptionanimations') != null) {
-				var zicon = dGet('wtw_menuoptionanimations').getBoundingClientRect();
-				dGet('wtw_menuoptionalanimations').style.left = (zicon.left + 12 - (zmenuwidth/2)) + 'px';
+				dGet('wtw_menuoptionalanimations').style.left = (WTW.sizeX/2 + 12 - (zmenuwidth/2)) + 'px';
 			}
 		} else {
 			WTW.hide('wtw_menuoptionalanimations');
@@ -547,8 +546,13 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 				}
 			}
 		}
+		var zmaxvisibility = 1;
+		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+			zmaxvisibility = .5;
+		}
 		for (var i=0; i<zavatarparts.length; i++) {
 			if (zavatarparts[i] != null) {
+				zavatarparts[i].visibility = zmaxvisibility;
 				zavatarparts[i].isVisible = true;
 			}
 		}
@@ -576,10 +580,14 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 					var zdone = false;
 					for (var i=0; i<zavatarparts.length;i++) {
 						if (zavatarparts[i] != null) {
-							if (zavatarparts[i].visibility < 1) {
+							var zmaxvisibility = 1;
+							if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+								zmaxvisibility = .5;
+							}
+							if (zavatarparts[i].visibility < zmaxvisibility) {
 								zavatarparts[i].visibility += .05;
 							} else {
-								zavatarparts[i].visibility = 1;
+								zavatarparts[i].visibility = zmaxvisibility;
 								zdone = true;
 							}
 						}
@@ -622,10 +630,14 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
-								if (zavatarparts[i].visibility < 1) {
+								var zmaxvisibility = 1;
+								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+									zmaxvisibility = .5;
+								}
+								if (zavatarparts[i].visibility < zmaxvisibility) {
 									zavatarparts[i].visibility += .05;
 								} else {
-									zavatarparts[i].visibility = 1;
+									zavatarparts[i].visibility = zmaxvisibility;
 									zdone = true;
 								}
 							}
@@ -689,10 +701,14 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 						if (WTW.getDegrees(ztorus1.rotation.y) > 340 || zavatarparts[0].visibility > 0) {
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
-									if (zavatarparts[i].visibility < 1) {
+									var zmaxvisibility = 1;
+									if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+										zmaxvisibility = .5;
+									}
+									if (zavatarparts[i].visibility < zmaxvisibility) {
 										zavatarparts[i].visibility += .05;
 									} else {
-										zavatarparts[i].visibility = 1;
+										zavatarparts[i].visibility = zmaxvisibility;
 										zdone = true;
 									}
 								}
@@ -791,10 +807,14 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 						if (WTW.getDegrees(ztorus1.rotation.y) > 340 || zavatarparts[0].visibility > 0) {
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
-									if (zavatarparts[i].visibility < 1) {
+									var zmaxvisibility = 1;
+									if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+										zmaxvisibility = .5;
+									}
+									if (zavatarparts[i].visibility < zmaxvisibility) {
 										zavatarparts[i].visibility += .01;
 									} else {
-										zavatarparts[i].visibility = 1;
+										zavatarparts[i].visibility = zmaxvisibility;
 										zdone = true;
 									}
 								}
@@ -883,10 +903,14 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
-								if (zavatarparts[i].visibility < 1) {
+								var zmaxvisibility = 1;
+								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+									zmaxvisibility = .5;
+								}
+								if (zavatarparts[i].visibility < zmaxvisibility) {
 									zavatarparts[i].visibility += .05;
 								} else {
-									zavatarparts[i].visibility = 1;
+									zavatarparts[i].visibility = zmaxvisibility;
 									zdone = true;
 								}
 							}
@@ -966,10 +990,14 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
-								if (zavatarparts[i].visibility < 1) {
+								var zmaxvisibility = 1;
+								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+									zmaxvisibility = .5;
+								}
+								if (zavatarparts[i].visibility < zmaxvisibility) {
 									zavatarparts[i].visibility += .02;
 								} else {
-									zavatarparts[i].visibility = 1;
+									zavatarparts[i].visibility = zmaxvisibility;
 									zdone = true;
 								}
 							}
@@ -1010,8 +1038,13 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 			zavatarscale.scaling.z = .001;
 		}
 		
+		var zmaxvisibility = 1;
+		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+			zmaxvisibility = .5;
+		}
 		for (var i=0; i<zavatarparts.length;i++) {
 			if (zavatarparts[i] != null) {
+				zavatarparts[i].visibility = zmaxvisibility;
 				zavatarparts[i].isVisible = true;
 			}
 		}
@@ -1086,8 +1119,13 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 			zavatarscale.scaling.x = .001;
 			zavatarscale.scaling.y = .001;
 			zavatarscale.scaling.z = .001;
+			var zmaxvisibility = 1;
+			if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+				zmaxvisibility = .5;
+			}
 			for (var i=0; i<zavatarparts.length;i++) {
 				if (zavatarparts[i] != null) {
+					zavatarparts[i].visibility = zmaxvisibility;
 					zavatarparts[i].isVisible = true;
 					try {
 						WTW.highlightLayer.addMesh(zavatarparts[i], BABYLON.Color3.Yellow());
@@ -1181,8 +1219,13 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 			zavatarscale.scaling.z = .001;
 		}
 		
+		var zmaxvisibility = 1;
+		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+			zmaxvisibility = .5;
+		}
 		for (var i=0; i<zavatarparts.length;i++) {
 			if (zavatarparts[i] != null) {
+				zavatarparts[i].visibility = zmaxvisibility;
 				zavatarparts[i].isVisible = true;
 			}
 		}
@@ -1274,8 +1317,13 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 		if (WTW.highlightLayer == null) {
 			WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 		}
+		var zmaxvisibility = 1;
+		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+			zmaxvisibility = .5;
+		}
 		for (var i=0; i<zavatarparts.length;i++) {
 			if (zavatarparts[i] != null) {
+				zavatarparts[i].visibility = zmaxvisibility;
 				zavatarparts[i].isVisible = true;
 				try {
 					WTW.highlightLayer.addMesh(zavatarparts[i], BABYLON.Color3.Gray());
@@ -1387,10 +1435,14 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
-								if (zavatarparts[i].visibility < 1) {
+								var zmaxvisibility = 1;
+								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+									zmaxvisibility = .5;
+								}
+								if (zavatarparts[i].visibility < zmaxvisibility) {
 									zavatarparts[i].visibility += .01;
 								} else {
-									zavatarparts[i].visibility = 1;
+									zavatarparts[i].visibility = zmaxvisibility;
 									zdone = true;
 								}
 							}

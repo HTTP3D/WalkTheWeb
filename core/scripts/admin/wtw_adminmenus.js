@@ -953,7 +953,18 @@ WTWJS.prototype.toggleAdminSubMenu = function(zobj) {
 				}
 				break;
 			case 'wtw_adminmedia':
-				if ((dGet('wtw_selectimagepage').style.display == 'none' || dGet('wtw_selectimagepage').style.display == '') && (dGet('wtw_adminmediawtwdownloads').style.display == 'none' || dGet('wtw_adminmediawtwdownloads').style.display == '') && (dGet('wtw_admincommunitiesdiv').style.display == 'none' || dGet('wtw_admincommunitiesdiv').style.display == '') && (dGet('wtw_adminbuildingsdiv').style.display == 'none' || dGet('wtw_adminbuildingsdiv').style.display == '') && (dGet('wtw_adminthingsdiv').style.display == 'none' || dGet('wtw_adminthingsdiv').style.display == '') && (dGet('wtw_showimportpage').style.display == 'none' || dGet('wtw_showimportpage').style.display == '')) {
+				var zopen = false;
+				if (dGet('wtw_adminmediawtwdownloads') != null) {
+					if (dGet('wtw_adminmediawtwdownloads').style.display != 'none' && dGet('wtw_adminmediawtwdownloads').style.display != '') {
+						zopen = true;
+					}
+				}
+				if (dGet('wtw_showimportpage') != null) {
+					if (dGet('wtw_showimportpage').style.display != 'none' && dGet('wtw_showimportpage').style.display != '') {
+						zopen = true;
+					}
+				}
+				if ((dGet('wtw_selectimagepage').style.display == 'none' || dGet('wtw_selectimagepage').style.display == '') && (dGet('wtw_admincommunitiesdiv').style.display == 'none' || dGet('wtw_admincommunitiesdiv').style.display == '') && (dGet('wtw_adminbuildingsdiv').style.display == 'none' || dGet('wtw_adminbuildingsdiv').style.display == '') && (dGet('wtw_adminthingsdiv').style.display == 'none' || dGet('wtw_adminthingsdiv').style.display == '') && zopen == false) {
 					WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);
 				} else {
 					WTW.hide('wtw_selectimagepage');
@@ -983,7 +994,7 @@ WTWJS.prototype.toggleAdminSubMenu = function(zobj) {
 				}
 				break;
 			case 'wtw_adminmenuinvoices':
-				if ((dGet('wtw_optionalpage').style.display == 'none' || dGet('wtw_optionalpage').style.display == '') && (dGet('wtw_invoicepage').style.display == 'none' || dGet('wtw_invoicepage').style.display == '') && (dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
+				if (dGet('wtw_optionalpage').style.display == 'none' || dGet('wtw_optionalpage').style.display == '') {
 					if (dGet('wtw_adminoptionalupgrades') != null) {
 						WTW.openFullPageForm('fullpage','Optional Upgrades','wtw_optionalpage');
 					} else {
@@ -997,7 +1008,7 @@ WTWJS.prototype.toggleAdminSubMenu = function(zobj) {
 				}
 				break;
 			case 'wtw_adminmyinvoices2':
-				if ((dGet('wtw_optionalpage').style.display == 'none' || dGet('wtw_optionalpage').style.display == '') && (dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
+				if (dGet('wtw_optionalpage').style.display == 'none' || dGet('wtw_optionalpage').style.display == '') {
 					if (dGet('wtw_adminoptionalupgrades') != null) {
 						WTW.openFullPageForm('fullpage','Optional Upgrades','wtw_optionalpage');
 					} else {

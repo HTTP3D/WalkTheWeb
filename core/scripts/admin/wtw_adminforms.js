@@ -65,9 +65,7 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
 				dGet('wtw_selectimageformscroll').style.height = (WTW.sizeY - 170) + 'px';
 				WTW.selectFileForm();
-				if (zsetcategory == '') {
-					WTW.showInline('wtw_menuwtwdownloads');
-				}
+				WTW.pluginsOpenFullPageFormMediaLibrary(zpageid, zsetcategory, zitem, zitemname, zitemnamepath, zpreviewname);
 				break;
 			case 'mediapage':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Media Library') + "</div>";
@@ -266,6 +264,9 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 				}
 				zfeedbacklist += "</table></div>";
 			}
+		}
+		if (zfeedbacklist == "<div class='wtw-dashboardbox'>") {
+			zfeedbacklist += "No Feedback has been submitted at this time.";
 		}
 		zfeedbacklist += "</div>";
 		if (dGet('wtw_feedbacklist') != null) {
@@ -4084,29 +4085,35 @@ WTWJS.prototype.displayAPIKeys = function(zresponse, zdeleted) {
 			dGet('wtw_apikeystitle').innerHTML = "<div class='wtw-bluebuttonright' onclick=\"WTW.openAPIKeys(0);\">Show Active API Keys</div>Deleted API Keys";
 		}
 		if (zresponse != null) {
-			var zapikeyslist = "<table class='wtw-table'><tr><td class='wtw-tablecolumnheading'><b>App URL</b></td><td class='wtw-tablecolumnheading'><b>App Name</b></td><td class='wtw-tablecolumnheading'><b>WalkTheWeb Key</b></td><td class='wtw-tablecolumnheading'><b>Approved</b></td><td class='wtw-tablecolumnheading'><b>Date</b></td><td class='wtw-tablecolumnheading'><b>&nbsp;</b></td></tr>";
+			var zapikeyslist = "";
 			if (zresponse.apikeys != undefined) {
-				for (var i=0;i<zresponse.apikeys.length;i++) {
-					if (zresponse.apikeys[i] != null) {
-						if (zresponse.apikeys[i].appurl != undefined) {
-							var zapprovetext = '';
-							if (zresponse.apikeys[i].approved == '1') {
-								zapprovetext = WTW.formatDate(zresponse.apikeys[i].approveddate);
-							} else if (zresponse.apikeys[i].approveddate != null) {
-								zapprovetext = "<span style='red'>Denied</span>";
+				if (zresponse.apikeys.length > 0) {
+					zapikeyslist = "<table class='wtw-table'><tr><td class='wtw-tablecolumnheading'><b>App URL</b></td><td class='wtw-tablecolumnheading'><b>App Name</b></td><td class='wtw-tablecolumnheading'><b>WalkTheWeb Key</b></td><td class='wtw-tablecolumnheading'><b>Approved</b></td><td class='wtw-tablecolumnheading'><b>Date</b></td><td class='wtw-tablecolumnheading'><b>&nbsp;</b></td></tr>";
+					for (var i=0;i<zresponse.apikeys.length;i++) {
+						if (zresponse.apikeys[i] != null) {
+							if (zresponse.apikeys[i].appurl != undefined) {
+								var zapprovetext = '';
+								if (zresponse.apikeys[i].approved == '1') {
+									zapprovetext = WTW.formatDate(zresponse.apikeys[i].approveddate);
+								} else if (zresponse.apikeys[i].approveddate != null) {
+									zapprovetext = "<span style='red'>Denied</span>";
+								}
+								zapikeyslist += "<tr><td class='wtw-tablecolumns'><a href='" + zresponse.apikeys[i].appurl + "' target='_blank'>" + zresponse.apikeys[i].appurl + "</a></td><td class='wtw-tablecolumns'>" + zresponse.apikeys[i].appname + "</td><td class='wtw-tablecolumns'>" + zresponse.apikeys[i].wtwkey + "</td><td class='wtw-tablecolumns'>" + zapprovetext + "</td><td class='wtw-tablecolumns'>" + WTW.formatDate(zresponse.apikeys[i].createdate) + "</td>";
+								if (zresponse.apikeys[i].approveddate != null) {
+									zapikeyslist += "<td class='wtw-tablecolumns'><div class='wtw-bluebuttonright' onclick=\"WTW.openAPIKeyForm('" + zresponse.apikeys[i].apikeyid + "');\">Edit</div></td>";
+								} else {
+									zapikeyslist += "<td class='wtw-tablecolumns'><div class='wtw-redbuttonright' onclick=\"WTW.approveAPIKey('" + zresponse.apikeys[i].apikeyid + "','0');\">Deny</div><div class='wtw-greenbuttonright' onclick=\"WTW.approveAPIKey('" + zresponse.apikeys[i].apikeyid + "','1');\">Approve</div></td>";
+								}
+								zapikeyslist += "</tr>";
 							}
-							zapikeyslist += "<tr><td class='wtw-tablecolumns'><a href='" + zresponse.apikeys[i].appurl + "' target='_blank'>" + zresponse.apikeys[i].appurl + "</a></td><td class='wtw-tablecolumns'>" + zresponse.apikeys[i].appname + "</td><td class='wtw-tablecolumns'>" + zresponse.apikeys[i].wtwkey + "</td><td class='wtw-tablecolumns'>" + zapprovetext + "</td><td class='wtw-tablecolumns'>" + WTW.formatDate(zresponse.apikeys[i].createdate) + "</td>";
-							if (zresponse.apikeys[i].approveddate != null) {
-								zapikeyslist += "<td class='wtw-tablecolumns'><div class='wtw-bluebuttonright' onclick=\"WTW.openAPIKeyForm('" + zresponse.apikeys[i].apikeyid + "');\">Edit</div></td>";
-							} else {
-								zapikeyslist += "<td class='wtw-tablecolumns'><div class='wtw-redbuttonright' onclick=\"WTW.approveAPIKey('" + zresponse.apikeys[i].apikeyid + "','0');\">Deny</div><div class='wtw-greenbuttonright' onclick=\"WTW.approveAPIKey('" + zresponse.apikeys[i].apikeyid + "','1');\">Approve</div></td>";
-							}
-							zapikeyslist += "</tr>";
 						}
 					}
+					zapikeyslist += "</table>";
 				}
 			}
-			zapikeyslist += "</table>";
+			if (zapikeyslist == '') {
+				zapikeyslist = "<div style='margin:10px;'>No API Keys have been added.</div>";
+			}
 			dGet('wtw_apikeyslist').innerHTML = zapikeyslist;
 			WTW.hide('wtw_loadingapikeys');
 		}

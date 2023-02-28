@@ -851,6 +851,29 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 	}
 }
 
+WTWJS.prototype.hudLoginShowEnter = function() {
+	/* show enter button */
+	try {
+		if (WTW.placeHolder == 1) {
+			var zloginmenubox = WTW.getMeshOrNodeByID('hudlogin-loginmenubox');
+			if (zloginmenubox != null) {
+				if (dGet('wtw_tuserid').value == '' && zloginmenubox.isVisible == false) {
+					var zenter = WTW.getMeshOrNodeByID('hudlogin-button-enter');
+					var zentertext = WTW.getMeshOrNodeByID('hudlogin-button-entertext');
+					if (zenter != null) {
+						zenter.isVisible = true;
+					}
+					if (zentertext != null) {
+						zentertext.isVisible = true;
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginShowEnter=' + ex.message);
+	}
+}
+
 WTWJS.prototype.changeLoginHUDFocus = function(zmoldname) {
 	/* Change Login HUD Focus */
 	try {
