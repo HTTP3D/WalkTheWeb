@@ -275,15 +275,11 @@ WTW_3DINTERNET.prototype.adminMenuItemSelected = function(zobj) {
 			if (zobj.id != undefined) {
 				switch (zobj.id) {
 					case 'wtw_admincommunityaddbuilding':
-						WTW.hideAdminMenu();
 						wtw3dinternet.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
-						WTW.show('wtw_adminmenu27');
 						break;
 					case 'wtw_bback29':
 					case 'wtw_cancel29':	
-						WTW.hideAdminMenu();
 						wtw3dinternet.saveShareCommunityForm();
-						WTW.show('wtw_adminmenu24');
 						break;
 					case 'wtw_bsharecommunitytemp':
 						wtw3dinternet.saveShareCommunityForm();
@@ -292,9 +288,7 @@ WTW_3DINTERNET.prototype.adminMenuItemSelected = function(zobj) {
 						}
 						break;
 					case 'wtw_bback9':
-						WTW.hideAdminMenu();
 						wtw3dinternet.saveShareBuildingForm();
-						WTW.show('wtw_adminmenu4');
 						break;
 					case 'wtw_bsharebuildingtemp':
 						wtw3dinternet.saveShareBuildingForm();
@@ -303,14 +297,10 @@ WTW_3DINTERNET.prototype.adminMenuItemSelected = function(zobj) {
 						}
 						break;
 					case 'wtw_adminmenubuildsharecancel':
-						WTW.hideAdminMenu();
 						wtw3dinternet.saveShareBuildingForm();
-						WTW.show('wtw_adminmenu4');
 						break;
 					case 'wtw_bback39':
-						WTW.hideAdminMenu();
 						wtw3dinternet.saveShareThingForm();
-						WTW.show('wtw_adminmenu34');
 						break;
 					case 'wtw_bsharethingtemplate':
 						wtw3dinternet.saveShareThingForm();
@@ -319,15 +309,10 @@ WTW_3DINTERNET.prototype.adminMenuItemSelected = function(zobj) {
 						}
 						break;
 					case 'wtw_cancel39':	
-						WTW.hideAdminMenu();
 						wtw3dinternet.saveShareThingForm();
-						WTW.show('wtw_adminmenu34');
 						break;
-					case 'wtw_bbackwtw_adminShareAvatarDiv':
 					case 'wtw_cancelshareavatar':
-						WTW.hideAdminMenu();
 						wtw3dinternet.saveShareAvatarForm();
-						WTW.backToTools();
 						break;
 					case 'wtw_bshareavatartemplate':
 						wtw3dinternet.saveShareAvatarForm();
