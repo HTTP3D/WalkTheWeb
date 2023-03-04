@@ -237,6 +237,11 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
+					case 'wtw_admincommunityaddbuilding':
+						WTW.hideAdminMenu();
+						WTW.getAddBuildingList();
+						WTW.show('wtw_adminmenu27');
+						break;
 					case 'wtw_admincommunityaddthing':
 						WTW.hideAdminMenu();
 						WTW.getAddThingList();
@@ -252,10 +257,35 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.openRecoverItems();
 						WTW.show('wtw_adminmenu16');
 						break;
+					case 'wtw_bback29':
+					case 'wtw_cancel29':	
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminmenu24');
+						break;
 					case 'wtw_bback27':
 					case 'wtw_cancel27':	
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu26');
+						break;
+					case 'wtw_bback9':
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminmenu4');
+						break;
+					case 'wtw_bback39':
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminmenu34');
+						break;
+					case 'wtw_adminmenubuildsharecancel':
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminmenu4');
+						break;
+					case 'wtw_cancel39':	
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminmenu34');
+						break;
+					case 'wtw_cancelshareavatar':
+						WTW.hideAdminMenu();
+						WTW.backToTools();
 						break;
 					case 'wtw_adminlandscapesky':
 						WTW.hideAdminMenu();
