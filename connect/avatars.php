@@ -54,21 +54,26 @@ try {
 				$i = 0;
 				foreach ($zgrouplist as $zgroup) {
 					if ($i == 0) {
-						$zwhere .= "a1.avatargroup='".$zgroup."' ";
+						$zwhere .= "(a1.avatargroup='".$zgroup."' or g1.avatargroup='".$zgroup."') ";
 					} else {
-						$zwhere .= "or a1.avatargroup='".$zgroup."' ";
+						$zwhere .= "or (a1.avatargroup='".$zgroup."' or g1.avatargroup='".$zgroup."') ";
 					}
 					$i += 1;
 				}
 				$zwhere .= ")";
 			} else {
-				$zwhere .= "a1.avatargroup='".$zgroups."') ";
+				$zwhere .= " (a1.avatargroup='".$zgroups."' or g1.avatargroup='".$zgroups."')) ";
 			}
+
 			$zresults = $wtwconnect->query("
 				select distinct a1.*,
 					'' as useravatarid,
 					u1.displayname as defaultdisplayname
 				from ".wtw_tableprefix."avatars a1
+				left join ".wtw_tableprefix."avatarsingroups ag1
+                on a1.avatarid=ag1.avatarid
+                left join ".wtw_tableprefix."avatargroups g1
+                on g1.avatargroupid=ag1.avatargroupid
 				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
 				on 1=1
 				where ".$zwhere." 
@@ -120,7 +125,42 @@ try {
 		} else {
 			$zsnapshotthumbnail = '/content/system/images/menuprofilebig.png';
 		}
-		
+	
+		/* pull avatar groups by id */
+		$zavatargroups = array();
+		$zavatargroupsall = array();
+
+		/* pull avatar groups by id */
+		$zresults2 = $wtwconnect->query("
+			select g1.*,
+				ag1.avatarsingroupid
+			from ".wtw_tableprefix."avatargroups g1 
+				left join (select * from ".wtw_tableprefix."avatarsingroups where avatarid='".$zrow["avatarid"]."' and deleted=0) ag1
+				on ag1.avatargroupid=g1.avatargroupid
+			order by g1.avatargroup, ag1.avatarsingroupid;");
+		$k = 0;
+		$j = 0;
+		foreach ($zresults2 as $zrow2) {
+			$zavatarsingroupid = '';
+			if (isset($zrow2["avatarsingroupid"]) && !empty($zrow2["avatarsingroupid"])) {
+				$zavatarsingroupid = $zrow2["avatarsingroupid"];
+			}
+			$zavatargroupsall[$j] = array(
+				'avatarsingroupid'=> $zavatarsingroupid,
+				'avatargroupid'=> $zrow2["avatargroupid"],
+				'avatargroup'=> $zrow2["avatargroup"]
+			);
+			$j += 1;
+			if (!empty($zavatarsingroupid)) {
+				$zavatargroups[$k] = array(
+					'avatarsingroupid'=> $zrow2["avatarsingroupid"],
+					'avatargroupid'=> $zrow2["avatargroupid"],
+					'avatargroup'=> $zrow2["avatargroup"]
+				);
+				$k += 1;
+			}
+		}
+
 		$zavatars[$i] = array(
 			'useravatarid'=> $zrow["useravatarid"],
 			'avatarid'=> $zrow["avatarid"],
@@ -130,6 +170,8 @@ try {
 			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> $wtwconnect->escapeHTML($zrow["versiondesc"]),
 			'avatargroup'=> $zrow["avatargroup"],
+			'avatargroups'=> $zavatargroups,
+			'avatargroupsall'=> $zavatargroupsall,
 			'displayname'=> $wtwconnect->escapeHTML($zrow["displayname"]),
 			'defaultdisplayname'=> $zrow["defaultdisplayname"],
 			'avatardescription'=> $wtwconnect->escapeHTML($zrow["avatardescription"]),

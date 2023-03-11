@@ -321,6 +321,7 @@ try {
 			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> $wtwconnect->escapeHTML($zrow["versiondesc"]),
 			'avatargroup' => $zrow["avatargroup"],
+			'avatargroups' => array(),
 			'displayname' => $wtwconnect->escapeHTML($zrow["displayname"]),
 			'avatardescription' => $wtwconnect->escapeHTML($zrow["avatardescription"]),
 			'objectfolder' => $zrow["objectfolder"],

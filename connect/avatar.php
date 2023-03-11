@@ -17,6 +17,8 @@ try {
 
 	$zavatarparts = array();
 	$zavataranimationdefs = array();
+	$zavatargroups = array();
+	$zavatargroupsall = array();
 
 	/* pull avatar by id */
 
@@ -84,6 +86,37 @@ try {
 			);
 			$i += 1;
 			$zevent = $zrow["animationevent"];
+		}
+	}
+
+	/* pull avatar groups by id */
+	$zresults = $wtwconnect->query("
+		select g1.*,
+			ag1.avatarsingroupid
+		from ".wtw_tableprefix."avatargroups g1 
+			left join (select * from ".wtw_tableprefix."avatarsingroups where avatarid='".$zavatarid."' and deleted=0) ag1
+			on ag1.avatargroupid=g1.avatargroupid
+		order by g1.avatargroup, ag1.avatarsingroupid;");
+	$i = 0;
+	$j = 0;
+	foreach ($zresults as $zrow) {
+		$zavatarsingroupid = '';
+		if (isset($zrow["avatarsingroupid"]) && !empty($zrow["avatarsingroupid"])) {
+			$zavatarsingroupid = $zrow["avatarsingroupid"];
+		}
+		$zavatargroupsall[$j] = array(
+			'avatarsingroupid'=> $zavatarsingroupid,
+			'avatargroupid'=> $zrow["avatargroupid"],
+			'avatargroup'=> $zrow["avatargroup"]
+		);
+		$j += 1;
+		if (!empty($zavatarsingroupid)) {
+			$zavatargroups[$i] = array(
+				'avatarsingroupid'=> $zrow["avatarsingroupid"],
+				'avatargroupid'=> $zrow["avatargroupid"],
+				'avatargroup'=> $zrow["avatargroup"]
+			);
+			$i += 1;
 		}
 	}
 
@@ -165,6 +198,8 @@ try {
 			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> $wtwconnect->escapeHTML($zrow["versiondesc"]),
 			'avatargroup'=> $zrow["avatargroup"],
+			'avatargroups'=> $zavatargroups,
+			'avatargroupsall'=> $zavatargroupsall,
 			'displayname'=> $wtwconnect->escapeHTML($zrow["displayname"]),
 			'avatardescription'=> $wtwconnect->escapeHTML($zrow["avatardescription"]),
 			'gender'=> $zrow["gender"],

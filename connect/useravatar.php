@@ -18,7 +18,7 @@ try {
 	
 	$zfounduseravatarid = '';
 	$zfoundavatarid = '';
-	
+
 	if ($wtwconnect->hasValue($zuseravatarid)) {
 		/* check for user avatar */
 		$zresults = $wtwconnect->query("
@@ -33,7 +33,7 @@ try {
 		}
 	}
 
-	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zuserid) && !empty($zuserid)) {
+	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && (!isset($zfoundavatarid) || empty($zfoundavatarid)) && isset($zuserid) && !empty($zuserid)) {
 		/* check for user avatar for logged in user (latest used) */
 		$zresults = $wtwconnect->query("
 			select useravatarid, avatarid
@@ -48,7 +48,20 @@ try {
 		}
 	}
 
-	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zinstanceid) && !empty($zinstanceid)) {
+	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && (!isset($zfoundavatarid) || empty($zfoundavatarid)) && isset($zavatarid) && !empty($zavatarid)) {
+		/* check for avatar selected */
+		$zresults = $wtwconnect->query("
+			select avatarid
+			from ".wtw_tableprefix."avatars 
+			where avatarid='".$zavatarid."' 
+				and deleted=0 
+			limit 1;");
+		foreach ($zresults as $zrow) {
+			$zfoundavatarid = $zrow["avatarid"];
+		}
+	}
+
+	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && (!isset($zfoundavatarid) || empty($zfoundavatarid)) && isset($zinstanceid) && !empty($zinstanceid)) {
 		/* check for user avatar for by instance (latest used) */
 		$zresults = $wtwconnect->query("
 			select useravatarid, avatarid
@@ -59,19 +72,6 @@ try {
 			limit 1;");
 		foreach ($zresults as $zrow) {
 			$zfounduseravatarid = $zrow["useravatarid"];
-			$zfoundavatarid = $zrow["avatarid"];
-		}
-	}
-
-	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zavatarid) && !empty($zavatarid)) {
-		/* check for avatar selected */
-		$zresults = $wtwconnect->query("
-			select avatarid
-			from ".wtw_tableprefix."avatars 
-			where avatarid='".$zavatarid."' 
-				and deleted=0 
-			limit 1;");
-		foreach ($zresults as $zrow) {
 			$zfoundavatarid = $zrow["avatarid"];
 		}
 	}
@@ -261,7 +261,6 @@ try {
 			);
 			$i += 1;
 		}
-
 	} else {
 		if (!isset($zfoundavatarid) || empty($zfoundavatarid)) {
 			/* get the first anonymous avatar available (latest updated) */
@@ -511,6 +510,7 @@ try {
 		'avatardescription'=> addslashes($zavatardescription),
 		'gender'=> addslashes($zgender),
 		'avatargroup'=> addslashes($zavatargroup),
+		'avatargroups'=> array(),
 		'privacy'=> $zprivacy,
 		'scalingx'=> $zscalingx,
 		'scalingy'=> $zscalingy,
