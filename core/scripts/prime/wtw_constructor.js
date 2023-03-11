@@ -341,7 +341,8 @@ function WTWJS() {
 	/* WTW.keysPressed - keys pressed Array of values that are translated into movement and animation */
 	this.keysPressed = [];
 	
-	this.testTimer = null;
+	/* WTW.avatarTimer - avatar timer used to test or execute automated avatar movement commands */
+	this.avatarTimer = null;
 	
 
 /* vehicle related */

@@ -1473,9 +1473,7 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 WTWJS.prototype.loadSit = function(zavatarname) {
 	/* work in progress - sit command will move avatar to location, turn, and sit on designated mold */
 	try {
-		var zuseravataranimationid = 'cccccccccccccccc';
-		var zavataranimationid = 'dddddddddddddddd';
-		WTW.loadAvatarAnimation(zavatarname, zuseravataranimationid, 'Sit Wait', '', zavataranimationid, 'onsitwait', '/content/system/animations/movement/', 'sitwait.babylon', 1, 155, 1, 0, 0);
+		
     } catch (ex) {
 		WTW.log('avatars-loadavatar-loadSit=' + ex.message);
     }
@@ -1491,7 +1489,7 @@ WTWJS.prototype.startSit = function(zmoldname) {
 			var zactionzonename = zmoldnameparts.parentname;
 			var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzoneaxlebase-','actionzoneaxle-'));
 			if (zactionzoneaxle != null) {
-				WTW.walkToPosition(zavatarname, zactionzoneaxle, 'WTW.setSit', zactionzoneaxle);
+				WTW.walkToPosition(zavatarname, null, zactionzoneaxle, false, 'WTW.setSit', zactionzoneaxle);
 			}
 		}
     } catch (ex) {
@@ -1503,7 +1501,7 @@ WTWJS.prototype.setSit = function(zmoldtomatch) {
 	/* work in progress - sit move */
 	try {	
 		/* walk to position, rotate then */
-/*						
+						
 		WTW.keyPressedAdd('onsitwait');
 		var zsitdist = 0;
 		var zsitmove = window.setInterval(function() {
@@ -1514,73 +1512,168 @@ WTWJS.prototype.setSit = function(zmoldtomatch) {
 				zsitdist += .1;
 			}
 		},10); 
-*/					
+					
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-setSit=' + ex.message);
     }
 }
 
-WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionname, zparameters) {
+WTWJS.prototype.selectWalkToPosition = function(zavatarname, zmoldname, zrun) {
+	/* select position, add click-to-move decal, and initiate walk to position */
+	/* zrun = true uses run movement - false uses walk movements */
+	try {
+		var zclicktomove = WTW.getMeshOrNodeByID('clicktomove');
+		if (zclicktomove != null) {
+			zclicktomove.dispose();
+		}
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
+		var zpickinfo = scene.pick(WTW.mouseX, WTW.mouseY, function (mesh) { return mesh === zmold; });
+		if (zpickinfo.hit) {
+			var decalMaterial = new BABYLON.StandardMaterial("clicktomove-mat", scene);
+			decalMaterial.diffuseTexture = new BABYLON.Texture("/content/system/images/target.png", scene);
+			decalMaterial.diffuseTexture.hasAlpha = true;
+			decalMaterial.zOffset = -2;			
+			zclicktomove = BABYLON.MeshBuilder.CreateDecal("clicktomove", zmold, {position: zpickinfo.pickedPoint, normal: zpickinfo.getNormal(true), size: new BABYLON.Vector3(4, 4, 4)});
+			zclicktomove.material = decalMaterial;			
+			
+			WTW.walkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickinfo.pickedPoint, null, zrun, null, null);
+		}
+    } catch (ex) {
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-selectWalkToPosition=' + ex.message);
+    }
+}
+		
+WTWJS.prototype.walkToPosition = function(zavatarname, zabspos, zmoldtomatch, zrun, zfunctionname, zparameters) {
 	/* work in progress - force avatar to walk to a position and rotation */
 	try {
 		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
-			var zabspos = WTW.getWorldPosition(zmoldtomatch);
-			var zabsrot = WTW.getWorldRotation(zmoldtomatch);
-
-			if (zavatar.position != zabspos) {
-				var zangledegy = WTW.cleanDegrees(WTW.getDegrees(Math.atan((zabspos.x-zavatar.position.x)/(zabspos.z-zavatar.position.z))) + 180);
-				var zavatardeg = WTW.getDegrees(zavatar.rotation.y);
-				var zmoveavatar = window.setInterval(function(){
-					var ztargetangle = WTW.getMyAngleToPoint(zabspos.x,zabspos.z);
-					var zavatardeg = WTW.getDegrees(zavatar.rotation.y);
-					var zdir = 1;
-					var zdegleft = 0;
-					var zwalk = 1;
-					var zdx = (zabspos.x - zavatar.position.x);
-					var zdz = (zabspos.z - zavatar.position.z);
-					var zdist = Math.sqrt((zdx * zdx) + (zdz * zdz));
-					if (Math.round(ztargetangle) == 0 || Math.round(ztargetangle) == 360 || zdist < 3) {
-						zdir = 0;
-					} else if (ztargetangle < 1) {
-						zdir = -.1;
-						zdegleft = ztargetangle;
-					} else if (ztargetangle < 2) {
-						zdir = -.5;
-						zdegleft = ztargetangle;
-					} else if (ztargetangle < 10) {
-						zdir = -1;
-						zdegleft = ztargetangle;
-					} else if (ztargetangle < 30) {
-						zdir = -5;
-						zdegleft = ztargetangle;
-					} else if (ztargetangle < 90) {
-						zdir = -10;
-						zdegleft = ztargetangle;
-					} else if (ztargetangle < 180) {
-						zdir = -15;
-						zdegleft = ztargetangle;
+			if (zmoldtomatch != null) {
+				zabspos = WTW.getWorldPosition(zmoldtomatch);
+			}
+			/* move avatar - onwalk */
+			if (WTW.avatarTimer != null) {
+				window.clearInterval(WTW.avatarTimer);
+				WTW.avatarTimer = null;
+			}
+			var zolddist = 10000;
+			WTW.avatarTimer = window.setInterval(function(){
+				var zdx = (zabspos.x - zavatar.position.x);
+				var zdz = (zabspos.z - zavatar.position.z);
+				var zdist = Math.sqrt((zdx * zdx) + (zdz * zdz));
+				/* get angles in degrees */
+				var zavatarangle = WTW.getDegrees(zavatar.rotation.y);
+				var zpointangle = WTW.getDegrees(-Math.atan2(zdz,zdx));
+				var zleft = 0;
+				var zright = 0;
+				/* calculate degrees to turn left or right to see which is less */
+				if (zpointangle < zavatarangle) {
+					zleft = zavatarangle - zpointangle;
+					zright = 360 - zavatarangle + zpointangle;
+				} else {
+					zleft = 360 - zpointangle + zavatarangle;
+					zright = zpointangle - zavatarangle;
+				}
+				if (zdist > 1 && zolddist >= zdist) {
+					/* has not reached destination */
+					if (Math.round(zleft) < Math.round(zright)) {
+						/* need to rotate left */
+						if (Math.round(zleft) < 5) {
+							/* close enough to jump to rotation */
+							WTW.keyPressedRemove(1037); /* rotate left */
+							WTW.keyPressedRemove(2037); /* rotate run left */
+							if (zrun) {
+								WTW.keyPressedAdd(2038); /* run forward */
+							} else {
+								WTW.keyPressedAdd(1038); /* forward */
+							}
+							zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) - zleft);
+						} else {
+							if (zleft > 35) {
+								/* distance is great - stop forward motion so it rotates more */
+								WTW.keyPressedRemove(1038); /* forward */
+								WTW.keyPressedRemove(2038); /* run forward */
+							} else {
+								/* move forward */
+								if (zrun) {
+									WTW.keyPressedAdd(2038); /* run forward */
+								} else {
+									WTW.keyPressedAdd(1038); /* forward */
+								}
+							}
+							/* rotate left */
+							if (zrun) {
+								WTW.keyPressedAdd(2037); /* rotate run left */
+							} else {
+								WTW.keyPressedAdd(1037); /* rotate left */
+							}
+						}
+					} else if (Math.round(zright) < Math.round(zleft)) {
+						/* need to rotate right */
+						if (Math.round(zright) < 5) {
+							/* close enough to jump to rotation */
+							WTW.keyPressedRemove(1039); /* rotate right */
+							WTW.keyPressedRemove(2039); /* rotate run right */
+							if (zrun) {
+								WTW.keyPressedAdd(2038); /* run forward */
+							} else {
+								WTW.keyPressedAdd(1038); /* forward */
+							}
+							zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + zright);
+						} else {
+							if (zright > 35) {
+								/* distance is great - stop forward motion so it rotates more */
+								WTW.keyPressedRemove(1038); /* forward */
+								WTW.keyPressedRemove(2038); /* run forward */
+							} else {
+								/* move forward */
+								if (zrun) {
+									WTW.keyPressedAdd(2038); /* run forward */
+								} else {
+									WTW.keyPressedAdd(1038); /* forward */
+								}
+							}
+							/* rotate right */
+							if (zrun) {
+								WTW.keyPressedAdd(2039); /* rotate run right */
+							} else {
+								WTW.keyPressedAdd(1039); /* rotate right */
+							}
+						}
 					} else {
-						zdegleft = 360 - ztargetangle;
+						if (zrun) {
+							WTW.keyPressedAdd(2038); /* run forward */
+						} else {
+							WTW.keyPressedAdd(1038); /* forward */
+						}
 					}
-					zavatardeg += zdir;
-					zavatar.rotation.y = WTW.getRadians(zavatardeg);
-					if (zdist < 3) {
-						zwalk = 0;
-						WTW.keyPressedRemove('onwalk');
-					} else {
-						WTW.keyPressedAdd('onwalk');
+					zolddist = zdist;
+				} else {
+					/* remove point */
+					var zclicktomove = WTW.getMeshOrNodeByID('clicktomove');
+					if (zclicktomove != null) {
+						zclicktomove.dispose();
 					}
-					if (zdegleft < 3 && zwalk == 0) {
-						window.clearInterval(zmoveavatar);
-						zavatar.position.x = zabspos.x;
-						zavatar.position.z = zabspos.z;
+					/* stop all movement and animations */
+					WTW.keyPressedRemove(1038); /* forward */
+					WTW.keyPressedRemove(2038); /* run forward */
+					WTW.keyPressedRemove(1039); /* rotate right */
+					WTW.keyPressedRemove(2039); /* rotate run right */
+					WTW.keyPressedRemove(1037); /* rotate left */
+					WTW.keyPressedRemove(2037); /* rotate run left */
+					/* move to final point */
+					zavatar.position.x = zabspos.x;
+					zavatar.position.z = zabspos.z;
+					if (WTW.avatarTimer != null) {
+						window.clearInterval(WTW.avatarTimer);
+						WTW.avatarTimer = null;
+					}
+					if (zfunctionname != '') {
+						/* execute a function on arrival to point */
 						WTW.executeFunctionByName(zfunctionname, window, zparameters);
 					}
-				},10);
-			} else {
-				WTW.executeFunctionByName(zfunctionname, window, zparameters);
-			}
+				}
+			},10);
 		}
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-walkToPosition=' + ex.message);
@@ -1595,7 +1688,11 @@ WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionnam
 			var zabspos = WTW.getWorldPosition(zmoldtoface);
 			var zangle = WTW.getMyAngleToPoint(zabspos.x, zabspos.z);
 			
-			var zmoveavatar = window.setInterval(function(){
+			if (WTW.avatarTimer != null) {
+				window.clearInterval(WTW.avatarTimer);
+				WTW.avatarTimer = null;
+			}
+			WTW.avatarTimer = window.setInterval(function(){
 				var ztargetangle = WTW.getMyAngleToPoint(zabspos.x,zabspos.z);
 				var zavatardeg = WTW.getDegrees(zavatar.rotation.y);
 				var zdir = 1;
@@ -1619,7 +1716,7 @@ WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionnam
 					WTW.keyPressedAdd('onrunturnleft');
 				}
 				if (zdegleft < 1) {
-					window.clearInterval(zmoveavatar);
+					window.clearInterval(WTW.avatarTimer);
 					WTW.keyPressedRemove('onrunturnright');
 					WTW.keyPressedRemove('onrunturnleft');
 					WTW.executeFunctionByName(zfunctionname, window, zparameters);

@@ -210,11 +210,11 @@ WTWJS.prototype.initEnvironment = function() {
 		}, 1000);
 		
 		/* initialize extra ground (extended ground that never ends while the avatar walks) */
-		WTW.extraGround = BABYLON.MeshBuilder.CreateGround('communityeground', {width: 5000, height: 5000, subdivisions: 2, updatable: false}, scene);
+		WTW.extraGround = BABYLON.MeshBuilder.CreateGround('communityeground-', {width: 5000, height: 5000, subdivisions: 2, updatable: false}, scene);
 		WTW.extraGround.position.x = 0;
 		WTW.extraGround.position.y = 0;
 		WTW.extraGround.position.z = 0;
-		WTW.extraGround.isPickable = false;
+		WTW.extraGround.isPickable = true;
 		WTW.extraGround.checkCollisions = true;
 		WTW.extraGround.material = new BABYLON.StandardMaterial('mat-communityeground', scene);
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);

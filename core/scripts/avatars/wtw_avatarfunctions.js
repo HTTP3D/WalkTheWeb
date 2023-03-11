@@ -725,11 +725,12 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												zweight = WTW.pluginsSetAvatarMovement(zavatar, zevent, zweight);
 												break;
 										}
+										/* limits the camera rotation for up and down */
 										if (WTW.cameraYOffset < -10) {
 											WTW.cameraYOffset = -10;
 										}
-										if (WTW.cameraYOffset > 20) {
-											WTW.cameraYOffset = 20;
+										if (WTW.cameraYOffset > 10) {
+											WTW.cameraYOffset = 10;
 										}
 										/* sets the camera to properly follow and rotate from the avatar position */
 										WTW.setMovingCameras(zavatar);

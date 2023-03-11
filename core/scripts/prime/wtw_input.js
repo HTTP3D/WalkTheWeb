@@ -5,6 +5,281 @@
 /* these functions are used by the event listeners to handle the input devices */
 /* and functions for onclicks, hovers, and other user interface interactions */
 
+WTWJS.prototype.hasInputMoved = function(zstartx, zstarty) {
+	/* allow small movement to be considered no movement for a click */
+	var zmoved = true;
+	try {
+		var zdist = 5; /* amount of wiggle room on a click */
+		if (zstartx == undefined) {
+			zstartx = WTW.mouseStartX;
+		}
+		if (zstarty == undefined) {
+			zstarty = WTW.mouseStartY;
+		}
+		if (WTW.mouseX == zstartx && WTW.mouseY == zstarty) {
+			zmoved = false;
+		} else {
+			var zdifx = Math.abs(zstartx - WTW.mouseX);
+			var zdify = Math.abs(zstarty - WTW.mouseY);
+			if (zdifx < zdist && zdify < zdist) {
+				zmoved = false;
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-hasInputMoved=' + ex.message);
+	}
+	return zmoved;
+}
+
+WTWJS.prototype.inputDown = function(zevent) {
+	/* process mouseDown and touchDown */
+	try {
+		if (scene != undefined && WTW.hasInputMoved() == false) {
+			var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
+			if (zresult.pickedMesh == null) {
+				zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
+			}
+			if (zresult.pickedMesh != null) {
+				if (zresult.pickedMesh.name.indexOf('scrollboxup') > -1) {
+					WTW.scrollBoxMove(zresult.pickedMesh.name, 25);
+				} else if (zresult.pickedMesh.name.indexOf('scrollboxdown') > -1) {
+					WTW.scrollBoxMove(zresult.pickedMesh.name, -25);
+				} else if (zresult.pickedMesh.name.indexOf('-scrollboxtab') > -1) {
+					WTW.dragID = zresult.pickedMesh.name;
+				} else if (zresult.pickedMesh.name.indexOf('hud-') > -1) {
+					WTW.hudChangeCameraDistance(zresult.pickedMesh.name);
+				} else {
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-inputDown=' + ex.message);
+	}
+}
+
+WTWJS.prototype.inputUp = function(zevent) {
+	/* process mouseUp and touchUp */
+	try {
+		WTW.keyPressedRemove(1038);
+		WTW.keyPressedRemove(2038);
+		WTW.keyPressedRemove(1040);
+		WTW.keyPressedRemove(2040);
+		WTW.keyPressedRemove(1037);
+		WTW.keyPressedRemove(2037);
+		WTW.keyPressedRemove(1039);
+		WTW.keyPressedRemove(2039);
+		WTW.keyPressedRemove(1082);
+		WTW.keyPressedRemove(1070);
+		WTW.vehicleStopTurn();
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-inputUp=' + ex.message);
+	}
+}
+
+WTWJS.prototype.inputClick = function(zevent) {
+	/* process mouseClick and touchUp */
+	try {
+		if (WTW.hasInputMoved() == false) {
+			var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
+			var zpickedname = '';
+			if (zresult.pickedMesh == null) {
+				if (WTW.currentID != '') {
+					zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
+				}
+				zpickedname = WTW.currentID;
+			} else {
+				zpickedname = zresult.pickedMesh.name;
+			}
+
+			WTW.pluginsOnClick(zpickedname);
+			if (zpickedname != '') {
+				var zmold = WTW.getMeshOrNodeByID(zpickedname);
+				if (zpickedname.indexOf('-') > -1) {
+					WTW.checkMoldEvent('onclick', zpickedname);
+					if (zpickedname.substr(0,4) == 'hud-') {
+						WTW.hudClick(zpickedname);
+					} else if (zpickedname.substr(0,9) == 'hudlogin-') {
+						WTW.hudLoginClick(zpickedname);
+					} else if (zpickedname.substr(0,9) == 'myavatar-') {
+						WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
+					} else if (zpickedname.indexOf('-image') > -1) {
+						WTW.checkImageClick(zpickedname);
+					} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
+						WTW.checkVideoClick(zpickedname);
+					} else if (zpickedname.indexOf('-vehicle') > -1) {
+						WTW.toggleStartVehicle(zpickedname);
+					} else {
+						/* check if mold has an animation or jsfunction */
+						if (WTW.checkMoldFunctionAndExecute(zpickedname) == false) {
+							/* mold does not have an animation or jsfunction */
+							if (zevent.detail === 1) {
+								/* single click - to walk */
+								WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
+							} else {
+								/* double click - to run */
+								WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+							}
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-inputClick=' + ex.message);
+	}
+}
+
+WTWJS.prototype.inputMoving = function(zevent) {
+	/* process mouseMove and touchMoving */
+	try {
+		if (WTW.dragID == '' && WTW.isMouseDown == 1) {
+			/* not dragging an object */
+			if (WTW.mouseMoveX < WTW.sizeX-285) {
+				if (WTW.hasInputMoved(WTW.mouseMoveX, WTW.mouseMoveY) == false) {
+					WTW.keyPressedRemove(1037);
+					WTW.keyPressedRemove(1039);
+					WTW.keyPressedRemove(1070);
+					WTW.keyPressedRemove(1082);
+				} else {
+					if (WTW.isMouseDown == 1 && WTW.mouseX > WTW.mouseMoveX) {
+						WTW.keyPressedRemove(1037);
+						WTW.keyPressedAdd(1039);
+					} else if (WTW.isMouseDown == 1 && WTW.mouseX < WTW.mouseMoveX) {
+						WTW.keyPressedRemove(1039);
+						WTW.keyPressedAdd(1037);
+					} else if (WTW.isMouseDown == 1) {
+						WTW.keyPressedRemove(1037);
+						WTW.keyPressedRemove(1039);
+					}
+					if (WTW.isMouseDown == 1 && WTW.mouseY > WTW.mouseMoveY) {
+						WTW.keyPressedRemove(1082);
+						WTW.keyPressedAdd(1070);
+					} else if (WTW.isMouseDown == 1 && WTW.mouseY < WTW.mouseMoveY) {
+						WTW.keyPressedRemove(1070);
+						WTW.keyPressedAdd(1082);
+					} else if (WTW.isMouseDown == 1) {
+						WTW.keyPressedRemove(1070);
+						WTW.keyPressedRemove(1082);
+					}
+				}
+			}
+			WTW.mouseMoveX = WTW.mouseX;
+			WTW.mouseMoveY = WTW.mouseY;
+		}
+		WTW.setToolTipLocation();
+		if (WTW.isMouseDown == 1) {
+			/* check if you are dragging something */
+			if (WTW.dragID.indexOf('-') > -1) {
+				if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
+					var zmolds = WTW.buildingMolds;
+					var zmoldind = -1;
+					var znamepart = WTW.dragID.split('-');
+					var zpheight = 0;
+					var zscrollmove = 0;
+					if (znamepart[1] != null) {
+						if (znamepart[1].indexOf('communitymolds') > -1) {
+							zmolds = WTW.communitiesMolds;
+						}
+					}
+					if (znamepart[2] != null) {
+						if (WTW.isNumeric(znamepart[2])) {
+							zmoldind = Number(znamepart[2]);
+						}
+					}
+					if (zmolds[zmoldind] != null) {
+						if (zmolds[zmoldind].webtext.fullheight != undefined) {
+							zpheight = Number(zmolds[zmoldind].webtext.fullheight);
+						}			
+					}					
+					if (zpheight > 512) {
+						zscrollmove = (WTW.mouseStartY - WTW.mouseY) * (zpheight / 512);
+					} else {
+						zscrollmove = (WTW.mouseStartY - WTW.mouseY);
+					}
+					WTW.scrollBoxMove(WTW.dragID, zscrollmove);
+					WTW.mouseStartY = WTW.mouseY;
+					zevent.preventDefault();
+				} else if (WTW.dragID.indexOf('hud-') > -1) {
+					WTW.hudChangeCameraDistance(WTW.dragID);
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-inputMoving=' + ex.message);
+	}
+}
+
+WTWJS.prototype.touchDown = function(zevent) {
+	/* touch input - touch detected */
+	try {
+		WTW.isMouseDown = 1;
+		WTW.canvasFocus = 1;
+		WTW.clearSelectedMold();
+		if (zevent.originalEvent != undefined) {
+			if (zevent.originalEvent.touches != undefined) {
+				WTW.touch = zevent.originalEvent.touches;
+			}
+			if (zevent.originalEvent.changedTouches != undefined) {
+				WTW.touch = zevent.originalEvent.changedTouches;
+			}
+		}
+		if (zevent.touches[0] != undefined) {
+			WTW.touch = zevent.touches;
+		} else {
+			WTW.touch = null;
+		}
+		WTW.mouseX = WTW.touch[0].pageX; 
+		WTW.mouseY = WTW.touch[0].pageY;
+		WTW.mouseStartX = WTW.mouseX;
+		WTW.mouseStartY = WTW.mouseY;
+		if (WTW.mouseX < WTW.sizeX/2) {
+			WTW.touchLeftTimer = new Date();
+		} else {
+			WTW.touchRightTimer = new Date();
+		}
+		WTW.inputDown(zevent);
+		if (WTW.pause == 1) {
+			WTW.startRender();
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-touchDown=' + ex.message);
+	}
+}
+
+WTWJS.prototype.touchUp = function(zevent) {
+	/* touch input - touch release detected */
+	try {
+		if (zevent.touches[0] != undefined) {
+			WTW.touch = zevent.touches;
+		} else {
+			WTW.touch = null;
+		}
+		WTW.setTouchMove(zevent);
+		WTW.isMouseDown = 0;
+		var zsetclick = false;
+		if (WTW.hasInputMoved() == false) {
+			/* check if it was a click */
+			var ztouchtimer = new Date();
+			if (WTW.touchLeftTimer != null) {
+				if (ztouchtimer - WTW.touchLeftTimer < 240) {
+					zsetclick = true;
+				}
+			}
+			if (WTW.touchRightTimer != null) {
+				if (ztouchtimer - WTW.touchRightTimer < 240) {
+					zsetclick = true;
+				}
+			}
+		}
+		if (zsetclick == false) {
+			/* only process if it wasnt a click (click is captured separately) */
+			WTW.inputUp(zevent);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-touchUp=' + ex.message);
+	}
+}
+
 WTWJS.prototype.setTouchMove = function(zevent) {
 	/* touch input - movement detected */
 	var zisclick = false;
@@ -38,144 +313,12 @@ WTWJS.prototype.setTouchMove = function(zevent) {
 	return zisclick;
 }
 
-WTWJS.prototype.touchDown = function(zevent) {
-	/* touch input - touch detected */
-	try {
-		WTW.isMouseDown = 0;
-		WTW.canvasFocus = 1;
-		WTW.clearSelectedMold();
-		//scene.activeCamera = scene.activeCameras[0];
-		if (zevent.originalEvent != undefined) {
-			if (zevent.originalEvent.touches != undefined) {
-				WTW.touch = zevent.originalEvent.touches;
-			}
-			if (zevent.originalEvent.changedTouches != undefined) {
-				WTW.touch = zevent.originalEvent.changedTouches;
-			}
-		}
-		if (zevent.touches[0] != undefined) {
-			WTW.touch = zevent.touches;
-		} else {
-			WTW.touch = null;
-		}
-		WTW.mouseX = WTW.touch[0].pageX; 
-		WTW.mouseY = WTW.touch[0].pageY;
-		WTW.mouseStartX = WTW.mouseX;
-		WTW.mouseStartY = WTW.mouseY;
-		if (WTW.mouseX < WTW.sizeX/2) {
-			dGet('wtw_itouchleft').style.left = (WTW.mouseX - 25) + 'px';
-			dGet('wtw_itouchleft').style.top = (WTW.mouseY - 25) + 'px';
-			WTW.show('wtw_itouchleft');
-			WTW.touchLeftTimer = new Date();
-		} else {
-			dGet('wtw_itouchright').style.left = (WTW.mouseX - 25) + 'px';
-			dGet('wtw_itouchright').style.top = (WTW.mouseY - 25) + 'px';
-			WTW.show('wtw_itouchright');
-			WTW.touchRightTimer = new Date();
-		}
-		//WTW.setToolTipLocation();
-		//window.setTimeout(function() { WTW.hide('wtw_itooltip'); },3000);
-		if (WTW.pause == 1) {
-			WTW.startRender();
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_input.js-touchDown=' + ex.message);
-	}
-}
-
-WTWJS.prototype.touchUp = function(zevent) {
-	/* touch input - touch release detected */
-	try {
-		if (zevent.touches[0] != undefined) {
-			WTW.touch = zevent.touches;
-		} else {
-			WTW.touch = null;
-		}
-		WTW.setTouchMove(zevent);
-		var zsetclick = false;
-		var ztouchtimer = new Date();
-		if (WTW.mouseX == WTW.mouseStartX && WTW.mouseY == WTW.mouseStartY) {
-			if (WTW.touchLeftTimer != null) {
-				if (ztouchtimer - WTW.touchLeftTimer < 240) {
-					zsetclick = true;
-				}
-			}
-			if (WTW.touchRightTimer != null) {
-				if (ztouchtimer - WTW.touchRightTimer < 240) {
-					zsetclick = true;
-				}
-			}
-			if (zsetclick) {
-				WTW.mouseClick(zevent);
-			}
-		}
-		if (zsetclick == false) {
-			WTW.keyPressedRemove(1038);
-			WTW.keyPressedRemove(2038);
-			WTW.keyPressedRemove(1040);
-			WTW.keyPressedRemove(2040);
-			WTW.keyPressedRemove(1037);
-			WTW.keyPressedRemove(2037);
-			WTW.keyPressedRemove(1039);
-			WTW.keyPressedRemove(2039);
-			WTW.keyPressedRemove(1082);
-			WTW.keyPressedRemove(1070);
-			WTW.vehicleStopTurn();
-			WTW.hide('wtw_itouchleft');
-			WTW.hide('wtw_itouchright');
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_input.js-touchUp=' + ex.message);
-	}
-}
-
 WTWJS.prototype.touchMoving = function(zevent) {
 	/* touch input - touch currently moving detected */
 	try {
 		if (WTW.canvasFocus == 1) {
 			WTW.setTouchMove(zevent);
-			if (dGet('wtw_itouchleft').style.display == 'block') {
-				dGet('wtw_itouchleft').style.left = (WTW.mouseX - 25) + 'px';
-				dGet('wtw_itouchleft').style.top = (WTW.mouseY - 25) + 'px';
-				WTW.show('wtw_itouchleft');
-				if (WTW.mouseStartY > WTW.mouseY) {
-					if (WTW.mouseY < WTW.sizeY/4) {
-						WTW.keyPressedReplace(1038, 2038);
-					} else {
-						WTW.keyPressedReplace(2038, 1038);
-					}
-				} else if (WTW.mouseStartY < WTW.mouseY) {
-					if (WTW.mouseY > WTW.sizeY * 3/4) {
-						WTW.keyPressedReplace(1040, 2040);
-					} else {
-						WTW.keyPressedReplace(2040, 1040);
-					}
-				}
-			}
-			if (dGet('wtw_itouchright').style.display == 'block') {
-				dGet('wtw_itouchright').style.left = (WTW.mouseX - 25) + 'px';
-				dGet('wtw_itouchright').style.top = (WTW.mouseY - 25) + 'px';
-				WTW.show('wtw_itouchright');
-				if (WTW.mouseStartX > WTW.mouseX) { // left
-					if (WTW.mouseX < WTW.sizeX * 11/20) {
-						WTW.keyPressedReplace(1037, 2037);
-					} else {
-						WTW.keyPressedReplace(2037, 1037);
-					}
-				} else if (WTW.mouseStartX < WTW.mouseX) {
-					if (WTW.mouseX > WTW.sizeX * 9/10) {
-						WTW.keyPressedReplace(1039, 2039);
-					} else {
-						WTW.keyPressedReplace(2039, 1039);
-					}
-				}
-				if (WTW.mouseStartY < WTW.mouseY) {
-					WTW.keyPressedAdd(1070);
-				} else if (WTW.mouseStartY > WTW.mouseY) {
-					WTW.keyPressedAdd(1082);
-				}
-				
-			}
+			WTW.inputMoving(zevent);
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-touchMoving=' + ex.message);
@@ -186,8 +329,6 @@ WTWJS.prototype.touchCancel = function(zevent) {
 	/* touch input - touch canceled or released detected */
 	try {
 		WTW.setTouchMove(zevent);
-		WTW.hide('wtw_itouchleft');
-		WTW.hide('wtw_itouchright');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-touchCancel=' + ex.message);
 	}
@@ -429,6 +570,62 @@ WTWJS.prototype.keyPressedRemove = function(keycode) {
     }
 }
 
+WTWJS.prototype.mouseDown = function(zevent) {
+	/* mouse input - left mouse button held down detected */
+	try {
+		WTW.isMouseDown = 1;
+		zevent = zevent || window.event;
+		if (WTW.canvasFocus == 1) {
+			if (WTW.pause == 1) {
+				WTW.startRender();
+			}
+			WTW.mouseStartX = zevent.clientX; 
+			WTW.mouseStartY = zevent.clientY;
+			WTW.mouseMoveX = zevent.clientX; 
+			WTW.mouseMoveY = zevent.clientY;
+			if (WTW.adminView == 1) {
+				WTW.mouseDownAdmin(zevent);
+			}
+			WTW.inputDown(zevent);
+		}
+		return true;
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-mouseDown=' + ex.message);
+    }
+}
+
+WTWJS.prototype.mouseUp = function(zevent) {
+	/* mouse input - left mouse button up or release detected */
+	try {
+		WTW.isMouseDown = 0;
+		zevent = zevent || window.event;
+		if (WTW.canvasFocus == 1) {
+			if (WTW.mouseTimer != null) {
+				window.clearInterval(WTW.mouseTimer);
+				WTW.mouseTimer = null;
+			}
+			if (WTW.pause == 1) {
+				WTW.startRender();
+			}
+			if (WTW.adminView == 1) {
+				WTW.mouseUpAdmin(zevent);
+			}
+			if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
+				WTW.lastID = WTW.dragID;
+				WTW.dragID = WTW.dragID.replace('-scrollboxtab','');
+				WTW.resetScrollBox(WTW.dragID);
+			} else if (WTW.dragID.indexOf('hud-') > -1) {
+				WTW.hudChangeCameraDistance(WTW.dragID);
+			}
+			WTW.dragID = '';
+		}
+		WTW.inputUp(zevent);
+		return true;
+    } catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-mouseUp=' + ex.message);
+    }
+}
+
 WTWJS.prototype.mouseClick = function(zevent) {
 	/* mouse input - single click detected */
 	try {
@@ -438,48 +635,10 @@ WTWJS.prototype.mouseClick = function(zevent) {
 				WTW.startRender();
 			}
 			WTW.clearSelectedMold();
-			if (zevent.clientX != undefined) {
-				WTW.mouseStartX = zevent.clientX; 
-				WTW.mouseStartY = zevent.clientY;
-			}
 			if (WTW.adminView == 1) {
 				WTW.mouseClickAdmin(zevent);
 			} 
-			if (WTW.mouseStartX == WTW.mouseX && WTW.mouseStartY == WTW.mouseY) {
-				var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
-				var zpickedname = '';
-				if (zresult.pickedMesh == null) {
-					if (WTW.currentID != '') {
-						zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
-					}
-					zpickedname = WTW.currentID;
-				} else {
-					zpickedname = zresult.pickedMesh.name;
-				}
-
-				WTW.pluginsOnClick(zpickedname);
-				if (zpickedname != '') {
-					var zmold = WTW.getMeshOrNodeByID(zpickedname);
-					if (zpickedname.indexOf('-') > -1) {
-						WTW.checkMoldEvent('onclick', zpickedname);
-						if (zpickedname.substr(0,4) == 'hud-') {
-							WTW.hudClick(zpickedname);
-						} else if (zpickedname.substr(0,9) == 'hudlogin-') {
-							WTW.hudLoginClick(zpickedname);
-						} else if (zpickedname.substr(0,9) == 'myavatar-') {
-							WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
-						} else if (zpickedname.indexOf('-image') > -1) {
-							WTW.checkImageClick(zpickedname);
-						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
-							WTW.checkVideoClick(zpickedname);
-						} else if (zpickedname.indexOf('-vehicle') > -1) {
-							WTW.toggleStartVehicle(zpickedname);
-						} else {
-							WTW.checkMoldFunctionAndExecute(zpickedname);
-						}
-					}
-				}
-			}
+			WTW.inputClick(zevent);
 		}
 		return true;
     } catch (ex) {
@@ -526,90 +685,6 @@ WTWJS.prototype.mouseRight = function(zevent) {
     }
 }
 
-WTWJS.prototype.mouseDown = function(zevent) {
-	/* mouse input - left mouse button held down detected */
-	try {
-		WTW.isMouseDown = 1;
-		zevent = zevent || window.event;
-		if (WTW.canvasFocus == 1) {
-			if (WTW.pause == 1) {
-				WTW.startRender();
-			}
-			WTW.mouseStartX = zevent.clientX; 
-			WTW.mouseStartY = zevent.clientY;
-			WTW.mouseMoveX = zevent.clientX; 
-			WTW.mouseMoveY = zevent.clientY;
-			if (WTW.adminView == 1) {
-				WTW.mouseDownAdmin(zevent);
-			}
-			if (scene != undefined && WTW.mouseStartX == WTW.mouseX && WTW.mouseStartY == WTW.mouseY) {
-				var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
-				if (zresult.pickedMesh == null) {
-					zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
-				}
-				if (zresult.pickedMesh != null) {
-					if (zresult.pickedMesh.name.indexOf('scrollboxup') > -1) {
-						WTW.scrollBoxMove(zresult.pickedMesh.name, 25);
-					} else if (zresult.pickedMesh.name.indexOf('scrollboxdown') > -1) {
-						WTW.scrollBoxMove(zresult.pickedMesh.name, -25);
-					} else if (zresult.pickedMesh.name.indexOf('-scrollboxtab') > -1) {
-						WTW.dragID = zresult.pickedMesh.name;
-					} else if (zresult.pickedMesh.name.indexOf('hud-') > -1) {
-						WTW.hudChangeCameraDistance(zresult.pickedMesh.name);
-					}
-				}
-			}
-		}
-		return true;
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_input.js-mouseDown=' + ex.message);
-    }
-}
-
-WTWJS.prototype.mouseUp = function(zevent) {
-	/* mouse input - left mouse button up or release detected */
-	try {
-		WTW.isMouseDown = 0;
-		zevent = zevent || window.event;
-		if (WTW.canvasFocus == 1) {
-			if (WTW.mouseTimer != null) {
-				window.clearInterval(WTW.mouseTimer);
-				WTW.mouseTimer = null;
-			}
-			if (WTW.pause == 1) {
-				WTW.startRender();
-			}
-			if (WTW.adminView == 1) {
-				WTW.mouseUpAdmin(zevent);
-			}
-			if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
-				WTW.lastID = WTW.dragID;
-				WTW.dragID = WTW.dragID.replace('-scrollboxtab','');
-				WTW.resetScrollBox(WTW.dragID);
-			} else if (WTW.dragID.indexOf('hud-') > -1) {
-				WTW.hudChangeCameraDistance(WTW.dragID);
-			}
-			WTW.dragID = '';
-		}
-		WTW.keyPressedRemove(1038);
-		WTW.keyPressedRemove(2038);
-		WTW.keyPressedRemove(1040);
-		WTW.keyPressedRemove(2040);
-		WTW.keyPressedRemove(1037);
-		WTW.keyPressedRemove(2037);
-		WTW.keyPressedRemove(1039);
-		WTW.keyPressedRemove(2039);
-		WTW.keyPressedRemove(1082);
-		WTW.keyPressedRemove(1070);
-		WTW.vehicleStopTurn();
-		WTW.hide('wtw_itouchleft');
-		WTW.hide('wtw_itouchright');
-		return true;
-    } catch (ex) {
-		WTW.log('core-scripts-prime-wtw_input.js-mouseUp=' + ex.message);
-    }
-}
-
 WTWJS.prototype.mouseMove = function(zevent) {
 	/* mouse input - mouse movement detected */
 	try {
@@ -622,69 +697,7 @@ WTWJS.prototype.mouseMove = function(zevent) {
 				WTW.mouseX = zevent.clientX; 
 				WTW.mouseY = zevent.clientY;
 			}
-			if (WTW.dragID == '') {
-				if (WTW.mouseMoveX < WTW.sizeX-285) {
-					if (WTW.isMouseDown == 1 && WTW.mouseX > WTW.mouseMoveX) {
-						WTW.keyPressedRemove(1037);
-						WTW.keyPressedAdd(1039);
-					} else if (WTW.isMouseDown == 1 && WTW.mouseX < WTW.mouseMoveX) {
-						WTW.keyPressedRemove(1039);
-						WTW.keyPressedAdd(1037);
-					} else if (WTW.isMouseDown == 1) {
-						WTW.keyPressedRemove(1037);
-						WTW.keyPressedRemove(1039);
-					}
-					if (WTW.isMouseDown == 1 && WTW.mouseY > WTW.mouseMoveY) {
-						WTW.keyPressedRemove(1082);
-						WTW.keyPressedAdd(1070);
-					} else if (WTW.isMouseDown == 1 && WTW.mouseY < WTW.mouseMoveY) {
-						WTW.keyPressedRemove(1070);
-						WTW.keyPressedAdd(1082);
-					} else if (WTW.isMouseDown == 1) {
-						WTW.keyPressedRemove(1070);
-						WTW.keyPressedRemove(1082);
-					}
-				}
-				WTW.mouseMoveX = WTW.mouseX;
-				WTW.mouseMoveY = WTW.mouseY;
-			}
-			WTW.setToolTipLocation();
-			if (WTW.isMouseDown == 1) {
-				if (WTW.dragID.indexOf('-') > -1) {
-					if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
-						var zmolds = WTW.buildingMolds;
-						var zmoldind = -1;
-						var znamepart = WTW.dragID.split('-');
-						var zpheight = 0;
-						var zscrollmove = 0;
-						if (znamepart[1] != null) {
-							if (znamepart[1].indexOf('communitymolds') > -1) {
-								zmolds = WTW.communitiesMolds;
-							}
-						}
-						if (znamepart[2] != null) {
-							if (WTW.isNumeric(znamepart[2])) {
-								zmoldind = Number(znamepart[2]);
-							}
-						}
-						if (zmolds[zmoldind] != null) {
-							if (zmolds[zmoldind].webtext.fullheight != undefined) {
-								zpheight = Number(zmolds[zmoldind].webtext.fullheight);
-							}			
-						}					
-						if (zpheight > 512) {
-							zscrollmove = (WTW.mouseStartY - WTW.mouseY) * (zpheight / 512);
-						} else {
-							zscrollmove = (WTW.mouseStartY - WTW.mouseY);
-						}
-						WTW.scrollBoxMove(WTW.dragID, zscrollmove);
-						WTW.mouseStartY = WTW.mouseY;
-						zevent.preventDefault();
-					} else if (WTW.dragID.indexOf('hud-') > -1) {
-						WTW.hudChangeCameraDistance(WTW.dragID);
-					}
-				}
-			}
+			WTW.inputMoving(zevent);
 		}
     } catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-mouseMove=' + ex.message);

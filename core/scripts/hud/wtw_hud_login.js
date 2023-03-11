@@ -49,6 +49,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[0].additionalscript = '';
 				zobjectanimations[0].additionalparameters = '';
 				break;
+			case "Enter":
 			case "Login Menu":
 				zobjectfile = 'wtw-loginmenu.babylon';
 				
@@ -323,16 +324,15 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 							/* make sure child meshes are pickable */
 							switch (zmeshname) {
 								case 'loginmenubox':
-									if (WTW.isInitCycle == 1) {
-										zresults.meshes[i].isPickable = false;
+									zresults.meshes[i].isPickable = false;
+									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isVisible = false;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									}									
 									break;
 								case 'button-loginwtw':
-									if (WTW.isInitCycle == 1) {
+									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 										WTW.registerMouseOver(zresults.meshes[i]);
@@ -346,16 +346,15 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									}
 									break;
 								case 'button-loginwtwtext':
-									if (WTW.isInitCycle == 1 || WTW.globalLogins != '1') {
-										zresults.meshes[i].isPickable = false;
+									zresults.meshes[i].isPickable = false;
+									if (WTW.isInitCycle == 1 || WTW.globalLogins != '1' || zpage == 'Enter') {
 										zresults.meshes[i].isVisible = false;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
 								case 'button-loginlocal':
-									if (WTW.isInitCycle == 1) {
+									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 										WTW.registerMouseOver(zresults.meshes[i]);
@@ -369,16 +368,15 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									}
 									break;
 								case 'button-loginlocaltext':
-									if (WTW.isInitCycle == 1 || WTW.localLogins != '1') {
-										zresults.meshes[i].isPickable = false;
+									zresults.meshes[i].isPickable = false;
+									if (WTW.isInitCycle == 1 || WTW.localLogins != '1' || zpage == 'Enter') {
 										zresults.meshes[i].isVisible = false;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
 								case 'button-loginguest':
-									if (WTW.isInitCycle == 1) {
+									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 										WTW.registerMouseOver(zresults.meshes[i]);
@@ -392,16 +390,19 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									}
 									break;
 								case 'button-loginguesttext':
-									if (WTW.isInitCycle == 1 || WTW.anonymousLogins != '1') {
-										zresults.meshes[i].isPickable = false;
+									zresults.meshes[i].isPickable = false;
+									if (WTW.isInitCycle == 1 || WTW.anonymousLogins != '1' || zpage == 'Enter') {
 										zresults.meshes[i].isVisible = false;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
 								case 'button-enter':
-									if (WTW.isInitCycle == 1) {
+									if (zpage == 'Enter') {
+										zresults.meshes[i].isPickable = true;
+										zresults.meshes[i].isVisible = true;
+										WTW.registerMouseOver(zresults.meshes[i]);
+									} else if (WTW.isInitCycle == 1) {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = false;
 										WTW.registerMouseOver(zresults.meshes[i]);
@@ -412,7 +413,11 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									break;
 								case 'button-entertext':
 									zresults.meshes[i].isPickable = false;
-									zresults.meshes[i].isVisible = false;
+									if (zpage == 'Enter') {
+										zresults.meshes[i].isVisible = true;
+									} else {
+										zresults.meshes[i].isVisible = false;
+									}
 									break;
 								case 'hudlogin-button-editprofile':
 								case 'hudlogin-button-selectmyavatar':
@@ -460,38 +465,34 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									zresults.meshes[i].isVisible = false;
 									break;
 								case 'titlewtw':
+									zresults.meshes[i].isPickable = false;
 									if (zpage == 'WalkTheWeb Login') {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
 								case 'titlelocal':
+									zresults.meshes[i].isPickable = false;
 									if (zpage == '3D Website Login') {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
 								case 'titlecreatewtw':
+									zresults.meshes[i].isPickable = false;
 									if (zpage == 'Create WTW Login') {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
 								case 'titlecreatelocal':
+									zresults.meshes[i].isPickable = false;
 									if (zpage == 'Create Login') {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = true;
 									} else {
-										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
@@ -777,7 +778,7 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 							WTW.openLoginHUD('3D Website Login');
 						}
 					} else if (zmoldname == 'hudlogin-button-enter') {
-						WTW.openLoginHUD("Login Menu");
+						WTW.hudLoginEnter();
 					} else if (zmoldname == 'hudlogin-button-loginguest') {
 						/* login menu */
 						WTW.closeLoginHUD();
@@ -867,10 +868,40 @@ WTWJS.prototype.hudLoginShowEnter = function() {
 						zentertext.isVisible = true;
 					}
 				}
+			} else {
+				WTW.openLoginHUD('Enter');
 			}
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginShowEnter=' + ex.message);
+	}
+}
+
+WTWJS.prototype.hudLoginEnter = function() {
+	/* enter button - random select avatar, rando name, and enter scene */
+	try {
+		/* get array of possible avatars for random entry */
+		WTW.getAsyncJSON('/connect/avatars.php?groups=anonymous', 
+			function(zresponse) {
+				var zanonavatars = [];
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.avatars != null) {
+						var zdisplayname = '';
+						var zavatarid = '';
+						var zrand = Math.floor(Math.random() * zresponse.avatars.length)
+						if (zresponse.avatars[zrand] != null) {
+							zdisplayname = zresponse.avatars[zrand].displayname;
+							zavatarid = zresponse.avatars[zrand].avatarid;
+						}
+						WTW.closeLoginHUD();
+						WTW.onMyAvatarSelect('', '', zavatarid);
+					}
+				}
+			}
+		);		
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginEnter=' + ex.message);
 	}
 }
 
