@@ -1,7 +1,7 @@
 {
  "version": 1,
  "mappings": "",
- "sources": ["babylon.max.js"],
+ "sources": [],
  "names": [],
  "file": "babylon.js"
 }
