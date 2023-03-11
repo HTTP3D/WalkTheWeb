@@ -258,6 +258,22 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;			
 			");
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."avatarsingroups` (
+				  `avatarsingroupid` varchar(16) NOT NULL,
+				  `avatarid` varchar(16) NOT NULL,
+				  `avatargroupid` varchar(416) NOT NULL,
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`avatarsingroupid`)
+				  UNIQUE KEY `".wtw_tableprefix."avatarsingroupid_UNIQUE` (`avatarsingroupid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."buildingmolds` (
 				  `buildingmoldid` varchar(16) NOT NULL,
 				  `pastbuildingmoldid` varchar(16) DEFAULT '',
@@ -4003,6 +4019,8 @@ class wtwtables {
 					where versionid='v6b5lsgd9zze503v'
 						and not thingid='v6b5lsgd9zze503v';
 				");
+			}
+			if (($zoldversion1 == 3 && $zoldversion2 < 7) || $zoldversion1 < 3) {
 				/* updated 3.6.0 - changed login global variables (settings) */
 				$zresults = $wtwdb->query("
 					select * 
@@ -4041,7 +4059,52 @@ class wtwtables {
 						or settingname='wtw3dinternet_enableLocal'
 						or settingname='wtw3dinternet_enableAnonymous';
 				");
-				
+				/* updated 3.6.2 - changed avatar group to one to many using avatarsingroups table */
+				/* get all avatars where the avatar group is not blank or deleted */
+				$zresults = $wtwdb->query("
+					select * 
+					from ".wtw_tableprefix."avatars 
+					where (not avatargroup='')
+						and deleted=0;
+				");
+				foreach ($zresults as $zrow) {
+					/* look up avatar group id */
+					$zresults2 = $wtwdb->query("
+						select avatargroupid 
+						from ".wtw_tableprefix."avatargroups 
+						where LOWER(avatargroup)='".strtolower($zrow["avatargroup"])."'
+						order by createdate desc, deleted
+						limit 1;
+					");
+					foreach ($zresults2 as $zrow2) {
+						/* check for a record of avatar in group to avoid duplicates */
+						$zresults3 = $wtwdb->query("
+							select avatarsingroupid 
+							from ".wtw_tableprefix."avatarsingroups 
+							where avatarid='".$zrow["avatarid"]."'
+								and avatargroupid='".$zrow2["avatargroupid"]."'
+							limit 1;
+						");
+						if (count($zresults3) == 0) {
+							/* only add avatars in groups if it does not exist */
+							$zavatarsingroupid = $wtwdb->getRandomString(16,1);
+							$wtwdb->query("
+								insert into ".wtw_tableprefix."avatarsingroups 
+								   (avatarsingroupid, avatarid, avatargroupid, createdate, createuserid, updatedate, updateuserid)
+								values 
+								   ('".$zavatarsingroupid."','".$zrow["avatarid"]."','".$zrow2["avatargroupid"]."','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."');
+							");
+						}
+						/* clear old avatar group field in avatars table */
+/*						$wtwdb->query("
+							update ".wtw_tableprefix."avatars
+							set avatargroup='',
+								updatedate='".$ztimestamp."',
+								updateuserid='".$zuserid."'
+							where avatarid='".$zrow["avatarid"]."';
+						");
+*/					}
+				}
 			}
 
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);

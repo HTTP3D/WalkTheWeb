@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = '3.6.1';
-	public $dbversion = '1.2.20';
+	public $dbversion = '1.2.21';
 	public $versiondate = '2023-2-28';
 	public $oldversion = '';
 	public $olddbversion = '';
@@ -2568,8 +2568,6 @@ class wtw {
 			$zmainelements .= "<div id='wtw_iwalkarrow' class='wtw-hide'></div>\r\n";
 			$zmainelements .= "<div id='wtw_iwalkarrow2' class='wtw-hide'></div>\r\n";
 			$zmainelements .= "<div id='wtw_itooltip'></div>\r\n";
-			$zmainelements .= "<div id='wtw_itouchleft'></div>\r\n";
-			$zmainelements .= "<div id='wtw_itouchright'></div>\r\n";
 			$zmainelements .= "<canvas id='wtw_renderCanvas' touch-action='none' style='cursor:default;'></canvas>\r\n";
 			$zmainelements .= "<div id='wtw_greyout'></div>\r\n";
 			$zmainelements .= "<div id='wtw_ibrowsediv' class='wtw-browsediv' style='display:none;' onclick='WTW.blockPassThrough();'>\r\n";

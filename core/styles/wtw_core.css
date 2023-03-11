@@ -179,36 +179,6 @@ input:checked + .wtw-slider:before {
 	pointer-events:none;
 	touch-action:none;
 }
-#wtw_itouchleft {
-	position:absolute;
-	z-index:5002;
-	top:50px;
-	left:50px;
-	display:none;
-	visibility:hidden;
-	border:3px solid #009900;
-	border-radius:25px;
-	width:50px;
-	height:50px;
-	padding:0px;
-	pointer-events:none;
-	touch-action:none;
-}
-#wtw_itouchright {
-	position:absolute;
-	z-index:5002;
-	top:50px;
-	left:500px;
-	display:none;
-	visibility:hidden;
-	border:3px solid #000099;
-	border-radius:25px;
-	width:50px;
-	height:50px;
-	padding:0px;
-	pointer-events:none;
-	touch-action:none;
-}
 #wtw_showmeshfps{
 	position:absolute;
 	z-index:2499;
@@ -371,6 +341,10 @@ h4 {
 	color:#ffffff;
 	background-color:#555555;
 	margin-bottom:2px;
+}
+.wtw-avatargroups {
+	/* note class is used to select input boxes */
+	color:gray;
 }
 .wtw-smallfilename {
 	font-size:10px;

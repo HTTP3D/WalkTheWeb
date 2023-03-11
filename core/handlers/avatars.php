@@ -63,6 +63,7 @@ try {
 	$zspeedratio = $wtwhandlers->getPost('speedratio','1');
 	$ztransport = $wtwhandlers->getPost('transport','1');
 	$zavatargroupid = $wtwhandlers->getPost('avatargroupid','');
+	$zavatarsingroupid = $wtwhandlers->getPost('avatarsingroupid','');
 	$zavatargroup = $wtwhandlers->getPost('avatargroup','');
 	$zanimationeventid = $wtwhandlers->getPost('animationeventid','');
 	$zanimationevent = $wtwhandlers->getPost('animationevent','');
@@ -139,6 +140,12 @@ try {
 			break;
 		case "saveavatarinformation":
 			$zresponse = $wtwavatars->saveAvatarInformation($zavatarid, $zavatargroup, $zdisplayname, $zavatardescription, $zgender);
+			break;
+		case "saveavatarsingroup":
+			$zresponse = $wtwavatars->saveAvatarsInGroup($zavatarid, $zavatargroupid, $zavatarsingroupid, '1');
+			break;
+		case "deleteavatarsingroup":
+			$zresponse = $wtwavatars->saveAvatarsInGroup($zavatarid, $zavatargroupid, $zavatarsingroupid, '0');
 			break;
 		case "saveavatarscaling":
 			$zresponse = $wtwavatars->saveAvatarScaling($zavatarid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz);
