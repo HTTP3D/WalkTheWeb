@@ -188,7 +188,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 							if (zanimdef.animationevent.indexOf('onoption') > -1) {
 								var zfriendlyname = zanimdef.animationfriendlyname;
 								var zmode = '';
-								var zicon = '/content/system/icons/animdefault.png';
+								var zicon = '/content/system/images/animdefault.png';
 								if (zanimdef.animationicon != '') {
 									zicon = zanimdef.animationicon;
 								}
