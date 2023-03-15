@@ -321,8 +321,12 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 			/* check cookie and load Avatar OR open select Avatar list */
 			WTW.hide('wtw_menulogin');
 			WTW.hide('wtw_menuloggedin');
+			var zavatarid = WTW.getCookie('avatarid');
 			var zuseravatarid = WTW.getCookie('useravatarid');
-			if (zuseravatarid != null) {
+			if (zavatarid == '' || zavatarid == null) {
+				zavatarid = '3b9bt5c70igtmqux';
+			}
+			if (zuseravatarid != '' && zuseravatarid != null) {
 				var zglobaluseravatarid = '';
 				if (WTW.getCookie('globaluseravatarid') != null) {
 					zglobaluseravatarid = WTW.getCookie('globaluseravatarid');
@@ -331,8 +335,8 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 				/* if avatar saved, load avatar */
 				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, '', false);
 			} else {
-				/* avatar not saved, open avatar select window */
-				WTW.openLocalLogin('Select Avatar',.4,.9);
+				/* avatar not saved, select random avatar */
+				WTW.hudLoginEnter();
 			}
 		}
 	} catch (ex) {

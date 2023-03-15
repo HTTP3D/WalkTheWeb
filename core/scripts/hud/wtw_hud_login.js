@@ -880,26 +880,32 @@ WTWJS.prototype.hudLoginShowEnter = function() {
 WTWJS.prototype.hudLoginEnter = function() {
 	/* enter button - random select avatar, rando name, and enter scene */
 	try {
-		/* get array of possible avatars for random entry */
-		WTW.getAsyncJSON('/connect/avatars.php?groups=anonymous', 
-			function(zresponse) {
-				var zanonavatars = [];
-				if (zresponse != null) {
-					zresponse = JSON.parse(zresponse);
-					if (zresponse.avatars != null) {
-						var zdisplayname = '';
-						var zavatarid = '';
-						var zrand = Math.floor(Math.random() * zresponse.avatars.length)
-						if (zresponse.avatars[zrand] != null) {
-							zdisplayname = zresponse.avatars[zrand].displayname;
-							zavatarid = zresponse.avatars[zrand].avatarid;
+		var zavatarid = WTW.getCookie('avatarid');
+		if (zavatarid == '' || zavatarid == null) {
+			/* get array of possible avatars for random entry */
+			WTW.getAsyncJSON('/connect/avatars.php?groups=anonymous', 
+				function(zresponse) {
+					var zdisplayname = '';
+					zavatarid = '3b9bt5c70igtmqux';
+					if (zresponse != null) {
+						zresponse = JSON.parse(zresponse);
+						if (zresponse.avatars != null) {
+							var zrand = Math.floor(Math.random() * zresponse.avatars.length)
+							if (zresponse.avatars[zrand] != null) {
+								zdisplayname = zresponse.avatars[zrand].displayname;
+								zavatarid = zresponse.avatars[zrand].avatarid;
+							}
 						}
-						WTW.closeLoginHUD();
-						WTW.onMyAvatarSelect('', '', zavatarid);
 					}
+					WTW.closeLoginHUD();
+					WTW.setCookie("avatarid",zavatarid);
+					WTW.onMyAvatarSelect('', '', zavatarid);
 				}
-			}
-		);		
+			);
+		} else {
+			WTW.closeLoginHUD();
+			WTW.onMyAvatarSelect('', '', zavatarid);
+		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginEnter=' + ex.message);
 	}
