@@ -332,6 +332,12 @@ function WTWJS() {
 	/* WTW.editAvatar - this is the avatar object parent (cube at the base of the avatar) when you edit a 3D Avatar */
 	this.editAvatar = null; 
 	
+	/* WTW.selectAvatars - this is an array of avatars to choose from when entering a 3D Scene */
+	this.selectAvatars = [];
+
+	/* WTW.selectedAvatar - this is the currently selected avatar index from the array of avatars to choose from when entering a 3D Scene */
+	this.selectedAvatar = 0;
+
 	/* WTW.animationSet - appends a name to the animation name running to temporarily change the animation running on command */
 	/* example: default onwait animation - if you set 
 			WTW.animationSet = 'sit'; 

@@ -1680,6 +1680,22 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zabspos, zmoldtomatch, zr
     }
 }
 
+WTWJS.prototype.cancelWalkToPosition = function() {
+	/* cancel walk to position if a decal target exists */
+	try {
+		var zclicktomove = WTW.getMeshOrNodeByID('clicktomove');
+		if (zclicktomove != null) {
+			zclicktomove.dispose();
+			if (WTW.avatarTimer != null) {
+				window.clearInterval(WTW.avatarTimer);
+				WTW.avatarTimer = null;
+			}
+		}
+    } catch (ex) {
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-cancelWalkToPosition=' + ex.message);
+    }
+}
+
 WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionname, zparameters) {
 	/* work in progress - force avatar to turn to a set rotation */
 	try {

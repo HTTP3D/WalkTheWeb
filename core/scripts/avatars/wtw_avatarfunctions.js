@@ -835,7 +835,7 @@ WTWJS.prototype.deleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, 
 					WTW.pluginsDeleteUserAvatar(zglobaluseravatarid, zuseravatarid, zwidth, zheight);
 					if (zglobaluseravatarid == '') {
 						/* only had local user avatar - refresh list */
-						WTW.getMyAvatarList(zwidth, zheight, true);
+						WTW.hudLoginLoadAvatars();
 					}
 				}
 			);

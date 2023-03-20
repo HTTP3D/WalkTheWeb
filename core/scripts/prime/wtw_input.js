@@ -96,28 +96,42 @@ WTWJS.prototype.inputClick = function(zevent) {
 				var zmold = WTW.getMeshOrNodeByID(zpickedname);
 				if (zpickedname.indexOf('-') > -1) {
 					WTW.checkMoldEvent('onclick', zpickedname);
-					if (zpickedname.substr(0,4) == 'hud-') {
-						WTW.hudClick(zpickedname);
-					} else if (zpickedname.substr(0,9) == 'hudlogin-') {
-						WTW.hudLoginClick(zpickedname);
-					} else if (zpickedname.substr(0,9) == 'myavatar-') {
-						WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
-					} else if (zpickedname.indexOf('-image') > -1) {
-						WTW.checkImageClick(zpickedname);
-					} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
-						WTW.checkVideoClick(zpickedname);
-					} else if (zpickedname.indexOf('-vehicle') > -1) {
-						WTW.toggleStartVehicle(zpickedname);
+					
+					if (WTW.avatarTimer != null && (
+						zpickedname.substr(0,4) == 'hud-' || 
+						zpickedname.substr(0,9) == 'hudlogin-' || 
+						zpickedname.substr(0,9) == 'myavatar-' || 
+						zpickedname.indexOf('-image') > -1 || 
+						zpickedname.indexOf('-videoposter') > -1 || 
+						zpickedname.indexOf('-video-screen') > -1 || 
+						zpickedname.indexOf('-vehicle') > -1)) {
+						/* if my avatar is walking to a position, and any other click happened, then cancel walk to position */
+						WTW.cancelWalkToPosition();
 					} else {
-						/* check if mold has an animation or jsfunction */
-						if (WTW.checkMoldFunctionAndExecute(zpickedname) == false) {
-							/* mold does not have an animation or jsfunction */
-							if (zevent.detail === 1) {
-								/* single click - to walk */
-								WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
-							} else {
-								/* double click - to run */
-								WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+						if (zpickedname.substr(0,4) == 'hud-') {
+							WTW.hudClick(zpickedname);
+						} else if (zpickedname.substr(0,9) == 'hudlogin-') {
+							WTW.executeAnimationByName(zpickedname.replace('hudlogin-','HUDLOGIN').replace('-',''));
+							WTW.hudLoginClick(zpickedname);
+						} else if (zpickedname.substr(0,9) == 'myavatar-') {
+							WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
+						} else if (zpickedname.indexOf('-image') > -1) {
+							WTW.checkImageClick(zpickedname);
+						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
+							WTW.checkVideoClick(zpickedname);
+						} else if (zpickedname.indexOf('-vehicle') > -1) {
+							WTW.toggleStartVehicle(zpickedname);
+						} else {
+							/* check if mold has an animation or jsfunction */
+							if (WTW.checkMoldFunctionAndExecute(zpickedname) == false) {
+								/* mold does not have an animation or jsfunction */
+								if (zevent.detail === 1) {
+									/* single click - to walk */
+									WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
+								} else {
+									/* double click - to run */
+									WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+								}
 							}
 						}
 					}

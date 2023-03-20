@@ -1474,7 +1474,12 @@ WTWJS.prototype.showSettingsMenu = function(zmenuitem) {
 	try {
 		switch (zmenuitem) {
 			case 'wtw_menuprofile':
-				WTW.openLoginMenu();WTW.closeMenus();
+				var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
+				if (zhudlogin == null) {
+					WTW.openLoginMenu();WTW.closeMenus();
+				} else {
+					WTW.closeLoginHUD();
+				}
 				return true;
 				break;
 		}

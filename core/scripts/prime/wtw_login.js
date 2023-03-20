@@ -34,7 +34,7 @@ WTWJS.prototype.globalLogin = async function(zparameters) {
 					/* continue if no errors */
 					if (WTW.globalLoginResponse(zresponse)) {
 						WTW.hide('wtw_menuloggedin');
-						WTW.openLocalLogin('Select Avatar',.4,.9);
+						WTW.openLoginHUD('Select My Avatar');
 					}
 				}
 			);
@@ -133,7 +133,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				if (dGet('wtw_tuserid').value != '') {
 					zpagediv += "<div class='wtw-logincancel' onclick='WTW.logout();' style='width:170px;'>Logout 3D Website Only</div>";
 				} else {
-					zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('Select an Anonymous Avatar', .4, .5);\"><img src='/content/system/images/menuprofilebig.png' alt='Anonymous Login' title='Anonymous Login' class='wtw-image40'/><div style='margin-top:10px;'>3D Browse as Guest</div></div>";
+					zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLoginHUD('Select My Avatar');\"><img src='/content/system/images/menuprofilebig.png' alt='Anonymous Login' title='Anonymous Login' class='wtw-image40'/><div style='margin-top:10px;'>3D Browse as Guest</div></div>";
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				if (dGet('wtw_tuserid').value == '') {
@@ -185,35 +185,6 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 					"<div class='wtw-loginbutton' onclick='WTW.createAccount();'><div style='margin-top:10px;'>Create Login</div></div>" +
 					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('3D Website Login', .4, .6);\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				break;
-			case 'Select My Avatar':
-				zpagediv += "<h2 class='wtw-login'>Select My Avatar</h2>" +
-					"<div class='wtw-ipagediv' style='margin-left:5%;width:90%;height:auto;min-height:1%;max-height:200px;'><div id='wtw_myavatars'></div></div><br />" + 
-					"<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('Select an Avatar', .4, .6);\"><div style='margin-top:4px;'>Quick-Start Avatars</div></div><br />" + 
-					"<div class='wtw-loginbutton' onclick='WTW.openAvatarDesigner();'><div style='margin-top:4px;'>Create a New Avatar</div></div>";
-				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getMyAvatarList(zwidth, zheight);
-				break;
-			case 'Select Avatar':
-				zpagediv += "<h2 class='wtw-login'>Select My Avatar</h2>" + 
-					"<div class='wtw-loadingmenu'>Loading</div>" + 
-					"<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUD('User Menu');\">Cancel</div>";
-				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getFullAvatarList(true, zwidth, zheight);
-				break;
-			case 'Select an Avatar':
-				zpagediv += "<h2 class='wtw-login'>Select an Avatar</h2>" + 
-					"<div class='wtw-loadingmenu'>Loading</div>" + 
-					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Select My Avatar', .4, .6);\">Cancel</div>";
-				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getFullAvatarList(false, zwidth, zheight);
-				break;
-			case 'Select an Anonymous Avatar':
-				zpagediv += "<h2 class='wtw-login'>Select an Anonymous Avatar</h2>" + 
-					"<div class='wtw-loadingmenu'>Loading</div>" + 
-					"<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUDLogin();\">Cancel</div>";
-				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getAnonymousAvatarList();
 				break;
 		}
 		WTW.pluginsOpenLocalLogin(zitem, zwidth, zheight);
@@ -274,7 +245,7 @@ WTWJS.prototype.getLocalProfile = async function(zedit, zwidth, zheight) {
 
 					zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('Edit Profile', .4, .6);\"><div style='margin-top:4px;'>Edit Profile</div></div>";
 					
-					zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('Select Avatar', .4, .9);\"><div style='margin-top:4px;'>Select My Avatar</div></div>";
+					zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLoginHUD('Select My Avatar');\"><div style='margin-top:4px;'>Select My Avatar</div></div>";
 					
 					zpagediv += "<div class='wtw-loginbutton' onclick='WTW.closeIFrame();WTW.openAvatarDesigner();'><div style='margin-top:4px;'>Edit My Avatar</div></div>";
 					
@@ -332,340 +303,6 @@ WTWJS.prototype.saveMyProfileComplete = function(zresponse) {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-saveMyProfileComplete=' + ex.message);
-	}
-}
-
-WTWJS.prototype.getAnonymousAvatarList = async function() {
-	/* provides a formatted list of anonymous avatars to select and use in the scene */
-	try {
-		WTW.getAsyncJSON('/connect/avatars.php?groups=anonymous', 
-			function(zresponse) {
-				var zanonavatars = [];
-				if (zresponse != null) {
-					zresponse = JSON.parse(zresponse);
-					if (zresponse.avatars != null) {
-						for (var i=0;i<zresponse.avatars.length;i++) {
-							if (zresponse.avatars[i] != null) {
-								zanonavatars[zanonavatars.length] = {
-									'globaluseravatarid': '',
-									'useravatarid': zresponse.avatars[i].useravatarid,
-									'avatarid': zresponse.avatars[i].avatarid,
-									'avatargroup': zresponse.avatars[i].avatargroup,
-									'avatargroups': zresponse.avatars[i].avatargroups,
-									'displayname': zresponse.avatars[i].displayname,
-									'avatardescription': zresponse.avatars[i].avatardescription,
-									'gender': zresponse.avatars[i].gender,
-									'objects': {
-										'folder': zresponse.avatars[i].objects.folder,
-										'file': zresponse.avatars[i].objects.file
-									},
-									'scaling': {
-										'x': zresponse.avatars[i].scaling.x,
-										'y': zresponse.avatars[i].scaling.y,
-										'z': zresponse.avatars[i].scaling.z
-									},
-									'snapshots': {
-										'full': zresponse.avatars[i].snapshots.full,
-										'thumbnail': zresponse.avatars[i].snapshots.thumbnail
-									},
-									'sortorder': zresponse.avatars[i].sortorder,
-									'selected': false
-								}
-							}
-						}
-					}
-				}
-				var zpagediv = "<h2 class='wtw-login'>Select an Anonymous Avatar</h2>";
-				zpagediv += "<div class='wtw-imagescrollhorizontal'>";
-				if (zanonavatars.length > 0) {
-					for (var i=0;i<zanonavatars.length;i++) {
-						if (zanonavatars[i] != null) {
-							zpagediv += "<div class='wtw-imagescroll' onclick=\"WTW.onMyAvatarSelect('', '', '" + zanonavatars[i].avatarid + "');\"><img src='" + zanonavatars[i].snapshots.thumbnail + "' title=\"" + zanonavatars[i].displayname + "\" alt=\"" + zanonavatars[i].displayname + "\" class='wtw-image180' /><br /><div class='wtw_imagename'>" + zanonavatars[i].displayname + "</div></div>";
-						}
-					}
-				} else {
-					zpagediv += 'No Anonymous Avatars Available';
-				}
-				zpagediv += '</div>';
-				zpagediv += "<br /><div class='wtw-logincancel' onclick=\"WTW.openLoginHUDLogin();\">Cancel</div>";
-				dGet('wtw_ipagediv').innerHTML = zpagediv;
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_login.js-getAnonymousAvatarList=' + ex.message);
-	}
-}
-
-WTWJS.prototype.getFullAvatarList = async function(zshowmyavatars, zwidth, zheight) {
-	/* provides a formatted list of all available avatars to select and use in the scene (for logged in users) */
-	try {
-		WTW.getAsyncJSON('/connect/avatars.php?groups=', 
-			function(zresponse) {
-				var zfullavatars = [];
-				if (zresponse != null) {
-					zresponse = JSON.parse(zresponse);
-					if (zresponse.avatars != null) {
-						for (var i=0;i<zresponse.avatars.length;i++) {
-							if (zresponse.avatars[i] != null) {
-								zfullavatars[zfullavatars.length] = {
-									'globaluseravatarid': '',
-									'useravatarid': zresponse.avatars[i].useravatarid,
-									'avatarid': zresponse.avatars[i].avatarid,
-									'avatargroup': zresponse.avatars[i].avatargroup,
-									'avatargroups': zresponse.avatars[i].avatargroups,
-									'displayname': zresponse.avatars[i].displayname,
-									'defaultdisplayname': zresponse.avatars[i].defaultdisplayname,
-									'avatardescription': zresponse.avatars[i].avatardescription,
-									'gender': zresponse.avatars[i].gender,
-									'objects': {
-										'folder': zresponse.avatars[i].objects.folder,
-										'file': zresponse.avatars[i].objects.file
-									},
-									'scaling': {
-										'x': zresponse.avatars[i].scaling.x,
-										'y': zresponse.avatars[i].scaling.y,
-										'z': zresponse.avatars[i].scaling.z
-									},
-									'snapshots': {
-										'full': zresponse.avatars[i].snapshots.full,
-										'thumbnail': zresponse.avatars[i].snapshots.thumbnail
-									},
-									'sortorder': zresponse.avatars[i].sortorder,
-									'selected': false
-								}
-							}
-						}
-					}
-				}
-				var zdefaultdisplayname = 'Anonymous';
-				if (zfullavatars.length > 0) {
-					if (zfullavatars[0].defaultdisplayname != '') {
-						zdefaultdisplayname = zfullavatars[0].defaultdisplayname;
-					}
-				}
-				var zpagediv = "<h2 class='wtw-login'>Select an Avatar</h2>";
-				if (zshowmyavatars) {
-					zpagediv = "<h2 class='wtw-login'>Select My Avatar</h2>";
-					zpagediv += "<div class='wtw-ipagediv' style='margin-left:5%;width:90%;height:auto;min-height:1%;max-height:200px;'><div id='wtw_myavatars'></div></div>";
-				}
-				zpagediv += "<h2 id='wtw_createnewavatar' class='wtw-login' style='display:none;visibility:hidden;'>Add New Avatar</h2>";
-				zpagediv += "<div class='wtw-loginlabel'>Display Name</div><div><input type='text' id='wtw_tnewavatardisplayname' value=\"" + zdefaultdisplayname + "\" autocomplete='nickname' class='wtw-textbox' maxlength='64' /></div><div style='clear:both;'></div>";
-				zpagediv += "<div class='wtw-imagescrollhorizontal'>";
-				if (zfullavatars.length > 0) {
-					for (var i=0;i<zfullavatars.length;i++) {
-						if (zfullavatars[i] != null) {
-							zpagediv += "<div class='wtw-imagescroll' onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globaluseravatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src='" + zfullavatars[i].snapshots.thumbnail + "' title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class='wtw-image180' /><br /><div class='wtw_imagename'>" + zfullavatars[i].displayname + "</div></div>";
-						}
-					}
-				} else if (zshowmyavatars == false) {
-					zpagediv += 'No Avatars Available';
-				}
-				zpagediv += '</div>';
-				if (zshowmyavatars) {
-					zpagediv += "<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUD('User Menu');\">Cancel</div>";
-				} else {
-					zpagediv += "<br /><div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Select My Avatar', .4, .6);\">Cancel</div>";
-				}
-				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				if (zshowmyavatars) {
-					WTW.getMyAvatarList(zwidth, zheight);
-					WTW.setBrowseDiv(zwidth, zheight);
-				} else {
-					WTW.setBrowseDiv(zwidth, .6);
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_login.js-getFullAvatarList=' + ex.message);
-	}
-}
-
-WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight, zeditmode) {
-	/* gets a list of my avatars to select and use in the scene (only if user is logged in) */
-	try {
-		if (zeditmode == undefined) {
-			zeditmode = false;
-		}
-		var zloaddefault = true;
-		zloaddefault = WTW.pluginsGetMyAvatarList(zloaddefault, zeditmode);
-		if (zloaddefault) {
-			let zmyavatars = [];
-			if (dGet('wtw_myavatars') != null) {
-				WTW.getAsyncJSON('/connect/avatars.php?groups=my', 
-					function(zresponse) {
-						var zversioncheck = [];
-						if (zresponse != null) {
-							zresponse = JSON.parse(zresponse);
-							if (zresponse.avatars != null) {
-								if (zresponse.avatars.length > 0) {
-									for (var i=0;i<zresponse.avatars.length;i++) {
-										if (zresponse.avatars[i] != null) {
-											zversioncheck[zversioncheck.length] = {
-												'webtype': 'avatar',
-												'webname': btoa(zresponse.avatars[i].displayname),
-												'webdesc': btoa(zresponse.avatars[i].avatardescription),
-												'webimage': zresponse.avatars[i].snapshots.thumbnail,
-												'globaluseravatarid': '',
-												'useravatarid': zresponse.avatars[i].useravatarid,
-												'webid': zresponse.avatars[i].avatarid,
-												'versionid': zresponse.avatars[i].versionid,
-												'version': zresponse.avatars[i].version
-											};
-											zmyavatars[zmyavatars.length] = {
-												'globaluseravatarid': '',
-												'useravatarid': zresponse.avatars[i].useravatarid,
-												'avatarid': zresponse.avatars[i].avatarid,
-												'versionid': zresponse.avatars[i].versionid,
-												'version': zresponse.avatars[i].version,
-												'versionorder': zresponse.avatars[i].versionorder,
-												'versiondesc': zresponse.avatars[i].versiondesc,
-												'avatargroup': zresponse.avatars[i].avatargroup,
-												'avatargroups': zresponse.avatars[i].avatargroups,
-												'displayname': zresponse.avatars[i].displayname,
-												'avatardescription': zresponse.avatars[i].avatardescription,
-												'gender': zresponse.avatars[i].gender,
-												'objects': {
-													'folder': zresponse.avatars[i].objects.folder,
-													'file': zresponse.avatars[i].objects.file
-												},
-												'scaling': {
-													'x': zresponse.avatars[i].scaling.x,
-													'y': zresponse.avatars[i].scaling.y,
-													'z': zresponse.avatars[i].scaling.z
-												},
-												'snapshots': {
-													'full': zresponse.avatars[i].snapshots.full,
-													'thumbnail': zresponse.avatars[i].snapshots.thumbnail
-												},
-												'sortorder': zresponse.avatars[i].sortorder,
-												'selected': false
-											}
-										}
-									}
-								}
-							}
-						}
-						WTW.showMyAvatarList(zmyavatars, zwidth, zheight, zeditmode, zversioncheck);
-						WTW.setBrowseDiv(zwidth, zheight);
-					}
-				);
-			}
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_login.js-getMyAvatarList=' + ex.message);
-	}
-}
-
-WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmode, zversioncheck) {
-	/* formats the list of avatars to select and use in the scene */
-	try {
-		if (zeditmode == undefined) {
-			zeditmode = false;
-		}
-		var zmyavatarcount = 0;
-		if (zmyavatars != null) {
-			zmyavatarcount = zmyavatars.length;
-		}
-		if (zmyavatarcount > 0) {
-			if (dGet('wtw_myavatars') != null) {
-				var zmylist = ''; 
-				dGet('wtw_myavatars').innerHTML = '';
-				var zdefault = -1;
-				for (var i=0;i<zmyavatars.length;i++) {
-					if (zmyavatars[i] != null) {
-						var zuseravatarid = '';
-						var zglobaluseravatarid = '';
-						var zupdateuseravatarid = '';
-						var zavatarid = '';
-						var zglobal = false;
-						var zicon2 = '/content/system/images/avatarselect.png';;
-						var zicon = '/content/system/images/localserver.png';
-						var ztext = '3D Website Local Avatar';
-						var ztext2 = 'My Avatar';
-						var zversion = '1.0.0';
-						if (zmyavatars[i].globaluseravatarid != undefined) {
-							if (zmyavatars[i].globaluseravatarid != '') {
-								zglobaluseravatarid = zmyavatars[i].globaluseravatarid;
-								zicon = '/content/system/images/global.png';
-								ztext = 'WalkTheWeb Global Avatar';
-								zupdateuseravatarid = zglobaluseravatarid;
-								zglobal = true;
-							}
-						}
-						if (zmyavatars[i].useravatarid != undefined) {
-							if (zmyavatars[i].useravatarid != '') {
-								zuseravatarid = zmyavatars[i].useravatarid;
-								if (zglobal == false) {
-									zupdateuseravatarid = zuseravatarid;
-								}
-							}
-						}
-						if (zmyavatars[i].avatarid != undefined) {
-							if (zmyavatars[i].avatarid != '') {
-								zavatarid = zmyavatars[i].avatarid;
-							}
-						}
-						if (zmyavatars[i].version != undefined) {
-							if (zmyavatars[i].version != '') {
-								zversion = zmyavatars[i].version;
-							}
-						}
-						if (zdefault == -1) {
-							dGet('wtw_browseheaderclose').onclick = function() {WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);};
-							zdefault = i;
-						}
-						if (zmyavatars[i].snapshots.thumbnail != undefined) {
-							if (zmyavatars[i].snapshots.thumbnail != '') {
-								zicon2 = zmyavatars[i].snapshots.thumbnail;
-							}
-						}
-						if (zmyavatars[i].displayname != undefined) {
-							if (zmyavatars[i].displayname != '') {
-								ztext2 = zmyavatars[i].displayname;
-							}
-						}
-						if (zeditmode) {
-							zmylist += "<div id='wtw_editmyavatar" + i + "' class='wtw-editmoderight' onclick=\"WTW.deleteUserAvatar('" + zglobaluseravatarid + "','" + zuseravatarid + "'," + zwidth + "," + zheight + ");\">Delete</div>";
-						}
-						zmylist += "<div id='wtw_beditavatar-" + zupdateuseravatarid + "' class='wtw-loginbutton' style='text-align:left;' title='Select Avatar' alt='Select Avatar' onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
-						zmylist += "<div style='float:right;'>[" + zversion + "]</div>";
-						zmylist += "<img src='" + zicon + "' class='wtw-image32' title='" + ztext + "' alt='" + ztext + "' />";
-						zmylist += "<img src='" + zicon2 + "' class='wtw-image32' title='" + ztext2 + "' alt='" + ztext2 + "' />";
-						zmylist += ztext2 + "<div style='clear:both;'></div></div>\r\n";
-					}
-				}
-				if (zmyavatars.length > 0) {
-					if (zeditmode) {
-						zmylist += "<div id='wtw_editmyavatarslist' class='wtw-editmode'>Cancel - Edit My Avatars List</div>";
-					} else {
-						zmylist += "<div id='wtw_editmyavatarslist' class='wtw-editmode'>Edit My Avatars List</div>";
-					}
-				}
-				dGet('wtw_myavatars').innerHTML = zmylist;
-				if (dGet('wtw_editmyavatarslist') != null) {
-					if (zeditmode) {
-						dGet('wtw_editmyavatarslist').onclick = function() {
-							WTW.showMyAvatarList(zmyavatars, zwidth, zheight, false, zversioncheck);
-						}
-					} else {
-						dGet('wtw_editmyavatarslist').onclick = function() {
-							WTW.showMyAvatarList(zmyavatars, zwidth, zheight, true, zversioncheck);
-						}
-					}
-				}
-				if (zdefault == -1) {
-					dGet('wtw_browseheaderclose').onclick = function() {WTW.openAvatarDesigner();};
-				}
-				if (zversioncheck != undefined) {
-					/* check for updated versions */
-					WTW.pluginsShowListVersionCheck('useravatar', zversioncheck);
-				}
-			}
-			WTW.show('wtw_createnewavatar');
-			WTW.setBrowseDiv(zwidth, zheight);
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_login.js-showMyAvatarList=' + ex.message);
 	}
 }
 
@@ -764,7 +401,7 @@ WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuser
 				if (zresponse.useravatarid != undefined) {
 					if (zresponse.useravatarid == '') {
 						/* avatar could not be created, send back to selection */
-						WTW.openLocalLogin('Select Avatar', .4, .9);
+						WTW.openLoginHUD('Select My Avatar');
 					} else {
 						/* avatar created, continue to loading the avatar */
 						zuseravatarid = zresponse.useravatarid;
@@ -772,7 +409,7 @@ WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuser
 					}
 				} else {
 					/* avatar could not be created, send back to selection */
-					WTW.openLocalLogin('Select Avatar', .4, .9);
+					WTW.openLoginHUD('Select My Avatar');
 				}
 			}
 		);
@@ -851,7 +488,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresponse) {
 					if (WTW.enableEmailValidation == 1) {
 						WTW.checkEmailValidation(zresponse.email);
 					} else {
-						WTW.openLocalLogin('Select Avatar',.4,.9);
+						WTW.openLoginHUD('Select My Avatar');
 					}
 				} else {
 					WTW.hide('wtw_menuloggedin');
@@ -956,7 +593,7 @@ WTWJS.prototype.createAccountComplete = function(zresponse) {
 			if (WTW.enableEmailValidation == 1) {
 				WTW.checkEmailValidation(zresponse.email);
 			} else {
-				WTW.openLocalLogin('Select Avatar',.4,.9);
+				WTW.openLoginHUD('Select My Avatar');
 			}
 		}
 	} catch (ex) {
@@ -1056,7 +693,7 @@ WTWJS.prototype.checkEmailValidation = async function(zuseremail) {
 					);
 				} else {
 					WTW.hide('wtw_menuloggedin');
-					WTW.openLocalLogin('Select Avatar',.4,.9);
+					WTW.openLoginHUD('Select My Avatar');
 				}
 			}
 		);
@@ -1336,7 +973,8 @@ WTWJS.prototype.switchAvatarMenu = function(zmenu) {
 				WTW.hide('wtw_menuavatardisplaynamediv');
 				WTW.hide('wtw_menuavataranimationsdiv');
 				if (dGet('wtw_menuavatarchangediv').style.display == 'none') {
-					WTW.closeMenus();WTW.openLocalLogin('Select Avatar',.4,.9);
+					WTW.closeMenus();
+					WTW.openLoginHUD('Select My Avatar');
 					WTW.show('wtw_menuavatarchangediv');
 				} else {
 					WTW.hide('wtw_menuavatarchangediv');

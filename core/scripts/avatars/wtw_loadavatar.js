@@ -93,7 +93,7 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 			}
 			WTW.pluginsGetSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);
 		} else {
-			WTW.openLocalLogin('Select Avatar', .4, .9);
+			WTW.openLoginHUD('Select My Avatar');
 		}
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-getSavedAvatar=' + ex.message);
