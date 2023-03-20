@@ -77,6 +77,9 @@ try {
 				'serror'=> $zserror
 			);
 			break;
+		case "savedisplayname":
+			$zresponse = $wtwusers->saveDisplayName($zuserid, $zdisplayname);
+			break;
 		case "saveuserrole":
 			$wtwusers->saveUserRoleID($zuserid, $zroleid);
 			break;

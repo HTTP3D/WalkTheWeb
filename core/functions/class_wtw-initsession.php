@@ -2522,7 +2522,6 @@ class wtw {
 			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/babylon.accessibility.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/pep.js?x=".$zver."'></script>\r\n";
-//			$zjsdata .= "<script src='/core/scripts/engine/loader.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/meshwriter.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_input.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."'></script>\r\n";

@@ -1132,6 +1132,45 @@ class wtwusers {
 		return $zresponse;
 	}
 	
+	public function saveDisplayName($zuserid, $zdisplayname) {
+		/* update the local user displayname */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=> ''
+		);
+		try {
+			if (!empty($wtwhandlers->getSessionUserID())) {
+				$zdisplayname = $wtwhandlers->decode64($zdisplayname);
+				
+				$zfounduserid = '';
+				$zresults = $wtwhandlers->query("
+					select * from ".wtw_tableprefix."users
+					where userid='".$zuserid."'
+						and deleted=0
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfounduserid = $zrow["userid"];
+				}
+				
+				if (!empty($zfounduserid) && $wtwhandlers->userid == $zuserid) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."users
+						set displayname='".addslashes($zdisplayname)."',
+							updatedate=now(),
+							updateuserid='".$wtwhandlers->userid."'
+						where userid='".$wtwhandlers->userid."'
+							and deleted=0;");
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveDisplayName=".$e->getMessage());
+			$zresponse = array(
+				'serror'=> $e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
 	public function saveUser($zuserid, $zdisplayname, $zemail) {
 		/* save the user and email */
 		global $wtwhandlers;

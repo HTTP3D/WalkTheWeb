@@ -694,6 +694,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsHudLoginLoadAvatarsArray = function(zfilter, zdefaultdisplayname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('hudloginloadavatarsarray');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsHudLoginLoadAvatarsArray=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsOnMessage = function(zevent) {\r\n";
 			$jsdata .= "		var zsafe = false;\r\n";
 			$jsdata .= "		try {\r\n";
@@ -750,15 +758,6 @@ class wtwplugins {
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsDownloadUserAvatarVersionResponse=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsGetMyAvatarList = function(zloaddefault, zeditmode) {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('getmyavatarlist','zloaddefault');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsGetMyAvatarList=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "		return zloaddefault;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsAvatarBeforeCreate = function(zavatarname, zavatardef) {\r\n";
