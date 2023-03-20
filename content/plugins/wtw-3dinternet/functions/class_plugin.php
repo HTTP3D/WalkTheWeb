@@ -165,6 +165,8 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("openlocallogin", "wtw3dinternet.openLocalLogin(zitem, zwidth, zheight);");
 			$wtwplugins->addScriptFunction("hudloginlogin", "wtw3dinternet.hudLoginLogin(zlocal, zemail, zpassword, zremembercheck);");
 			$wtwplugins->addScriptFunction("hudlogincreate", "wtw3dinternet.hudLoginCreate(zlocal, zemail, zpassword, zpassword2);");
+			$wtwplugins->addScriptFunction("hudloginloadavatarsarray", "wtw3dinternet.hudLoginLoadAvatarsArray(zfilter, zdefaultdisplayname);");
+
 			$wtwplugins->addScriptFunction("onmicrophonegrantedonmessage", "wtw3dinternet.onMicrophoneGrantedOnMessage(zevent, zrecordbuffer);");
 			$wtwplugins->addScriptFunction("onmicvolumechange", "wtw3dinternet.onMicVolumeChange(zvolume);");
 			$wtwplugins->addScriptFunction("togglemicmute", "wtw3dinternet.toggleMicMute();");
@@ -188,7 +190,6 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("resetactivitytimer", "wtw3dinternet.resetActivityTimer();");
 			$wtwplugins->addScriptFunction("loadloginsettings", "wtw3dinternet.loadLoginSettings(zloaddefault);");
 
-			$wtwplugins->addScriptFunction("getmyavatarlist", "wtw3dinternet.getMyAvatarList(zloaddefault, zeditmode);");
 			$wtwplugins->addScriptFunction("onmyavatarselect", "wtw3dinternet.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);");
 			$wtwplugins->addScriptFunction("getsavedavatar", "wtw3dinternet.getSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);");
 			$wtwplugins->addScriptFunction("savedavatarretrieved", "wtw3dinternet.savedAvatarRetrieved(zavatarname, zsendrefresh);");

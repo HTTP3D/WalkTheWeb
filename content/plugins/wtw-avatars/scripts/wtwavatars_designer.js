@@ -1050,7 +1050,7 @@ WTWJS.prototype.returnCloseDesigner = function() {
 				}, '*');
 			}, 2000);
 		} else {
-			WTW.openLocalLogin('Select Avatar',.4,.9);
+			WTW.openLoginHUD('Select My Avatar');
 		}
 	} catch (ex) {
 		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-returnCloseDesigner=' + ex.message);

@@ -1219,7 +1219,7 @@ WTW_3DINTERNET.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 					}
 				} else {
 					if (WTW.anonymousLogins == '1') {
-						zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('Select an Anonymous Avatar', .4, .5);\"><img src='/content/system/images/menuprofilebig.png' alt='Anonymous Login' title='Anonymous Login' class='wtw-image40'/><div style='margin-top:10px;'>Continue as Guest</div></div>";
+						zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLoginHUD('Select My Avatar');\"><img src='/content/system/images/menuprofilebig.png' alt='Anonymous Login' title='Anonymous Login' class='wtw-image40'/><div style='margin-top:10px;'>Continue as Guest</div></div>";
 					}
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
@@ -1240,151 +1240,74 @@ WTW_3DINTERNET.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 	}
 }
 
-WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
+WTW_3DINTERNET.prototype.hudLoginLoadAvatarsArray = function(zfilter, zdefaultdisplayname) {
 	/* retrieve my available avatars to select one for this 3D Scene */
 	try {
-		if (zeditmode == undefined) {
-			zeditmode = false;
-		}
-		let zmyavatars = [];
-		let zversioncheck = [];
-		let zlocalcomplete = false;
-		let zglobalcomplete = false;
-		if (WTW.localLogins == '1') {
-			if (dGet('wtw_myavatars') != null) {
-				WTW.getJSON('/connect/avatars.php?groups=my', 
-					function(zresponse) {
-						if (zresponse != null) {
-							zresponse = JSON.parse(zresponse);
-							if (zresponse.avatars != null) {
-								if (zresponse.avatars.length > 0) {
-									for (var i=0;i<zresponse.avatars.length;i++) {
-										if (zresponse.avatars[i] != null) {
-											zversioncheck[zversioncheck.length] = {
-												'webtype': 'avatar',
-												'globaluseravatarid': '',
-												'useravatarid': zresponse.avatars[i].useravatarid,
-												'webid': zresponse.avatars[i].avatarid,
-												'webname': btoa(zresponse.avatars[i].displayname),
-												'webdesc': btoa(zresponse.avatars[i].avatardescription),
-												'webimage': zresponse.avatars[i].snapshots.thumbnail,
-												'versionid': zresponse.avatars[i].versionid,
-												'version': zresponse.avatars[i].version
-											};
-											zmyavatars[zmyavatars.length] = {
-												'globaluseravatarid': '',
-												'useravatarid': zresponse.avatars[i].useravatarid,
-												'avatarid': zresponse.avatars[i].avatarid,
-												'versionid': zresponse.avatars[i].versionid,
-												'version': zresponse.avatars[i].version,
-												'versionorder': zresponse.avatars[i].versionorder,
-												'versiondesc': zresponse.avatars[i].versiondesc,
-												'avatargroup': zresponse.avatars[i].avatargroup,
-												'displayname': zresponse.avatars[i].displayname,
-												'avatardescription': zresponse.avatars[i].avatardescription,
-												'gender': zresponse.avatars[i].gender,
-												'objects': {
-													'folder': zresponse.avatars[i].objects.folder,
-													'file': zresponse.avatars[i].objects.file
-												},
-												'scaling': {
-													'x': zresponse.avatars[i].scaling.x,
-													'y': zresponse.avatars[i].scaling.y,
-													'z': zresponse.avatars[i].scaling.z
-												},
-												'snapshots': {
-													'full': zresponse.avatars[i].snapshots.full,
-													'thumbnail': zresponse.avatars[i].snapshots.thumbnail
-												},
-												'sortorder': zresponse.avatars[i].sortorder,
-												'selected': false
-											}
-										}
-									}
-								}
-							}
-						}
-						zlocalcomplete = true;
-						if (zglobalcomplete || WTW.globalLogins != '1') {
-							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode, zversioncheck);
-						}
-					}
-				);
-			}
-		}
 		if (WTW.globalLogins == '1') {
-			if (dGet('wtw_myavatars') != null) {
-				/* call for global list */
-				var zrequest = {
-					'usertoken':dGet('wtw_tusertoken').value,
-					'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
-					'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
-					'groups':'my',
-					'function':'getmyglobalavatars'
-				};
-				WTW.postJSON('https://3dnet.walktheweb.com/connect/globalavatars.php', zrequest, 
-					function(zresponse) {
-						zresponse = JSON.parse(zresponse);
-						if (zresponse.avatars != null) {
-							if (zresponse.avatars.length > 0) {
-								for (var i=0;i<zresponse.avatars.length;i++) {
-									if (zresponse.avatars[i] != null) {
-										zversioncheck[zversioncheck.length] = {
-											'webtype': 'avatar',
-											'webname': btoa(zresponse.avatars[i].displayname),
-											'webdesc': btoa(zresponse.avatars[i].avatardescription),
-											'webimage': zresponse.avatars[i].snapshots.thumbnail,
-											'globaluseravatarid': zresponse.avatars[i].globaluseravatarid,
-											'useravatarid': zresponse.avatars[i].useravatarid,
-											'webid': zresponse.avatars[i].avatarid,
-											'versionid': zresponse.avatars[i].versionid,
-											'version': zresponse.avatars[i].version
-										};
-										zmyavatars[zmyavatars.length] = {
-											'globaluseravatarid': zresponse.avatars[i].globaluseravatarid,
-											'useravatarid': zresponse.avatars[i].useravatarid,
-											'avatarid': zresponse.avatars[i].avatarid,
-											'versionid': zresponse.avatars[i].versionid,
-											'version': zresponse.avatars[i].version,
-											'versionorder': zresponse.avatars[i].versionorder,
-											'versiondesc': zresponse.avatars[i].versiondesc,
-											'avatargroup': zresponse.avatars[i].avatargroup,
-											'displayname': zresponse.avatars[i].displayname,
-											'avatardescription': zresponse.avatars[i].avatardescription,
-											'gender': zresponse.avatars[i].gender,
-											'objects': {
-												'folder': zresponse.avatars[i].objects.folder,
-												'file': zresponse.avatars[i].objects.file
-											},
-											'scaling': {
-												'x': zresponse.avatars[i].scaling.x,
-												'y': zresponse.avatars[i].scaling.y,
-												'z': zresponse.avatars[i].scaling.z
-											},
-											'snapshots': {
-												'full': zresponse.avatars[i].snapshots.full,
-												'thumbnail': zresponse.avatars[i].snapshots.thumbnail
-											},
-											'sortorder': zresponse.avatars[i].sortorder,
-											'selected': false
+			/* call for global list */
+			var zrequest = {
+				'usertoken':dGet('wtw_tusertoken').value,
+				'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
+				'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
+				'groups':'my',
+				'function':'getmyglobalavatars'
+			};
+			WTW.postJSON('https://3dnet.walktheweb.com/connect/globalavatars.php', zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.avatars != null) {
+						if (zresponse.avatars.length > 0) {
+							for (var i=0;i<zresponse.avatars.length;i++) {
+								if (zresponse.avatars[i] != null) {
+									if (zfilter == 'my') {
+										if (zresponse.avatars[i].displayname != '' && zdefaultdisplayname == 'Anonymous') {
+											zdefaultdisplayname = zresponse.avatars[i].displayname;
 										}
+									} else {
+										if (zresponse.avatars[i].defaultdisplayname != '' && zdefaultdisplayname == 'Anonymous') {
+											zdefaultdisplayname = zresponse.avatars[i].defaultdisplayname;
+										}
+									}
+									WTW.selectAvatars[WTW.selectAvatars.length] = {
+										'globaluseravatarid': zresponse.avatars[i].globaluseravatarid,
+										'useravatarid': zresponse.avatars[i].useravatarid,
+										'avatarid': zresponse.avatars[i].avatarid,
+										'versionid': zresponse.avatars[i].versionid,
+										'version': zresponse.avatars[i].version,
+										'versionorder': zresponse.avatars[i].versionorder,
+										'versiondesc': zresponse.avatars[i].versiondesc,
+										'avatargroup': zresponse.avatars[i].avatargroup,
+										'displayname': zresponse.avatars[i].displayname,
+										'defaultdisplayname': zresponse.avatars[i].defaultdisplayname,
+										'avatardescription': zresponse.avatars[i].avatardescription,
+										'gender': zresponse.avatars[i].gender,
+										'objects': {
+											'folder': zresponse.avatars[i].objects.folder,
+											'file': zresponse.avatars[i].objects.file
+										},
+										'scaling': {
+											'x': zresponse.avatars[i].scaling.x,
+											'y': zresponse.avatars[i].scaling.y,
+											'z': zresponse.avatars[i].scaling.z
+										},
+										'snapshots': {
+											'full': zresponse.avatars[i].snapshots.full,
+											'thumbnail': zresponse.avatars[i].snapshots.thumbnail
+										},
+										'sortorder': zresponse.avatars[i].sortorder,
+										'selected': false
 									}
 								}
 							}
 						}
-						zglobalcomplete = true;
-						if (zlocalcomplete || WTW.localLogins != '1') {
-							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode, zversioncheck);
-						}
 					}
-				);
-			}
+					WTW.hudLoginLoadChoiceAvatarsArray(zfilter, zdefaultdisplayname);
+				}
+			);
 		}
-		zloaddefault = false;
 	} catch(ex) {
-		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-getMyAvatarList=' + ex.message);
+		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-hudLoginLoadAvatarsArray=' + ex.message);
 	}
-	return zloaddefault;
 }
 
 WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
@@ -1445,12 +1368,12 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 							} else {
 								WTW.closeLoginHUD();
 								WTW.log("Avatar Not Found.");
-								WTW.openLocalLogin('Select Avatar',.4,.9);
+								WTW.openLoginHUD('Select My Avatar');
 							}
 						} else {
 							WTW.closeLoginHUD();
 							WTW.log("Avatar Not Found.");
-							WTW.openLocalLogin('Select Avatar',.4,.9);
+							WTW.openLoginHUD('Select My Avatar');
 						}
 					}
 				);
@@ -2107,7 +2030,7 @@ WTW_3DINTERNET.prototype.deleteUserAvatar = function(zglobaluseravatarid, zusera
 				function(zresponse2) {
 					zresponse2 = JSON.parse(zresponse2);
 					/* global user avatar - refresh list */
-					WTW.getMyAvatarList(zwidth, zheight, true);
+					WTW.hudLoginLoadAvatars();
 				}
 			);
 		}
@@ -2196,7 +2119,7 @@ WTW_3DINTERNET.prototype.hudLoginLogin = function(zlocal, zemail, zpassword, zre
 								zresponse = JSON.parse(zresponse);
 								/* continue if no errors */
 								if (WTW.globalLoginResponse(zresponse)) {
-									WTW.openLocalLogin('Select Avatar',.4,.9);
+									WTW.openLoginHUD('Select My Avatar');
 								}
 							}
 						);
@@ -2336,7 +2259,7 @@ WTW_3DINTERNET.prototype.hudLoginCreate = function(zlocal, zemail, zpassword, zp
 								zresponse = JSON.parse(zresponse);
 								/* continue if no errors */
 								if (WTW.globalLoginResponse(zresponse)) {
-									WTW.openLocalLogin('Select Avatar',.4,.9);
+									WTW.openLoginHUD('Select My Avatar');
 								}
 							}
 						);

@@ -67,7 +67,6 @@ $zver = date("Y-m-d-H-i-s");
 		<script src="/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=<?php echo $zver; ?>"></script>
 		<script src="/core/scripts/engine/babylonjs.materials.min.js?x=<?php echo $zver; ?>"></script>
 		<script src="/core/scripts/engine/pep.js?x=<?php echo $zver; ?>"></script>
-		<script src="/core/scripts/engine/loader.js?x=<?php echo $zver; ?>"></script>
 		<script src="/core/scripts/engine/meshwriter.min.js?x=<?php echo $zver; ?>"></script>
         <script src="/content/plugins/wtw-avatars/scripts/wtwavatars_common.js?x=<?php echo $zver; ?>"></script>
         <script src="/content/plugins/wtw-avatars/scripts/wtwavatars_designer.js?x=<?php echo $zver; ?>"></script>
