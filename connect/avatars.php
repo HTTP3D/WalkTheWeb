@@ -46,6 +46,23 @@ try {
 					and deleted=0
 				order by avatargroup, displayname, avatarid, useravatarid;");
 			$zwebtype = 'useravatars';
+		} else if ($zgroups == 'all') {
+			/* pull all groups of available avatars */
+			$zwhere = "a1.deleted=0 and (a1.hostuserid='".$zhostuserid."' or a1.hostuserid='') ";
+
+			$zresults = $wtwconnect->query("
+				select distinct a1.*,
+					'' as useravatarid,
+					u1.displayname as defaultdisplayname
+				from ".wtw_tableprefix."avatars a1
+				left join ".wtw_tableprefix."avatarsingroups ag1
+                on a1.avatarid=ag1.avatarid
+                left join ".wtw_tableprefix."avatargroups g1
+                on g1.avatargroupid=ag1.avatargroupid
+				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
+				on 1=1
+				where ".$zwhere." 
+				order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
 		} else {
 			/* pull a group of available avatars */
 			$zwhere = "a1.deleted=0 and (a1.hostuserid='".$zhostuserid."' or a1.hostuserid='') and (";
