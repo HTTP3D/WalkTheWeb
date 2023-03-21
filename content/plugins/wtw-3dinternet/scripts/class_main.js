@@ -1560,7 +1560,7 @@ WTW_3DINTERNET.prototype.resetActivityTimer = async function() {
 							var zavatarparts = zavatarscale.getChildren();
 							var zdone = false;
 							var zmaxvisibility = 1;
-							if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+							if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 								zmaxvisibility = .5;
 							}
 							for (var i=0; i<zavatarparts.length;i++) {
@@ -1725,40 +1725,40 @@ WTW_3DINTERNET.prototype.fadeAvatar = function(zdata) {
 			var zavatar = WTW.getMeshOrNodeByID('person-' + zdata.instanceid);
 			if (zavatar != null) {
 				if (zavatar.WTW != undefined) {
-					var zfade = 1;
-					if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
-						zfade = .5;
+					var zmaximumvisibility = 1;
+					if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
+						zmaximumvisibility = .5;
 					}
 					var ztimeincrement = 500;
 					if (zdata.fade != undefined) {
-						zfade = Number(zdata.fade);
+						zmaximumvisibility = Number(zdata.fade);
 					}
 					if (zavatar.WTW.fadetimer != null) {
 						window.clearInterval(zavatar.WTW.fadetimer);
 						zavatar.WTW.fadetimer = null;
 					}
-					if (zfade == 1) {
+					if (zmaximumvisibility == 1) {
 						ztimeincrement = 50;
 					}
 					zavatar.WTW.fadetimer  = window.setInterval(function(){
 						var zavatarscale = WTW.getMeshOrNodeByID('person-' + zdata.instanceid + '-scale');
 						if (zavatarscale != null) {
-							var zfaded = zfade;
+							var zmaxvisibility = zmaximumvisibility;
 							var zavatarparts = zavatarscale.getChildren();
 							var zdone = false;
 							if (wtw3dinternet.isBlocked(zdata.instanceid)) {
-								zfaded = 0;
-							} else if (wtw3dinternet.isBanned(zdata.instanceid) && zfaded == 1) {
-								zfaded = .5;
+								zmaxvisibility = 0;
+							} else if (wtw3dinternet.isBanned(zdata.instanceid) && zmaxvisibility == 1) {
+								zmaxvisibility = .5;
 							}
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
-									if (zavatarparts[i].visibility > zfaded + .05) {
+									if (zavatarparts[i].visibility > zmaxvisibility + .05) {
 										zavatarparts[i].visibility -= .05;
-									} else if (zavatarparts[i].visibility < zfaded - .05) {
+									} else if (zavatarparts[i].visibility < zmaxvisibility - .05) {
 										zavatarparts[i].visibility += .05;
 									} else {
-										zavatarparts[i].visibility = zfaded;
+										zavatarparts[i].visibility = zmaxvisibility;
 										zdone = true;
 									}
 								}
@@ -1766,7 +1766,7 @@ WTW_3DINTERNET.prototype.fadeAvatar = function(zdata) {
 							if (zdone) {
 								for (var i=0; i<zavatarparts.length;i++) {
 									if (zavatarparts[i] != null) {
-										zavatarparts[i].visibility = zfaded;
+										zavatarparts[i].visibility = zmaxvisibility;
 									}
 								} 
 								window.clearInterval(zavatar.WTW.fadetimer);

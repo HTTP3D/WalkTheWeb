@@ -547,18 +547,18 @@ WTW_3DINTERNET.prototype.showAvatar = async function(zavatarname, zsend) {
 					}
 					zavatar.WTW.fadetimer = window.setInterval(function() {
 						var zfadedin = true;
-						var zvisibility = 1;
-						if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
-							zvisibility = .5;
+						var zmaxvisibility = 1;
+						if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
+							zmaxvisibility = .5;
 						}
 						
 						var znamemold = WTW.getMeshOrNodeByID(zavatarname + '-nameplate-text');
 						var zavatarparent = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 						/* check if avatar is blocked or banned and set max visibility accordingly */
 						if (wtw3dinternet.isBanned(zavatarname.replace('person-',''))) {
-							zvisibility = 0;
+							zmaxvisibility = 0;
 						} else if (wtw3dinternet.isBlocked(zavatarname.replace('person-',''))) {
-							zvisibility = .5;
+							zmaxvisibility = .5;
 						}
 						if (zavatarparent != null) {
 							var zavatarparts = zavatarparent.getChildren();
@@ -567,11 +567,11 @@ WTW_3DINTERNET.prototype.showAvatar = async function(zavatarname, zsend) {
 									for (var i=0;i< zavatarparts.length;i++) {
 										if (zavatarparts[i] != null) {
 											if (zavatarparts[i].visibility != undefined) {
-												if (zavatarparts[i].visibility < zvisibility) {
+												if (zavatarparts[i].visibility < zmaxvisibility) {
 													zfadedin = false;
 													zavatarparts[i].visibility += .05;
 												} else {
-													zavatarparts[i].visibility = zvisibility;
+													zavatarparts[i].visibility = zmaxvisibility;
 												}
 											}
 										}
@@ -580,10 +580,10 @@ WTW_3DINTERNET.prototype.showAvatar = async function(zavatarname, zsend) {
 							}
 						}
 						if (znamemold != null) {
-							if (znamemold.visibility < zvisibility) {
+							if (znamemold.visibility < zmaxvisibility) {
 								znamemold.visibility += .05;
 							} else {
-								znamemold.visibility = zvisibility;
+								znamemold.visibility = zmaxvisibility;
 							}
 						}
 						if (zfadedin) {
@@ -595,7 +595,7 @@ WTW_3DINTERNET.prototype.showAvatar = async function(zavatarname, zsend) {
 										for (var i=0;i< zavatarparts.length;i++) {
 											if (zavatarparts[i] != null) {
 												if (zavatarparts[i].visibility != undefined) {
-													zavatarparts[i].visibility = zvisibility;
+													zavatarparts[i].visibility = zmaxvisibility;
 												}
 											}
 										}
@@ -603,7 +603,7 @@ WTW_3DINTERNET.prototype.showAvatar = async function(zavatarname, zsend) {
 								}
 							}
 							if (znamemold != null) {
-								znamemold.visibility = zvisibility;
+								znamemold.visibility = zmaxvisibility;
 							}
 						}
 					},100);
