@@ -347,6 +347,9 @@ function WTWJS() {
 	/* WTW.keysPressed - keys pressed Array of values that are translated into movement and animation */
 	this.keysPressed = [];
 	
+	/* WTW.mouseTimestamp - mouse Timestamp is used to decide between mouse hold and a mouse click (touch hold vs touch ) */
+	this.mouseTimestamp = null;
+
 	/* WTW.avatarTimer - avatar timer used to test or execute automated avatar movement commands */
 	this.avatarTimer = null;
 	

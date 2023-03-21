@@ -547,7 +547,7 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 			}
 		}
 		var zmaxvisibility = 1;
-		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+		if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 			zmaxvisibility = .5;
 		}
 		for (var i=0; i<zavatarparts.length; i++) {
@@ -581,7 +581,7 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 					for (var i=0; i<zavatarparts.length;i++) {
 						if (zavatarparts[i] != null) {
 							var zmaxvisibility = 1;
-							if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+							if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 								zmaxvisibility = .5;
 							}
 							if (zavatarparts[i].visibility < zmaxvisibility) {
@@ -631,7 +631,7 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
 								var zmaxvisibility = 1;
-								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+								if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 									zmaxvisibility = .5;
 								}
 								if (zavatarparts[i].visibility < zmaxvisibility) {
@@ -702,7 +702,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
 									var zmaxvisibility = 1;
-									if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+									if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 										zmaxvisibility = .5;
 									}
 									if (zavatarparts[i].visibility < zmaxvisibility) {
@@ -808,7 +808,7 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
 									var zmaxvisibility = 1;
-									if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+									if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 										zmaxvisibility = .5;
 									}
 									if (zavatarparts[i].visibility < zmaxvisibility) {
@@ -904,7 +904,7 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
 								var zmaxvisibility = 1;
-								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+								if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 									zmaxvisibility = .5;
 								}
 								if (zavatarparts[i].visibility < zmaxvisibility) {
@@ -991,7 +991,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
 								var zmaxvisibility = 1;
-								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+								if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 									zmaxvisibility = .5;
 								}
 								if (zavatarparts[i].visibility < zmaxvisibility) {
@@ -1039,7 +1039,7 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 		}
 		
 		var zmaxvisibility = 1;
-		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+		if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 			zmaxvisibility = .5;
 		}
 		for (var i=0; i<zavatarparts.length;i++) {
@@ -1120,7 +1120,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 			zavatarscale.scaling.y = .001;
 			zavatarscale.scaling.z = .001;
 			var zmaxvisibility = 1;
-			if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+			if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 				zmaxvisibility = .5;
 			}
 			for (var i=0; i<zavatarparts.length;i++) {
@@ -1220,7 +1220,7 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 		}
 		
 		var zmaxvisibility = 1;
-		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+		if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 			zmaxvisibility = .5;
 		}
 		for (var i=0; i<zavatarparts.length;i++) {
@@ -1318,7 +1318,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 			WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 		}
 		var zmaxvisibility = 1;
-		if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+		if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 			zmaxvisibility = .5;
 		}
 		for (var i=0; i<zavatarparts.length;i++) {
@@ -1436,7 +1436,7 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
 								var zmaxvisibility = 1;
-								if (WTW.isMobile && zavatarname.indexOf('myavatar') > -1) {
+								if ((WTW.isMobile || WTW.sizeX < WTW.sizeY) && zavatarname.indexOf('myavatar') > -1) {
 									zmaxvisibility = .5;
 								}
 								if (zavatarparts[i].visibility < zmaxvisibility) {

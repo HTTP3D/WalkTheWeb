@@ -22,7 +22,11 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 		var zcamerafront = WTW.getMeshOrNodeByID('camerafront');
 		
 		zhudlogin = new BABYLON.TransformNode(zmoldname);
-		zhudlogin.position = new BABYLON.Vector3(0,0,0);
+		if (WTW.sizeX < WTW.sizeY) {
+			zhudlogin.position = new BABYLON.Vector3(0,5,0);
+		} else {
+			zhudlogin.position = new BABYLON.Vector3(0,0,0);
+		}
 		zhudlogin.rotation = new BABYLON.Vector3(0,WTW.getRadians(90),WTW.getRadians(20));
 		zhudlogin.scaling = new BABYLON.Vector3(1,1,1);
 		zhudlogin.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;

@@ -34,6 +34,7 @@ WTWJS.prototype.hasInputMoved = function(zstartx, zstarty) {
 WTWJS.prototype.inputDown = function(zevent) {
 	/* process mouseDown and touchDown */
 	try {
+		WTW.mouseTimestamp = new Date();
 		if (scene != undefined && WTW.hasInputMoved() == false) {
 			var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
 			if (zresult.pickedMesh == null) {
@@ -71,6 +72,13 @@ WTWJS.prototype.inputUp = function(zevent) {
 		WTW.keyPressedRemove(1082);
 		WTW.keyPressedRemove(1070);
 		WTW.vehicleStopTurn();
+		var zclicktomove = WTW.getMeshOrNodeByID('clicktomove');
+		if (zclicktomove == null) {
+			if (WTW.avatarTimer != null) {
+				window.clearInterval(WTW.avatarTimer);
+				WTW.avatarTimer = null;
+			}
+		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-inputUp=' + ex.message);
 	}
@@ -79,60 +87,63 @@ WTWJS.prototype.inputUp = function(zevent) {
 WTWJS.prototype.inputClick = function(zevent) {
 	/* process mouseClick and touchUp */
 	try {
-		if (WTW.hasInputMoved() == false) {
-			var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
-			var zpickedname = '';
-			if (zresult.pickedMesh == null) {
-				if (WTW.currentID != '') {
-					zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
+		var ztimestamp = new Date();
+		if ((ztimestamp - WTW.mouseTimestamp) < 350) {
+			if (WTW.hasInputMoved() == false) {
+				var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
+				var zpickedname = '';
+				if (zresult.pickedMesh == null) {
+					if (WTW.currentID != '') {
+						zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
+					}
+					zpickedname = WTW.currentID;
+				} else {
+					zpickedname = zresult.pickedMesh.name;
 				}
-				zpickedname = WTW.currentID;
-			} else {
-				zpickedname = zresult.pickedMesh.name;
-			}
 
-			WTW.pluginsOnClick(zpickedname);
-			if (zpickedname != '') {
-				var zmold = WTW.getMeshOrNodeByID(zpickedname);
-				if (zpickedname.indexOf('-') > -1) {
-					WTW.checkMoldEvent('onclick', zpickedname);
-					
-					if (WTW.avatarTimer != null && (
-						zpickedname.substr(0,4) == 'hud-' || 
-						zpickedname.substr(0,9) == 'hudlogin-' || 
-						zpickedname.substr(0,9) == 'myavatar-' || 
-						zpickedname.indexOf('-image') > -1 || 
-						zpickedname.indexOf('-videoposter') > -1 || 
-						zpickedname.indexOf('-video-screen') > -1 || 
-						zpickedname.indexOf('-vehicle') > -1)) {
-						/* if my avatar is walking to a position, and any other click happened, then cancel walk to position */
-						WTW.cancelWalkToPosition();
-					} else {
-						if (zpickedname.substr(0,4) == 'hud-') {
-							WTW.hudClick(zpickedname);
-						} else if (zpickedname.substr(0,9) == 'hudlogin-') {
-							WTW.executeAnimationByName(zpickedname.replace('hudlogin-','HUDLOGIN').replace('-',''));
-							WTW.hudLoginClick(zpickedname);
-						} else if (zpickedname.substr(0,9) == 'myavatar-') {
-							WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
-						} else if (zpickedname.indexOf('-image') > -1) {
-							WTW.checkImageClick(zpickedname);
-						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
-							WTW.checkVideoClick(zpickedname);
-						} else if (zpickedname.indexOf('-vehicle') > -1) {
-							WTW.toggleStartVehicle(zpickedname);
+				WTW.pluginsOnClick(zpickedname);
+				if (zpickedname != '') {
+					var zmold = WTW.getMeshOrNodeByID(zpickedname);
+					if (zpickedname.indexOf('-') > -1) {
+						WTW.checkMoldEvent('onclick', zpickedname);
+						
+						if (WTW.avatarTimer != null && (
+							zpickedname.substr(0,4) == 'hud-' || 
+							zpickedname.substr(0,9) == 'hudlogin-' || 
+							zpickedname.substr(0,9) == 'myavatar-' || 
+							zpickedname.indexOf('-image') > -1 || 
+							zpickedname.indexOf('-videoposter') > -1 || 
+							zpickedname.indexOf('-video-screen') > -1 || 
+							zpickedname.indexOf('-vehicle') > -1)) {
+							/* if my avatar is walking to a position, and any other click happened, then cancel walk to position */
+							WTW.cancelWalkToPosition();
 						} else {
-							/* check if mold has an animation or jsfunction */
-							if (WTW.checkMoldFunctionAndExecute(zpickedname) == false) {
-								/* mold does not have an animation or jsfunction */
-								if (WTW.placeHolder == 0) {
-									/* only works if avatar is loaded */
-									if (zevent.detail === 1) {
-										/* single click - to walk */
-										WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
-									} else {
-										/* double click - to run */
-										WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+							if (zpickedname.substr(0,4) == 'hud-') {
+								WTW.hudClick(zpickedname);
+							} else if (zpickedname.substr(0,9) == 'hudlogin-') {
+								WTW.executeAnimationByName(zpickedname.replace('hudlogin-','HUDLOGIN').replace('-',''));
+								WTW.hudLoginClick(zpickedname);
+							} else if (zpickedname.substr(0,9) == 'myavatar-') {
+								WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
+							} else if (zpickedname.indexOf('-image') > -1) {
+								WTW.checkImageClick(zpickedname);
+							} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
+								WTW.checkVideoClick(zpickedname);
+							} else if (zpickedname.indexOf('-vehicle') > -1) {
+								WTW.toggleStartVehicle(zpickedname);
+							} else {
+								/* check if mold has an animation or jsfunction */
+								if (WTW.checkMoldFunctionAndExecute(zpickedname) == false) {
+									/* mold does not have an animation or jsfunction */
+									if (WTW.placeHolder == 0) {
+										/* only works if avatar is loaded */
+										if (zevent.detail === 1) {
+											/* single click - to walk */
+											WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
+										} else {
+											/* double click - to run */
+											WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+										}
 									}
 								}
 							}
@@ -149,40 +160,51 @@ WTWJS.prototype.inputClick = function(zevent) {
 WTWJS.prototype.inputMoving = function(zevent) {
 	/* process mouseMove and touchMoving */
 	try {
+		/* swipe rotation for my avatar */
 		if (WTW.dragID == '' && WTW.isMouseDown == 1) {
 			/* not dragging an object */
-			if (WTW.mouseMoveX < WTW.sizeX-285) {
-				if (WTW.hasInputMoved(WTW.mouseMoveX, WTW.mouseMoveY) == false) {
-					WTW.keyPressedRemove(1037);
-					WTW.keyPressedRemove(1039);
-					WTW.keyPressedRemove(1070);
-					WTW.keyPressedRemove(1082);
-				} else {
-					if (WTW.isMouseDown == 1 && WTW.mouseX > WTW.mouseMoveX) {
-						WTW.keyPressedRemove(1037);
-						WTW.keyPressedAdd(1039);
-					} else if (WTW.isMouseDown == 1 && WTW.mouseX < WTW.mouseMoveX) {
+			WTW.cancelWalkToPosition();
+			WTW.avatarTimer = window.setInterval(function(){
+				if (WTW.dragID == '' && WTW.isMouseDown == 1) {
+					/* not dragging an object */
+					if (WTW.mouseX < WTW.sizeX/5) {
 						WTW.keyPressedRemove(1039);
+						WTW.keyPressedRemove(2039);
+						WTW.keyPressedAdd(2037);
+					} else if (WTW.mouseX < WTW.sizeX/2 - 100) {
+						WTW.keyPressedRemove(1039);
+						WTW.keyPressedRemove(2039);
 						WTW.keyPressedAdd(1037);
-					} else if (WTW.isMouseDown == 1) {
+					} else if (WTW.mouseX > WTW.sizeX*4/5) {
 						WTW.keyPressedRemove(1037);
+						WTW.keyPressedRemove(2037);
+						WTW.keyPressedAdd(2039);
+					} else if (WTW.mouseX > WTW.sizeX/2 + 100) {
+						WTW.keyPressedRemove(1037);
+						WTW.keyPressedRemove(2037);
+						WTW.keyPressedAdd(1039);
+					} else {
 						WTW.keyPressedRemove(1039);
+						WTW.keyPressedRemove(2039);
+						WTW.keyPressedRemove(1037);
+						WTW.keyPressedRemove(2037);
 					}
-					if (WTW.isMouseDown == 1 && WTW.mouseY > WTW.mouseMoveY) {
-						WTW.keyPressedRemove(1082);
-						WTW.keyPressedAdd(1070);
-					} else if (WTW.isMouseDown == 1 && WTW.mouseY < WTW.mouseMoveY) {
+					if (WTW.mouseY < WTW.sizeY/4) {
 						WTW.keyPressedRemove(1070);
 						WTW.keyPressedAdd(1082);
-					} else if (WTW.isMouseDown == 1) {
-						WTW.keyPressedRemove(1070);
+					} else if (WTW.mouseY > WTW.sizeY*3/4) {
 						WTW.keyPressedRemove(1082);
+						WTW.keyPressedAdd(1070);
+					} else {
+						WTW.keyPressedRemove(1082);
+						WTW.keyPressedRemove(1070);
+						WTW.keyPressedAdd(1070);
 					}
 				}
-			}
-			WTW.mouseMoveX = WTW.mouseX;
-			WTW.mouseMoveY = WTW.mouseY;
+			},10);
 		}
+		WTW.mouseMoveX = WTW.mouseX;
+		WTW.mouseMoveY = WTW.mouseY;
 		WTW.setToolTipLocation();
 		if (WTW.isMouseDown == 1) {
 			/* check if you are dragging something */

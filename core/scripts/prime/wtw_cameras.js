@@ -274,7 +274,11 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 					/* switch case is set up to allow custom support for specific cameras */
 					switch (scene.activeCameras[0].id) {
 						default:
-							var zray = scene.activeCameras[0].getForwardRay(20);
+							var zdist = 20;
+							if (WTW.sizeX < WTW.sizeY) {
+								zdist = 36;
+							}
+							var zray = scene.activeCameras[0].getForwardRay(zdist);
 							zcamerafront.position = zray.direction.scale(zray.length);
 							break;
 					}
