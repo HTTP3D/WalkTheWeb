@@ -1526,17 +1526,20 @@ WTWJS.prototype.selectWalkToPosition = function(zavatarname, zmoldname, zrun) {
 		if (zclicktomove != null) {
 			zclicktomove.dispose();
 		}
-		var zmold = WTW.getMeshOrNodeByID(zmoldname);
-		var zpickinfo = scene.pick(WTW.mouseX, WTW.mouseY, function (mesh) { return mesh === zmold; });
-		if (zpickinfo.hit) {
-			var decalMaterial = new BABYLON.StandardMaterial("clicktomove-mat", scene);
-			decalMaterial.diffuseTexture = new BABYLON.Texture("/content/system/images/target.png", scene);
-			decalMaterial.diffuseTexture.hasAlpha = true;
-			decalMaterial.zOffset = -2;			
-			zclicktomove = BABYLON.MeshBuilder.CreateDecal("clicktomove", zmold, {position: zpickinfo.pickedPoint, normal: zpickinfo.getNormal(true), size: new BABYLON.Vector3(4, 4, 4)});
-			zclicktomove.material = decalMaterial;			
-			
-			WTW.walkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickinfo.pickedPoint, null, zrun, null, null);
+		if (WTW.placeHolder == 0) {
+			/* only works if avatar is loaded */
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
+			var zpickinfo = scene.pick(WTW.mouseX, WTW.mouseY, function (mesh) { return mesh === zmold; });
+			if (zpickinfo.hit) {
+				var decalMaterial = new BABYLON.StandardMaterial("clicktomove-mat", scene);
+				decalMaterial.diffuseTexture = new BABYLON.Texture("/content/system/images/target.png", scene);
+				decalMaterial.diffuseTexture.hasAlpha = true;
+				decalMaterial.zOffset = -2;			
+				zclicktomove = BABYLON.MeshBuilder.CreateDecal("clicktomove", zmold, {position: zpickinfo.pickedPoint, normal: zpickinfo.getNormal(true), size: new BABYLON.Vector3(4, 4, 4)});
+				zclicktomove.material = decalMaterial;			
+				
+				WTW.walkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickinfo.pickedPoint, null, zrun, null, null);
+			}
 		}
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-selectWalkToPosition=' + ex.message);

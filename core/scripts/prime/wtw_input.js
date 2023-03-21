@@ -125,12 +125,15 @@ WTWJS.prototype.inputClick = function(zevent) {
 							/* check if mold has an animation or jsfunction */
 							if (WTW.checkMoldFunctionAndExecute(zpickedname) == false) {
 								/* mold does not have an animation or jsfunction */
-								if (zevent.detail === 1) {
-									/* single click - to walk */
-									WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
-								} else {
-									/* double click - to run */
-									WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+								if (WTW.placeHolder == 0) {
+									/* only works if avatar is loaded */
+									if (zevent.detail === 1) {
+										/* single click - to walk */
+										WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, false);
+									} else {
+										/* double click - to run */
+										WTW.selectWalkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, true);
+									}
 								}
 							}
 						}

@@ -794,20 +794,6 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 										WTW.mouseStartY = WTW.mouseY;
 									}
 									break;
-								case 82: //r rotate up
-								case 38: //arrow w forward
-								case 87: //w forward
-								case 1038: //arrow w forward
-								case 2038: //arrow w forward
-									WTW.cameraYOffset -= 100/WTW.sizeY * 10 * WTW.turnSpeed;
-									break;
-								case 70: //f rotate down
-								case 40: //arrow s backwards
-								case 83: //s backwards
-								case 1040: //arrow s backwards
-								case 2040: //arrow s backwards
-									WTW.cameraYOffset += 100/WTW.sizeY * 10 * WTW.turnSpeed;
-									break;
 							}
 						}
 					}
