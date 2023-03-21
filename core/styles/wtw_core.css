@@ -6,11 +6,14 @@ html, body {
 	height:100%;
 	margin:0px;
 	padding:0px;
+	position: fixed;
 	overflow:hidden;
 	scroll:no;
 	-webkit-user-select:none;
 	-ms-user-select:none;
 	user-select:none;
+	overscroll-behavior-y: contain;
+	overscroll-behavior-x: contain;
 }
 
 /* form and fields */
