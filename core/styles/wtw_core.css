@@ -148,6 +148,17 @@ input:checked + .wtw-slider:before {
 	width:240px;
 	direction:ltr;
 }
+.wtw-formfieldsdiv {
+	position:absolute;
+	z-index:2;
+	top:-30px;
+	left:0;
+	width:100%;
+	height:20px;
+	text-align:center;
+	pointer-events:auto;
+	touch-action:auto;
+}
 #wtw_renderCanvas {
 	cursor:default;
 	position:absolute;
@@ -418,6 +429,22 @@ h4 {
 	vertical-align:middle;
 	line-height:32px;
 	margin:auto 10px auto 10px;
+}
+.wtw-menumobiletext {
+	text-align:left;
+	font-size:1em;
+	color:#ffffff;
+	vertical-align:middle;
+	line-height:32px;
+	margin:auto 5px auto 10px;
+}
+.wtw-menumobileicon {
+	float:left;
+	font-size:1em;
+	color:#ffffff;
+	vertical-align:middle;
+	line-height:32px;
+	margin:auto 5px auto 10px;
 }
 .wtw-loginnote {
 	font-size:1em;
@@ -1810,6 +1837,26 @@ hr.wtw-menuhr {
 	background-color:#111111;
 	width:100%;
 	min-height:32px;
+	pointer-events:auto;
+	touch-action:auto; 
+}
+.wtw-menuexpandedmobile {
+	position:absolute;
+	z-index:9000;
+	bottom:34px;
+	left:0px;
+	padding-left:10px;
+	margin-left:3%;
+	margin-right:auto;
+/*	display:none;
+	visibility:hidden;*/
+	color:#ffffff;
+	background-color:#111111;
+	width:92%;
+	max-width:400px;
+	min-height:400px;
+	overflow-y:auto;
+	overflow-x:hidden;
 	pointer-events:auto;
 	touch-action:auto; 
 }
