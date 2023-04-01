@@ -2130,10 +2130,12 @@ WTW_3DINTERNET.prototype.hudLoginLogin = function(zlocal, zemail, zpassword, zre
 						dGet('wtw_tuseremail').value = '';
 						dGet('wtw_tdisplayname').value = '';
 						dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+						dGet('wtw_mainmenudisplaynamemobile').innerHTML = 'Login';
 						dGet('wtw_menudisplayname').innerHTML = 'Login';
 						dGet('wtw_tuserimageurl').value = '';
 						dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 						dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+						dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
 
 						WTW.log("Login Error = " + serror);
 						var zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
@@ -2270,10 +2272,12 @@ WTW_3DINTERNET.prototype.hudLoginCreate = function(zlocal, zemail, zpassword, zp
 						dGet('wtw_tuseremail').value = '';
 						dGet('wtw_tdisplayname').value = '';
 						dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+						dGet('wtw_mainmenudisplaynamemobile').innerHTML = 'Login';
 						dGet('wtw_menudisplayname').innerHTML = 'Login';
 						dGet('wtw_tuserimageurl').value = '';
 						dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 						dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+						dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
 
 						WTW.log("Login Error = " + serror);
 						var zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
