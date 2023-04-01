@@ -59,10 +59,12 @@ WTWJS.prototype.globalLoginResponse = function(zresponse) {
 					dGet('wtw_tuseremail').value = '';
 					dGet('wtw_tdisplayname').value = '';
 					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+					dGet('wtw_mainmenudisplaynamemobile').innerHTML = 'Login';
 					dGet('wtw_menudisplayname').innerHTML = 'Login';
 					dGet('wtw_tuserimageurl').value = '';
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+					dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_tusertoken').value = '';
 				}
 				if (zresponse.userid != '') {
@@ -476,10 +478,12 @@ WTWJS.prototype.loginAttemptResponse = function(zresponse) {
 					dGet('wtw_tuseremail').value = '';
 					dGet('wtw_tdisplayname').value = '';
 					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+					dGet('wtw_mainmenudisplaynamemobile').innerHTML = 'Login';
 					dGet('wtw_menudisplayname').innerHTML = 'Login';
 					dGet('wtw_tuserimageurl').value = '';
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+					dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
 				}
 				if (zresponse.userid != '') {
 					WTW.hide('wtw_menulogin');
@@ -514,6 +518,7 @@ WTWJS.prototype.logout = async function() {
 	/* local server log out and clear login values from 3D Scene and browse window */
 	try {
 		WTW.hide('wtw_mainadminmode');
+		WTW.hide('wtw_mainadminmodemobile');
 		WTW.hide('wtw_menuloggedin');
 		WTW.show('wtw_menulogin');
 		dGet('wtw_tuserid').value = '';
@@ -521,24 +526,31 @@ WTWJS.prototype.logout = async function() {
 		dGet('wtw_tuploadpathid').value = '';
 		dGet('wtw_tdisplayname').value = '';
 		dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+		dGet('wtw_mainmenudisplaynamemobile').innerHTML = 'Login';
 		dGet('wtw_menudisplayname').innerHTML = '';
 		dGet('wtw_tuseremail').value = '';
 		dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 		dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+		dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
 		if (dGet('wtw_mainadminmode') != null) {
 			dGet('wtw_mainadminmode').innerHTML = '';
+			dGet('wtw_mainadminmodemobile').innerHTML = '';
 		}
 		if (dGet('wtw_modecommunity') != null) {
 			dGet('wtw_modecommunity').onclick = '';
+			dGet('wtw_modecommunitymobile').onclick = '';
 		}
 		if (dGet('wtw_showcommunityname') != null) {
 			dGet('wtw_showcommunityname').onclick = '';
+			dGet('wtw_showcommunitynamemobile').onclick = '';
 		}
 		if (dGet('wtw_modebuilding') != null) {
 			dGet('wtw_modebuilding').onclick = '';
+			dGet('wtw_modebuildingmobile').onclick = '';
 		}
 		if (dGet('wtw_showbuildingname') != null) {
 			dGet('wtw_showbuildingname').onclick = '';
+			dGet('wtw_showbuildingnamemobile').onclick = '';
 		}
 		if (window.location.href.indexOf('admin.php') > -1) {
 			window.location.href = '//' + wtw_domainname + '/';
@@ -634,6 +646,7 @@ WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserim
 		}
 		if (zdisplayname != '' && zdisplayname != undefined && zdisplayname != 'undefined') {
 			dGet('wtw_mainmenudisplayname').innerHTML = zdisplayname;
+			dGet('wtw_mainmenudisplaynamemobile').innerHTML = zdisplayname;
 			dGet('wtw_menudisplayname').innerHTML = zdisplayname;
 		}
 		dGet('wtw_tdisplayname').value = zdisplayname;
@@ -643,9 +656,11 @@ WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserim
 		if (zuserimageurl != '' && zuserimageurl != undefined) {	
 			dGet('wtw_profileimagelg').src = zuserimageurl;
 			dGet('wtw_profileimagesm').src = zuserimageurl;
+			dGet('wtw_profileimagesmmobile').src = zuserimageurl;
 		}
 		WTW.hide('wtw_menulogin');
 		WTW.show('wtw_mainadminmode');
+		WTW.show('wtw_mainadminmodemobile');
 		WTW.show('wtw_menuloggedin');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-setLoginValues=' + ex.message);

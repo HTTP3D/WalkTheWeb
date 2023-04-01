@@ -46,12 +46,18 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 					}
 					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Thing';
 					dGet('wtw_showcommunityname').style.cursor = 'default';
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'Edit 3D Thing';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 					if (dGet('wtw_tthingname').value == '') {
 						dGet('wtw_showbuildingname').innerHTML = '3D Thing';
 						dGet('wtw_showbuildingname').style.cursor = 'default';
+						dGet('wtw_showbuildingnamemobile').innerHTML = '3D Thing';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
 						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
 					}
 					window.setTimeout(function() {
 						WTW.hide('wtw_loadingthingform');
@@ -98,12 +104,18 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 					}
 					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Thing';
 					dGet('wtw_showcommunityname').style.cursor = 'default';
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'Edit 3D Thing';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 					if (dGet('wtw_tthingname').value == '') {
 						dGet('wtw_showbuildingname').innerHTML = '3D Thing';
 						dGet('wtw_showbuildingname').style.cursor = 'default';
+						dGet('wtw_showbuildingnamemobile').innerHTML = '3D Thing';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
 						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
 					}
 				}
 			}
@@ -153,6 +165,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 								WTW.things[i].thinginfo.versiondesc = WTW.encode(dGet('wtw_tinfothingversiondesc').value);
 								WTW.things[i].thinginfo.analytics = dGet('wtw_tthinganalyticsid').value;
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tthingname').value;
+								dGet('wtw_showbuildingnamemobile').innerHTML = dGet('wtw_tthingname').value;
 							}
 						}
 					}

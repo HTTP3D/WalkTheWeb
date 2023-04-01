@@ -412,17 +412,51 @@ WTWJS.prototype.keyDown = function(zevent) {
 						/* mold name of 3D input box has matching HTML input element */
 						dGet(WTW.selectedMoldName + '-textbox').value = dGet(WTW.selectedMoldName + '-textbox').value.replace('|','');
 						switch (zevent.key) {
-							case 'Backspace':
-							case 'Delete':
-								/* remove the last character */
-								var ztext = dGet(WTW.selectedMoldName + '-textbox').value.substring(0, dGet(WTW.selectedMoldName + '-textbox').value.length - 1);
-								dGet(WTW.selectedMoldName + '-textbox').value = ztext;
+							case 'ArrowLeft':
+								WTW.textCursor -= 1;
+								zevent.preventDefault();
 								break;
-							case 'Tab':
+							case 'ArrowRight':
+								WTW.textCursor += 1;
+								zevent.preventDefault();
+								break;
+							case 'ArrowDown':
 								if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
 									WTW.addText(true);
 								}
 								WTW.tabNextField();
+								zevent.preventDefault();
+								break;
+							case 'ArrowUp':
+								if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
+									WTW.addText(true);
+								}
+								WTW.tabNextField(-1);
+								zevent.preventDefault();
+								break;
+							case 'Delete':
+								dGet(WTW.selectedMoldName + '-textbox').value = dGet(WTW.selectedMoldName + '-textbox').value.substr(0,WTW.textCursor) + dGet(WTW.selectedMoldName + '-textbox').value.substr(WTW.textCursor + 1);
+								zevent.preventDefault();
+								break;
+							case 'Backspace':
+								if (WTW.textCursor > 0) {
+									dGet(WTW.selectedMoldName + '-textbox').value = dGet(WTW.selectedMoldName + '-textbox').value.substr(0,WTW.textCursor - 1) + dGet(WTW.selectedMoldName + '-textbox').value.substr(WTW.textCursor);
+									WTW.textCursor -= 1;
+								}
+								zevent.preventDefault();
+								break;
+							case 'Tab':
+								if (WTW.shiftKey) {
+									if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
+										WTW.addText(true);
+									}
+									WTW.tabNextField(-1);
+								} else {
+									if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
+										WTW.addText(true);
+									}
+									WTW.tabNextField();
+								}
 								zevent.preventDefault();
 								break;
 							default:
@@ -432,6 +466,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 									} else {
 										dGet(WTW.selectedMoldName + '-textbox').checked = true;
 									}
+									zevent.preventDefault();
 								} else if (WTW.selectedMoldName.indexOf('-button-') > -1) {
 									if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
 										/* execute animation on button pressed by keyboard entry */
@@ -439,6 +474,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 										/* process click */
 										WTW.hudLoginClick(WTW.selectedMoldName);
 									}
+									zevent.preventDefault();
 								} else {
 									/* only process accepted keys */
 									var zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@&";
@@ -451,8 +487,9 @@ WTWJS.prototype.keyDown = function(zevent) {
 									} else if (WTW.selectedMoldName.indexOf('-search-') > -1) {
 										zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@'";
 									}
-									if (zaccept.indexOf(zevent.key) > -1 && document.activeElement.id != 'wtw_mobileinput') {
-										dGet(WTW.selectedMoldName + '-textbox').value += zevent.key;
+									if (zaccept.indexOf(zevent.key) > -1) { /*  && document.activeElement.id != 'wtw_mobileinput' */
+										dGet(WTW.selectedMoldName + '-textbox').value = dGet(WTW.selectedMoldName + '-textbox').value.substr(0,WTW.textCursor) + zevent.key + dGet(WTW.selectedMoldName + '-textbox').value.substr(WTW.textCursor);
+										WTW.textCursor += 1;
 										zevent.preventDefault();
 									}
 								}

@@ -839,6 +839,7 @@ WTWJS.prototype.showAvatarDisplayName = function(zopen) {
 			dGet('wtw_tavatardisplayname').readOnly = false;
 			WTW.show('wtw_displaybannote');
 			dGet('wtw_mainmenudisplayname').innerHTML = dGet('wtw_tavatardisplayname').value;
+			dGet('wtw_mainmenudisplaynamemobile').innerHTML = dGet('wtw_tavatardisplayname').value;
 			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tavatardisplayname').value;
 			dGet('wtw_tdisplayname').value = dGet('wtw_tavatardisplayname').value;
 		}

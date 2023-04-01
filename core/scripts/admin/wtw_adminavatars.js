@@ -188,12 +188,18 @@ WTWJS.prototype.loadAvatarForEdit = function() {
 					var zdisplayname = zresponse.avatar.displayname;
 					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Avatar';
 					dGet('wtw_showcommunityname').style.cursor = 'default';
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'Edit 3D Avatar';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 					if (zdisplayname == '') {
 						dGet('wtw_showbuildingname').innerHTML = '3D Avatar';
 						dGet('wtw_showbuildingname').style.cursor = 'default';
+						dGet('wtw_showbuildingnamemobile').innerHTML = '3D Avatar';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = zdisplayname;
 						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = zdisplayname;
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
 					}
 					WTW.addAvatarForEdit(zavatardef.name, zavatardef);
 				}

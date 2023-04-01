@@ -470,6 +470,9 @@ function WTWJS() {
 	
 	/* WTW.textTimer - used to create a blinking cursor in the fill in the blank for editing the Selected Mold (above) */
 	this.textTimer = null;
+
+	/* WTW.textCursor - used to position the blinking cursor in the fill in the blank for editing the Selected Mold (above) */
+	this.textCursor = 0;
 	
 	/* WTW.tabOrder - array of fields for the form to use for Selected Mold when tab is clicked. It will check if the mold exists and move to the next mold if it does not. */
 	this.tabOrder = [];

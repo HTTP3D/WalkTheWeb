@@ -49,12 +49,18 @@ WTWJS.prototype.openBuildingForm = async function(w) {
 					}
 					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Building';
 					dGet('wtw_showcommunityname').style.cursor = 'default';
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'Edit 3D Building';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 					if (dGet('wtw_tbuildingname').value == '') {
 						dGet('wtw_showbuildingname').innerHTML = '3D Building';
 						dGet('wtw_showbuildingname').style.cursor = 'default';
+						dGet('wtw_showbuildingnamemobile').innerHTML = '3D Building';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
 						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
 					}
 					window.setTimeout(function() {
 						WTW.hide('wtw_loadingbuildingform');
@@ -100,12 +106,18 @@ WTWJS.prototype.loadBuildingForm = async function(w) {
 					}
 					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Building';
 					dGet('wtw_showcommunityname').style.cursor = 'default';
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'Edit 3D Building';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 					if (dGet('wtw_tbuildingname').value == '') {
 						dGet('wtw_showbuildingname').innerHTML = '3D Building';
 						dGet('wtw_showbuildingname').style.cursor = 'default';
+						dGet('wtw_showbuildingnamemobile').innerHTML = '3D Building';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
 						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
 					}
 				}
 			}
@@ -159,6 +171,7 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 								WTW.buildings[i].buildinginfo.analyticsid = dGet('wtw_tbuildinganalyticsid').value;
 								WTW.buildings[i].alttag.name = WTW.encode(dGet('wtw_tbuildingalttag').value);
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tbuildingname').value;
+								dGet('wtw_showbuildingnamemobile').innerHTML = dGet('wtw_tbuildingname').value;
 							}
 						}
 					}

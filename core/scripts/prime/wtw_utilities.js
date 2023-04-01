@@ -2467,21 +2467,29 @@ WTWJS.prototype.setClosestBuilding = function() {
 					dGet('wtw_showbuildingname').innerHTML = zclosestwebname;
 					dGet('wtw_showbuildingname').style.cursor = 'pointer';
 					WTW.showInline('wtw_showbuildingname');
+					dGet('wtw_showbuildingnamemobile').innerHTML = zclosestwebname;
+					dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+					WTW.showInline('wtw_showbuildingnamemobile');
 				}
 			}
 			if (WTW.editBuildingAccess != undefined) {
 				if (WTW.adminView == 0 && ((WTW.editBuildingAccess.indexOf(dGet('wtw_tuserid').value) > -1 && zclosestwebtype == 'Building') || (zclosestaccess.indexOf(dGet('wtw_tuserid').value) > -1 && zclosestwebtype == 'Thing')) && dGet('wtw_tuserid').value != '') {
 					dGet('wtw_modebuilding').alt = 'Edit ' + zclosestwebtype;
 					dGet('wtw_modebuilding').title = 'Edit ' + zclosestwebtype;
+					dGet('wtw_modebuildingmobile').alt = 'Edit ' + zclosestwebtype;
+					dGet('wtw_modebuildingmobile').title = 'Edit ' + zclosestwebtype;
 					switch (zclosestwebtype) {
 						case 'Thing':
 							dGet('wtw_modebuilding').src = '/content/system/images/menuthings32.png';
+							dGet('wtw_modebuildingmobile').src = '/content/system/images/menuthings32.png';
 							break;
 						case 'Community':
 							dGet('wtw_modebuilding').src = '/content/system/images/menucommunities32.png';
+							dGet('wtw_modebuildingmobile').src = '/content/system/images/menucommunities32.png';
 							break;
 						default:
 							dGet('wtw_modebuilding').src = '/content/system/images/menubuildings32.png';
+							dGet('wtw_modebuildingmobile').src = '/content/system/images/menubuildings32.png';
 							break;
 					}
 					dGet('wtw_modebuilding').onclick = function() {
@@ -2492,9 +2500,19 @@ WTWJS.prototype.setClosestBuilding = function() {
 							window.location.href = '/admin.php';
 						}
 					}
+					dGet('wtw_modebuildingmobile').onclick = function() {
+						var zreturnpath = window.location.href;
+						if (zclosestwebid != '') {
+							window.location.href = '/admin.php?' + zclosestwebtype.toLowerCase() + 'id=' + zclosestwebid + '&returnpath=' + zreturnpath;
+						} else {
+							window.location.href = '/admin.php';
+						}
+					}
 					WTW.showInline('wtw_modebuilding');
+					WTW.showInline('wtw_modebuildingmobile');
 				} else if (WTW.adminView == 1) {
 					dGet('wtw_modebuilding').src = '/content/system/images/menuedit32.png';
+					dGet('wtw_modebuildingmobile').src = '/content/system/images/menuedit32.png';
 					var zreturnpath1 = '';
 					if (dGet('wtw_returnpath') != null) {
 						zreturnpath1 = dGet('wtw_returnpath').value;
@@ -2502,9 +2520,13 @@ WTWJS.prototype.setClosestBuilding = function() {
 					if (zreturnpath1 != '') {
 						dGet('wtw_modebuilding').alt = 'Return to 3D Website';
 						dGet('wtw_modebuilding').title = 'Return to 3D Website';
+						dGet('wtw_modebuildingmobile').alt = 'Return to 3D Website';
+						dGet('wtw_modebuildingmobile').title = 'Return to 3D Website';
 					} else {
 						dGet('wtw_modebuilding').alt = 'View ' + zclosestwebtype;
 						dGet('wtw_modebuilding').title = 'View ' + zclosestwebtype;
+						dGet('wtw_modebuildingmobile').alt = 'View ' + zclosestwebtype;
+						dGet('wtw_modebuildingmobile').title = 'View ' + zclosestwebtype;
 					}
 					dGet('wtw_modebuilding').onclick = function() {
 						var zreturnpath = '';
@@ -2519,9 +2541,24 @@ WTWJS.prototype.setClosestBuilding = function() {
 							window.location.href = '/';
 						}
 					}
+					dGet('wtw_modebuildingmobile').onclick = function() {
+						var zreturnpath = '';
+						if (dGet('wtw_returnpath') != null) {
+							zreturnpath = dGet('wtw_returnpath').value;
+						}
+						if (zreturnpath != '') {
+							window.location.href = zreturnpath;
+						} else if (zclosestwebid != '') {
+							window.location.href = '/' + zclosestwebtype.toLowerCase() + '/' + zclosestwebid;
+						} else {
+							window.location.href = '/';
+						}
+					}
 					WTW.showInline('wtw_modebuilding');
+					WTW.showInline('wtw_modebuildingmobile');
 				} else {
 					WTW.hide('wtw_modebuilding');
+					WTW.hide('wtw_modebuildingmobile');
 				}
 			}
 			if (WTW.editCommunityAccess != undefined) {
@@ -2529,10 +2566,15 @@ WTWJS.prototype.setClosestBuilding = function() {
 					if (dGet('wtw_showcommunityname') != null) {
 						dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
 						dGet('wtw_showcommunityname').style.cursor = 'pointer';
+						dGet('wtw_showcommunitynamemobile').innerHTML = WTW.communityName;
+						dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
 					}
 					dGet('wtw_modecommunity').alt = 'Edit Community';
 					dGet('wtw_modecommunity').title = 'Edit Community';
 					dGet('wtw_modecommunity').src = '/content/system/images/menucommunities32.png';
+					dGet('wtw_modecommunitymobile').alt = 'Edit Community';
+					dGet('wtw_modecommunitymobile').title = 'Edit Community';
+					dGet('wtw_modecommunitymobile').src = '/content/system/images/menucommunities32.png';
 					dGet('wtw_modecommunity').onclick = function() {
 						var zreturnpath = window.location.href;
 						if (zclosestwebid != '') {
@@ -2541,13 +2583,25 @@ WTWJS.prototype.setClosestBuilding = function() {
 							window.location.href = '/admin.php';
 						}
 					}
+					dGet('wtw_modecommunitymobile').onclick = function() {
+						var zreturnpath = window.location.href;
+						if (zclosestwebid != '') {
+							window.location.href = '/admin.php?communityid=' + communityid + '&returnpath=' + zreturnpath;
+						} else {
+							window.location.href = '/admin.php';
+						}
+					}
 					WTW.showInline('wtw_modecommunity');		
+					WTW.showInline('wtw_modecommunitymobile');		
 				} else if (WTW.adminView == 1 && communityid != '') {
 					if (dGet('wtw_showcommunityname') != null) {
 						dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
 						dGet('wtw_showcommunityname').style.cursor = 'pointer';
+						dGet('wtw_showcommunitynamemobile').innerHTML = WTW.communityName;
+						dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
 					}
 					dGet('wtw_modecommunity').src = '/content/system/images/menuedit32.png';
+					dGet('wtw_modecommunitymobile').src = '/content/system/images/menuedit32.png';
 					var zreturnpath1 = '';
 					if (dGet('wtw_returnpath') != null) {
 						zreturnpath1 = dGet('wtw_returnpath').value;
@@ -2555,9 +2609,13 @@ WTWJS.prototype.setClosestBuilding = function() {
 					if (zreturnpath1 != '') {
 						dGet('wtw_modecommunity').alt = 'Return to 3D Website';
 						dGet('wtw_modecommunity').title = 'Return to 3D Website';
+						dGet('wtw_modecommunitymobile').alt = 'Return to 3D Website';
+						dGet('wtw_modecommunitymobile').title = 'Return to 3D Website';
 					} else {
 						dGet('wtw_modecommunity').alt = 'View 3D Community';
 						dGet('wtw_modecommunity').title = 'View  3D Community';
+						dGet('wtw_modecommunitymobile').alt = 'View 3D Community';
+						dGet('wtw_modecommunitymobile').title = 'View  3D Community';
 					}
 					dGet('wtw_modecommunity').onclick = function() {
 						var zreturnpath = '';
@@ -2572,9 +2630,24 @@ WTWJS.prototype.setClosestBuilding = function() {
 							window.location.href = '/';
 						}
 					}
+					dGet('wtw_modecommunitymobile').onclick = function() {
+						var zreturnpath = '';
+						if (dGet('wtw_returnpath') != null) {
+							zreturnpath = dGet('wtw_returnpath').value;
+						}
+						if (zreturnpath != '') {
+							window.location.href = zreturnpath;
+						} else if (communityid != '') {
+							window.location.href = '/' + communityid;
+						} else {
+							window.location.href = '/';
+						}
+					}
 					WTW.showInline('wtw_modecommunity');
+					WTW.showInline('wtw_modecommunitymobile');
 				} else {
 					WTW.hide('wtw_modecommunity');
+					WTW.hide('wtw_modecommunitymobile');
 				}
 			}
 			WTW.closestWebID = zclosestwebid;

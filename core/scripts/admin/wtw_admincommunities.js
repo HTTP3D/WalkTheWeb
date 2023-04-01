@@ -189,6 +189,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 							WTW.communities[i].wind.direction.z = dGet('wtw_twaterwinddirectionz').value;
 							WTW.communities[i].alttag.name = WTW.encode(dGet('wtw_tcommunityalttag').value);
 							dGet('wtw_showcommunityname').innerHTML = dGet('wtw_tcommunityname').value;
+							dGet('wtw_showcommunitynamemobile').innerHTML = dGet('wtw_tcommunityname').value;
 						}
 					}
 				}

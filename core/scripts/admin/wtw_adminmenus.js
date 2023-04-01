@@ -1866,15 +1866,25 @@ WTWJS.prototype.setMenuBarSelectText = function() {
 		if (thingid == '' && buildingid == '' && communityid == '' && avatarid == '') {
 			dGet('wtw_showcommunityname').innerHTML = WTW.__('Select 3D Item to Edit');
 			dGet('wtw_showcommunityname').style.cursor = 'default';
+			dGet('wtw_showcommunitynamemobile').innerHTML = WTW.__('Select 3D Item to Edit');
+			dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 			dGet('wtw_showbuildingname').innerHTML = WTW.__('from Admin Menu Above');
 			dGet('wtw_showbuildingname').style.cursor = 'default';
+			dGet('wtw_showbuildingnamemobile').innerHTML = WTW.__('from Admin Menu Above');
+			dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 			WTW.hide('wtw_modebuilding');
+			WTW.hide('wtw_modebuildingmobile');
 			WTW.hide('wtw_mainadminmode');
+			WTW.hide('wtw_mainadminmodemobile');
 			WTW.hide('wtw_rating');
+			WTW.hide('wtw_ratingmobile');
 		} else {
 			WTW.showInline('wtw_modebuilding');
+			WTW.showInline('wtw_modebuildingmobile');
 			WTW.showInline('wtw_mainadminmode');
+			WTW.showInline('wtw_mainadminmodemobile');
 			WTW.showInline('wtw_rating');
+			WTW.showInline('wtw_ratingmobile');
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmenus.js-setMenuBarSelectText=' + ex.message);

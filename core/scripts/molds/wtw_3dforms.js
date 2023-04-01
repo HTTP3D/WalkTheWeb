@@ -30,11 +30,12 @@ WTWJS.prototype.focusText = function(zeditdone) {
 			if (dGet('wtw_formfields') == null) {
 				var zformsdiv = document.createElement('div');
 				zformsdiv.id = 'wtw_formfields';
-				zformsdiv.className = 'wtw-hide';
+				zformsdiv.className = 'wtw-formfieldsdiv';
 				document.getElementsByTagName('body')[0].appendChild(zformsdiv);
 			}
 			var zinput = document.createElement('input');
 			zinput.id = ztextbox;
+			zinput.name = ztextbox;
 			if (WTW.selectedMoldName.indexOf('-password-') > -1) {
 				zinput.type = 'password';
 			} else if (WTW.selectedMoldName.indexOf('-check-') > -1) {
@@ -57,12 +58,14 @@ WTWJS.prototype.focusText = function(zeditdone) {
 							zemail = WTW.getCookie('globalloginemail');
 						}
 						zinput.value = zemail;
+						WTW.textCursor = zemail.length;
 					} else if (WTW.selectedMoldName.indexOf('-password-password') > -1) {
 						var zpassword = WTW.getCookie('localloginpassword');
 						if (zlocal == false) {
 							zpassword = WTW.getCookie('globalloginpassword');
 						}
 						zinput.value = atob(zpassword);
+						WTW.textCursor = zpassword.length;
 					} else if (WTW.selectedMoldName.indexOf('-check-remember') > -1) {
 						zinput.checked = true;
 					}
@@ -70,26 +73,19 @@ WTWJS.prototype.focusText = function(zeditdone) {
 			}
 			dGet('wtw_formfields').appendChild(zinput);
 		}
-		if (dGet('wtw_mobileinput') == null) {
-			var zmobileinput = document.createElement('input');
-			zmobileinput.id = 'wtw_mobileinput';
-			zmobileinput.value = '';
-			zmobileinput.onkeydown = function() { WTW.setMobileInput();};
-			if (WTW.selectedMoldName.indexOf('-password-') > -1) {
-				zmobileinput.type = 'password';
-			} else {
-				zmobileinput.type = 'text';
+		var zinputs = dGet('wtw_formfields').children;
+		for (var i=0;i<zinputs.length;i++) {
+			if (zinputs[i] != null) {
+				if (zinputs[i].id == ztextbox) {
+					WTW.show(ztextbox);
+					dGet(ztextbox).style.marginLeft = 'auto';
+					dGet(ztextbox).style.marginRight = 'auto';
+				} else {
+					WTW.hide(zinputs[i].id);
+				}
 			}
-			document.body.appendChild(zmobileinput);
-		} else {
-			if (WTW.selectedMoldName.indexOf('-password-') > -1) {
-				dGet('wtw_mobileinput').type = 'password';
-			} else {
-				dGet('wtw_mobileinput').type = 'text';
-			}
-			dGet('wtw_mobileinput').value = '';
 		}
-//		dGet('wtw_mobileinput').focus();
+		dGet(ztextbox).focus();
 		if (zeditdone) {
 			WTW.addText(true);
 		} else {
@@ -147,17 +143,6 @@ WTWJS.prototype.addText = function(zeditdone) {
 						zmaxlength = Math.round(zmaxlength * .8);
 					}
 				}
-				if (zshowtext.length > zmaxlength) {
-					if (zeditdone) {
-						zshowtext = zshowtext.substr(zstartposition, zmaxlength);
-					} else {
-						zstartposition = zshowtext.length - zmaxlength;
-						if (zstartposition < 0) {
-							zstartposition = 0;
-						}
-						zshowtext = zshowtext.substr(zstartposition, zmaxlength);
-					}
-				}
 				/* check if password field */
 				if (WTW.selectedMoldName.indexOf('password') > -1) {
 					var zastrisks = '';
@@ -171,10 +156,30 @@ WTWJS.prototype.addText = function(zeditdone) {
 					zshowtext = zshowtext.replace('|','');
 					dGet(zinputid).value = dGet(zinputid).value.replace('|','');
 				} else if (zhaspipe == 0 && zeditdone == false) {
-					zshowtext += '|';
-					dGet(zinputid).value += '|';
+					if (WTW.textCursor > zshowtext.length) {
+						WTW.textCursor = zshowtext.length;
+					} else if (WTW.textCursor < 0) {
+						WTW.textCursor = 0;
+					}
+					zshowtext = zshowtext.substr(0,WTW.textCursor) + '|' + zshowtext.substr(WTW.textCursor);
+					dGet(zinputid).value = dGet(zinputid).value.substr(0,WTW.textCursor) + '|' + dGet(zinputid).value.substr(WTW.textCursor);
 				} else {
+					zshowtext = zshowtext.substr(0,WTW.textCursor) + ' ' + zshowtext.substr(WTW.textCursor);
 					dGet(zinputid).value = dGet(zinputid).value.replace('|','');
+				}
+				if (zshowtext.length > zmaxlength) {
+					if (zeditdone) {
+						zshowtext = zshowtext.substr(zstartposition, zmaxlength);
+					} else {
+						zstartposition = zshowtext.length - zmaxlength;
+						if (WTW.textCursor < zstartposition) {
+							zstartposition = WTW.textCursor - 1;
+						}
+						if (zstartposition < 0) {
+							zstartposition = 0;
+						}
+						zshowtext = zshowtext.substr(zstartposition, zmaxlength);
+					}
 				}
 			} else {
 				zshowtext = '';
@@ -198,9 +203,12 @@ WTWJS.prototype.addText = function(zeditdone) {
 	}
 }
 
-WTWJS.prototype.tabNextField = function() {
+WTWJS.prototype.tabNextField = function(zdirection) {
 	/* tab to next field on form */
 	try {
+		if (zdirection == undefined) {
+			zdirection = 1;
+		}
 		if (WTW.tabOrder.length > 0) {
 			var zmoldname = '';
 			var zfoundfield = false;
@@ -228,28 +236,57 @@ WTWJS.prototype.tabNextField = function() {
 						}
 					}
 				}
-				/* find next field */
-				znexttab = zcurrenttab + 1;
-				/* check array after current tab */
-				for (var i=znexttab;i<WTW.tabOrder.length;i++) {
-					if (WTW.tabOrder[i] != null) {
-						var zmold = WTW.getMeshOrNodeByID(WTW.tabOrder[i]);
-						if (zmold != null) {
-							zmoldname = WTW.tabOrder[i];
-							zfoundfield = true;
-							i = WTW.tabOrder.length;
-						}
-					}
-				}
-				if (zfoundfield == false && znexttab > 0) {
-					/* check from beginning of array */
-					for (var i=0;i<znexttab;i++) {
+				if (zdirection > 0) {
+					/* find next field */
+					znexttab = zcurrenttab + 1;
+					/* check array after current tab */
+					for (var i=znexttab;i<WTW.tabOrder.length;i++) {
 						if (WTW.tabOrder[i] != null) {
 							var zmold = WTW.getMeshOrNodeByID(WTW.tabOrder[i]);
 							if (zmold != null) {
 								zmoldname = WTW.tabOrder[i];
 								zfoundfield = true;
-								i = znexttab;
+								i = WTW.tabOrder.length;
+							}
+						}
+					}
+					if (zfoundfield == false && znexttab > 0) {
+						/* check from beginning of array */
+						for (var i=0;i<znexttab;i++) {
+							if (WTW.tabOrder[i] != null) {
+								var zmold = WTW.getMeshOrNodeByID(WTW.tabOrder[i]);
+								if (zmold != null) {
+									zmoldname = WTW.tabOrder[i];
+									zfoundfield = true;
+									i = znexttab;
+								}
+							}
+						}
+					}
+				} else {
+					/* find next field backwards */
+					znexttab = zcurrenttab - 1;
+					/* check array after current tab */
+					for (var i=znexttab;i>0;i--) {
+						if (WTW.tabOrder[i] != null) {
+							var zmold = WTW.getMeshOrNodeByID(WTW.tabOrder[i]);
+							if (zmold != null) {
+								zmoldname = WTW.tabOrder[i];
+								zfoundfield = true;
+								i = 0;
+							}
+						}
+					}
+					if (zfoundfield == false && znexttab < WTW.tabOrder.length) {
+						/* check from beginning of array */
+						for (var i=WTW.tabOrder.length;i>0;i--) {
+							if (WTW.tabOrder[i] != null) {
+								var zmold = WTW.getMeshOrNodeByID(WTW.tabOrder[i]);
+								if (zmold != null) {
+									zmoldname = WTW.tabOrder[i];
+									zfoundfield = true;
+									i = 0;
+								}
 							}
 						}
 					}
@@ -262,34 +299,5 @@ WTWJS.prototype.tabNextField = function() {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-molds-wtw_3dforms.js-tabNextField=' + ex.message);
-	}
-}
-
-WTWJS.prototype.setMobileInput = function() {
-	/* capture mobile input text (allowing keyboard to show) */
-	try {
-		var zevent = window.event;
-		/* only process accepted keys */
-		var zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@&";
-		if (WTW.selectedMoldName.indexOf('-email-') > -1) {
-			zaccept = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@";
-		} else if (WTW.selectedMoldName.indexOf('-name-') > -1) {
-			zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_',";
-		} else if (WTW.selectedMoldName.indexOf('-password-') > -1) {
-			zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+_@!#$%^&*()=[]:;'?,";
-		} else if (WTW.selectedMoldName.indexOf('-search-') > -1) {
-			zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@'";
-		}
-		if (zaccept.indexOf(zevent.key) > -1) {
-			dGet('wtw_mobileinput').value += zevent.key;
-			if (dGet(WTW.selectedMoldName + '-textbox') != null) {
-				dGet(WTW.selectedMoldName + '-textbox').value = dGet('wtw_mobileinput').value;
-//WTW.log("SET TEXT=" + dGet('wtw_mobileinput').value);
-				WTW.addText();
-			}
-			zevent.preventDefault();
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-molds-wtw_3dforms.js-setMobileInput=' + ex.message);
 	}
 }
