@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.6.1';
+	public $version = '3.6.2';
 	public $dbversion = '1.2.21';
-	public $versiondate = '2023-2-28';
+	public $versiondate = '2023-4-1';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
