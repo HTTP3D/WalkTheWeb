@@ -581,13 +581,6 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												} else {
 													WTW.cameraYOffset -= 400/WTW.sizeY * WTW.turnSpeed * zavatar.WTW.animations.running[zevent].weight;
 												}
-/*												if (WTW.mouseY == WTW.mouseStartY) {
-													WTW.cameraYOffset -= 400/WTW.sizeY * WTW.turnSpeed * zavatar.WTW.animations.running[zevent].weight;
-												} else if (WTW.isMouseDown == 1) {
-													WTW.cameraYOffset += 100/WTW.sizeY * (WTW.mouseY - WTW.mouseStartY) * WTW.turnSpeed * zavatar.WTW.animations.running[zevent].weight;
-													WTW.mouseStartY = WTW.mouseY;
-												}
-*/
 												zweight -= zavatar.WTW.animations.running[zevent].weight;
 												break;
 											case 'onrotatedown':
@@ -596,13 +589,6 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												} else {
 													WTW.cameraYOffset += 400/WTW.sizeY * WTW.turnSpeed * zavatar.WTW.animations.running[zevent].weight;
 												}
-/*												if (WTW.mouseY == WTW.mouseStartY) {
-													WTW.cameraYOffset += 400/WTW.sizeY * WTW.turnSpeed * zavatar.WTW.animations.running[zevent].weight;
-												} else if (WTW.isMouseDown == 1) {
-													WTW.cameraYOffset -= 100/WTW.sizeY * (WTW.mouseStartY - WTW.mouseY) * WTW.turnSpeed * zavatar.WTW.animations.running[zevent].weight;
-													WTW.mouseStartY = WTW.mouseY;
-												}
-*/
 												zweight -= zavatar.WTW.animations.running[zevent].weight;
 												break;
 											case 'onwalk':
@@ -845,15 +831,18 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 WTWJS.prototype.swipeRotateAvatar = function(zavatar) {
 	/* swipe rotation avatar */
 	try {
+		/* touch or mouse position based rotation */
+		/* left and right */
 		if (WTW.mouseX < WTW.sizeX/5) {
-			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) - 4);
+			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) - (2 * WTW.turnSpeed));
 		} else if (WTW.mouseX < WTW.sizeX/2 - 100) {
-			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) - 2);
+			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) - WTW.turnSpeed);
 		} else if (WTW.mouseX > WTW.sizeX*4/5) {
-			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + 4);
+			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + (2 * WTW.turnSpeed));
 		} else if (WTW.mouseX > WTW.sizeX/2 + 100) {
-			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + 2);
+			zavatar.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.turnSpeed);
 		}
+		/* up and down */
 		if (WTW.mouseY < WTW.sizeY/6) {
 			WTW.cameraYOffset -= .75;
 		} else if (WTW.mouseY < WTW.sizeY/4) {
