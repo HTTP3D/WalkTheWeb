@@ -541,7 +541,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							/* set community and initial building name */
 							document.title = zresponse.communityinfo.communityname;
 							dGet('wtw_showcommunityname').innerHTML = zresponse.communityinfo.communityname;
-							dGet('wtw_showcommunitynamemobile').innerHTML = zresponse.communityinfo.communityname;
+							dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + zresponse.communityinfo.communityname + '</b>';
 							dGet('wtw_showbuildingname').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
 							dGet('wtw_showbuildingnamemobile').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
 							/* checking for main parent - adding if needed */

@@ -809,7 +809,6 @@ WTWJS.prototype.openLoginHUDLogin = function() {
 			WTW.openLoginHUD('3D Website Login');
 		} else if (WTW.anonymousLogins == '1') {
 			/* login not required - open select avatar */
-			WTW.closeLoginHUD();
 			WTW.openLoginHUD('Select My Avatar');
 		} else {
 			WTW.openLoginHUD('Login Menu');
@@ -944,7 +943,6 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 				window.setTimeout(function() {
 					if (zmoldname == 'hudlogin-button-loginlocal') {
 						/* login menu */
-						WTW.closeLoginHUD();
 						if (dGet('wtw_tuserid').value == '') {
 							WTW.openLoginHUD('3D Website Login');
 						} else {
@@ -955,7 +953,6 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						WTW.hudLoginEnter();
 					} else if (zmoldname == 'hudlogin-button-loginguest') {
 						/* login menu */
-						WTW.closeLoginHUD();
 						WTW.openLoginHUD('Select My Avatar');
 					} else if (zmoldname == 'hudlogin-button-editprofile') {
 						/* open edit profile */
@@ -977,7 +974,6 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						WTW.hudLoginLogin();
 					} else if (zmoldname == 'hudlogin-button-createlink') {
 						/* login */
-						WTW.closeLoginHUD();
 						let ztitlewtw = WTW.getMeshOrNodeByID('hudlogin-titlewtw');
 						let zfocus = false;
 						let zlocal = true;
@@ -993,26 +989,22 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						}
 					} else if (zmoldname == 'hudlogin-button-forgot') {
 						/* reset password */
-						WTW.closeLoginHUD();
 						//WTW.openLoginHUD('Reset Password'); /* 3d form is not ready */
 						WTW.openLocalLogin('Recover Login', .4, .5);
 					} else if (zmoldname == 'hudlogin-button-cancellogin') {
 						/* login */
-						WTW.closeLoginHUD();
 						WTW.openLoginHUDLogin();
 					} else if (zmoldname == 'hudlogin-button-create') {
 						/* create login */
 						WTW.hudLoginCreate();
 					} else if (zmoldname == 'hudlogin-button-cancelcreate') {
 						/* create login */
-						WTW.closeLoginHUD();
 						WTW.openLoginHUDLogin();
 					} else if (zmoldname == 'hudlogin-button-reset') {
 						/* reset password */
 						
 					} else if (zmoldname == 'hudlogin-button-cancelreset') {
 						/* cancel reset password */
-						WTW.closeLoginHUD();
 						WTW.openLoginHUDLogin();
 					} else if (zmoldname == 'hudlogin-button-next') {
 						/* select avatar - show next avatar */
@@ -1401,6 +1393,7 @@ WTWJS.prototype.hudLoginLoginResponse = function(zresponse) {
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
+					WTW.show('wtw_mainmenudisplaynamemobile');
 				}
 				if (zresponse.userid != '') {
 					/* successful login */
@@ -1562,6 +1555,7 @@ WTWJS.prototype.hudLoginCreateResponse = function(zresponse) {
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
+					WTW.show('wtw_mainmenudisplaynamemobile');
 				}
 				if (zresponse.userid != '') {
 					/* successful login */
@@ -1600,7 +1594,6 @@ WTWJS.prototype.hudLoginSaveAvatar = function() {
 	/* save avatar selection */
 	try {
 		var zdisplayname = dGet('hudlogin-name-displayname-textbox').value.replace('|','');
-		WTW.closeLoginHUD();
 		WTW.openLoginHUD('Loading 3D Avatar');
 		/* save cookie and load avatar */
 		if (WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid != '') {

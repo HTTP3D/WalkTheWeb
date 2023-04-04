@@ -58,9 +58,14 @@ WTWJS.prototype.openBuildingForm = async function(w) {
 						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
-						dGet('wtw_showbuildingname').style.cursor = 'pointer';
-						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
-						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Building: <b>' + WTW.decode(dGet('wtw_tbuildingname').value) + '</b>';
+						if (WTW.adminView == 1) {
+							dGet('wtw_showbuildingname').style.cursor = 'pointer';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						} else {
+							dGet('wtw_showbuildingname').style.cursor = 'default';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
+						}
 					}
 					window.setTimeout(function() {
 						WTW.hide('wtw_loadingbuildingform');
@@ -115,9 +120,14 @@ WTWJS.prototype.loadBuildingForm = async function(w) {
 						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
-						dGet('wtw_showbuildingname').style.cursor = 'pointer';
-						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tbuildingname').value);
-						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Building: <b>' + WTW.decode(dGet('wtw_tbuildingname').value) + '</b>';
+						if (WTW.adminView == 1) {
+							dGet('wtw_showbuildingname').style.cursor = 'pointer';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						} else {
+							dGet('wtw_showbuildingname').style.cursor = 'default';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
+						}
 					}
 				}
 			}
@@ -171,7 +181,7 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 								WTW.buildings[i].buildinginfo.analyticsid = dGet('wtw_tbuildinganalyticsid').value;
 								WTW.buildings[i].alttag.name = WTW.encode(dGet('wtw_tbuildingalttag').value);
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tbuildingname').value;
-								dGet('wtw_showbuildingnamemobile').innerHTML = dGet('wtw_tbuildingname').value;
+								dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Building: <b>' + dGet('wtw_tbuildingname').value + '</b>';
 							}
 						}
 					}

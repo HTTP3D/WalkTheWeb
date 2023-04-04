@@ -69,15 +69,20 @@ WTWJS.prototype.setContentRating = function() {
 				if (dGet('wtw_rating') != null) {
 					if (zresponse.unratedcontent == '1') {
 						dGet('wtw_rating').innerHTML = zresponse.rating + '*';
-						dGet('wtw_ratingmobile').innerHTML = zresponse.rating + '*';
+						dGet('wtw_ratingmobiletext').innerHTML = zresponse.rating + '*';
 					} else {
 						dGet('wtw_rating').innerHTML = zresponse.rating;
-						dGet('wtw_ratingmobile').innerHTML = zresponse.rating;
+						dGet('wtw_ratingmobiletext').innerHTML = zresponse.rating;
 					}
 					dGet('wtw_rating').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
 					dGet('wtw_rating').onmouseout = function() {WTW.hideToolTip();};
 					dGet('wtw_ratingmobile').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
+					dGet('wtw_ratingmobiletext').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
 					dGet('wtw_ratingmobile').onmouseout = function() {WTW.hideToolTip();};
+					dGet('wtw_ratingmobiletext').onmouseout = function() {WTW.hideToolTip();};
+					
+					dGet('wtw_ratingmobile').title = 'Content Rating - Click for more';
+					dGet('wtw_ratingmobile').alt = 'Content Rating - Click for more';
 					
 					dGet('wtw_contentrating').innerHTML = atob(zresponse.contentrating);
 				}
@@ -255,6 +260,7 @@ WTWJS.prototype.initEnvironment = function() {
 			if (dGet('wtw_mainmenudisplayname') != null) {
 				dGet('wtw_mainmenudisplayname').innerHTML = "<span class='wtw-yellow'>Login</span>";
 				dGet('wtw_mainmenudisplaynamemobile').innerHTML = "<span class='wtw-yellow'>Login</span>";
+				WTW.show('wtw_mainmenudisplaynamemobile');
 			}
 		}
 	} catch (ex) {
@@ -683,8 +689,10 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 			} else {
 				dGet('wtw_showcommunityname').innerHTML = WTW.decode(WTW.communityName);
 				dGet('wtw_showcommunityname').style.cursor = 'pointer';
-				dGet('wtw_showcommunitynamemobile').innerHTML = WTW.decode(WTW.communityName);
-				dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
+				dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + WTW.decode(WTW.communityName) + '</b>';
+				if (WTW.adminView == 1 && communityid != '') {
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
+				}
 			}
 		} else {
 			if (window.location.href.indexOf('/building/') > -1 || window.location.href.indexOf('/buildings/') > -1) {

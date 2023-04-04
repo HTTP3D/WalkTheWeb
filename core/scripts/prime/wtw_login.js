@@ -66,6 +66,7 @@ WTWJS.prototype.globalLoginResponse = function(zresponse) {
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_tusertoken').value = '';
+					WTW.show('wtw_mainmenudisplaynamemobile');
 				}
 				if (zresponse.userid != '') {
 					dGet('wtw_tusertoken').value = zresponse.usertoken;
@@ -484,6 +485,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresponse) {
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
+					WTW.show('wtw_mainmenudisplaynamemobile');
 				}
 				if (zresponse.userid != '') {
 					WTW.hide('wtw_menulogin');
@@ -532,6 +534,7 @@ WTWJS.prototype.logout = async function() {
 		dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 		dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 		dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
+		WTW.show('wtw_mainmenudisplaynamemobile');
 		if (dGet('wtw_mainadminmode') != null) {
 			dGet('wtw_mainadminmode').innerHTML = '';
 			dGet('wtw_mainadminmodemobile').innerHTML = '';
@@ -646,8 +649,9 @@ WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserim
 		}
 		if (zdisplayname != '' && zdisplayname != undefined && zdisplayname != 'undefined') {
 			dGet('wtw_mainmenudisplayname').innerHTML = zdisplayname;
-			dGet('wtw_mainmenudisplaynamemobile').innerHTML = zdisplayname;
+			dGet('wtw_profileimagesmmobiletext').innerHTML = 'Profile: ' + zdisplayname;
 			dGet('wtw_menudisplayname').innerHTML = zdisplayname;
+			WTW.hide('wtw_mainmenudisplaynamemobile');
 		}
 		dGet('wtw_tdisplayname').value = zdisplayname;
 		dGet('wtw_teditdisplayname').value = zdisplayname;

@@ -1484,10 +1484,16 @@ WTWJS.prototype.toggleFPS = function() {
 WTWJS.prototype.showSettingsMenu = function(zmenuitem) {
 	/* show or hide sections of the browse menu (bottom menu bar) */
 	try {
+		WTW.toggleBrowseMenu(0);
 		switch (zmenuitem) {
 			case 'wtw_menuprofile':
+				var zentervisible = false;
 				var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
-				if (zhudlogin == null) {
+				var zenter = WTW.getMeshOrNodeByID('hudlogin-button-enter');
+				if (zenter != null) {
+					zentervisible = zenter.isVisible;
+				}
+				if (zhudlogin == null || zentervisible) {
 					WTW.openLoginMenu();WTW.closeMenus();
 				} else {
 					WTW.closeLoginHUD();
@@ -1574,6 +1580,56 @@ WTWJS.prototype.closeMenus = function(zmenuid) {
 		WTW.pluginsCloseMenus(zmenuid);
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud.js-closeMenus=' + ex.message);
+	}
+}
+
+WTWJS.prototype.toggleBrowseMenu = function(zopen) {
+	/* toggles the browse menu */
+	try {
+		if (zopen == undefined) {
+			zopen = 3;
+		}
+		if (WTW.isMobile == 1 || WTW.sizeX < WTW.sizeY) {
+			/* is Mobile or portrait */
+			WTW.hide('wtw_menuexpanded');
+			if (zopen == 1) {
+				WTW.show('wtw_menuexpandedmobile');
+			} else if (dGet('wtw_menuexpandedmobile').style.display == 'block' || zopen == 0) {
+				WTW.hide('wtw_menuexpandedmobile');
+			} else {
+				WTW.show('wtw_menuexpandedmobile');
+			}
+			WTW.hide('wtw_profileimagesmmobile');
+			WTW.hide('wtw_profileimagesmmobiletext');
+			WTW.hide('wtw_modecommunitymobiletext');
+			WTW.hide('wtw_modebuildingmobiletext');
+			if (WTW.placeHolder == 1) {
+				WTW.hide('wtw_menuoptionanimationsmobile');
+				WTW.hide('wtw_menuoptionanimationsmobiletext');
+			} else {
+				WTW.show('wtw_menuoptionanimationsmobile');
+				WTW.show('wtw_menuoptionanimationsmobiletext');
+				if (dGet('wtw_tuserid').value != '') {
+					WTW.show('wtw_profileimagesmmobile');
+					WTW.show('wtw_profileimagesmmobiletext');
+				}
+			}
+			if (dGet('wtw_tuserid').value == '') {
+				WTW.hide('wtw_mainadminmodemobile');
+				WTW.hide('wtw_mainadminmodemobiletext');
+				WTW.show('wtw_mainmenudisplaynamemobile');
+			} else {
+				WTW.show('wtw_mainadminmodemobile');
+				WTW.show('wtw_mainadminmodemobiletext');
+				WTW.hide('wtw_mainmenudisplaynamemobile');
+			}
+		} else {
+			/* is not mobile or portrait */
+			WTW.toggle('wtw_menuexpanded');
+			WTW.hide('wtw_menuexpandedmobile');
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud.js-toggleMobileMenu=' + ex.message);
 	}
 }
 

@@ -197,9 +197,14 @@ WTWJS.prototype.loadAvatarForEdit = function() {
 						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = zdisplayname;
-						dGet('wtw_showbuildingname').style.cursor = 'pointer';
 						dGet('wtw_showbuildingnamemobile').innerHTML = zdisplayname;
-						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						if (WTW.adminView == 1) {
+							dGet('wtw_showbuildingname').style.cursor = 'pointer';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						} else {
+							dGet('wtw_showbuildingname').style.cursor = 'default';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
+						}
 					}
 					WTW.addAvatarForEdit(zavatardef.name, zavatardef);
 				}

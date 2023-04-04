@@ -1870,7 +1870,7 @@ WTWJS.prototype.setMenuBarSelectText = function() {
 			dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 			dGet('wtw_showbuildingname').innerHTML = WTW.__('from Admin Menu Above');
 			dGet('wtw_showbuildingname').style.cursor = 'default';
-			dGet('wtw_showbuildingnamemobile').innerHTML = WTW.__('from Admin Menu Above');
+			dGet('wtw_showbuildingnamemobile').innerHTML = WTW.__('from Admin Menu');
 			dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 			WTW.hide('wtw_modebuilding');
 			WTW.hide('wtw_modebuildingmobile');
@@ -1878,6 +1878,7 @@ WTWJS.prototype.setMenuBarSelectText = function() {
 			WTW.hide('wtw_mainadminmodemobile');
 			WTW.hide('wtw_rating');
 			WTW.hide('wtw_ratingmobile');
+			WTW.hide('wtw_ratingmobiletext');
 		} else {
 			WTW.showInline('wtw_modebuilding');
 			WTW.showInline('wtw_modebuildingmobile');
@@ -1885,6 +1886,7 @@ WTWJS.prototype.setMenuBarSelectText = function() {
 			WTW.showInline('wtw_mainadminmodemobile');
 			WTW.showInline('wtw_rating');
 			WTW.showInline('wtw_ratingmobile');
+			WTW.showInline('wtw_ratingmobiletext');
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmenus.js-setMenuBarSelectText=' + ex.message);

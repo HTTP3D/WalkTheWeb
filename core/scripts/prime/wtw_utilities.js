@@ -2465,10 +2465,15 @@ WTWJS.prototype.setClosestBuilding = function() {
 			if (dGet('wtw_showbuildingname') != null) {
 				if (zclosestwebname != '') {
 					dGet('wtw_showbuildingname').innerHTML = zclosestwebname;
-					dGet('wtw_showbuildingname').style.cursor = 'pointer';
 					WTW.showInline('wtw_showbuildingname');
-					dGet('wtw_showbuildingnamemobile').innerHTML = zclosestwebname;
-					dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+					dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Web: <b>' + zclosestwebname + '</b>';
+					if (WTW.adminView == 1) {
+						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+					} else {
+						dGet('wtw_showbuildingname').style.cursor = 'default';
+						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
+					}
 					WTW.showInline('wtw_showbuildingnamemobile');
 				}
 			}
@@ -2566,8 +2571,8 @@ WTWJS.prototype.setClosestBuilding = function() {
 					if (dGet('wtw_showcommunityname') != null) {
 						dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
 						dGet('wtw_showcommunityname').style.cursor = 'pointer';
-						dGet('wtw_showcommunitynamemobile').innerHTML = WTW.communityName;
-						dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
+						dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + WTW.communityName + '</b>';
+						dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 					}
 					dGet('wtw_modecommunity').alt = 'Edit Community';
 					dGet('wtw_modecommunity').title = 'Edit Community';
@@ -2597,7 +2602,7 @@ WTWJS.prototype.setClosestBuilding = function() {
 					if (dGet('wtw_showcommunityname') != null) {
 						dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
 						dGet('wtw_showcommunityname').style.cursor = 'pointer';
-						dGet('wtw_showcommunitynamemobile').innerHTML = WTW.communityName;
+						dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + WTW.communityName + '</b>';
 						dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
 					}
 					dGet('wtw_modecommunity').src = '/content/system/images/menuedit32.png';

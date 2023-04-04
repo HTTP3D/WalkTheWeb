@@ -55,9 +55,14 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
-						dGet('wtw_showbuildingname').style.cursor = 'pointer';
-						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
-						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Thing: <b>' + WTW.decode(dGet('wtw_tthingname').value) + '</b>';
+						if (WTW.adminView == 1) {
+							dGet('wtw_showbuildingname').style.cursor = 'pointer';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						} else {
+							dGet('wtw_showbuildingname').style.cursor = 'default';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
+						}
 					}
 					window.setTimeout(function() {
 						WTW.hide('wtw_loadingthingform');
@@ -113,9 +118,14 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 						dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
 					} else {
 						dGet('wtw_showbuildingname').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
-						dGet('wtw_showbuildingname').style.cursor = 'pointer';
-						dGet('wtw_showbuildingnamemobile').innerHTML = WTW.decode(dGet('wtw_tthingname').value);
-						dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Thing: <b>' + WTW.decode(dGet('wtw_tthingname').value) + '</b>';
+						if (WTW.adminView == 1) {
+							dGet('wtw_showbuildingname').style.cursor = 'pointer';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'pointer';
+						} else {
+							dGet('wtw_showbuildingname').style.cursor = 'default';
+							dGet('wtw_showbuildingnamemobile').style.cursor = 'default';
+						}
 					}
 				}
 			}
@@ -165,7 +175,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 								WTW.things[i].thinginfo.versiondesc = WTW.encode(dGet('wtw_tinfothingversiondesc').value);
 								WTW.things[i].thinginfo.analytics = dGet('wtw_tthinganalyticsid').value;
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tthingname').value;
-								dGet('wtw_showbuildingnamemobile').innerHTML = dGet('wtw_tthingname').value;
+								dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Thing: <b>' + dGet('wtw_tthingname').value + '</b>';
 							}
 						}
 					}
