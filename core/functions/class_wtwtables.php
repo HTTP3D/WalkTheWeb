@@ -3432,7 +3432,7 @@ class wtwtables {
 				if (count($zresults) == 0) {
 					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
 						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-							(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
+							(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '/content/system/images/menurating32.png', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
 					");
 				}
 
@@ -4020,7 +4020,7 @@ class wtwtables {
 						and not thingid='v6b5lsgd9zze503v';
 				");
 			}
-			if (($zoldversion1 == 3 && $zoldversion2 < 7) || $zoldversion1 < 3) {
+			if (($zoldversion1 == 3 && $zoldversion2 < 7) || $zoldversion1 < 4) {
 				/* updated 3.6.0 - changed login global variables (settings) */
 				$zresults = $wtwdb->query("
 					select * 
@@ -4104,6 +4104,24 @@ class wtwtables {
 							where avatarid='".$zrow["avatarid"]."';
 						");
 */					}
+				}
+
+				/* updated 3.6.3 - added icon to Content Rating on the Browse Menu */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menuitemname='wtw_rating';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '/content/system/images/menurating32.png', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
+					");
+				} else {
+					/* updated 3.6.3 - added ratings icon */
+					$wtwdb->query("UPDATE ".wtw_tableprefix."menuitems 
+						set menuicon='/content/system/images/menurating32.png',
+							updatedate='".$ztimestamp."',
+							updateuserid='".$zuserid."'
+						where menuitemname='wtw_rating'
+							and menuicon='';
+					");
 				}
 			}
 

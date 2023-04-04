@@ -431,12 +431,15 @@ h4 {
 	margin:auto 10px auto 10px;
 }
 .wtw-menumobiletext {
-	text-align:left;
+	float:left;
 	font-size:1em;
 	color:#ffffff;
 	vertical-align:middle;
 	line-height:32px;
 	margin:auto 5px auto 10px;
+}
+.wtw-menumobiletext:hover {
+	color:#FFF7DA;
 }
 .wtw-menumobileicon {
 	float:left;
@@ -1848,8 +1851,8 @@ hr.wtw-menuhr {
 	padding-left:10px;
 	margin-left:3%;
 	margin-right:auto;
-/*	display:none;
-	visibility:hidden;*/
+	display:none;
+	visibility:hidden;
 	color:#ffffff;
 	background-color:#111111;
 	width:92%;
