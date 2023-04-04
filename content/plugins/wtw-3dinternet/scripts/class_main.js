@@ -1366,12 +1366,10 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 									}
 								);
 							} else {
-								WTW.closeLoginHUD();
 								WTW.log("Avatar Not Found.");
 								WTW.openLoginHUD('Select My Avatar');
 							}
 						} else {
-							WTW.closeLoginHUD();
 							WTW.log("Avatar Not Found.");
 							WTW.openLoginHUD('Select My Avatar');
 						}
@@ -2136,6 +2134,7 @@ WTW_3DINTERNET.prototype.hudLoginLogin = function(zlocal, zemail, zpassword, zre
 						dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 						dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 						dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
+						WTW.show('wtw_mainmenudisplaynamemobile');
 
 						WTW.log("Login Error = " + serror);
 						var zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
@@ -2278,6 +2277,7 @@ WTW_3DINTERNET.prototype.hudLoginCreate = function(zlocal, zemail, zpassword, zp
 						dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 						dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 						dGet('wtw_profileimagesmmobile').src = '/content/system/images/menuprofile32.png';
+						WTW.show('wtw_mainmenudisplaynamemobile');
 
 						WTW.log("Login Error = " + serror);
 						var zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
