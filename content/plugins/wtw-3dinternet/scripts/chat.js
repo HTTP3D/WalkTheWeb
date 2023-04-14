@@ -650,7 +650,7 @@ WTW_3DINTERNET.prototype.toggleChatPrompt = function() {
 								}
 								if (WTW.shadows != null) {
 									/* add mesh to world shadow map */
-//									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+									//WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 								}
 //								zresults.meshes[i].receiveShadows = true;
 								/* initiate and preload any event driven animations */

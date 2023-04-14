@@ -51,8 +51,8 @@ WTWJS.prototype.createScene = function() {
 			WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
 			/* lesser light for back sides */
-			WTW.backLight = new BABYLON.DirectionalLight('backlight', new BABYLON.Vector3(1, -1, 1), scene);
-			WTW.backLight.intensity = WTW.sun.intensity / 1.5; //3;
+//			WTW.backLight = new BABYLON.DirectionalLight('backlight', new BABYLON.Vector3(1, -1, 1), scene);
+//			WTW.backLight.intensity = WTW.sun.intensity / 1.5; //3;
 			
 			var zsetupparent = new BABYLON.TransformNode('setupparent-0');
 			zsetupparent.position = new BABYLON.Vector3(0, -5, 0);
