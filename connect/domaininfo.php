@@ -73,38 +73,38 @@ try {
 	if ($wtwconnect->hasValue($zcommunityid) && $wtwconnect->hasValue($zbuildingid)) {
 		/* get domain info and connecting grids by communityid and buildingid */
 		$zresults = $wtwconnect->query("
-			select  communities.communityid,
+			select  c1.communityid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where communityid=communities.communityid 
+							where communityid=c1.communityid 
 								and deleted=0 and not communityid='') is null then ''
 					else
 						(select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where communityid=communities.communityid 
+							where communityid=c1.communityid 
 								and deleted=0 and not communityid='')
 					end as communityaccess,
-				buildings.buildingid,
+				b1.buildingid,
 				'' as thingid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where buildingid=buildings.buildingid 
+							where buildingid=b1.buildingid 
 								and deleted=0 and not buildingid='') is null then ''
 					else
 						(select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where buildingid=buildings.buildingid 
+							where buildingid=b1.buildingid 
 								and deleted=0 and not buildingid='')
 					end as buildingaccess,
-				buildings.positionx as positionx,
-				buildings.positiony as positiony,
-				buildings.positionz as positionz,
-				buildings.scalingx as scalingx,
-				buildings.scalingy as scalingy,
-				buildings.scalingz as scalingz,
-				buildings.rotationx as rotationx,
-				buildings.rotationy as rotationy,
-				buildings.rotationz as rotationz,
+				b1.positionx as positionx,
+				b1.positiony as positiony,
+				b1.positionz as positionz,
+				b1.scalingx as scalingx,
+				b1.scalingy as scalingy,
+				b1.scalingz as scalingz,
+				b1.rotationx as rotationx,
+				b1.rotationy as rotationy,
+				b1.rotationz as rotationz,
 				connectinggrids.positionx as bcpositionx,
 				connectinggrids.positiony as bcpositiony,
 				connectinggrids.positionz as bcpositionz,
@@ -114,90 +114,134 @@ try {
 				connectinggrids.rotationx as bcrotationx,
 				connectinggrids.rotationy as bcrotationy,
 				connectinggrids.rotationz as bcrotationz,
-				communities.userid,
-				communities.spawnactionzoneid,
-				communities.gravity,
-				communities.communityname as sitename,
-				buildings.buildingname,
-				communities.communityname,
-				communities.groundpositiony,
-				communities.waterpositiony,
-				communities.textureid,
-				case when communities.textureid = '' then ''
+				c1.userid,
+				c1.spawnactionzoneid,
+				c1.gravity,
+				c1.communityname as sitename,
+				b1.buildingname,
+				c1.communityname,
+				c1.groundpositiony,
+				c1.waterpositiony,
+				c1.textureid,
+				case when c1.textureid = '' then ''
 					else
 						(select u1.filepath 
 							from ".wtw_tableprefix."uploads u2 
 								left join ".wtw_tableprefix."uploads u1 
 									on u2.websizeid=u1.uploadid 
-							where u2.uploadid=communities.textureid limit 1)
+							where u2.uploadid=c1.textureid limit 1)
 					end as texturepath,
-				communities.skydomeid,
-				case when communities.skydomeid = '' then ''
+				c1.skydomeid,
+				case when c1.skydomeid = '' then ''
 					else
 						(select u1.filepath 
 							from ".wtw_tableprefix."uploads u2
 								left join ".wtw_tableprefix."uploads u1 
 									on u2.websizeid=u1.uploadid 
-							where u2.uploadid=communities.skydomeid limit 1)
+							where u2.uploadid=c1.skydomeid limit 1)
 					end as skydomepath,
-				communities.skyinclination,
-				communities.skyluminance,
-				communities.skyazimuth,
-				communities.skyrayleigh,
-				communities.skyturbidity,
-				communities.skymiedirectionalg,
-				communities.skymiecoefficient,
-				communities.waterbumpheight,
-				communities.watersubdivisions,
-				communities.windforce,
-				communities.winddirectionx,
-				communities.winddirectiony,
-				communities.winddirectionz,
-				communities.waterwaveheight,
-				communities.waterwavelength,
-				communities.watercolorrefraction,
-				communities.watercolorreflection,
-				communities.watercolorblendfactor,
-				communities.watercolorblendfactor2,
-				communities.wateralpha,
+				c1.waterbumpheight,
+				c1.watersubdivisions,
+				c1.windforce,
+				c1.winddirectionx,
+				c1.winddirectiony,
+				c1.winddirectionz,
+				c1.waterwaveheight,
+				c1.waterwavelength,
+				c1.watercolorrefraction,
+				c1.watercolorreflection,
+				c1.watercolorblendfactor,
+				c1.watercolorblendfactor2,
+				c1.wateralpha,
+				c1.sceneambientcolor,
+				c1.sceneclearcolor,
+				c1.sceneuseclonedmeshmap,
+				c1.sceneblockmaterialdirtymechanism,
+				c1.scenefogenabled,
+				c1.scenefogmode,
+				c1.scenefogdensity,
+				c1.scenefogstart,
+				c1.scenefogend,
+				c1.scenefogcolor,
+				c1.sundirectionalintensity,
+				c1.sundiffusecolor,
+				c1.sunspecularcolor,
+				c1.sungroundcolor,
+				c1.sundirectionx,
+				c1.sundirectiony,
+				c1.sundirectionz,
+				c1.backlightintensity,
+				c1.backlightdirectionx,
+				c1.backlightdirectiony,
+				c1.backlightdirectionz,
+				c1.backlightdiffusecolor,
+				c1.backlightspecularcolor,
+				c1.skytype,
+				c1.skysize,
+				c1.skyboxfolder,
+				c1.skyboxfile,
+				c1.skyboximageleft,
+				c1.skyboximageup,
+				c1.skyboximagefront,
+				c1.skyboximageright,
+				c1.skyboximagedown,
+				c1.skyboximageback,
+				c1.skypositionoffsetx,
+				c1.skypositionoffsety,
+				c1.skypositionoffsetz,
+				c1.skyboxmicrosurface,
+				c1.skyboxpbr,
+				c1.skyboxasenvironmenttexture,
+				c1.skyboxblur,
+				c1.skyboxdiffusecolor,
+				c1.skyboxspecularcolor,
+				c1.skyboxambientcolor,
+				c1.skyboxemissivecolor,
+				c1.skyinclination,
+				c1.skyluminance,
+				c1.skyazimuth,
+				c1.skyrayleigh,
+				c1.skyturbidity,
+				c1.skymiedirectionalg,
+				c1.skymiecoefficient,
 				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."communities 
-						where deleted=0 and communityid = '".$zcommunityid."') communities
+						where deleted=0 and communityid = '".$zcommunityid."') c1
 				left join (select * from ".wtw_tableprefix."connectinggrids 
 						where deleted=0 and childwebid = '".$zbuildingid."' 
 							and parentwebid = '".$zcommunityid."') connectinggrids
-					on communities.communityid = connectinggrids.parentwebid
+					on c1.communityid = connectinggrids.parentwebid
 				left join (select * from ".wtw_tableprefix."buildings 
-						where buildings.deleted=0 
-							and buildings.buildingid = '".$zbuildingid."') buildings 
-					on buildings.buildingid = connectinggrids.childwebid
+						where deleted=0 
+							and buildingid = '".$zbuildingid."') b1 
+					on b1.buildingid = connectinggrids.childwebid
 				;");
 	} else if ($wtwconnect->hasValue($zcommunityid)) {
 		/* get domain info and connecting grids by communityid */
 		$zresults = $wtwconnect->query("
-			select communities.communityid,
+			select c1.communityid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where communityid=communities.communityid 
+							where communityid=c1.communityid 
 								and deleted=0 and not communityid='') is null then ''
 					else
 						(select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where communityid=communities.communityid 
+							where communityid=c1.communityid 
 								and deleted=0 and not communityid='')
 					end as communityaccess,
 				'' as buildingid,
 				'' as thingid,
 				'' as buildingaccess,
-				communities.positionx as positionx,
-				communities.positiony as positiony,
-				communities.positionz as positionz,
-				communities.scalingx as scalingx,
-				communities.scalingy as scalingy,
-				communities.scalingz as scalingz,
-				communities.rotationx as rotationx,
-				communities.rotationy as rotationy,
-				communities.rotationz as rotationz,
+				c1.positionx as positionx,
+				c1.positiony as positiony,
+				c1.positionz as positionz,
+				c1.scalingx as scalingx,
+				c1.scalingy as scalingy,
+				c1.scalingz as scalingz,
+				c1.rotationx as rotationx,
+				c1.rotationy as rotationy,
+				c1.rotationz as rotationz,
 				0 as bcpositionx,
 				0 as bcpositiony,
 				0 as bcpositionz,
@@ -207,83 +251,127 @@ try {
 				0 as bcrotationx,
 				0 as bcrotationy,
 				0 as bcrotationz,
-				communities.userid,
-				communities.spawnactionzoneid,
-				communities.gravity,
-				communities.communityname as sitename,
+				c1.userid,
+				c1.spawnactionzoneid,
+				c1.gravity,
+				c1.communityname as sitename,
 				'' as buildingname,
-				communities.communityname,
-				communities.groundpositiony,
-				communities.waterpositiony,
-				communities.textureid,
-				case when communities.textureid = '' then ''
+				c1.communityname,
+				c1.groundpositiony,
+				c1.waterpositiony,
+				c1.textureid,
+				case when c1.textureid = '' then ''
 					else
 						(select u1.filepath 
 							from ".wtw_tableprefix."uploads u2 
 								left join ".wtw_tableprefix."uploads u1 
 									on u2.websizeid=u1.uploadid 
-							where u2.uploadid=communities.textureid limit 1)
+							where u2.uploadid=c1.textureid limit 1)
 					end as texturepath,
-				communities.skydomeid,
-				case when communities.skydomeid = '' then ''
+				c1.skydomeid,
+				case when c1.skydomeid = '' then ''
 					else
 						(select u1.filepath 
 							from ".wtw_tableprefix."uploads u2
 								left join ".wtw_tableprefix."uploads u1 
 									on u2.websizeid=u1.uploadid 
-							where u2.uploadid=communities.skydomeid limit 1)
+							where u2.uploadid=c1.skydomeid limit 1)
 					end as skydomepath,
-				communities.skyinclination,
-				communities.skyluminance,
-				communities.skyazimuth,
-				communities.skyrayleigh,
-				communities.skyturbidity,
-				communities.skymiedirectionalg,
-				communities.skymiecoefficient,
-				communities.waterbumpheight,
-				communities.watersubdivisions,
-				communities.windforce,
-				communities.winddirectionx,
-				communities.winddirectiony,
-				communities.winddirectionz,
-				communities.waterwaveheight,
-				communities.waterwavelength,
-				communities.watercolorrefraction,
-				communities.watercolorreflection,
-				communities.watercolorblendfactor,
-				communities.watercolorblendfactor2,
-				communities.wateralpha,
+				c1.waterbumpheight,
+				c1.watersubdivisions,
+				c1.windforce,
+				c1.winddirectionx,
+				c1.winddirectiony,
+				c1.winddirectionz,
+				c1.waterwaveheight,
+				c1.waterwavelength,
+				c1.watercolorrefraction,
+				c1.watercolorreflection,
+				c1.watercolorblendfactor,
+				c1.watercolorblendfactor2,
+				c1.wateralpha,
+				c1.sceneambientcolor,
+				c1.sceneclearcolor,
+				c1.sceneuseclonedmeshmap,
+				c1.sceneblockmaterialdirtymechanism,
+				c1.scenefogenabled,
+				c1.scenefogmode,
+				c1.scenefogdensity,
+				c1.scenefogstart,
+				c1.scenefogend,
+				c1.scenefogcolor,
+				c1.sundirectionalintensity,
+				c1.sundiffusecolor,
+				c1.sunspecularcolor,
+				c1.sungroundcolor,
+				c1.sundirectionx,
+				c1.sundirectiony,
+				c1.sundirectionz,
+				c1.backlightintensity,
+				c1.backlightdirectionx,
+				c1.backlightdirectiony,
+				c1.backlightdirectionz,
+				c1.backlightdiffusecolor,
+				c1.backlightspecularcolor,
+				c1.skytype,
+				c1.skysize,
+				c1.skyboxfolder,
+				c1.skyboxfile,
+				c1.skyboximageleft,
+				c1.skyboximageup,
+				c1.skyboximagefront,
+				c1.skyboximageright,
+				c1.skyboximagedown,
+				c1.skyboximageback,
+				c1.skypositionoffsetx,
+				c1.skypositionoffsety,
+				c1.skypositionoffsetz,
+				c1.skyboxmicrosurface,
+				c1.skyboxpbr,
+				c1.skyboxasenvironmenttexture,
+				c1.skyboxblur,
+				c1.skyboxdiffusecolor,
+				c1.skyboxspecularcolor,
+				c1.skyboxambientcolor,
+				c1.skyboxemissivecolor,
+				c1.skyinclination,
+				c1.skyluminance,
+				c1.skyazimuth,
+				c1.skyrayleigh,
+				c1.skyturbidity,
+				c1.skymiedirectionalg,
+				c1.skymiecoefficient,
 				'' as thingauthorizationid,
 				'' as userauthorizationid
 			from (select * from ".wtw_tableprefix."communities 
-						where deleted=0 and communityid='".$zcommunityid."') communities;	
+						where deleted=0 and communityid='".$zcommunityid."') c1;	
 		");	
 	} else if ($wtwconnect->hasValue($zbuildingid)) {
 		/* select domain info and connecting grids by buildingid */
 		$zresults = $wtwconnect->query("
 			select '' as communityid,
 				'' as communityaccess,
-				buildings.buildingid,
+				b1.buildingid,
 				'' as thingid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where buildingid=buildings.buildingid 
+							where buildingid=b1.buildingid 
 								and deleted=0 and not buildingid='') is null then ''
 					else
 						(select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where buildingid=buildings.buildingid 
+							where buildingid=b1.buildingid 
 								and deleted=0 and not buildingid='')
 					end as buildingaccess,
-				buildings.positionx as positionx,
-				buildings.positiony as positiony,
-				buildings.positionz as positionz,
-				buildings.scalingx as scalingx,
-				buildings.scalingy as scalingy,
-				buildings.scalingz as scalingz,
-				buildings.rotationx as rotationx,
-				buildings.rotationy as rotationy,
-				buildings.rotationz as rotationz,
+				b1.positionx as positionx,
+				b1.positiony as positiony,
+				b1.positionz as positionz,
+				b1.scalingx as scalingx,
+				b1.scalingy as scalingy,
+				b1.scalingz as scalingz,
+				b1.rotationx as rotationx,
+				b1.rotationy as rotationy,
+				b1.rotationz as rotationz,
 				0 as bcpositionx,
 				0 as bcpositiony,
 				0 as bcpositionz,
@@ -293,11 +381,11 @@ try {
 				0 as bcrotationx,
 				0 as bcrotationy,
 				0 as bcrotationz,
-				buildings.userid,
-				buildings.spawnactionzoneid,
-				buildings.gravity,
-				buildings.buildingname as sitename,
-				buildings.buildingname,
+				b1.userid,
+				b1.spawnactionzoneid,
+				b1.gravity,
+				b1.buildingname as sitename,
+				b1.buildingname,
 				'default' as communityname,
 				0 as groundpositiony,
 				-50 as waterpositiony,
@@ -305,6 +393,63 @@ try {
 				'/content/system/stock/dirt-512x512.jpg' as texturepath,
 				'' as skydomeid,
 				'' as skydomepath,
+				.60 as waterbumpheight,
+				2.00 as watersubdivisions,
+				-10.00 as windforce,
+				1.00 as winddirectionx,
+				0.00 as winddirectiony,
+				1.00 as winddirectionz,
+				.20 as waterwaveheight,
+				.02 as waterwavelength,
+				'#23749c' as watercolorrefraction,
+				'#52bcf1' as watercolorreflection,
+				.20 as watercolorblendfactor,
+				.20 as watercolorblendfactor2,
+				.90 as wateralpha,
+				'#E5E8E8' as sceneambientcolor,
+				'#000000' as sceneclearcolor,
+				1 as sceneuseclonedmeshmap,
+				1 as sceneblockmaterialdirtymechanism,
+				0 as scenefogenabled,
+				'' as scenefogmode,
+				0.01 as scenefogdensity,
+				20 as scenefogstart,
+				60 as scenefogend,
+				'#c0c0c0' as scenefogcolor,
+				1 as sundirectionalintensity,
+				'#ffffff' as sundiffusecolor,
+				'#ffffff' as sunspecularcolor,
+				'#000000' as sungroundcolor,
+				999 as sundirectionx,
+				-999 as sundirectiony,
+				999 as sundirectionz,
+				0.5 as backlightintensity,
+				-999 as backlightdirectionx,
+				999 as backlightdirectiony,
+				-999 as backlightdirectionz,
+				'#ffffff' as backlightdiffusecolor,
+				'#ffffff' as backlightspecularcolor,
+				'' as skytype,
+				5000.00 as skysize,
+				'' as skyboxfolder,
+				'' as skyboxfile,
+				'' as skyboximageleft,
+				'' as skyboximageup,
+				'' as skyboximagefront,
+				'' as skyboximageright,
+				'' as skyboximagedown,
+				'' as skyboximageback,
+				0 as skypositionoffsetx,
+				0 as skypositionoffsety,
+				0 as skypositionoffsetz,
+				0 as skyboxmicrosurface,
+				0 as skyboxpbr,
+				0 as skyboxasenvironmenttexture,
+				0 as skyboxblur,
+				'#000000' as skyboxdiffusecolor,
+				'#000000' as skyboxspecularcolor,
+				'#000000' as skyboxambientcolor,
+				'#000000' as skyboxemissivecolor,
 				0 as skyinclination,
 				1 as skyluminance,
 				.25 as skyazimuth,
@@ -312,23 +457,10 @@ try {
 				10 as skyturbidity,
 				.8 as skymiedirectionalg,
 				.005 as skymiecoefficient,
-				'0.60' as waterbumpheight,
-				'2.00' as watersubdivisions,
-				'-10.00' as windforce,
-				'1.00' as winddirectionx,
-				'0.00' as winddirectiony,
-				'1.00' as winddirectionz,
-				'0.20' as waterwaveheight,
-				'0.02' as waterwavelength,
-				'#23749c' as watercolorrefraction,
-				'#52bcf1' as watercolorreflection,
-				'0.20' as watercolorblendfactor,
-				'0.20' as watercolorblendfactor2,
-				'0.90' as wateralpha,
 				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."buildings 
-						where buildings.deleted=0 
-							and buildings.buildingid='".$zbuildingid."') buildings 
+						where deleted=0 
+							and buildingid='".$zbuildingid."') b1 
 		;");
 	} else if ($wtwconnect->hasValue($zthingid)) {
 		/* select domain info and connecting grids by thingid */
@@ -336,26 +468,26 @@ try {
 			select '' as communityid,
 				'' as communityaccess,
 				'' as buildingid,
-				things.thingid,
+				t1.thingid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where thingid=things.thingid 
+							where thingid=t1.thingid 
 								and deleted=0 and not thingid='') is null then ''
 					else
 						(select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
-							where thingid=things.thingid 
+							where thingid=t1.thingid 
 								and deleted=0 and not thingid='')
 					end as thingaccess,
-				things.positionx as positionx,
-				things.positiony as positiony,
-				things.positionz as positionz,
-				things.scalingx as scalingx,
-				things.scalingy as scalingy,
-				things.scalingz as scalingz,
-				things.rotationx as rotationx,
-				things.rotationy as rotationy,
-				things.rotationz as rotationz,
+				t1.positionx as positionx,
+				t1.positiony as positiony,
+				t1.positionz as positionz,
+				t1.scalingx as scalingx,
+				t1.scalingy as scalingy,
+				t1.scalingz as scalingz,
+				t1.rotationx as rotationx,
+				t1.rotationy as rotationy,
+				t1.rotationz as rotationz,
 				0 as bcpositionx,
 				0 as bcpositiony,
 				0 as bcpositionz,
@@ -365,10 +497,10 @@ try {
 				0 as bcrotationx,
 				0 as bcrotationy,
 				0 as bcrotationz,
-				things.userid,
-				things.spawnactionzoneid,
-				things.gravity,
-				things.thingname as sitename,
+				t1.userid,
+				t1.spawnactionzoneid,
+				t1.gravity,
+				t1.thingname as sitename,
 				'' as buildingname,
 				'default' as communityname,
 				0 as groundpositiony,
@@ -377,6 +509,63 @@ try {
 				'/content/system/stock/dirt-512x512.jpg' as texturepath,
 				'' as skydomeid,
 				'' as skydomepath,
+				.60 as waterbumpheight,
+				2.00 as watersubdivisions,
+				-10.00 as windforce,
+				1.00 as winddirectionx,
+				0.00 as winddirectiony,
+				1.00 as winddirectionz,
+				.20 as waterwaveheight,
+				.02 as waterwavelength,
+				'#23749c' as watercolorrefraction,
+				'#52bcf1' as watercolorreflection,
+				.20 as watercolorblendfactor,
+				.20 as watercolorblendfactor2,
+				.90 as wateralpha,
+				'#E5E8E8' as sceneambientcolor,
+				'#000000' as sceneclearcolor,
+				1 as sceneuseclonedmeshmap,
+				1 as sceneblockmaterialdirtymechanism,
+				0 as scenefogenabled,
+				'' as scenefogmode,
+				0.01 as scenefogdensity,
+				20 as scenefogstart,
+				60 as scenefogend,
+				'#c0c0c0' as scenefogcolor,
+				1 as sundirectionalintensity,
+				'#ffffff' as sundiffusecolor,
+				'#ffffff' as sunspecularcolor,
+				'#000000' as sungroundcolor,
+				999 as sundirectionx,
+				-999 as sundirectiony,
+				999 as sundirectionz,
+				0.5 as backlightintensity,
+				-999 as backlightdirectionx,
+				999 as backlightdirectiony,
+				-999 as backlightdirectionz,
+				'#ffffff' as backlightdiffusecolor,
+				'#ffffff' as backlightspecularcolor,
+				'' as skytype,
+				5000.00 as skysize,
+				'' as skyboxfolder,
+				'' as skyboxfile,
+				'' as skyboximageleft,
+				'' as skyboximageup,
+				'' as skyboximagefront,
+				'' as skyboximageright,
+				'' as skyboximagedown,
+				'' as skyboximageback,
+				0 as skypositionoffsetx,
+				0 as skypositionoffsety,
+				0 as skypositionoffsetz,
+				0 as skyboxmicrosurface,
+				0 as skyboxpbr,
+				0 as skyboxasenvironmenttexture,
+				0 as skyboxblur,
+				'#000000' as skyboxdiffusecolor,
+				'#000000' as skyboxspecularcolor,
+				'#000000' as skyboxambientcolor,
+				'#000000' as skyboxemissivecolor,
 				0 as skyinclination,
 				1 as skyluminance,
 				.25 as skyazimuth,
@@ -384,23 +573,10 @@ try {
 				10 as skyturbidity,
 				.8 as skymiedirectionalg,
 				.005 as skymiecoefficient,
-				'0.60' as waterbumpheight,
-				'2.00' as watersubdivisions,
-				'-10.00' as windforce,
-				'1.00' as winddirectionx,
-				'0.00' as winddirectiony,
-				'1.00' as winddirectionz,
-				'0.20' as waterwaveheight,
-				'0.02' as waterwavelength,
-				'#23749c' as watercolorrefraction,
-				'#52bcf1' as watercolorreflection,
-				'0.20' as watercolorblendfactor,
-				'0.20' as watercolorblendfactor2,
-				'0.90' as wateralpha,
 				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."things 
-						where things.deleted=0 
-							and things.thingid='".$zthingid."') things 
+						where deleted=0 
+							and thingid='".$zthingid."') t1 
 		;");
 	}
 
@@ -520,13 +696,6 @@ try {
 			'texturepath' => $zrow["texturepath"],
 			'skydomeid' => $zrow["skydomeid"],
 			'skydomepath' => $zrow["skydomepath"],
-			'skyinclination' => $zrow["skyinclination"],
-			'skyluminance' => $zrow["skyluminance"],
-			'skyazimuth' => $zrow["skyazimuth"],
-			'skyrayleigh' => $zrow["skyrayleigh"],
-			'skyturbidity' => $zrow["skyturbidity"],
-			'skymiedirectionalg' => $zrow["skymiedirectionalg"],
-			'skymiecoefficient' => $zrow["skymiecoefficient"],
 			'waterbumpheight' => $zrow["waterbumpheight"],
 			'watersubdivisions' => $zrow["watersubdivisions"],
 			'windforce' => $zrow["windforce"],
@@ -539,7 +708,58 @@ try {
 			'watercolorreflection' => $zrow["watercolorreflection"],
 			'watercolorblendfactor' => $zrow["watercolorblendfactor"],
 			'watercolorblendfactor2' => $zrow["watercolorblendfactor2"],
-			'wateralpha' => $zrow["wateralpha"]
+			'wateralpha' => $zrow["wateralpha"],
+			'sceneambientcolor' => $zrow["sceneambientcolor"],
+			'sceneclearcolor' => $zrow["sceneclearcolor"],
+			'sceneuseclonedmeshmap' => $zrow["sceneuseclonedmeshmap"],
+			'sceneblockmaterialdirtymechanism' => $zrow["sceneblockmaterialdirtymechanism"],
+			'sundirectionalintensity' => $zrow["sundirectionalintensity"],
+			'sundiffusecolor' => $zrow["sundiffusecolor"],
+			'sunspecularcolor' => $zrow["sunspecularcolor"],
+			'sungroundcolor' => $zrow["sungroundcolor"],
+			'sundirectionx' => $zrow["sundirectionx"],
+			'sundirectiony' => $zrow["sundirectiony"],
+			'sundirectionz' => $zrow["sundirectionz"],
+			'backlightintensity' => $zrow["backlightintensity"],
+			'backlightdirectionx' => $zrow["backlightdirectionx"],
+			'backlightdirectiony' => $zrow["backlightdirectiony"],
+			'backlightdirectionz' => $zrow["backlightdirectionz"],
+			'backlightdiffusecolor' => $zrow["backlightdiffusecolor"],
+			'backlightspecularcolor' => $zrow["backlightspecularcolor"],
+			'scenefogenabled' => $zrow["scenefogenabled"],
+			'scenefogmode' => $zrow["scenefogmode"],
+			'scenefogdensity' => $zrow["scenefogdensity"],
+			'scenefogstart' => $zrow["scenefogstart"],
+			'scenefogend' => $zrow["scenefogend"],
+			'scenefogcolor' => $zrow["scenefogcolor"],
+			'skytype' => $zrow["skytype"],
+			'skysize' => $zrow["skysize"],
+			'skyboxfolder' => $zrow["skyboxfolder"],
+			'skyboxfile' => $zrow["skyboxfile"],
+			'skyboximageleft' => $zrow["skyboximageleft"],
+			'skyboximageup' => $zrow["skyboximageup"],
+			'skyboximagefront' => $zrow["skyboximagefront"],
+			'skyboximageright' => $zrow["skyboximageright"],
+			'skyboximagedown' => $zrow["skyboximagedown"],
+			'skyboximageback' => $zrow["skyboximageback"],
+			'skypositionoffsetx' => $zrow["skypositionoffsetx"],
+			'skypositionoffsety' => $zrow["skypositionoffsety"],
+			'skypositionoffsetz' => $zrow["skypositionoffsetz"],
+			'skyboxmicrosurface' => $zrow["skyboxmicrosurface"],
+			'skyboxpbr' => $zrow["skyboxpbr"],
+			'skyboxasenvironmenttexture' => $zrow["skyboxasenvironmenttexture"],
+			'skyboxblur' => $zrow["skyboxblur"],
+			'skyboxdiffusecolor' => $zrow["skyboxdiffusecolor"],
+			'skyboxspecularcolor' => $zrow["skyboxspecularcolor"],
+			'skyboxambientcolor' => $zrow["skyboxambientcolor"],
+			'skyboxemissivecolor' => $zrow["skyboxemissivecolor"],
+			'skyinclination' => $zrow["skyinclination"],
+			'skyluminance' => $zrow["skyluminance"],
+			'skyazimuth' => $zrow["skyazimuth"],
+			'skyrayleigh' => $zrow["skyrayleigh"],
+			'skyturbidity' => $zrow["skyturbidity"],
+			'skymiedirectionalg' => $zrow["skymiedirectionalg"],
+			'skymiecoefficient' => $zrow["skymiecoefficient"]
 		);	
 		$zposition = array(
 			'x' => $zrow["positionx"],

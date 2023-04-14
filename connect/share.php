@@ -797,29 +797,73 @@ try {
 
 			$ztextureid = '';
 			$zskydomeid = '';
-			$zskyinclination = '';
-			$zskyluminance = '';
-			$zskyazimuth = '';
-			$zskyrayleigh = '';
-			$zskyturbidity = '';
-			$zskymiedirectionalg = '';
-			$zskymiecoefficient = '';
 			$zgroundpositiony = '';
 			$zwaterpositiony = '';
-			$zwaterbumpheight = '.6';
-			$zwatersubdivisions = '2';
-			$zwindforce = '-10';
-			$zwinddirectionx = '1';
-			$zwinddirectiony = '0';
-			$zwinddirectionz = '1';
-			$zwaterwaveheight = '.2';
-			$zwaterwavelength = '.02';
+			$zwaterbumpheight = .6;
+			$zwatersubdivisions = 2;
+			$zwindforce = -10;
+			$zwinddirectionx = 1;
+			$zwinddirectiony = 0;
+			$zwinddirectionz = 1;
+			$zwaterwaveheight = .2;
+			$zwaterwavelength = .02;
 			$zwatercolorrefraction = '#23749C';
 			$zwatercolorreflection = '#52BCF1';
-			$zwatercolorblendfactor = '.2';
-			$zwatercolorblendfactor2 = '.2';
-			$zwateralpha = '.9';
+			$zwatercolorblendfactor = .2;
+			$zwatercolorblendfactor2 = .2;
+			$zwateralpha = .9;
 			$zwaterbumpid = '';
+			$zsceneambientcolor = '#E5E8E8';
+			$zsceneclearcolor = '#000000';
+			$zsceneuseclonedmeshmap = 1;
+			$zsceneblockmaterialdirtymechanism = 1;
+			$zscenefogenabled = 0;
+			$zscenefogmode = '';
+			$zscenefogdensity = .01;
+			$zscenefogstart = 20;
+			$zscenefogend = 60;
+			$zscenefogcolor = '#c0c0c0';
+			$zsundirectionalintensity = 1;
+			$zsundiffusecolor = '#ffffff';
+			$zsunspecularcolor = '#ffffff';
+			$zsungroundcolor = '#000000';
+			$zsundirectionx = 999;
+			$zsundirectiony = -999;
+			$zsundirectionz = 999;
+			$zbacklightintensity = 0.5;
+			$zbacklightdirectionx = -999;
+			$zbacklightdirectiony = 999;
+			$zbacklightdirectionz = -999;
+			$zbacklightdiffusecolor = '#ffffff';
+			$zbacklightspecularcolor = '#ffffff';
+			$zskytype = '';
+			$zskysize = 5000;
+			$zskyboxfolder = '';
+			$zskyboxfile = '';
+			$zskyboximageleft = '';
+			$zskyboximageup = '';
+			$zskyboximagefront = '';
+			$zskyboximageright = '';
+			$zskyboximagedown = '';
+			$zskyboximageback = '';
+			$zskypositionoffsetx = 0;
+			$zskypositionoffsety = 0;
+			$zskypositionoffsetz = 0;
+			$zskyboxmicrosurface = 0;
+			$zskyboxpbr = 0;
+			$zskyboxasenvironmenttexture = 0;
+			$zskyboxblur = 0;
+			$zskyboxdiffusecolor = '#000000';
+			$zskyboxspecularcolor = '#000000';
+			$zskyboxambientcolor = '#000000';
+			$zskyboxemissivecolor = '#000000';
+			$zskyinclination = 0;
+			$zskyluminance = 1;
+			$zskyazimuth = 0.25;
+			$zskyrayleigh = 2;
+			$zskyturbidity = 10;
+			$zskymiedirectionalg = .8;
+			$zskymiecoefficient = .008;
 			$zbuildingpositionx = 0;
 			$zbuildingpositiony = 0;
 			$zbuildingpositionz = 0;
@@ -834,34 +878,155 @@ try {
 				/* these fields only apply to 3D Community Scenes */
 				$ztextureid = $zrow["textureid"];
 				$zskydomeid = $zrow["skydomeid"];
-				$zskyinclination = $zrow["skyinclination"];
-				$zskyluminance = $zrow["skyluminance"];
-				$zskyazimuth = $zrow["skyazimuth"];
-				$zskyrayleigh = $zrow["skyrayleigh"];
-				$zskyturbidity = $zrow["skyturbidity"];
-				$zskymiedirectionalg = $zrow["skymiedirectionalg"];
-				$zskymiecoefficient = $zrow["skymiecoefficient"];
 				$zgroundpositiony = $zrow["groundpositiony"];
 				$zwaterpositiony = $zrow["waterpositiony"];
-				$zwaterbumpheight = $zrow["waterbumpheight"];
-				$zwatersubdivisions = $zrow["watersubdivisions"];
-				$zwindforce = $zrow["windforce"];
-				$zwinddirectionx = $zrow["winddirectionx"];
-				$zwinddirectiony = $zrow["winddirectiony"];
-				$zwinddirectionz = $zrow["winddirectionz"];
-				$zwaterwaveheight = $zrow["waterwaveheight"];
-				$zwaterwavelength = $zrow["waterwavelength"];
+				if (isset($zrow["waterbumpheight"])) {
+					$zwaterbumpheight = $zrow["waterbumpheight"];
+				}
+				if (isset($zrow["watersubdivisions"])) {
+					$zwatersubdivisions = $zrow["watersubdivisions"];
+				}
+				if (isset($zrow["windforce"])) {
+					$zwindforce = $zrow["windforce"];
+				}
+				if (isset($zrow["winddirectionx"])) {
+					$zwinddirectionx = $zrow["winddirectionx"];
+				}
+				if (isset($zrow["winddirectiony"])) {
+					$zwinddirectiony = $zrow["winddirectiony"];
+				}
+				if (isset($zrow["winddirectionz"])) {
+					$zwinddirectionz = $zrow["winddirectionz"];
+				}
+				if (isset($zrow["waterwaveheight"])) {
+					$zwaterwaveheight = $zrow["waterwaveheight"];
+				}
+				if (isset($zrow["waterwavelength"])) {
+					$zwaterwavelength = $zrow["waterwavelength"];
+				}
 				$zwatercolorrefraction = $zrow["watercolorrefraction"];
 				$zwatercolorreflection = $zrow["watercolorreflection"];
-				$zwatercolorblendfactor = $zrow["watercolorblendfactor"];
-				$zwatercolorblendfactor2 = $zrow["watercolorblendfactor2"];
-				$zwateralpha = $zrow["wateralpha"];
+				if (isset($zrow["watercolorblendfactor"])) {
+					$zwatercolorblendfactor = $zrow["watercolorblendfactor"];
+				}
+				if (isset($zrow["watercolorblendfactor2"])) {
+					$zwatercolorblendfactor2 = $zrow["watercolorblendfactor2"];
+				}
+				if (isset($zrow["wateralpha"])) {
+					$zwateralpha = $zrow["wateralpha"];
+				}
 				$zwaterbumpid = $zrow["waterbumpid"];
-				$zbuildingpositionx = $zrow["buildingpositionx"];
-				$zbuildingpositiony = $zrow["buildingpositiony"];
-				$zbuildingpositionz = $zrow["buildingpositionz"];
-				$zbuildingrotationy = $zrow["buildingrotationy"];
 
+				$zsceneambientcolor => $zrow["sceneambientcolor"];
+				$zsceneclearcolor => $zrow["sceneclearcolor"];
+				if (isset($zrow["sceneuseclonedmeshmap"])) {
+					$zsceneuseclonedmeshmap => $zrow["sceneuseclonedmeshmap"];
+				}
+				if (isset($zrow["sceneblockmaterialdirtymechanism"])) {
+					$zsceneblockmaterialdirtymechanism => $zrow["sceneblockmaterialdirtymechanism"];
+				}
+				if (isset($zrow["sundirectionalintensity"])) {
+					$zsundirectionalintensity => $zrow["sundirectionalintensity"];
+				}
+				$zsundiffusecolor => $zrow["sundiffusecolor"];
+				$zsunspecularcolor => $zrow["sunspecularcolor"];
+				$zsungroundcolor => $zrow["sungroundcolor"];
+				if (isset($zrow["sundirectionx"])) {
+					$zsundirectionx => $zrow["sundirectionx"];
+				}
+				if (isset($zrow["sundirectiony"])) {
+					$zsundirectiony => $zrow["sundirectiony"];
+				}
+				if (isset($zrow["sundirectionz"])) {
+					$zsundirectionz => $zrow["sundirectionz"];
+				}
+				if (isset($zrow["backlightintensity"])) {
+					$zbacklightintensity => $zrow["backlightintensity"];
+				}
+				if (isset($zrow["backlightdirectionx"])) {
+					$zbacklightdirectionx => $zrow["backlightdirectionx"];
+				}
+				if (isset($zrow["backlightdirectiony"])) {
+					$zbacklightdirectiony => $zrow["backlightdirectiony"];
+				}
+				if (isset($zrow["backlightdirectionz"])) {
+					$zbacklightdirectionz => $zrow["backlightdirectionz"];
+				}
+				$zbacklightdiffusecolor => $zrow["backlightdiffusecolor"];
+				$zbacklightspecularcolor => $zrow["backlightspecularcolor"];
+				$zscenefogenabled => $zrow["scenefogenabled"];
+				$zscenefogmode => $zrow["scenefogmode"];
+				$zscenefogdensity => $zrow["scenefogdensity"];
+				$zscenefogstart => $zrow["scenefogstart"];
+				$zscenefogend => $zrow["scenefogend"];
+				$zscenefogcolor => $zrow["scenefogcolor"];
+				$zskytype => $zrow["skytype"];
+				if (isset($zrow["skysize"])) {
+					$zskysize => $zrow["skysize"];
+				}
+				$zskyboxfolder => $zrow["skyboxfolder"];
+				$zskyboxfile => $zrow["skyboxfile"];
+				$zskyboximageleft => $zrow["skyboximageleft"];
+				$zskyboximageup => $zrow["skyboximageup"];
+				$zskyboximagefront => $zrow["skyboximagefront"];
+				$zskyboximageright => $zrow["skyboximageright"];
+				$zskyboximagedown => $zrow["skyboximagedown"];
+				$zskyboximageback => $zrow["skyboximageback"];
+				if (isset($zrow["skypositionoffsetx"])) {
+					$zskypositionoffsetx => $zrow["skypositionoffsetx"];
+				}
+				if (isset($zrow["skypositionoffsety"])) {
+					$zskypositionoffsety => $zrow["skypositionoffsety"];
+				}
+				if (isset($zrow["skypositionoffsetz"])) {
+					$zskypositionoffsetz => $zrow["skypositionoffsetz"];
+				}
+				if (isset($zrow["skyboxmicrosurface"])) {
+					$zskyboxmicrosurface => $zrow["skyboxmicrosurface"];
+				}
+				if (isset($zrow["skyboxpbr"])) {
+					$zskyboxpbr => $zrow["skyboxpbr"];
+				}
+				if (isset($zrow["skyboxasenvironmenttexture"])) {
+					$zskyboxasenvironmenttexture => $zrow["skyboxasenvironmenttexture"];
+				}
+				if (isset($zrow["skyboxblur"])) {
+					$zskyboxblur => $zrow["skyboxblur"];
+				}
+				$zskyboxdiffusecolor => $zrow["skyboxdiffusecolor"];
+				$zskyboxspecularcolor => $zrow["skyboxspecularcolor"];
+				$zskyboxambientcolor => $zrow["skyboxambientcolor"];
+				$zskyboxemissivecolor => $zrow["skyboxemissivecolor"];
+				if (isset($zrow["skyinclination"])) {
+					$zskyinclination = $zrow["skyinclination"];
+				}
+				if (isset($zrow["skyluminance"])) {
+					$zskyluminance = $zrow["skyluminance"];
+				}
+				if (isset($zrow["skyazimuth"])) {
+					$zskyazimuth = $zrow["skyazimuth"];
+				}
+				if (isset($zrow["skyrayleigh"])) {
+					$zskyrayleigh = $zrow["skyrayleigh"];
+				}
+				if (isset($zrow["skyturbidity"])) {
+					$zskyturbidity = $zrow["skyturbidity"];
+				}
+				if (isset($zrow["skymiedirectionalg"])) {
+					$zskymiedirectionalg = $zrow["skymiedirectionalg"];
+				}
+				if (isset($zrow["skymiecoefficient"])) {
+					$zskymiecoefficient = $zrow["skymiecoefficient"];
+				}
+				if (isset($zrow["buildingpositionx"])) {
+					$zbuildingpositionx = $zrow["buildingpositionx"];
+				}
+				if (isset($zrow["buildingpositiony"])) {
+					$zbuildingpositiony = $zrow["buildingpositiony"];
+				}
+				if (isset($zrow["buildingpositionz"])) {
+					$zbuildingpositionz = $zrow["buildingpositionz"];
+				}
 				if (isset($zrow["buildingscalingx"])) {
 					$zbuildingscalingx = $zrow["buildingscalingx"];
 				}
@@ -873,6 +1038,9 @@ try {
 				}
 				if (isset($zrow["buildingrotationx"])) {
 					$zbuildingrotationx = $zrow["buildingrotationx"];
+				}
+				if (isset($zrow["buildingrotationy"])) {
+					$zbuildingrotationy = $zrow["buildingrotationy"];
 				}
 				if (isset($zrow["buildingrotationz"])) {
 					$zbuildingrotationz = $zrow["buildingrotationz"];
@@ -905,13 +1073,6 @@ try {
 				'rotationz' => $zrow["rotationz"],
 				'textureid' => $ztextureid,
 				'skydomeid' => $zskydomeid,
-				'skyinclination' => $zskyinclination,
-				'skyluminance' => $zskyluminance,
-				'skyazimuth' => $zskyazimuth,
-				'skyrayleigh' => $zskyrayleigh,
-				'skyturbidity' => $zskyturbidity,
-				'skymiedirectionalg' => $zskymiedirectionalg,
-				'skymiecoefficient' => $zskymiecoefficient,
 				'gravity' => $zrow["gravity"],
 				'groundpositiony' => $zgroundpositiony,
 				'waterpositiony' => $zwaterpositiony,
@@ -929,6 +1090,57 @@ try {
 				'watercolorblendfactor2' => $zwatercolorblendfactor2,
 				'wateralpha' => $zwateralpha,
 				'waterbumpid' => $zwaterbumpid,
+				'sceneambientcolor' => $zsceneambientcolor,
+				'sceneclearcolor' => $zsceneclearcolor,
+				'sceneuseclonedmeshmap' => $zsceneuseclonedmeshmap,
+				'sceneblockmaterialdirtymechanism' => $zsceneblockmaterialdirtymechanism,
+				'sundirectionalintensity' => $zsundirectionalintensity,
+				'sundiffusecolor' => $zsundiffusecolor,
+				'sunspecularcolor' => $zsunspecularcolor,
+				'sungroundcolor' => $zsungroundcolor,
+				'sundirectionx' => $zsundirectionx,
+				'sundirectiony' => $zsundirectiony,
+				'sundirectionz' => $zsundirectionz,
+				'backlightintensity' => $zbacklightintensity,
+				'backlightdirectionx' => $zbacklightdirectionx,
+				'backlightdirectiony' => $zbacklightdirectiony,
+				'backlightdirectionz' => $zbacklightdirectionz,
+				'backlightdiffusecolor' => $zbacklightdiffusecolor,
+				'backlightspecularcolor' => $zbacklightspecularcolor,
+				'scenefogenabled' => $zscenefogenabled,
+				'scenefogmode' => $zscenefogmode,
+				'scenefogdensity' => $zscenefogdensity,
+				'scenefogstart' => $zscenefogstart,
+				'scenefogend' => $zscenefogend,
+				'scenefogcolor' => $zscenefogcolor,
+				'skytype' => $zskytype,
+				'skysize' => $zskysize,
+				'skyboxfolder' => $zskyboxfolder,
+				'skyboxfile' => $zskyboxfile,
+				'skyboximageleft' => $zskyboximageleft,
+				'skyboximageup' => $zskyboximageup,
+				'skyboximagefront'=> $zskyboximagefront,
+				'skyboximageright' => $zskyboximageright,
+				'skyboximagedown' => $zskyboximagedown,
+				'skyboximageback' => $zskyboximageback,
+				'skypositionoffsetx' => $zskypositionoffsetx,
+				'skypositionoffsety' => $zskypositionoffsety,
+				'skypositionoffsetz' => $zskypositionoffsetz,
+				'skyboxmicrosurface' => $zskyboxmicrosurface,
+				'skyboxpbr' => $zskyboxpbr,
+				'skyboxasenvironmenttexture' => $zskyboxasenvironmenttexture,
+				'skyboxblur' => $zskyboxblur,
+				'skyboxdiffusecolor' => $zskyboxdiffusecolor,
+				'skyboxspecularcolor' => $zskyboxspecularcolor,
+				'skyboxambientcolor' => $zskyboxambientcolor,
+				'skyboxemissivecolor' => $zskyboxemissivecolor,
+				'skyinclination' => $zskyinclination,
+				'skyluminance' => $zskyluminance,
+				'skyazimuth' => $zskyazimuth,
+				'skyrayleigh' => $zskyrayleigh,
+				'skyturbidity' => $zskyturbidity,
+				'skymiedirectionalg' => $zskymiedirectionalg,
+				'skymiecoefficient' => $zskymiecoefficient,
 				'templatename' => $wtwconnect->escapeHTML($zrow["templatename"]),
 				'tags' => $wtwconnect->escapeHTML($zrow["tags"]),
 				'description' => $wtwconnect->escapeHTML($zrow["description"]),
