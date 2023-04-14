@@ -177,7 +177,7 @@ WTW_COINS.prototype.addMoldPlatform = function(zobjectfile, zmoldname, zmolddef,
 							}
 							if (WTW.shadows != null) {
 								/* add mesh to world shadow map */
-								WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+//								WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 							}
 							zresults.meshes[i].receiveShadows = true;
 							if (zmold == null || zmold.parent == null) {
@@ -245,7 +245,7 @@ WTW_COINS.prototype.addMoldPlatformLift = function(zobjectfile, zmoldname, zmold
 							}
 							if (WTW.shadows != null) {
 								/* add mesh to world shadow map */
-								WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+//								WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 							}
 							zresults.meshes[i].receiveShadows = true;
 							/* initiate and preload any event driven animations */
