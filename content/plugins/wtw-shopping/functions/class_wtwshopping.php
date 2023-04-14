@@ -101,7 +101,7 @@ class wtwshopping {
 				
 				/* hook plugin admin script functions into existing wtw functions */
 				$wtwplugins->addScriptFunction("setnewmold", "WTWShopping.setNewMold(zmoldname, zmolds, zmoldind, zrebuildmold);");
-				$wtwplugins->addScriptFunction("setcolor", "WTWShopping.setColor(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor);");
+				$wtwplugins->addScriptFunction("resetmoldcolor", "WTWShopping.resetMoldColor(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor);");
 				$wtwplugins->addScriptFunction("openaddnewmold", "WTWShopping.openAddNewMold(zwebtype, zshape, zmoldname);");
 				$wtwplugins->addScriptFunction("setnewmolddefaults", "WTWShopping.setNewMoldDefaults(zshape);");
 				$wtwplugins->addScriptFunction("setmoldformfields", "WTWShopping.setMoldFormFields(zshape);");
@@ -131,7 +131,7 @@ class wtwshopping {
 			$wtwplugins->addScriptFunction("onclick", "WTWShopping.onClick(zpickedname);");
 			$wtwplugins->addScriptFunction("checkhovers", "WTWShopping.checkHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("resethovers", "WTWShopping.resetHovers(zmoldname, zshape);");
-			$wtwplugins->addScriptFunction("opencolorselector", "WTWShopping.openColorSelector(zmold, zmoldname, zshape, zcolorgroup);");
+			$wtwplugins->addScriptFunction("openmoldcolorselector", "WTWShopping.openMoldColorSelector(zmold, zmoldname, zshape, zcolorgroup);");
 			$wtwplugins->addScriptFunction("keydownselectedmold", "WTWShopping.keyDownSelectedMold(zevent);");
 			$wtwplugins->addScriptFunction("clearselectedmold", "WTWShopping.clearSelectedMold();");
 

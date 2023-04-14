@@ -1171,7 +1171,8 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 		zcategorybuttonall.position = new BABYLON.Vector3(-zlenx/2 + .25, zfirsty, 0);
 		zcategorybuttonall.rotation.x = WTW.getRadians(-90);
 		zcategorybuttonall.parent = zbasemold;
-
+		zcategorybuttonall.renderingGroupId = 1;
+		
 		var zcategorybuttontextureall = new BABYLON.StandardMaterial('mat' + zmoldname + '-categorybuttontexture-', scene);
 		zcategorybuttontextureall.alpha = 1;
 		zcategorybuttontextureall.specularColor = new BABYLON.Color3(.2, .2, .2);
@@ -1193,6 +1194,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 		zcategorybuttonhoverall.position = new BABYLON.Vector3(-zlenx/2 + .15, zfirsty, 0);
 		zcategorybuttonhoverall.rotation.x = WTW.getRadians(-90);
 		zcategorybuttonhoverall.parent = zbasemold;
+		zcategorybuttonhoverall.renderingGroupId = 1;
 		
 		var zcategorybuttontexturehoverall = new BABYLON.StandardMaterial('mat' + zmoldname + '-categorybuttontexturehover-', scene);
 		zcategorybuttontexturehoverall.alpha = 0;
@@ -1224,7 +1226,8 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 							zcategorybutton.position = new BABYLON.Vector3(-zlenx/2 + .25, zfirsty + zincy, 0);
 							zcategorybutton.rotation.x = WTW.getRadians(-90);
 							zcategorybutton.parent = zbasemold;
-
+							zcategorybutton.renderingGroupId = 1;
+							
 							var zcategorybuttontexture = new BABYLON.StandardMaterial('mat' + zmoldname + '-categorybuttontexture-' + zcategoryid, scene);
 							zcategorybuttontexture.alpha = 1;
 							zcategorybuttontexture.specularColor = new BABYLON.Color3(.2, .2, .2);
@@ -1246,6 +1249,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 							zcategorybuttonhover.position = new BABYLON.Vector3(-zlenx/2 + .15, zfirsty + zincy, 0);
 							zcategorybuttonhover.rotation.x = WTW.getRadians(-90);
 							zcategorybuttonhover.parent = zbasemold;
+							zcategorybuttonhover.renderingGroupId = 1;
 							
 							var zcategorybuttontexturehover = new BABYLON.StandardMaterial('mat' + zmoldname + '-zcategorybuttontexturehover-' + zcategoryid, scene);
 							zcategorybuttontexturehover.alpha = 0;
@@ -1274,6 +1278,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 									zupbutton.position = new BABYLON.Vector3(-zlenx/2 + .4, zfirsty + 1.1, -zlenz/2 + .75);
 									zupbutton.rotation.x = WTW.getRadians(-90);
 									zupbutton.parent = zbasemold;
+									zupbutton.renderingGroupId = 1;
 									
 									var zupbuttontexture = new BABYLON.StandardMaterial('mat' + zmoldname + '-upbutton', scene);
 									zupbuttontexture.emissiveTexture = new BABYLON.Texture('/content/system/images/arrowscrollup.jpg', scene);
@@ -1285,6 +1290,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 									zupbuttonhover.position = new BABYLON.Vector3(-zlenx/2 + .4, zfirsty + 1.1, -zlenz/2 + .75);
 									zupbuttonhover.rotation.x = WTW.getRadians(-90);
 									zupbuttonhover.parent = zbasemold;
+									zupbuttonhover.renderingGroupId = 1;
 									
 									var zupbuttontexturehover = new BABYLON.StandardMaterial('mat' + zmoldname + '-upbuttonhover', scene);
 									zupbuttontexturehover.emissiveTexture = new BABYLON.Texture('/content/system/images/arrowscrollup2.jpg', scene);
@@ -1298,6 +1304,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 									zdownbutton.position = new BABYLON.Vector3(-zlenx/2 + .4, zlasty, -zlenz/2 + .75);
 									zdownbutton.rotation.x = WTW.getRadians(-90);
 									zdownbutton.parent = zbasemold;
+									zdownbutton.renderingGroupId = 1;
 									
 									var zdownbuttontexture = new BABYLON.StandardMaterial('mat' + zmoldname + '-downbutton', scene);
 									zdownbuttontexture.emissiveTexture = new BABYLON.Texture('/content/system/images/arrowscrolldown.jpg', scene);
@@ -1308,6 +1315,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 									zdownbuttonhover.position = new BABYLON.Vector3(-zlenx/2 + .4, zlasty, -zlenz/2 + .75);
 									zdownbuttonhover.rotation.x = WTW.getRadians(-90);
 									zdownbuttonhover.parent = zbasemold;
+									zdownbuttonhover.renderingGroupId = 1;
 									
 									var zdownbuttontexturehover = new BABYLON.StandardMaterial('mat' + zmoldname + '-downbuttonhover', scene);
 									zdownbuttontexturehover.emissiveTexture = new BABYLON.Texture('/content/system/images/arrowscrolldown2.jpg', scene);
@@ -2027,16 +2035,16 @@ wtwshopping.prototype.clearEditMold = function() {
 	}
 }
 
-wtwshopping.prototype.openColorSelector = function(zmold, zmoldname, zshape, zcolorgroup) {
+wtwshopping.prototype.openMoldColorSelector = function(zmold, zmoldname, zshape, zcolorgroup) {
 	try {
 		//zmold = WTW.getMeshOrNodeByID(zmoldname + '-text');
 	} catch (ex) {
-		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-openColorSelector=' + ex.message);
+		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-openMoldColorSelector=' + ex.message);
 	}
 	return zmold;
 }
 
-wtwshopping.prototype.setColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {
+wtwshopping.prototype.resetMoldColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {
 	try {
 		if (WTW.adminView == 1) {
 			var zmold = WTW.getMeshOrNodeByID(zmoldname);
@@ -2076,7 +2084,7 @@ wtwshopping.prototype.setColor = function(zmoldname, zcolorgroup, zemissivecolor
 			}
 		}
 	} catch (ex) {
-		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-setColor=' + ex.message);
+		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-resetMoldColor=' + ex.message);
 	}
 }
 

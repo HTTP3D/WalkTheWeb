@@ -405,8 +405,8 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 		}
 		
 		BABYLON.SceneLoader.ImportMeshAsync('', zfolder, zfile, scene).then(
-			function (results) {
-				if (results.meshes != null) {
+			function (zresults) {
+				if (zresults.meshes != null) {
 					/* animate the button and add JS function to execute when pressed */
 					var zobjectanimations = [];
 					switch (zshape) {
@@ -537,19 +537,20 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 							break;
 					}
 
-					for (var i=0; i < results.meshes.length; i++) {
-						if (results.meshes[i] != null) {
-							var zmeshname = results.meshes[i].name.toLowerCase();
+					for (var i=0; i < zresults.meshes.length; i++) {
+						if (zresults.meshes[i] != null) {
+							var zmeshname = zresults.meshes[i].name.toLowerCase();
 							var zchildmoldname = zmoldname + '-' + zmeshname;
-							results.meshes[i].name = zchildmoldname;
-							results.meshes[i].id = zchildmoldname;
-							results.meshes[i].isPickable = true;
-							WTW.registerMouseOver(results.meshes[i]);
-							if (results.meshes[i].parent == null) {
-								results.meshes[i].parent = zbasemold;
+							zresults.meshes[i].name = zchildmoldname;
+							zresults.meshes[i].id = zchildmoldname;
+							zresults.meshes[i].isPickable = true;
+							zresults.meshes[i].renderingGroupId = 1;
+							WTW.registerMouseOver(zresults.meshes[i]);
+							if (zresults.meshes[i].parent == null) {
+								zresults.meshes[i].parent = zbasemold;
 							}
 							if (zobjectanimations != null) {
-								WTW.addMoldAnimation(zmoldname, zmeshname, results.meshes[i], zobjectanimations);
+								WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
 							}
 						}
 					}
@@ -895,6 +896,7 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 							zresults.meshes[i].name = zchildmoldname;
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].isPickable = true;
+							zresults.meshes[i].renderingGroupId = 1;
 							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
@@ -957,11 +959,13 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 		ztitlemold.scaling = new BABYLON.Vector3(zlenx * 1.2, zleny * .24, .1);
 		ztitlemold.position = new BABYLON.Vector3(0, ztitlepositiony, -ztitlepositionz);
 		ztitlemold.parent = zbasemold;
+		ztitlemold.renderingGroupId = 1;
 
 		var zpricemold = BABYLON.MeshBuilder.CreatePlane(zmoldname + '-price1', {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
 		zpricemold.scaling = new BABYLON.Vector3(zlenx * .55, zleny * .24, .1);
 		zpricemold.position = new BABYLON.Vector3(zlenx * .3, zleny * .43, -zpricepositionz);
 		zpricemold.parent = zbasemold;
+		zpricemold.renderingGroupId = 1;
 		
 		if (zspecial1 != 2) {
 			var zmolddefclickimage = WTW.newMold();
@@ -984,7 +988,8 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 			var zclickimagemold = BABYLON.MeshBuilder.CreatePlane(zmoldname + '-clickimage', {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
 			zclickimagemold.scaling = new BABYLON.Vector3(zlenx * 1.15, zleny * 1.15, .1);
 			zclickimagemold.position = new BABYLON.Vector3(0, zleny * 1.15, -zlenz * .05);
-			zclickimagemold.parent = zbasemold; 
+			zclickimagemold.parent = zbasemold;
+			zclickimagemold.renderingGroupId = 1;
 		}
 		if (zspecial1 == 0 || zspecial1 == 2) {
 			if (zspecial1 == 0) {
@@ -997,12 +1002,14 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 			ztitlemold2.position = new BABYLON.Vector3(0, ztitlepositiony, ztitlepositionz);
 			ztitlemold2.rotation.y = WTW.getRadians(180);
 			ztitlemold2.parent = zbasemold;
+			ztitlemold2.renderingGroupId = 1;
 
 			var zpricemold2 = BABYLON.MeshBuilder.CreatePlane(zmoldname + '-price2', {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
 			zpricemold2.scaling = new BABYLON.Vector3(zlenx * .55, zleny * .24, .1);
 			zpricemold2.position = new BABYLON.Vector3(-zlenx * .3, zleny * .43, zpricepositionz);
 			zpricemold2.rotation.y = WTW.getRadians(180);
 			zpricemold2.parent = zbasemold;
+			zpricemold2.renderingGroupId = 1;
 			
 			if (zspecial1 != 2) {
 				var zmolddefclickimage2 = WTW.newMold();
@@ -1027,6 +1034,7 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 				zclickimagemold2.position = new BABYLON.Vector3(0, zleny * 1.15, zlenz * .2);
 				zclickimagemold2.rotation.y = WTW.getRadians(180);
 				zclickimagemold2.parent = zbasemold; 
+				zclickimagemold2.renderingGroupId = 1;
 			}
 		}
 	} catch (ex) {
@@ -1086,13 +1094,15 @@ wtwshopping.prototype.addMoldStoreSign = function(zmoldname, zmolddef, zlenx, zl
 		zimageframemold.position = new BABYLON.Vector3(0, 0, 0);
 		zimageframemold.material = WTW.addCovering(zmolddef.covering, zmoldname + '-imageframe', zmolddefframe, zlenx, zleny, zlenz, '0', '0');
 		zimageframemold.parent = zbasemold;
+		zimageframemold.renderingGroupId = 1;
 	
 		var ztitlemold2 = BABYLON.MeshBuilder.CreateBox(zmoldname + '-titleimage2', {}, scene);
 		ztitlemold2.scaling = new BABYLON.Vector3(zlenx, zlenz * .9, zleny * .9);
 		ztitlemold2.position = new BABYLON.Vector3(-zlenx * .1, 0, 0);
 		ztitlemold2.rotation.x = WTW.getRadians(-90);
 		ztitlemold2.parent = zbasemold;
-
+		ztitlemold2.renderingGroupId = 1;
+		
 		var zcoveringtitle1 = new BABYLON.StandardMaterial('mat' + zmoldname + '-titleimage1texture', scene);
 		zcoveringtitle1.alpha = 1;
 		zcoveringtitle1.specularColor = new BABYLON.Color3(.2, .2, .2);
@@ -1145,6 +1155,7 @@ wtwshopping.prototype.addMoldStore3DSign = function(zmoldname, zmolddef, zlenx, 
 		}
 		zmolddef.webtext.webtext = WTW.encode(zwebname);
 		zmold = WTW.addMold3DText(zmoldname, zmolddef, zlenx, zleny, zlenz);
+		zmold.renderingGroupId = 1;
 	} catch (ex) {
 		WTW.log('plugins:wtw-shopping:scripts-wtwshoppingmolds.js-addMoldStore3DSign=' + ex.message);
 	}
@@ -1202,14 +1213,15 @@ wtwshopping.prototype.addMoldStoreViewCart = function(zmoldname, zmolddef, zlenx
 		zimageframemold.position = new BABYLON.Vector3(0, 0, 0);
 		zimageframemold.material = WTW.addCovering(zmolddef.covering, zmoldname + '-imageframe', zmolddefframe, zlenx, zleny, zlenz, '0', '0');
 		zimageframemold.parent = zbasemold;	
-		
+		zimageframemold.renderingGroupId = 1;
 	
 		var ztitlemold2 = BABYLON.MeshBuilder.CreateBox(zmoldname + '-titleimage2', {}, scene);
 		ztitlemold2.scaling = new BABYLON.Vector3(zlenx, zlenz * .9, zleny * .9);
 		ztitlemold2.position = new BABYLON.Vector3(-zlenx * .1, 0, 0);
 		ztitlemold2.rotation.x = WTW.getRadians(-90);
 		ztitlemold2.parent = zbasemold;
-
+		ztitlemold2.renderingGroupId = 1;
+		
 		var zcoveringtitle1 = new BABYLON.StandardMaterial('mat' + zmoldname + '-titleimage1texture', scene);
 		zcoveringtitle1.alpha = 1;
 		zcoveringtitle1.specularColor = new BABYLON.Color3(.2, .2, .2);
@@ -1231,6 +1243,7 @@ wtwshopping.prototype.addMoldStoreViewCart = function(zmoldname, zmolddef, zlenx
 		zcarthover.position = new BABYLON.Vector3(-zlenx * .12, 0, 0);
 		zcarthover.rotation.x = WTW.getRadians(-90);
 		zcarthover.parent = zbasemold;
+		zcarthover.renderingGroupId = 1;
 		
 		var zcarttexturehover = new BABYLON.StandardMaterial('mat' + zmoldname + '-carttexturehover', scene);
 		zcarttexturehover.alpha = 0;
@@ -1308,11 +1321,13 @@ wtwshopping.prototype.addMoldStoreCategories = function(zmoldname, zmolddef, zle
 		zimageframemold.position = new BABYLON.Vector3(0, 0, 0);
 		zimageframemold.material = WTW.addCovering(zmolddef.covering, zmoldname + '-imageframe', zmolddefframe, zlenx, zleny, zlenz, '0', '0');
 		zimageframemold.parent = zbasemold;	
+		zimageframemold.renderingGroupId = 1;
 		
 		var zimagecutout = BABYLON.MeshBuilder.CreateBox(zmoldname + '-imagecutout', {}, scene);
 		zimagecutout.scaling = new BABYLON.Vector3(1, zleny - 3, zlenz - .5);
 		zimagecutout.position = new BABYLON.Vector3(-zlenx + .7, 0, 0);
 		zimagecutout.parent = zbasemold;
+		zimagecutout.renderingGroupId = 1;
 		
 		var zcsgmaterial = zimageframemold.material;
 		var zcsgmain = BABYLON.CSG.FromMesh(zimageframemold);
@@ -1323,13 +1338,15 @@ wtwshopping.prototype.addMoldStoreCategories = function(zmoldname, zmolddef, zle
 		zimagecutout.dispose();
 		var znewmold = zcsgmerge.toMesh(zmoldname + '-imageframe', zcsgmaterial, scene);
 		znewmold.parent = zbasemold;
-	
+		znewmold.renderingGroupId = 1;
+		
 		var ztitlemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-titleimage', {}, scene);
 		ztitlemold.scaling = new BABYLON.Vector3(.2, 7, 1.4);
 		ztitlemold.position = new BABYLON.Vector3(-zlenx/2 + .08, zleny/2 - .75, 0);
 		ztitlemold.rotation.x = WTW.getRadians(-90);
 		ztitlemold.parent = zbasemold;
-
+		ztitlemold.renderingGroupId = 1;
+		
 		var zcoveringtitle1 = new BABYLON.StandardMaterial('mat' + zmoldname + '-titleimage1texture', scene);
 		zcoveringtitle1.alpha = 1;
 		zcoveringtitle1.specularColor = new BABYLON.Color3(.2, .2, .2);
@@ -1350,7 +1367,8 @@ wtwshopping.prototype.addMoldStoreCategories = function(zmoldname, zmolddef, zle
 		ztitlemold2.position = new BABYLON.Vector3(-zlenx/2 + .08, -zleny/2 + .75, 0);
 		ztitlemold2.rotation.x = WTW.getRadians(-90);
 		ztitlemold2.parent = zbasemold;
-
+		ztitlemold2.renderingGroupId = 1;
+		
 		var zcoveringtitle2 = new BABYLON.StandardMaterial('mat' + zmoldname + '-titleimage2texture', scene);
 		zcoveringtitle2.alpha = 1;
 		zcoveringtitle2.specularColor = new BABYLON.Color3(.2, .2, .2);
@@ -1495,6 +1513,7 @@ wtwshopping.prototype.addMoldProductSearch = function(zmoldname, zmolddef, zlenx
 							zresults.meshes[i].name = zchildmoldname;
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].isPickable = true;
+							zresults.meshes[i].renderingGroupId = 1;
 							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
