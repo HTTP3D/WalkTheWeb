@@ -918,6 +918,25 @@ a.wtw-linkwrap:hover {
 	height: auto;
 	border: 1px solid #c0c0c0;
 }
+.wtw-blankimage20 {
+	float:left;
+	cursor:default;
+	margin:2px;
+	width: 20%;
+	height: auto;
+	border: 1px solid #000000;
+}
+.wtw-previewimage20 {
+	float:left;
+	cursor:default;
+	margin:2px;
+	width: 20%;
+	height: auto;
+	border: 1px solid #c0c0c0;
+}
+.wtw-previewimage20:hover {
+	cursor:pointer;
+}
 .wtw-tinyimage {
 	height:25px;
 	width:25px;

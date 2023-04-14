@@ -51,6 +51,50 @@ try {
 	$zgravity = $wtwhandlers->getPost('gravity','9.8');
 	$ztextureid = $wtwhandlers->getPost('textureid','');
 	$zskydomeid = $wtwhandlers->getPost('skydomeid','');
+	$zsceneambientcolor = $wtwhandlers->getPost('sceneambientcolor','#E5E8E8');
+	$zsceneclearcolor = $wtwhandlers->getPost('sceneclearcolor','#000000');
+	$zsceneuseclonedmeshmap = $wtwhandlers->getPost('sceneuseclonedmeshmap','1');
+	$zsceneblockmaterialdirtymechanism = $wtwhandlers->getPost('sceneblockmaterialdirtymechanism','1');
+	$zscenefogenabled = $wtwhandlers->getPost('scenefogenabled','0');
+	$zscenefogmode = $wtwhandlers->getPost('scenefogmode','');
+	$zscenefogdensity = $wtwhandlers->getPost('scenefogdensity','.01');
+	$zscenefogstart = $wtwhandlers->getPost('scenefogstart','20');
+	$zscenefogend = $wtwhandlers->getPost('scenefogend','60');
+	$zscenefogcolor = $wtwhandlers->getPost('scenefogcolor','#c0c0c0');
+	$zsundirectionalintensity = $wtwhandlers->getPost('sundirectionalintensity','1');
+	$zsundiffusecolor = $wtwhandlers->getPost('sundiffusecolor','#ffffff');
+	$zsunspecularcolor = $wtwhandlers->getPost('sunspecularcolor','#ffffff');
+	$zsungroundcolor = $wtwhandlers->getPost('sungroundcolor','#000000');
+	$zsundirectionx = $wtwhandlers->getPost('sundirectionx','999');
+	$zsundirectiony = $wtwhandlers->getPost('sundirectiony','-999');
+	$zsundirectionz = $wtwhandlers->getPost('sundirectionz','999');
+	$zbacklightintensity = $wtwhandlers->getPost('backlightintensity','.5');
+	$zbacklightdirectionx = $wtwhandlers->getPost('backlightdirectionx','-999');
+	$zbacklightdirectiony = $wtwhandlers->getPost('backlightdirectiony','999');
+	$zbacklightdirectionz = $wtwhandlers->getPost('backlightdirectionz','-999');
+	$zbacklightdiffusecolor = $wtwhandlers->getPost('backlightdiffusecolor','#ffffff');
+	$zbacklightspecularcolor = $wtwhandlers->getPost('backlightspecularcolor','#ffffff');
+	$zskytype = $wtwhandlers->getPost('skytype','');
+	$zskysize = $wtwhandlers->getPost('skysize','5000');
+	$zskyboxfolder = $wtwhandlers->getPost('skyboxfolder','');
+	$zskyboxfile = $wtwhandlers->getPost('skyboxfile','');
+	$zskyboximageleft = $wtwhandlers->getPost('skyboximageleft','');
+	$zskyboximageup = $wtwhandlers->getPost('skyboximageup','');
+	$zskyboximagefront = $wtwhandlers->getPost('skyboximagefront','');
+	$zskyboximageright = $wtwhandlers->getPost('skyboximageright','');
+	$zskyboximagedown = $wtwhandlers->getPost('skyboximagedown','');
+	$zskyboximageback = $wtwhandlers->getPost('skyboximageback','');
+	$zskypositionoffsetx = $wtwhandlers->getPost('skypositionoffsetx','0');
+	$zskypositionoffsety = $wtwhandlers->getPost('skypositionoffsety','0');
+	$zskypositionoffsetz = $wtwhandlers->getPost('skypositionoffsetz','0');
+	$zskyboxmicrosurface = $wtwhandlers->getPost('skyboxmicrosurface','0');
+	$zskyboxpbr = $wtwhandlers->getPost('skyboxpbr','0');
+	$zskyboxasenvironmenttexture = $wtwhandlers->getPost('skyboxasenvironmenttexture','0');
+	$zskyboxblur = $wtwhandlers->getPost('skyboxblur','0');
+	$zskyboxdiffusecolor = $wtwhandlers->getPost('skyboxdiffusecolor','#000000');
+	$zskyboxspecularcolor = $wtwhandlers->getPost('skyboxspecularcolor','#000000');
+	$zskyboxambientcolor = $wtwhandlers->getPost('skyboxambientcolor','#000000');
+	$zskyboxemissivecolor = $wtwhandlers->getPost('skyboxemissivecolor','#000000');
 	$zskyinclination = $wtwhandlers->getPost('skyinclination','');
 	$zskyluminance = $wtwhandlers->getPost('skyluminance','');
 	$zskyazimuth = $wtwhandlers->getPost('skyazimuth','');
@@ -90,11 +134,14 @@ try {
 		case "updatefirstbuilding":
 			$wtwcommunities->saveFirstBuilding($zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
 			break;
-		case "savegravity":
+		case "savecommunitygravity":
 			$wtwcommunities->saveCommunityGravity($zcommunityid, $zgravity);
 			break;
-		case "saveskydome":
-			$wtwcommunities->saveCommunitySky($zcommunityid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient);
+		case "savecommunityscene":
+			$wtwcommunities->saveCommunityScene($zcommunityid, $zsceneambientcolor, $zsceneclearcolor, $zsceneuseclonedmeshmap, $zsceneblockmaterialdirtymechanism, $zscenefogenabled, $zscenefogmode, $zscenefogdensity, $zscenefogstart, $zscenefogend, $zscenefogcolor, $zsundirectionalintensity, $zsundiffusecolor, $zsunspecularcolor, $zsungroundcolor, $zsundirectionx, $zsundirectiony, $zsundirectionz, $zbacklightintensity, $zbacklightdirectionx, $zbacklightdirectiony, $zbacklightdirectionz, $zbacklightdiffusecolor, $zbacklightspecularcolor);
+			break;
+		case "savecommunitysky":
+			$wtwcommunities->saveCommunitySky($zcommunityid, $zskydomeid, $zskytype, $zskysize, $zskyboxfolder, $zskyboxfile, $zskyboximageleft, $zskyboximageup, $zskyboximagefront, $zskyboximageright, $zskyboximagedown, $zskyboximageback, $zskypositionoffsetx, $zskypositionoffsety, $zskypositionoffsetz, $zskyboxmicrosurface, $zskyboxpbr, $zskyboxasenvironmenttexture, $zskyboxblur, $zskyboxdiffusecolor, $zskyboxspecularcolor, $zskyboxambientcolor, $zskyboxemissivecolor, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient);
 			break;
 		case "saveextendedground":
 			$wtwcommunities->saveCommunityGround($zcommunityid, $zgroundtextureid);

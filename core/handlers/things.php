@@ -46,9 +46,6 @@ try {
 		case "savestartposition":
 			$wtwthings->saveThingStartPosition($zthingid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz);
 			break;
-		case "savegravity":
-			//$wtwthings->saveThingGravity($zthingid, $zgravity);
-			break;
 	}
 
 	/* set headers to keep data local to server */

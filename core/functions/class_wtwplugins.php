@@ -1178,20 +1178,20 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsOpenColorSelector = function(zmold, zmoldname, zshape, zcolorgroup) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsOpenMoldColorSelector = function(zmold, zmoldname, zshape, zcolorgroup) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('opencolorselector', 'zmold');
+			$jsdata .= 	$this->returnScriptFunction('openmoldcolorselector', 'zmold');
 			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsOpenColorSelector=' + ex.message);\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsOpenMoldColorSelector=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "		return zmold;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsSetColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsResetMoldColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('setcolor');
+			$jsdata .= 	$this->getScriptFunction('resetmoldcolor');
 			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsSetColor=' + ex.message);\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsResetMoldColor=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 

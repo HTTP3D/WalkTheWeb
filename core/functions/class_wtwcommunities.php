@@ -141,6 +141,50 @@ class wtwcommunities {
 							 textureid,
 							 waterbumpid,
 							 skydomeid,
+							 sceneambientcolor,
+							 sceneclearcolor,
+							 sceneuseclonedmeshmap,
+							 sceneblockmaterialdirtymechanism,
+							 scenefogenabled,
+							 scenefogmode,
+							 scenefogdensity,
+							 scenefogstart,
+							 scenefogend,
+							 scenefogcolor,
+							 sundirectionalintensity,
+							 sundiffusecolor,
+							 sunspecularcolor,
+							 sungroundcolor,
+							 sundirectionx,
+							 sundirectiony,
+							 sundirectionz,
+							 backlightintensity,
+							 backlightdirectionx,
+							 backlightdirectiony,
+							 backlightdirectionz,
+							 backlightdiffusecolor,
+							 backlightspecularcolor,
+							 skytype,
+							 skysize,
+							 skyboxfolder,
+							 skyboxfile,
+							 skyboximageleft,
+							 skyboximageup,
+							 skyboximagefront,
+							 skyboximageright,
+							 skyboximagedown,
+							 skyboximageback,
+							 skypositionoffsetx,
+							 skypositionoffsety,
+							 skypositionoffsetz,
+							 skyboxmicrosurface,
+							 skyboxpbr,
+							 skyboxasenvironmenttexture,
+							 skyboxblur,
+							 skyboxdiffusecolor,
+							 skyboxspecularcolor,
+							 skyboxambientcolor,
+							 skyboxemissivecolor,
 							 skyinclination,
 							 skyluminance,
 							 skyazimuth,
@@ -207,6 +251,50 @@ class wtwcommunities {
 							 textureid,
 							 waterbumpid,
 							 skydomeid,
+							 sceneambientcolor,
+							 sceneclearcolor,
+							 sceneuseclonedmeshmap,
+							 sceneblockmaterialdirtymechanism,
+							 scenefogenabled,
+							 scenefogmode,
+							 scenefogdensity,
+							 scenefogstart,
+							 scenefogend,
+							 scenefogcolor,
+							 sundirectionalintensity,
+							 sundiffusecolor,
+							 sunspecularcolor,
+							 sungroundcolor,
+							 sundirectionx,
+							 sundirectiony,
+							 sundirectionz,
+							 backlightintensity,
+							 backlightdirectionx,
+							 backlightdirectiony,
+							 backlightdirectionz,
+							 backlightdiffusecolor,
+							 backlightspecularcolor,
+							 skytype,
+							 skysize,
+							 skyboxfolder,
+							 skyboxfile,
+							 skyboximageleft,
+							 skyboximageup,
+							 skyboximagefront,
+							 skyboximageright,
+							 skyboximagedown,
+							 skyboximageback,
+							 skypositionoffsetx,
+							 skypositionoffsety,
+							 skypositionoffsetz,
+							 skyboxmicrosurface,
+							 skyboxpbr,
+							 skyboxasenvironmenttexture,
+							 skyboxblur,
+							 skyboxdiffusecolor,
+							 skyboxspecularcolor,
+							 skyboxambientcolor,
+							 skyboxemissivecolor,
 							 skyinclination,
 							 skyluminance,
 							 skyazimuth,
@@ -538,15 +626,103 @@ class wtwcommunities {
 		return $zsuccess;
 	}
 	
-	public function saveCommunitySky($zcommunityid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient) {
-		/* save 3D Community Scene sky settings */
+	public function saveCommunityScene($zcommunityid, $zsceneambientcolor, $zsceneclearcolor, $zsceneuseclonedmeshmap, $zsceneblockmaterialdirtymechanism, $zscenefogenabled, $zscenefogmode, $zscenefogdensity, $zscenefogstart, $zscenefogend, $zscenefogcolor, $zsundirectionalintensity, $zsundiffusecolor, $zsunspecularcolor, $zsungroundcolor, $zsundirectionx, $zsundirectiony, $zsundirectionz, $zbacklightintensity, $zbacklightdirectionx, $zbacklightdirectiony, $zbacklightdirectionz, $zbacklightdiffusecolor, $zbacklightspecularcolor) {
+		/* save 3D Community Scene, Fog, and Lighting settings */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				if ($zsceneuseclonedmeshmap == true || $zsceneuseclonedmeshmap == 1 || $zsceneuseclonedmeshmap == '1') {
+					$zsceneuseclonedmeshmap = 1;
+				} else {
+					$zsceneuseclonedmeshmap = 0;
+				}
+				if ($zsceneblockmaterialdirtymechanism == true || $zsceneblockmaterialdirtymechanism == 1 || $zsceneblockmaterialdirtymechanism == '1') {
+					$zsceneblockmaterialdirtymechanism = 1;
+				} else {
+					$zsceneblockmaterialdirtymechanism = 0;
+				}
+				if ($zscenefogenabled == true || $zscenefogenabled == 1 || $zscenefogenabled == '1') {
+					$zscenefogenabled = 1;
+				} else {
+					$zscenefogenabled = 0;
+				}
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."communities
+					set sceneambientcolor='".$zsceneambientcolor."',
+						sceneclearcolor='".$zsceneclearcolor."',
+						sceneuseclonedmeshmap=".$wtwhandlers->checkNumber($zsceneuseclonedmeshmap,1).",
+						sceneblockmaterialdirtymechanism=".$wtwhandlers->checkNumber($zsceneblockmaterialdirtymechanism,1).",
+						scenefogenabled=".$wtwhandlers->checkNumber($zscenefogenabled,0).",
+						scenefogmode='".$zscenefogmode."',
+						scenefogdensity=".$wtwhandlers->checkNumber($zscenefogdensity,.01).",
+						scenefogstart=".$wtwhandlers->checkNumber($zscenefogstart,20).",
+						scenefogend=".$wtwhandlers->checkNumber($zscenefogend,60).",
+						scenefogcolor='".$zscenefogcolor."',
+						sundirectionalintensity=".$wtwhandlers->checkNumber($zsundirectionalintensity,1).",
+						sundiffusecolor='".$zsundiffusecolor."',
+						sunspecularcolor='".$zsunspecularcolor."',
+						sungroundcolor='".$zsungroundcolor."',
+						sundirectionx=".$wtwhandlers->checkNumber($zsundirectionx,999).",
+						sundirectiony=".$wtwhandlers->checkNumber($zsundirectiony,-999).",
+						sundirectionz=".$wtwhandlers->checkNumber($zsundirectionz,999).",
+						backlightintensity=".$wtwhandlers->checkNumber($zbacklightintensity,.5).",
+						backlightdirectionx=".$wtwhandlers->checkNumber($zbacklightdirectionx,-999).",
+						backlightdirectiony=".$wtwhandlers->checkNumber($zbacklightdirectiony,999).",
+						backlightdirectionz=".$wtwhandlers->checkNumber($zbacklightdirectionz,-999).",
+						backlightdiffusecolor='".$zbacklightdiffusecolor."',
+						backlightspecularcolor='".$zbacklightspecularcolor."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where communityid='".$zcommunityid."';");
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunityScene=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function saveCommunitySky($zcommunityid, $zskydomeid, $zskytype, $zskysize, $zskyboxfolder, $zskyboxfile, $zskyboximageleft, $zskyboximageup, $zskyboximagefront, $zskyboximageright, $zskyboximagedown, $zskyboximageback, $zskypositionoffsetx, $zskypositionoffsety, $zskypositionoffsetz, $zskyboxmicrosurface, $zskyboxpbr, $zskyboxasenvironmenttexture, $zskyboxblur, $zskyboxdiffusecolor, $zskyboxspecularcolor, $zskyboxambientcolor, $zskyboxemissivecolor, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient) {
+		/* save 3D Community sky settings */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				if ($zskyboxpbr == true || $zskyboxpbr || $zskyboxpbr == '1') {
+					$zskyboxpbr = 1;
+				} else {
+					$zskyboxpbr = 0;
+				}
+				if ($zskyboxasenvironmenttexture == true || $zskyboxasenvironmenttexture == 1 || $zskyboxasenvironmenttexture == '1') {
+					$zskyboxasenvironmenttexture = 1;
+				} else {
+					$zskyboxasenvironmenttexture = 0;
+				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set skydomeid='".$zskydomeid."',
+						skytype='".$zskytype."',
+						skysize=".$wtwhandlers->checkNumber($zskysize,5000).",
+						skyboxfolder='".$zskyboxfolder."',
+						skyboxfile='".$zskyboxfile."',
+						skyboximageleft='".$zskyboximageleft."',
+						skyboximageup='".$zskyboximageup."',
+						skyboximagefront='".$zskyboximagefront."',
+						skyboximageright='".$zskyboximageright."',
+						skyboximagedown='".$zskyboximagedown."',
+						skyboximageback='".$zskyboximageback."',
+						skypositionoffsetx=".$wtwhandlers->checkNumber($zskypositionoffsetx,0).",
+						skypositionoffsety=".$wtwhandlers->checkNumber($zskypositionoffsety,0).",
+						skypositionoffsetz=".$wtwhandlers->checkNumber($zskypositionoffsetz,0).",
+						skyboxmicrosurface=".$wtwhandlers->checkNumber($zskyboxmicrosurface,0).",
+						skyboxpbr=".$wtwhandlers->checkNumber($zskyboxpbr,0).",
+						skyboxasenvironmenttexture=".$wtwhandlers->checkNumber($zskyboxasenvironmenttexture,0).",
+						skyboxblur=".$wtwhandlers->checkNumber($zskyboxblur,0).",
+						skyboxdiffusecolor='".$zskyboxdiffusecolor."',
+						skyboxspecularcolor='".$zskyboxspecularcolor."',
+						skyboxambientcolor='".$zskyboxambientcolor."',
+						skyboxemissivecolor='".$zskyboxemissivecolor."',
 						skyinclination=".$wtwhandlers->checkNumber($zskyinclination,0).",
 						skyluminance=".$wtwhandlers->checkNumber($zskyluminance,1).",
 						skyazimuth=".$wtwhandlers->checkNumber($zskyazimuth,.25).",
@@ -566,7 +742,8 @@ class wtwcommunities {
 	}
 
 	public function copyCommunity($zcommunityid, $zfromcommunityid) {
-		/* creates a copy of a 3D Community */
+		/* creates a copy of a 3D Community - everything except the communities and userauthorizations tables */
+		/* for full Community copy use: saveCommunity('NewCommunityID', 'CommunityIDToCopy', '', '', '', 'New Community Name', 'New Community Description'); - where NewComunityID can be '' blank to get a new CommunityID assigned and returned from function */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
