@@ -438,7 +438,7 @@ WTWJS.prototype.getSelectCommunitiesList = async function(zfilter) {
 		WTW.hide('wtw_listcommunities');
 		WTW.show('wtw_loadingcommunityid');
 		var zlistcommunities = '';
-		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer') || WTW.isUserInRole('architect') || WTW.isUserInRole('graphic artist')) {
+		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer')) {
 			zlistcommunities = "<div class='wtw-localbuttonleftpad'></div><div id='wtw_communitybuttonmine' class='wtw-localbutton";
 			if (zfilter == 'mine') {
 				zlistcommunities += "selected";
@@ -447,7 +447,7 @@ WTWJS.prototype.getSelectCommunitiesList = async function(zfilter) {
 			if (zfilter == 'all') {
 				zlistcommunities += "selected";
 			}
-			zlistcommunities += " wtw-rightradius' onclick=\"WTW.setCommunitiesListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+			zlistcommunities += " wtw-rightradius' onclick=\"WTW.setCommunitiesListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div><div class='wtw-mainmenuvalue'>Admins and Developer Roles can edit <b>All</b> 3D Communities on this server.</div><hr /><div class='wtw-clear'></div>\r\n";
 		} else {
 			zlistcommunities = '<br /><br />';
 		}
@@ -798,15 +798,363 @@ WTWJS.prototype.cancelGround = function() {
 	}		
 }
 
-/* sky dome */
-WTWJS.prototype.openSkyDomeForm = function() {
-	/* edit sky dome appearance */
-	/* this sky dome uses sky procedure texture */
+/* scene, lighting (sun and backlight), and fog */
+WTWJS.prototype.openSceneForm = function() {
+	/* edit scene appearance (colors and lighting) */
+	try {
+		WTW.hide('wtw_adminmenu46b');
+		WTW.show('wtw_loadingscenesettingsform');
+		/* back up settings in case of cancel */
+		dGet('wtw_tsceneambientcolorbackup').value = WTW.init.sceneAmbientColor;
+		dGet('wtw_tsceneclearcolorbackup').value = WTW.init.sceneClearColor;
+		dGet('wtw_tsceneuseclonedmeshmapbackup').value = WTW.init.sceneUseClonedMeshMap;
+		dGet('wtw_tsceneblockmaterialdirtymechanismbackup').value = WTW.init.sceneBlockMaterialDirtyMechanism;
+		dGet('wtw_tscenefogenabledbackup').value = WTW.init.sceneFogEnabled;
+		dGet('wtw_tscenefogmodebackup').value = WTW.init.sceneFogMode;
+		dGet('wtw_tscenefogdensitybackup').value = WTW.init.sceneFogDensity;
+		dGet('wtw_tscenefogstartbackup').value = WTW.init.sceneFogStart;
+		dGet('wtw_tscenefogendbackup').value = WTW.init.sceneFogEnd;
+		dGet('wtw_tscenefogcolorbackup').value = WTW.init.sceneFogColor;
+		dGet('wtw_tsundirectionalintensitybackup').value = WTW.init.sunDirectionalIntensity;
+		dGet('wtw_tsundiffusecolorbackup').value = WTW.init.sunDiffuseColor;
+		dGet('wtw_tsunspecularcolorbackup').value = WTW.init.sunSpecularColor;
+		dGet('wtw_tsungroundcolorbackup').value = WTW.init.sunGroundColor;
+		dGet('wtw_tsundirectionxbackup').value = WTW.init.sunDirectionX;
+		dGet('wtw_tsundirectionybackup').value = WTW.init.sunDirectionY;
+		dGet('wtw_tsundirectionzbackup').value = WTW.init.sunDirectionZ;
+		dGet('wtw_tbacklightintensitybackup').value = WTW.init.backLightIntensity;
+		dGet('wtw_tbacklightdirectionxbackup').value = WTW.init.backLightDirectionX;
+		dGet('wtw_tbacklightdirectionybackup').value = WTW.init.backLightDirectionY;
+		dGet('wtw_tbacklightdirectionzbackup').value = WTW.init.backLightDirectionZ;
+		dGet('wtw_tbacklightdiffusecolorbackup').value = WTW.init.backLightDiffuseColor;
+		dGet('wtw_tbacklightspecularcolorbackup').value = WTW.init.backLightSpecularColor;
+		
+		/* set form fields */
+		dGet('wtw_tsceneambientcolor').value = WTW.init.sceneAmbientColor;
+		dGet('wtw_tsceneclearcolor').value = WTW.init.sceneClearColor;
+		dGet('wtw_tsceneuseclonedmeshmap').checked = WTW.init.sceneUseClonedMeshMap;
+		dGet('wtw_tsceneblockmaterialdirtymechanism').checked = WTW.init.sceneBlockMaterialDirtyMechanism;
+		
+		dGet('wtw_tsundirectionalintensity').value = WTW.init.sunDirectionalIntensity;
+		dGet('wtw_tsundiffusecolor').value = WTW.init.sunDiffuseColor;
+		dGet('wtw_tsunspecularcolor').value = WTW.init.sunSpecularColor;
+		dGet('wtw_tsungroundcolor').value = WTW.init.sunGroundColor;
+		dGet('wtw_tsundirectionx').value = WTW.init.sunDirectionX;
+		dGet('wtw_tsundirectiony').value = WTW.init.sunDirectionY;
+		dGet('wtw_tsundirectionz').value = WTW.init.sunDirectionZ;
+		dGet('wtw_tbacklightintensity').value = WTW.init.backLightIntensity;
+		dGet('wtw_tbacklightdiffusecolor').value = WTW.init.backLightDiffuseColor;
+		dGet('wtw_tbacklightspecularcolor').value = WTW.init.backLightSpecularColor;
+		dGet('wtw_tbacklightdirectionx').value = WTW.init.backLightDirectionX;
+		dGet('wtw_tbacklightdirectiony').value = WTW.init.backLightDirectionY;
+		dGet('wtw_tbacklightdirectionz').value = WTW.init.backLightDirectionZ;
+
+		dGet('wtw_tscenefogenabled').checked = WTW.init.sceneFogEnabled;
+		WTW.setDDLValue('wtw_tscenefogmode', WTW.init.sceneFogMode);
+		dGet('wtw_tscenefogdensity').value = WTW.init.sceneFogDensity*100;
+		dGet('wtw_tscenefogstart').value = WTW.init.sceneFogStart;
+		dGet('wtw_tscenefogend').value = WTW.init.sceneFogEnd;
+		dGet('wtw_tscenefogcolor').value = WTW.init.sceneFogColor;
+
+		WTW.setCommunityScene();
+		WTW.hide('wtw_loadingscenesettingsform');
+		WTW.show('wtw_adminmenu46b');
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openSceneForm=' + ex.message);
+	}
+}
+
+WTWJS.prototype.setCommunityScene = function() {
+	/* set scene, fog, and lighting changes while editing from form */
+	try {
+		/* scene settings */
+		if (WTW.isHexColor(dGet('wtw_tsceneambientcolor').value)) {
+			WTW.init.sceneAmbientColor = dGet('wtw_tsceneambientcolor').value;
+		} else {
+			WTW.init.sceneAmbientColor = '#e5e8e8';
+		}
+		if (WTW.isHexColor(dGet('wtw_tsceneclearcolor').value)) {
+			WTW.init.sceneClearColor = dGet('wtw_tsceneclearcolor').value;
+		} else {
+			WTW.init.sceneClearColor = '#e5e8e8';
+		}
+		WTW.init.sceneUseClonedMeshMap = dGet('wtw_tsceneuseclonedmeshmap').checked;
+		WTW.init.sceneBlockMaterialDirtyMechanism = dGet('wtw_tsceneblockmaterialdirtymechanism').checked;
+		scene.ambientColor = new BABYLON.Color3.FromHexString(WTW.init.sceneAmbientColor);
+		scene.clearColor = new BABYLON.Color3.FromHexString(WTW.init.sceneClearColor); //optional light setting  */
+		scene.useClonedMeshMap = WTW.init.sceneUseClonedMeshMap;
+		scene.blockMaterialDirtyMechanism = WTW.init.sceneBlockMaterialDirtyMechanism;
+
+		/* sun and backlight */
+		if (WTW.isNumeric(dGet('wtw_tsundirectionalintensity').value) == false) {
+			dGet('wtw_tsundirectionalintensity').value = '1.00';
+		} else if (Number(dGet('wtw_tsundirectionalintensity').value) > 20) {
+			dGet('wtw_tsundirectionalintensity').value = '20.00';
+		} else if (Number(dGet('wtw_tsundirectionalintensity').value) < 0) {
+			dGet('wtw_tsundirectionalintensity').value = '0.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tsundirectionx').value) == false) {
+			dGet('wtw_tsundirectionx').value = '999.00';
+		} else if (Number(dGet('wtw_tsundirectionx').value) > 5000) {
+			dGet('wtw_tsundirectionx').value = '5000.00';
+		} else if (Number(dGet('wtw_tsundirectionx').value) < -5000) {
+			dGet('wtw_tsundirectionx').value = '-5000.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tsundirectiony').value) == false) {
+			dGet('wtw_tsundirectiony').value = '999.00';
+		} else if (Number(dGet('wtw_tsundirectiony').value) > 5000) {
+			dGet('wtw_tsundirectiony').value = '5000.00';
+		} else if (Number(dGet('wtw_tsundirectiony').value) < -5000) {
+			dGet('wtw_tsundirectiony').value = '-5000.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tsundirectionz').value) == false) {
+			dGet('wtw_tsundirectionz').value = '999.00';
+		} else if (Number(dGet('wtw_tsundirectionz').value) > 5000) {
+			dGet('wtw_tsundirectionz').value = '5000.00';
+		} else if (Number(dGet('wtw_tsundirectionz').value) < -5000) {
+			dGet('wtw_tsundirectionz').value = '-5000.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tbacklightintensity').value) == false) {
+			dGet('wtw_tbacklightintensity').value = '1.00';
+		} else if (Number(dGet('wtw_tbacklightintensity').value) > 20) {
+			dGet('wtw_tbacklightintensity').value = '20.00';
+		} else if (Number(dGet('wtw_tbacklightintensity').value) < 0) {
+			dGet('wtw_tbacklightintensity').value = '0.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tbacklightdirectionx').value) == false) {
+			dGet('wtw_tbacklightdirectionx').value = '999.00';
+		} else if (Number(dGet('wtw_tbacklightdirectionx').value) > 5000) {
+			dGet('wtw_tbacklightdirectionx').value = '5000.00';
+		} else if (Number(dGet('wtw_tbacklightdirectionx').value) < -5000) {
+			dGet('wtw_tbacklightdirectionx').value = '-5000.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tbacklightdirectiony').value) == false) {
+			dGet('wtw_tbacklightdirectiony').value = '999.00';
+		} else if (Number(dGet('wtw_tbacklightdirectiony').value) > 5000) {
+			dGet('wtw_tbacklightdirectiony').value = '5000.00';
+		} else if (Number(dGet('wtw_tbacklightdirectiony').value) < -5000) {
+			dGet('wtw_tbacklightdirectiony').value = '-5000.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tbacklightdirectionz').value) == false) {
+			dGet('wtw_tbacklightdirectionz').value = '999.00';
+		} else if (Number(dGet('wtw_tbacklightdirectionz').value) > 5000) {
+			dGet('wtw_tbacklightdirectionz').value = '5000.00';
+		} else if (Number(dGet('wtw_tbacklightdirectionz').value) < -5000) {
+			dGet('wtw_tbacklightdirectionz').value = '-5000.00';
+		}
+		WTW.init.sunDirectionalIntensity = Number(dGet('wtw_tsundirectionalintensity').value);
+		if (WTW.isHexColor(dGet('wtw_tsundiffusecolor').value)) {
+			WTW.init.sunDiffuseColor = dGet('wtw_tsundiffusecolor').value;
+		} else {
+			WTW.init.sunDiffuseColor = '#ffffff';
+		}
+		if (WTW.isHexColor(dGet('wtw_tsunspecularcolor').value)) {
+			WTW.init.sunSpecularColor = dGet('wtw_tsunspecularcolor').value;
+		} else {
+			WTW.init.sunSpecularColor = '#ffffff';
+		}
+		if (WTW.isHexColor(dGet('wtw_tsungroundcolor').value)) {
+			WTW.init.sunGroundColor = dGet('wtw_tsungroundcolor').value;
+		} else {
+			WTW.init.sunGroundColor = '#000000';
+		}
+		WTW.init.sunDirectionX = Number(dGet('wtw_tsundirectionx').value);
+		WTW.init.sunDirectionY = Number(dGet('wtw_tsundirectiony').value);
+		WTW.init.sunDirectionZ = Number(dGet('wtw_tsundirectionz').value);
+		WTW.init.backLightIntensity = Number(dGet('wtw_tbacklightintensity').value);
+		if (WTW.isHexColor(dGet('wtw_tbacklightdiffusecolor').value)) {
+			WTW.init.backLightDiffuseColor = dGet('wtw_tbacklightdiffusecolor').value;
+		} else {
+			WTW.init.backLightDiffuseColor = '#ffffff';
+		}
+		if (WTW.isHexColor(dGet('wtw_tbacklightspecularcolor').value)) {
+			WTW.init.backLightSpecularColor = dGet('wtw_tbacklightspecularcolor').value;
+		} else {
+			WTW.init.backLightSpecularColor = '#ffffff';
+		}
+		WTW.init.backLightDirectionX = Number(dGet('wtw_tbacklightdirectionx').value);
+		WTW.init.backLightDirectionY = Number(dGet('wtw_tbacklightdirectiony').value);
+		WTW.init.backLightDirectionZ = Number(dGet('wtw_tbacklightdirectionz').value);
+		
+		WTW.setSunLight();
+
+		/* fog settings */
+		if (WTW.isNumeric(dGet('wtw_tscenefogdensity').value) == false) {
+			dGet('wtw_tscenefogdensity').value = '0.00';
+		} else if (Number(dGet('wtw_tscenefogdensity').value) > 100) {
+			dGet('wtw_tscenefogdensity').value = '100.00';
+		} else if (Number(dGet('wtw_tscenefogdensity').value) < 0) {
+			dGet('wtw_tscenefogdensity').value = '0.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tscenefogstart').value) == false) {
+			dGet('wtw_tscenefogstart').value = '20.00';
+		} else if (Number(dGet('wtw_tscenefogstart').value) > 4999) {
+			dGet('wtw_tscenefogstart').value = '4999.00';
+		} else if (Number(dGet('wtw_tscenefogstart').value) < 0) {
+			dGet('wtw_tscenefogstart').value = '0.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tscenefogend').value) == false) {
+			dGet('wtw_tscenefogend').value = '60.00';
+		} else if (Number(dGet('wtw_tscenefogend').value) > 5000) {
+			dGet('wtw_tscenefogend').value = '5000.00';
+		} else if (Number(dGet('wtw_tscenefogend').value) < 0) {
+			dGet('wtw_tscenefogend').value = '1.00';
+		}
+		/* make sure for end is farther than fog start */
+		if (Number(dGet('wtw_tscenefogend').value) < Number(dGet('wtw_tscenefogstart').value)) {
+			dGet('wtw_tscenefogend').value = Number(dGet('wtw_tscenefogstart').value) + 1;
+		}
+		WTW.init.sceneFogEnabled = dGet('wtw_tscenefogenabled').checked;
+		WTW.init.sceneFogMode = WTW.getDDLValue('wtw_tscenefogmode');
+		WTW.init.sceneFogDensity = Number(dGet('wtw_tscenefogdensity').value)/100;
+		WTW.init.sceneFogStart = Number(dGet('wtw_tscenefogstart').value);
+		WTW.init.sceneFogEnd = Number(dGet('wtw_tscenefogend').value);
+		if (WTW.isHexColor(dGet('wtw_tscenefogcolor').value)) {
+			WTW.init.sceneFogColor = dGet('wtw_tscenefogcolor').value;
+		} else {
+			WTW.init.sceneFogColor = '#c0c0c0';
+		}
+
+		if (WTW.init.sceneFogEnabled) {
+			WTW.show('wtw_scenefogenableddiv');
+			WTW.hide('wtw_scenefogdensitydiv');
+			WTW.hide('wtw_scenefogstartdiv');
+			WTW.hide('wtw_scenefogenddiv');
+			switch (WTW.init.sceneFogMode) {
+				case 'exponential':
+				case 'exponential faster':
+					WTW.show('wtw_scenefogdensitydiv');
+					break;
+				case 'linear':
+					WTW.show('wtw_scenefogstartdiv');
+					WTW.show('wtw_scenefogenddiv');
+					break;
+			}
+		} else {
+			WTW.hide('wtw_scenefogenableddiv');
+		}
+		WTW.setFog();
+		WTW.setExtendedGround();
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setCommunityScene=' + ex.message);
+	}
+}
+
+WTWJS.prototype.saveCommunityScene = async function() {
+	/* save scene, fog, and lighting changes */
+	try {
+		var zsceneuseclonedmeshmap = 0;
+		var zsceneblockmaterialdirtymechanism = 0;
+		var zfogenabled = 0;
+		if (WTW.init.sceneUseClonedMeshMap) {
+			zsceneuseclonedmeshmap = 1;
+		}
+		if (WTW.init.sceneBlockMaterialDirtyMechanism) {
+			zsceneblockmaterialdirtymechanism = 1;
+		}
+		if (WTW.init.sceneFogEnabled) {
+			zfogenabled = 1;
+		}
+		
+		var zrequest = {
+			'communityid': communityid,
+			'sceneambientcolor': WTW.init.sceneAmbientColor,
+			'sceneclearcolor': WTW.init.sceneClearColor,
+			'sceneuseclonedmeshmap': zsceneuseclonedmeshmap,
+			'sceneblockmaterialdirtymechanism': zsceneblockmaterialdirtymechanism,
+			'scenefogenabled': zfogenabled,
+			'scenefogmode': WTW.init.sceneFogMode,
+			'scenefogdensity': WTW.init.sceneFogDensity,
+			'scenefogstart': WTW.init.sceneFogStart,
+			'scenefogend': WTW.init.sceneFogEnd,
+			'scenefogcolor': WTW.init.sceneFogColor,
+			'sundirectionalintensity': WTW.init.sunDirectionalIntensity,
+			'sundiffusecolor': WTW.init.sunDiffuseColor,
+			'sunspecularcolor': WTW.init.sunSpecularColor,
+			'sungroundcolor': WTW.init.sunGroundColor,
+			'sundirectionx': WTW.init.sunDirectionX,
+			'sundirectiony': WTW.init.sunDirectionY,
+			'sundirectionz': WTW.init.sunDirectionZ,
+			'backlightintensity': WTW.init.backLightIntensity,
+			'backlightdirectionx': WTW.init.backLightDirectionX,
+			'backlightdirectiony': WTW.init.backLightDirectionY,
+			'backlightdirectionz': WTW.init.backLightDirectionZ,
+			'backlightdiffusecolor': WTW.init.backLightDiffuseColor,
+			'backlightspecularcolor': WTW.init.backLightSpecularColor,
+			'function':'savecommunityscene'
+		};
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveCommunityScene=' + ex.message);
+	}
+}
+
+WTWJS.prototype.cancelCommunityScene = function() {
+	/* cancel and undo scene form changes */
+	try {
+		WTW.init.sceneAmbientColor = dGet('wtw_tsceneambientcolorbackup').value;
+		WTW.init.sceneClearColor = dGet('wtw_tsceneclearcolorbackup').value;
+		WTW.init.sceneUseClonedMeshMap = dGet('wtw_tsceneuseclonedmeshmapbackup').value;
+		WTW.init.sceneBlockMaterialDirtyMechanism = dGet('wtw_tsceneblockmaterialdirtymechanismbackup').value;
+		WTW.init.sceneFogEnabled = dGet('wtw_tscenefogenabledbackup').value;
+		WTW.init.sceneFogMode = dGet('wtw_tscenefogmodebackup').value;
+		WTW.init.sceneFogDensity = dGet('wtw_tscenefogdensitybackup').value;
+		WTW.init.sceneFogStart = dGet('wtw_tscenefogstartbackup').value;
+		WTW.init.sceneFogEnd = dGet('wtw_tscenefogendbackup').value;
+		WTW.init.sceneFogColor = dGet('wtw_tscenefogcolorbackup').value;
+		WTW.init.sunDirectionalIntensity = dGet('wtw_tsundirectionalintensitybackup').value;
+		WTW.init.sunDiffuseColor = dGet('wtw_tsundiffusecolorbackup').value;
+		WTW.init.sunSpecularColor = dGet('wtw_tsunspecularcolorbackup').value;
+		WTW.init.sunGroundColor = dGet('wtw_tsungroundcolorbackup').value;
+		WTW.init.sunDirectionX = dGet('wtw_tsundirectionxbackup').value;
+		WTW.init.sunDirectionY = dGet('wtw_tsundirectionybackup').value;
+		WTW.init.sunDirectionZ = dGet('wtw_tsundirectionzbackup').value;
+		WTW.init.backLightIntensity = dGet('wtw_tbacklightintensitybackup').value;
+		WTW.init.backLightDirectionX = dGet('wtw_tbacklightdirectionxbackup').value;
+		WTW.init.backLightDirectionY = dGet('wtw_tbacklightdirectionybackup').value;
+		WTW.init.backLightDirectionZ = dGet('wtw_tbacklightdirectionzbackup').value;
+		WTW.init.backLightDiffuseColor = dGet('wtw_tbacklightdiffusecolorbackup').value;
+		WTW.init.backLightSpecularColor = dGet('wtw_tbacklightspecularcolorbackup').value;
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-cancelCommunityScene=' + ex.message);
+	}
+}
+
+
+/* sky */
+WTWJS.prototype.openCommunitySkyForm = function() {
+	/* edit sky appearance */
 	try {
 		var zskydomeid = WTW.init.skyTextureID;
 		WTW.hide('wtw_adminmenu40b');
 		WTW.show('wtw_loadingskysettingsform');
 		WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, 1);
+		dGet('wtw_tskytypebackup').value = WTW.init.skyType;
+		dGet('wtw_tskysizebackup').value = WTW.init.skySize;
+		dGet('wtw_tskyboxfolderbackup').value = WTW.init.skyBoxFolder;
+		dGet('wtw_tskyboxfilebackup').value = WTW.init.skyBoxFile;
+		dGet('wtw_tskyboximageleftbackup').value = WTW.init.skyBoxImageLeft;
+		dGet('wtw_tskyboximageupbackup').value = WTW.init.skyBoxImageUp;
+		dGet('wtw_tskyboximagefrontbackup').value = WTW.init.skyBoxImageFront;
+		dGet('wtw_tskyboximagerightbackup').value = WTW.init.skyBoxImageRight;
+		dGet('wtw_tskyboximagedownbackup').value = WTW.init.skyBoxImageDown;
+		dGet('wtw_tskyboximagebackbackup').value = WTW.init.skyBoxImageBack;
+		dGet('wtw_tskypositionoffsetxbackup').value = WTW.init.skyPositionOffsetX;
+		dGet('wtw_tskypositionoffsetybackup').value = WTW.init.skyPositionOffsetY;
+		dGet('wtw_tskypositionoffsetzbackup').value = WTW.init.skyPositionOffsetZ;
+		dGet('wtw_tskyboxmicrosurfacebackup').value = WTW.init.skyBoxMicroSurface;
+		dGet('wtw_tskyboxpbrbackup').value = WTW.init.skyBoxPBR;
+		dGet('wtw_tskyboxasenvironmenttexturebackup').value = WTW.init.skyBoxAsEnvironmentTexture;
+		dGet('wtw_tskyboxblurbackup').value = WTW.init.skyBoxBlur;
+		dGet('wtw_tskyboxdiffusecolorbackup').value = WTW.init.skyBoxDiffuseColor;
+		dGet('wtw_tskyboxspecularcolorbackup').value = WTW.init.skyBoxSpecularColor;
+		dGet('wtw_tskyboxambientcolorbackup').value = WTW.init.skyBoxAmbientColor;
+		dGet('wtw_tskyboxemissivecolorbackup').value = WTW.init.skyBoxEmissiveColor;
 		dGet('wtw_tskyinclinationbackup').value = WTW.init.skyInclination;
 		dGet('wtw_tskyluminancebackup').value = WTW.init.skyLuminance;
 		dGet('wtw_tskyazimuthbackup').value = WTW.init.skyAzimuth;
@@ -826,15 +1174,219 @@ WTWJS.prototype.openSkyDomeForm = function() {
 				}
 			}
 		}
+		WTW.setDDLValue('wtw_tskytype', WTW.init.skyType);
+		WTW.setDDLValue('wtw_tskyboxfolder', WTW.init.skyBoxFolder);
+		dGet('wtw_tskysize').value = WTW.init.skySize;
+		dGet('wtw_tskyboxblur').value = WTW.init.skyBoxBlur*100;
+		dGet('wtw_tskyboxmicrosurface').value = WTW.init.skyBoxMicroSurface*100;
+		dGet('wtw_tskyboxemissivecolor').value = WTW.init.skyBoxEmissiveColor;
+		dGet('wtw_tskyboxdiffusecolor').value = WTW.init.skyBoxDiffuseColor;
+		dGet('wtw_tskyboxspecularcolor').value = WTW.init.skyBoxSpecularColor;
+		dGet('wtw_tskyboxambientcolor').value = WTW.init.skyBoxAmbientColor;
+		dGet('wtw_tskyboximageleft').value = WTW.init.skyBoxImageLeft;
+		dGet('wtw_tskyboximageup').value = WTW.init.skyBoxImageUp;
+		dGet('wtw_tskyboximagefront').value = WTW.init.skyBoxImageFront;
+		dGet('wtw_tskyboximageright').value = WTW.init.skyBoxImageRight;
+		dGet('wtw_tskyboximagedown').value = WTW.init.skyBoxImageDown;
+		dGet('wtw_tskyboximageback').value = WTW.init.skyBoxImageBack;
+		if (WTW.init.skyBoxImageLeft != '') {
+			dGet('wtw_tskyboxleftpreview').src = WTW.init.skyBoxImageLeft;
+		} else {
+			dGet('wtw_tskyboxleftpreview').src = '/content/system/skies/skybox/skybox_nx.jpg';
+		}
+		if (WTW.init.skyBoxImageUp != '') {
+			dGet('wtw_tskyboxuppreview').src = WTW.init.skyBoxImageUp;
+		} else {
+			dGet('wtw_tskyboxuppreview').src = '/content/system/skies/skybox/skybox_py.jpg';
+		}
+		if (WTW.init.skyBoxImageFront != '') {
+			dGet('wtw_tskyboxfrontpreview').src = WTW.init.skyBoxImageFront;
+		} else {
+			dGet('wtw_tskyboxfrontpreview').src = '/content/system/skies/skybox/skybox_nz.jpg';
+		}
+		if (WTW.init.skyBoxImageRight != '') {
+			dGet('wtw_tskyboxrightpreview').src = WTW.init.skyBoxImageRight;
+		} else {
+			dGet('wtw_tskyboxrightpreview').src = '/content/system/skies/skybox/skybox_px.jpg';
+		}
+		if (WTW.init.skyBoxImageDown != '') {
+			dGet('wtw_tskyboxdownpreview').src = WTW.init.skyBoxImageDown;
+		} else {
+			dGet('wtw_tskyboxdownpreview').src = '/content/system/skies/skybox/skybox_ny.jpg';
+		}
+		if (WTW.init.skyBoxImageBack != '') {
+			dGet('wtw_tskyboxbackpreview').src = WTW.init.skyBoxImageBack;
+		} else {
+			dGet('wtw_tskyboxbackpreview').src = '/content/system/skies/skybox/skybox_pz.jpg';
+		}
+
+		dGet('wtw_tskyboxpbr').checked = WTW.init.skyBoxPBR;
+		dGet('wtw_tskyboxenvironment').checked = WTW.init.skyBoxAsEnvironmentTexture;
+		WTW.changeSkyType();
+		
 		WTW.hide('wtw_loadingskysettingsform');
 		WTW.show('wtw_adminmenu40b');
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admincommunities.js-openSkyDomeForm=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openCommunitySkyForm=' + ex.message);
+	}
+}
+
+WTWJS.prototype.changeSkyType = function () {
+	/* sets the form areas for specific skyType */
+	try {
+		WTW.init.skyType = WTW.getDDLValue('wtw_tskytype');
+		WTW.hide('wtw_skydefault');
+		WTW.show('wtw_skyskybox');
+		WTW.hide('wtw_skyboxsizediv');
+		WTW.hide('wtw_skyboxfolderdiv');
+		WTW.hide('wtw_skyboxfilesdiv');
+		WTW.hide('wtw_skyboxcolorsdiv');
+		WTW.hide('wtw_skyboxblurdiv');
+		WTW.hide('wtw_skyboxpbrdiv');
+		WTW.hide('wtw_skyboxenvironmentdiv');
+		WTW.hide('wtw_skyboxmicrosurfacediv');
+		switch (WTW.init.skyType) {
+			case 'SkyBox':
+				dGet('wtw_skyboxtitle').innerHTML = 'Sky Box Settings';
+				WTW.init.skyBoxFolder = WTW.getDDLValue('wtw_tskyboxfolder');
+				if (WTW.init.skyBoxFolder == '' && (WTW.init.skyBoxImageLeft == '' || WTW.init.skyBoxImageUp == '' || WTW.init.skyBoxImageFront == '' || WTW.init.skyBoxImageRight == '' || WTW.init.skyBoxImageDown == '' || WTW.init.skyBoxImageBack == '')) {
+					WTW.init.skyBoxFolder = '/content/system/skies/sunny/sunny';
+				}
+				if (WTW.init.skyBoxFolder == '') {
+					WTW.show('wtw_skyboxfilesdiv');
+				}
+				WTW.show('wtw_skyboxfolderdiv');
+				WTW.show('wtw_skyboxsizediv');
+				WTW.show('wtw_skyboxcolorsdiv');
+				break;
+			case 'PBR SkyBox':
+				dGet('wtw_skyboxtitle').innerHTML = 'PBR SkyBox Settings';
+				WTW.show('wtw_skyboxsizediv');
+				WTW.show('wtw_skyboxblurdiv');
+				WTW.show('wtw_skyboxpbrdiv');
+				WTW.show('wtw_skyboxenvironmentdiv');
+
+// WTW.init.skyBoxFile
+
+				break;
+			case 'Reflective PBR SkyBox':
+				dGet('wtw_skyboxtitle').innerHTML = 'Reflective PBR SkyBox Settings';
+				WTW.show('wtw_skyboxsizediv');
+				WTW.show('wtw_skyboxblurdiv');
+				WTW.show('wtw_skyboxpbrdiv');
+				WTW.show('wtw_skyboxenvironmentdiv');
+
+// WTW.init.skyBoxFile
+
+				break;
+			case 'HDR SkyBox':
+				dGet('wtw_skyboxtitle').innerHTML = 'HDR SkyBox Settings';
+				WTW.show('wtw_skyboxsizediv');
+
+// WTW.init.skyBoxFile
+
+				break;
+			case 'Equirectangular Panoramic SkyBox':
+				dGet('wtw_skyboxtitle').innerHTML = 'Equirectangular Panoramic SkyBox Settings';
+				WTW.show('wtw_skyboxsizediv');
+				WTW.show('wtw_skyboxmicrosurfacediv');
+
+// WTW.init.skyBoxFile
+
+				break;
+			default:
+				WTW.hide('wtw_skyskybox');
+				WTW.show('wtw_skydefault');
+				break;
+		}
+		WTW.createSky();
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-changeSkyType=' + ex.message);
+	}
+}
+
+WTWJS.prototype.changeSkyBox = function () {
+	/* changes the sky box folder and updates the sky */
+	try {
+		WTW.init.skyBoxFolder = WTW.getDDLValue('wtw_tskyboxfolder');
+		if (WTW.init.skyBoxFolder == '') {
+			WTW.show('wtw_skyboxfilesdiv');
+		} else {
+			WTW.hide('wtw_skyboxfilesdiv');
+		}
+		WTW.createSky();
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-changeSkyBox=' + ex.message);
+	}
+}
+
+WTWJS.prototype.setSkyBox = function () {
+	/* changes the sky box as you edit it using the form */
+	try {
+		if (WTW.isNumeric(dGet('wtw_tskysize').value) == false) {
+			dGet('wtw_tskysize').value = 1000;
+		} else if (Number(dGet('wtw_tskysize').value) > 5000) {
+			dGet('wtw_tskysize').value = 5000;
+		} else if (Number(dGet('wtw_tskysize').value) < 100) {
+			dGet('wtw_tskysize').value = 100;
+		} else {
+			dGet('wtw_tskysize').value = Math.round(dGet('wtw_tskysize').value);
+		}
+		if (WTW.isNumeric(dGet('wtw_tskyboxblur').value) == false) {
+			dGet('wtw_tskyboxblur').value = '0.00';
+		} else if (Number(dGet('wtw_tskyboxblur').value) > 100) {
+			dGet('wtw_tskyboxblur').value = '100.00';
+		} else if (Number(dGet('wtw_tskyboxblur').value) < 0) {
+			dGet('wtw_tskyboxblur').value = '0.00';
+		}
+		if (WTW.isNumeric(dGet('wtw_tskyboxmicrosurface').value) == false) {
+			dGet('wtw_tskyboxmicrosurface').value = '0.00';
+		} else if (Number(dGet('wtw_tskyboxmicrosurface').value) > 100) {
+			dGet('wtw_tskyboxmicrosurface').value = '100.00';
+		} else if (Number(dGet('wtw_tskyboxmicrosurface').value) < 10) {
+			dGet('wtw_tskyboxmicrosurface').value = '10.00';
+		}
+		WTW.init.skySize = Number(dGet('wtw_tskysize').value);
+		WTW.init.skyBoxBlur = Number(dGet('wtw_tskyboxblur').value)/100;
+		WTW.init.skyBoxMicroSurface = Number(dGet('wtw_tskyboxmicrosurface').value)/100;
+		if (WTW.isHexColor(dGet('wtw_tskyboxemissivecolor').value)) {
+			WTW.init.skyBoxEmissiveColor = dGet('wtw_tskyboxemissivecolor').value;
+		} else {
+			WTW.init.skyBoxEmissiveColor = '#000000';
+		}
+		if (WTW.isHexColor(dGet('wtw_tskyboxdiffusecolor').value)) {
+			WTW.init.skyBoxDiffuseColor = dGet('wtw_tskyboxdiffusecolor').value;
+		} else {
+			WTW.init.skyBoxDiffuseColor = '#000000';
+		}
+		if (WTW.isHexColor(dGet('wtw_tskyboxspecularcolor').value)) {
+			WTW.init.skyBoxSpecularColor = dGet('wtw_tskyboxspecularcolor').value;
+		} else {
+			WTW.init.skyBoxSpecularColor = '#000000';
+		}
+		if (WTW.isHexColor(dGet('wtw_tskyboxambientcolor').value)) {
+			WTW.init.skyBoxAmbientColor = dGet('wtw_tskyboxambientcolor').value;
+		} else {
+			WTW.init.skyBoxAmbientColor = '#000000';
+		}
+		WTW.init.skyBoxImageLeft = dGet('wtw_tskyboximageleft').value;
+		WTW.init.skyBoxImageUp = dGet('wtw_tskyboximageup').value;
+		WTW.init.skyBoxImageFront = dGet('wtw_tskyboximagefront').value;
+		WTW.init.skyBoxImageRight = dGet('wtw_tskyboximageright').value;
+		WTW.init.skyBoxImageDown = dGet('wtw_tskyboximagedown').value;
+		WTW.init.skyBoxImageBack = dGet('wtw_tskyboximageback').value;
+		WTW.init.skyBoxPBR = dGet('wtw_tskyboxpbr').checked;
+		WTW.init.skyBoxAsEnvironmentTexture = dGet('wtw_tskyboxenvironment').checked;
+		
+		WTW.createSky();
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setSkyBox=' + ex.message);
 	}
 }
 
 WTWJS.prototype.setSkyScene = function (zkey, znewvalue, zincrement) {
 	/* set sky dome based on form settings (one value at a time updates) */
+	/* this sky dome uses sky procedure texture */
 	try {
 		var zfield = '';
 		var zmin = 0;
@@ -947,10 +1499,31 @@ WTWJS.prototype.setSkyScene = function (zkey, znewvalue, zincrement) {
 	}  
 }
 
-WTWJS.prototype.cancelSkyDome = function() {
-	/* cancel and undo sky dome form changes */
+WTWJS.prototype.cancelCommunitySky = function() {
+	/* cancel and undo sky form changes */
 	try {
 		var zskydomeid = WTW.init.skyTextureID;
+		WTW.init.skyType = dGet('wtw_tskytypebackup').value;
+		WTW.init.skySize = dGet('wtw_tskysizebackup').value;
+		WTW.init.skyBoxFolder = dGet('wtw_tskyboxfolderbackup').value;
+		WTW.init.skyBoxFile = dGet('wtw_tskyboxfilebackup').value;
+		WTW.init.skyBoxImageLeft = dGet('wtw_tskyboximageleftbackup').value;
+		WTW.init.skyBoxImageUp = dGet('wtw_tskyboximageupbackup').value;
+		WTW.init.skyBoxImageFront = dGet('wtw_tskyboximagefrontbackup').value;
+		WTW.init.skyBoxImageRight = dGet('wtw_tskyboximagerightbackup').value;
+		WTW.init.skyBoxImageDown = dGet('wtw_tskyboximagedownbackup').value;
+		WTW.init.skyBoxImageBack = dGet('wtw_tskyboximagebackbackup').value;
+		WTW.init.skyPositionOffsetX = dGet('wtw_tskypositionoffsetxbackup').value;
+		WTW.init.skyPositionOffsetY = dGet('wtw_tskypositionoffsetybackup').value;
+		WTW.init.skyPositionOffsetZ = dGet('wtw_tskypositionoffsetzbackup').value;
+		WTW.init.skyBoxMicroSurface = dGet('wtw_tskyboxmicrosurfacebackup').value;
+		WTW.init.skyBoxPBR = dGet('wtw_tskyboxpbrbackup').value;
+		WTW.init.skyBoxAsEnvironmentTexture = dGet('wtw_tskyboxasenvironmenttexturebackup').value;
+		WTW.init.skyBoxBlur = dGet('wtw_tskyboxblurbackup').value;
+		WTW.init.skyBoxDiffuseColor = dGet('wtw_tskyboxdiffusecolorbackup').value;
+		WTW.init.skyBoxSpecularColor = dGet('wtw_tskyboxspecularcolorbackup').value;
+		WTW.init.skyBoxAmbientColor = dGet('wtw_tskyboxambientcolorbackup').value;
+		WTW.init.skyBoxEmissiveColor = dGet('wtw_tskyboxemissivecolorbackup').value;
 		WTW.init.skyInclination = dGet('wtw_tskyinclinationbackup').value;
 		WTW.init.skyLuminance = dGet('wtw_tskyluminancebackup').value;
 		WTW.init.skyAzimuth = dGet('wtw_tskyazimuthbackup').value;
@@ -972,15 +1545,25 @@ WTWJS.prototype.cancelSkyDome = function() {
 				}
 			}
 		}
+		WTW.closeColorSelector();
+		WTW.createSky();
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admincommunities.js-cancelSkyDome=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-cancelCommunitySky=' + ex.message);
 	}
 }
 
-WTWJS.prototype.saveSkyDome = async function() {
-	/* save skydome sky changes */
+WTWJS.prototype.saveCommunitySky = async function() {
+	/* save community sky settings */
 	try {
 		var zskydomeid = WTW.init.skyTextureID;
+		var zskyboxpbr = 0;
+		var zskyboxasenvironmenttexture = 0;
+		if (WTW.init.skyBoxPBR) {
+			zskyboxpbr = 1;
+		}
+		if (WTW.init.skyBoxAsEnvironmentTexture) {
+			zskyboxasenvironmenttexture = 1;
+		}
 		if (dGet('wtw_tskydomeid').value != '') {
 			zskydomeid = dGet('wtw_tskydomeid').value;
 		}
@@ -997,6 +1580,27 @@ WTWJS.prototype.saveSkyDome = async function() {
 		var zrequest = {
 			'communityid': communityid,
 			'skydomeid': zskydomeid,
+			'skytype': WTW.init.skyType,
+			'skysize': WTW.init.skySize,
+			'skyboxfolder': WTW.init.skyBoxFolder,
+			'skyboxfile': WTW.init.skyBoxFile,
+			'skyboximageleft': WTW.init.skyBoxImageLeft,
+			'skyboximageup': WTW.init.skyBoxImageUp,
+			'skyboximagefront': WTW.init.skyBoxImageFront,
+			'skyboximageright': WTW.init.skyBoxImageRight,
+			'skyboximagedown': WTW.init.skyBoxImageDown,
+			'skyboximageback': WTW.init.skyBoxImageBack,
+			'skypositionoffsetx': WTW.init.skyPositionOffsetX,
+			'skypositionoffsety': WTW.init.skyPositionOffsetY,
+			'skypositionoffsetz': WTW.init.skyPositionOffsetZ,
+			'skyboxmicrosurface': WTW.init.skyBoxMicroSurface,
+			'skyboxpbr': zskyboxpbr,
+			'skyboxasenvironmenttexture': zskyboxasenvironmenttexture,
+			'skyboxblur': WTW.init.skyBoxBlur,
+			'skyboxdiffusecolor': WTW.init.skyBoxDiffuseColor,
+			'skyboxspecularcolor': WTW.init.skyBoxSpecularColor,
+			'skyboxambientcolor': WTW.init.skyBoxAmbientColor,
+			'skyboxemissivecolor': WTW.init.skyBoxEmissiveColor,
 			'skyinclination': WTW.init.skyInclination,
 			'skyluminance': WTW.init.skyLuminance,
 			'skyazimuth': WTW.init.skyAzimuth,
@@ -1004,7 +1608,7 @@ WTWJS.prototype.saveSkyDome = async function() {
 			'skyturbidity': WTW.init.skyTurbidity,
 			'skymiedirectionalg': WTW.init.skyMieDirectionalG,
 			'skymiecoefficient': WTW.init.skyMieCoefficient,
-			'function':'saveskydome'
+			'function':'savecommunitysky'
 		};
 		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
@@ -1012,20 +1616,21 @@ WTWJS.prototype.saveSkyDome = async function() {
 				/* note serror would contain errors */
 			}
 		);
+		WTW.closeColorSelector();
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveSkyDome=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveCommunitySky=' + ex.message);
 	}
 }
 
 /* 3D Community Scene gravity */
-WTWJS.prototype.saveGravity = async function() {
+WTWJS.prototype.saveCommunityGravity = async function() {
 	/* save community gravity (applies to scene when loaded) */
 	try {
 		if (communityid != '') {
 			var zrequest = {
 				'communityid': communityid,
 				'gravity':WTW.init.gravity,
-				'function':'savegravity'
+				'function':'savecommunitygravity'
 			};
 			WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 				function(zresponse) {
@@ -1033,31 +1638,9 @@ WTWJS.prototype.saveGravity = async function() {
 					/* note serror would contain errors */
 				}
 			);
-		} else if (buildingid != '') {
-			var zrequest = {
-				'buildingid': buildingid,
-				'gravity':WTW.init.gravity,
-				'function':'savegravity'
-			};
-			WTW.postAsyncJSON('/core/handlers/buildings.php', zrequest, 
-				function(zresponse) {
-				}
-			);
-		} else if (thingid != '') {
-			var zrequest = {
-				'thingid': thingid,
-				'gravity':WTW.init.gravity,
-				'function':'savegravity'
-			};
-			WTW.postAsyncJSON('/core/handlers/things.php', zrequest, 
-				function(zresponse) {
-					zresponse = JSON.parse(zresponse);
-					/* note serror would contain errors */
-				}
-			);
 		}		
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveGravity=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveCommunityGravity=' + ex.message);
 	}
 }
 

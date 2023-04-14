@@ -184,16 +184,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.openFirstBuildingForm();
 						WTW.show('wtw_adminmenu28');
 						break;
-					case 'wtw_admincommunitygravity':
-						WTW.hideAdminMenu();
-						dGet('wtw_tcommgravity').value = WTW.init.gravity;
-						if (WTW.init.gravity > 0) {
-							scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-						} else {
-							scene.gravity = new BABYLON.Vector3(0, 0, 0);
-						}
-						WTW.show('wtw_adminmenu45');
-						break;
 					case 'wtw_admincommunityaccess':
 						WTW.hideAdminMenu();
 						WTW.openPermissionsForm();
@@ -223,7 +213,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.hideAdminMenu();
 						WTW.backToTools();
 						break;
-					case 'wtw_admincommunitylandscape':
+					case 'wtw_admincommunityscene':
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu30');
 						break;
@@ -287,17 +277,33 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.hideAdminMenu();
 						WTW.backToTools();
 						break;
-					case 'wtw_adminlandscapesky':
+					case 'wtw_adminscene':
 						WTW.hideAdminMenu();
-						WTW.openSkyDomeForm();
+						WTW.openSceneForm();
+						WTW.show('wtw_adminmenu46');
+						break;
+					case 'wtw_bsaveeditscene':
+						WTW.hideAdminMenu();
+						WTW.saveCommunityScene();
+						WTW.show('wtw_adminmenu30');
+						break;
+					case 'wtw_bback46':
+					case 'wtw_cancel46':
+						WTW.hideAdminMenu();
+						WTW.cancelCommunityScene();
+						WTW.show('wtw_adminmenu30');
+						break;
+					case 'wtw_adminsky':
+						WTW.hideAdminMenu();
+						WTW.openCommunitySkyForm();
 						WTW.show('wtw_adminmenu40');
 						break;
-					case 'wtw_adminlandscapeground':
+					case 'wtw_adminground':
 						WTW.hideAdminMenu();
 						WTW.openEditGroundSettings();
 						WTW.show('wtw_adminmenu41');
 						break;
-					case 'wtw_adminlandscapewater':
+					case 'wtw_adminwater':
 						WTW.hideAdminMenu();
 						WTW.openCommunityForm(communityid);
 						WTW.show('wtw_adminmenu42');
@@ -305,7 +311,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 					case 'wtw_changewaterbumptexture':
 						WTW.openFullPageForm('medialibrary','image','waterbumptexture','wtw_twaterbumpid','wtw_twaterbumppath','wtw_waterbumppreview');
 						break;
-					case 'wtw_adminlandscapegravity':
+					case 'wtw_admingravity':
 						WTW.hideAdminMenu();
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;
 						if (WTW.init.gravity > 0) {
@@ -315,7 +321,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						}
 						WTW.show('wtw_adminmenu45');
 						break;
-					case 'wtw_adminlandscapeterrain':
+					case 'wtw_adminterrain':
 						WTW.hideAdminMenu();
 						WTW.openAddGroundTerrain();
 						break;
@@ -331,15 +337,15 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 					case 'wtw_skysetnight':
 						WTW.loadSkyScene(0.26, 1, 0.10, 0, 2, 0.8, 0.006, .5);
 						break;
-					case 'wtw_bsaveeditskydome':	
+					case 'wtw_bsaveeditsky':	
 						WTW.hideAdminMenu();
-						WTW.saveSkyDome();
+						WTW.saveCommunitySky();
 						WTW.show('wtw_adminmenu30');
 						break;
 					case 'wtw_bback40':
 					case 'wtw_cancel40':
 						WTW.hideAdminMenu();
-						WTW.cancelSkyDome();
+						WTW.cancelCommunitySky();
 						WTW.show('wtw_adminmenu30');
 						break;
 					case 'wtw_bsaveground':	
@@ -372,7 +378,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 							WTW.init.gravity = 0;
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
 						}
-						WTW.saveGravity();
+						WTW.saveCommunityGravity();
 						WTW.backToTools();
 						break;
 					case 'wtw_bback45':
@@ -391,7 +397,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 							WTW.init.gravity = 0;
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
 						}
-						WTW.backToTools();
+						WTW.show('wtw_adminmenu30');
 						break;
 					case 'wtw_bback42':
 					case 'wtw_cancel42':
@@ -615,6 +621,24 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						break;
 					case 'wtw_changebluebumptexture':
 						WTW.openFullPageForm('medialibrary','image','groundbluebumpmap','wtw_tmoldtexturebumpbid','wtw_tmoldtexturebumpbpath','wtw_moldtexturebumpbpreview');
+						break;
+					case 'wtw_tskyboxbuttonleft':
+						WTW.openFullPageForm('medialibrary','image','skybox','wtw_tskyboximageleftid','wtw_tskyboximageleft','wtw_tskyboxleftpreview');
+						break;
+					case 'wtw_tskyboxbuttonup':
+						WTW.openFullPageForm('medialibrary','image','skybox','wtw_tskyboximageupid','wtw_tskyboximageup','wtw_tskyboxuppreview');
+						break;
+					case 'wtw_tskyboxbuttonfront':
+						WTW.openFullPageForm('medialibrary','image','skybox','wtw_tskyboximagefrontid','wtw_tskyboximagefront','wtw_tskyboxfrontpreview');
+						break;
+					case 'wtw_tskyboxbuttonright':
+						WTW.openFullPageForm('medialibrary','image','skybox','wtw_tskyboximagerightid','wtw_tskyboximageright','wtw_tskyboxrightpreview');
+						break;
+					case 'wtw_tskyboxbuttondown':
+						WTW.openFullPageForm('medialibrary','image','skybox','wtw_tskyboximagedownid','wtw_tskyboximagedown','wtw_tskyboxdownpreview');
+						break;
+					case 'wtw_tskyboxbuttonback':
+						WTW.openFullPageForm('medialibrary','image','skybox','wtw_tskyboximagebackid','wtw_tskyboximageback','wtw_tskyboxbackpreview');
 						break;
 					case 'wtw_selectsound':
 						WTW.openFullPageForm('medialibrary','audio','moldsound','wtw_tmoldsoundid','wtw_tmoldsoundpath','wtw_soundicon');
@@ -1612,9 +1636,6 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 						case 70: // f
 							dGet('wtw_admincommunityfirstbuilding').click();
 							break;
-						case 71: // g
-							dGet('wtw_admincommunitygravity').click();
-							break;
 						case 72: // h
 							dGet('wtw_admincommunityshare').click();
 							break;
@@ -1659,9 +1680,6 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 						case 72: // h
 							dGet('wtw_admincommunityaddthing').click();
 							break;
-						case 76: // l
-							dGet('wtw_admincommunitylandscape').click();
-							break;
 						case 77: // m
 							dGet('wtw_admincommunityaddmodel').click();
 							break;
@@ -1670,6 +1688,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							break;
 						case 82: // r
 							dGet('wtw_admincommunityrecover').click();
+							break;
+						case 83: // s
+							dGet('wtw_admincommunityscene').click();
 							break;
 						case 85: // u
 							dGet('wtw_admincommunityaddbuilding').click();

@@ -47,7 +47,7 @@ WTWJS.prototype.openSelectAvatar = function(zfilter) {
 			if (zfilter == 'all') {
 				zlistavatars += "selected";
 			}
-			zlistavatars += " wtw-rightradius' onclick=\"WTW.setAvatarsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+			zlistavatars += " wtw-rightradius' onclick=\"WTW.setAvatarsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div><div class='wtw-mainmenuvalue'>Admins and Developer Roles can edit <b>All</b> 3D Avatars on this server.</div><hr /><div class='wtw-clear'></div>\r\n";
 		} else {
 			zlistavatars = '<br /><br />';
 		}

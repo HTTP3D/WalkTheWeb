@@ -908,7 +908,9 @@ WTWJS.prototype.setSelectFileID = function(zselectedobj, zuploadid, zoriginalid,
 				WTW.setSoundFields();
 				break;
 			case 'image':
-				WTW.setNewMold(1);
+				if (zitem != 'skybox') {
+					WTW.setNewMold(1);
+				}
 				break;
 		}
 		switch (zitem) {
@@ -934,6 +936,11 @@ WTWJS.prototype.setSelectFileID = function(zselectedobj, zuploadid, zoriginalid,
 				zextragroundmaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
 				zextragroundmaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 				WTW.extraGround.material = zextragroundmaterial;
+				break;
+			case "skybox":
+				WTW.closeFullPageForm();
+				WTW.setSkyBox();
+				return true;
 				break;
 		}
 		if (zitemname == 'wtw_taliassiteiconid') {

@@ -2550,7 +2550,7 @@ WTWJS.prototype.getNewCoordinates = function(zdist) {
 	};
 }
 
-WTWJS.prototype.openColorSelector = function(zobj, ztitle, zcolorgroup) {
+WTWJS.prototype.openMoldColorSelector = function(zobj, ztitle, zcolorgroup) {
 	/* when form uses color as a texture, the color wheels are opened and set to the current color settings */
 	/* typical colors are a combination of emissive, diffuse, and specular color settings */
 	try {
@@ -2577,7 +2577,7 @@ WTWJS.prototype.openColorSelector = function(zobj, ztitle, zcolorgroup) {
 			zcolortitle.height = '50px';
 			zpanel.addControl(zcolortitle);     
 		
-			zmold = WTW.pluginsOpenColorSelector(zmold, zmoldname, dGet('wtw_tmoldshape').value, zcolorgroup);
+			zmold = WTW.pluginsOpenMoldColorSelector(zmold, zmoldname, dGet('wtw_tmoldshape').value, zcolorgroup);
 			
 			var zcolorpicker = new BABYLON.GUI.ColorPicker();
 			var colorvalue = null;
@@ -2648,17 +2648,17 @@ WTWJS.prototype.openColorSelector = function(zobj, ztitle, zcolorgroup) {
 			zcolorpicker.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 			zcolorpicker.onValueChangedObservable.add(function(value) {
 				if (value != null) {
-					WTW.setColor(dGet('wtw_tmoldname').value, zcolorgroup, value.r, value.g, value.b);
+					WTW.setMoldColor(dGet('wtw_tmoldname').value, zcolorgroup, value.r, value.g, value.b);
 				}
 			});
 			zpanel.addControl(zcolorpicker); 
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmolds.js-openColorSelector=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_adminmolds.js-openMoldColorSelector=' + ex.message);
 	}
 }
 
-WTWJS.prototype.setMoldColor = function(zmoldname, zspecularcolor, zemissivecolor, zdiffusecolor, zambientcolor) {
+WTWJS.prototype.resetMoldColor = function(zmoldname, zspecularcolor, zemissivecolor, zdiffusecolor, zambientcolor) {
 	/* reset the mold color and save settings to form fields and array */
 	try {
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
@@ -2720,11 +2720,11 @@ WTWJS.prototype.setMoldColor = function(zmoldname, zspecularcolor, zemissivecolo
 			dGet('wtw_tmoldwebtextambient').value = zambientcolor;
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmolds.js-setMoldColor=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_adminmolds.js-resetMoldColor=' + ex.message);
 	}
 }
 
-WTWJS.prototype.setColorDirect = function(zobj) {
+WTWJS.prototype.setMoldColorDirect = function(zobj) {
 	/* set color after change is made on the text box */
 	try {
 		if (zobj != null) {
@@ -2738,36 +2738,36 @@ WTWJS.prototype.setColorDirect = function(zobj) {
 					ztitle = 'Diffuse Color (Base)';
 					zcolorgroup = 'diffuse';
 					/* reset the mold color and save settings to form fields and array */
-					WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+					WTW.resetMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
 					break;
 				case 'wtw_tmoldemissivecolor':
 					ztitle = 'Emissive Color (Projected)';
 					zcolorgroup = 'emissive';
 					/* reset the mold color and save settings to form fields and array */
-					WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+					WTW.resetMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
 					break;
 				case 'wtw_tmoldspecularcolor':
 					ztitle = 'Specular Color (Highlight)';
 					zcolorgroup = 'specular';
 					/* reset the mold color and save settings to form fields and array */
-					WTW.setMoldColor(zmoldname, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+					WTW.resetMoldColor(zmoldname, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
 					break;
 				case 'wtw_tmoldambientcolor':
 					ztitle = 'Ambient Color (Environment)';
 					zcolorgroup = 'ambient';
 					/* reset the mold color and save settings to form fields and array */
-					WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zobj.value);
+					WTW.resetMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zobj.value);
 					break;
 			}
 			WTW.closeColorSelector(true);
-			WTW.openColorSelector(zobj, ztitle, zcolorgroup);
+			WTW.openMoldColorSelector(zobj, ztitle, zcolorgroup);
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmolds.js-setColorDirect=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_adminmolds.js-setMoldColorDirect=' + ex.message);
 	}
 }
 
-WTWJS.prototype.setColor = function(zmoldname, zcolorgroup, zr, zg, zb) {
+WTWJS.prototype.setMoldColor = function(zmoldname, zcolorgroup, zr, zg, zb) {
 	/* set color after change is made on the color wheels */
 	try {
 		var zmolds = null;
@@ -2899,58 +2899,13 @@ WTWJS.prototype.setColor = function(zmoldname, zcolorgroup, zr, zg, zb) {
 						zmolds[zmoldind].color.ambientcolor = zcolor.toHexString().toLowerCase();
 						break;
 				}
-				WTW.pluginsSetColor(zmoldname, zcolorgroup, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
+				WTW.pluginsSetMoldColor(zmoldname, zcolorgroup, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
 			}
 		}
 		WTW.setNewMold();
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmolds.js-setColor=' + ex.message);
+		WTW.log('core-scripts-admin-wtw_adminmolds.js-setMoldColor=' + ex.message);
 	}
-}
-
-WTWJS.prototype.closeColorSelector = function(zcloseovercanvas) {
-	/* close and dispose color selector after use */
-	try {
-		if (zcloseovercanvas == undefined) {
-			zcloseovercanvas = true;
-		}
-		if ((zcloseovercanvas == false && WTW.guiAdminColors != null && WTW.canvasFocus == 0) || (zcloseovercanvas && WTW.guiAdminColors != null)) {
-			WTW.guiAdminColors.dispose();
-			WTW.guiAdminColors = null;
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmolds.js-closeColorSelector=' + ex.message);
-	}
-}
-
-WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
-	/* when the color is selected, the form updates the color to the background */
-	/* this also sets the text color to an opposite color than the background (default is black or white) */
-	var zcolor = 'black';
-	try {
-		if (zlightcolor == undefined) {
-			zlightcolor = '#ffffff';
-		}
-		if (zdarkcolor == undefined) {
-			zdarkcolor = '#000000';
-		}
-		var zcolorstring = (zbgcolor.charAt(0) === '#') ? zbgcolor.substring(1, 7) : zbgcolor;
-		var zred = parseInt(zcolorstring.substring(0, 2), 16); // hexToR
-		var zgreen = parseInt(zcolorstring.substring(2, 4), 16); // hexToG
-		var zblue = parseInt(zcolorstring.substring(4, 6), 16); // hexToB
-		var zuicolors = [zred / 255, zgreen / 255, zblue / 255];
-		var zcols = zuicolors.map((zcol) => {
-			if (zcol <= 0.03928) {
-				return zcol / 12.92;
-			}
-			return Math.pow((zcol + 0.055) / 1.055, 2.4);
-		});
-		var zcompare = (0.2126 * zcols[0]) + (0.7152 * zcols[1]) + (0.0722 * zcols[2]);
-		zcolor = (zcompare > 0.179) ? zdarkcolor : zlightcolor;
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmolds.js-setTextColor=' + ex.message);
-	}
-	return zcolor;
 }
 
 

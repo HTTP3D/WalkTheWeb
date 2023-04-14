@@ -438,6 +438,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 							zchildmoldname = zchildmoldname.replace(' ','_').toLowerCase();
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].name = zchildmoldname;
+							zresults.meshes[i].renderingGroupId = 3;
 							
 							/* make sure child meshes are pickable */
 							switch (zmeshname) {
@@ -661,7 +662,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 							}
 							if (WTW.shadows != null) {
 								/* add mesh to world shadow map */
-//									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+								//WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 							}
 //								zresults.meshes[i].receiveShadows = true;
 							/* initiate and preload any event driven animations */
@@ -1827,6 +1828,7 @@ WTWJS.prototype.hudLoginShowAvatar = function(zindex) {
 				zcovering.specularColor = new BABYLON.Color3.FromHexString('#000000');
 				zcovering.ambientColor = new BABYLON.Color3.FromHexString('#ffffff');
 				zpreview.material = zcovering;
+				zpreview.renderingGroupId = 3;
 			}
 
 			var zmolddef = WTW.newMold();
@@ -1849,6 +1851,7 @@ WTWJS.prototype.hudLoginShowAvatar = function(zindex) {
 			znamemold.position.x = 2;
 			znamemold.position.y = -4.7;
 			znamemold.rotation.y = WTW.getRadians(-90);
+			znamemold.renderingGroupId = 3;
 			
 			if (WTW.selectAvatars[zindex].globaluseravatarid != '') {
 				if (zglobalserverdecal != null) {

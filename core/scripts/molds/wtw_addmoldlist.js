@@ -504,7 +504,7 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 			} else {
 				zmold.unfreezeWorldMatrix();
 			}
-			
+			zmold.renderingGroupId = 1;
 			/*
 			 * Possible values : 
 			 * - BABYLON.AbstractMesh.CULLINGSTRATEGY_STANDARD  

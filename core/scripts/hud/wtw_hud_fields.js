@@ -39,6 +39,7 @@ WTWJS.prototype.hudAddLabel = function(zlabel, zid, zpositionx, zpositiony, zpos
 			zmenuitemtext.name = zid;
 			zmenuitemtext.parent = zmold;
 			zmenuitemtext.isPickable = false;
+			zmenuitemtext.renderingGroupId = 3;
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudGetProfile=' + ex.message);
@@ -72,6 +73,7 @@ WTWJS.prototype.hudAddTextbox = function(zvalue, zid, zpositionx, zpositiony, zp
 			ztextbox.isPickable = true;
 			ztextbox.isVisible = true;
 			ztextbox.parent = zmold;
+			ztextbox.renderingGroupId = 3;
 			WTW.registerMouseOver(ztextbox);
 
 			var zstyle = {
@@ -111,6 +113,7 @@ WTWJS.prototype.hudAddTextbox = function(zvalue, zid, zpositionx, zpositiony, zp
 				zvaluetext.id = 'hud-textbox-' + zid + '-text';
 				zvaluetext.name = 'hud-textbox-' + zid + '-text';
 				zvaluetext.parent = zmold;
+				zvaluetext.renderingGroupId = 3;
 				zvaluetext.isPickable = false;
 			}
 		}
@@ -135,6 +138,7 @@ WTWJS.prototype.hudAddImageButton = function(zimageurl, zid, zpositionx, zpositi
 			zbutton.isPickable = true;
 			zbutton.isVisible = true;
 			zbutton.parent = zmold;
+			zbutton.renderingGroupId = 3;
 			var zbgcolor = '#000000';
 			/* need to check if it is selected */
 			if (zactive == 1) {
@@ -165,6 +169,7 @@ WTWJS.prototype.hudAddImageButton = function(zimageurl, zid, zpositionx, zpositi
 			zimage.scaling = new BABYLON.Vector3(1/.3, 1, 1);
 			zimage.isPickable = false;
 			zimage.parent = zbutton;
+			zimage.renderingGroupId = 3;
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudAddImageButton=' + ex.message);
@@ -222,6 +227,7 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zslidertab.isPickable = true;
 			zslidertab.isVisible = true;
 			zslidertab.parent = zmold;
+			zslidertab.renderingGroupId = 3;
 			WTW.registerMouseOver(zslidertab);
 			zslidertab.material = zcovering;
 
@@ -231,6 +237,7 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zslider.isPickable = false;
 			zslider.isVisible = true;
 			zslider.parent = zmold;
+			zslider.renderingGroupId = 3;
 			WTW.registerMouseOver(zslider);
 
 			var zsliderleft = zsliderleftmaster.clone(zsliderid + '-left');
@@ -239,6 +246,7 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zsliderleft.isPickable = true;
 			zsliderleft.isVisible = true;
 			zsliderleft.parent = zmold;
+			zsliderleft.renderingGroupId = 3;
 			WTW.registerMouseOver(zsliderleft);
 			zsliderleft.material = zcovering;
 
@@ -248,6 +256,7 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zsliderright.isPickable = true;
 			zsliderright.isVisible = true;
 			zsliderright.parent = zmold;
+			zsliderright.renderingGroupId = 3;
 			WTW.registerMouseOver(zsliderright);
 			zsliderright.material = zcovering;
 
@@ -270,6 +279,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zsavebutton.isPickable = true;
 			zsavebutton.isVisible = true;
 			zsavebutton.parent = zmold;
+			zsavebutton.renderingGroupId = 3;
 			WTW.registerMouseOver(zsavebutton);
 			var zcovering = new BABYLON.StandardMaterial('hud-save-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#082F0C');
@@ -285,6 +295,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zcancelbutton.isPickable = true;
 			zcancelbutton.isVisible = true;
 			zcancelbutton.parent = zmold;
+			zcancelbutton.renderingGroupId = 3;
 			WTW.registerMouseOver(zcancelbutton);
 			var zcovering = new BABYLON.StandardMaterial('hud-save-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#30320B');
@@ -314,6 +325,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zsavetext.id = 'hud-save-' + zid + '-text';
 			zsavetext.name = 'hud-save-' + zid + '-text';
 			zsavetext.parent = zmold;
+			zsavewriter.renderingGroupId = 3;
 			zsavetext.isPickable = false;
 
 			var zcancelwriter = new Writer('Cancel', zstyle);
@@ -323,6 +335,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zcanceltext.id = 'hud-cancel-' + zid + '-text';
 			zcanceltext.name = 'hud-cancel-' + zid + '-text';
 			zcanceltext.parent = zmold;
+			zcanceltext.renderingGroupId = 3;
 			zcanceltext.isPickable = false;
 		}
 	} catch (ex) {
@@ -431,6 +444,7 @@ WTWJS.prototype.hudEditRefreshText = function(zmoldname, zparentname, zeditdone)
 			zmytext.name = zmoldname + '-text';
 			zmytext.parent = zmoldparent;
 			zmytext.isPickable = false;
+			zmytext.renderingGroupId = 3;
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudEditRefreshText=' + ex.message);

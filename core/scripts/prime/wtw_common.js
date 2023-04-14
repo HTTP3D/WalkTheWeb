@@ -993,7 +993,7 @@ WTWJS.prototype.checkMirrorReflectionList = function(zactionzoneind) {
 							var zreflectionlist = []
 							if (zmold.material.reflectionTexture.renderList != undefined) {
 								zreflectionlist = zmold.material.reflectionTexture.renderList;
-								WTW.addMirrorReflectionList(WTW.sky, zreflectionlist);
+//								WTW.addMirrorReflectionList(WTW.sky, zreflectionlist);
 								WTW.addMirrorReflectionList(WTW.extraGround, zreflectionlist);
 							}
 							if (WTW.water != null) {
@@ -1036,18 +1036,59 @@ WTWJS.prototype.addMirrorReflectionList = function(zmold, zreflectionlist) {
 }
 
 
-/* sky settings */
+/* sun, sky, and extended ground settings */
+
+WTWJS.prototype.setSunLight = function () {
+	/* create sun and backlight the 3D Scene */
+	try {
+		if (WTW.sun != null) {
+			WTW.sun.dispose();
+			WTW.sun = null;
+		}
+		if (WTW.backLight != null) {
+			WTW.backLight.dispose();
+			WTW.backLight = null;
+		}
+		/* set 2 light sources so that the front and backs of 3D Objects have at least a minimum light */
+		/* direct light immitating the sun */
+		WTW.sun = new BABYLON.DirectionalLight('sun', new BABYLON.Vector3(WTW.init.sunDirectionX, WTW.init.sunDirectionY, WTW.init.sunDirectionZ), scene);
+		WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
+		if (WTW.init.skyType == '') {
+			WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
+		} else {
+			WTW.sun.intensity = WTW.init.sunDirectionalIntensity;
+		}
+		WTW.sun.shadowMinZ = 1;
+		WTW.sun.shadowMaxZ = 2500;
+		WTW.sun.diffuse = new BABYLON.Color3.FromHexString(WTW.init.sunDiffuseColor);
+		WTW.sun.specular = new BABYLON.Color3.FromHexString(WTW.init.sunSpecularColor);
+		WTW.sun.groundColor = new BABYLON.Color3.FromHexString(WTW.init.sunGroundColor);
+
+		/* lesser light for back sides of 3D Objects */
+		WTW.backLight = new BABYLON.HemisphericLight('backlight', new BABYLON.Vector3(WTW.init.backLightDirectionX, WTW.init.backLightDirectionY, WTW.init.backLightDirectionZ), scene);
+		WTW.backLight.intensity = WTW.init.backLightIntensity;
+		WTW.backLight.range = 10000;
+		WTW.backLight.diffuse = new BABYLON.Color3.FromHexString(WTW.init.backLightDiffuseColor);
+		WTW.backLight.specular = new BABYLON.Color3.FromHexString(WTW.init.backLightSpecularColor);
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_common.js-setSunLight=' + ex.message);
+	}
+}
 
 WTWJS.prototype.getSunIntensity = function (zinclination, zazimuth) {
 	/* get sun intensity based on sun position (inclination) */
 	var zintensity = .3;
 	try {
-		if (zinclination < .3 && zinclination > -.3 && zazimuth > .2) {
-			zintensity = 1.5;
-		} else if ((zinclination >= .3 || zinclination <= -.3) && zazimuth > .2) {
-			zintensity = 0.75;
-		} else if (zazimuth < .2) {
-			zintensity = 0.43;
+		if (WTW.init.skyType == '') {
+			if (zinclination < .3 && zinclination > -.3 && zazimuth > .2) {
+				zintensity = 1.5;
+			} else if ((zinclination >= .3 || zinclination <= -.3) && zazimuth > .2) {
+				zintensity = 0.75;
+			} else if (zazimuth < .2) {
+				zintensity = 0.43;
+			}
+		} else {
+			zintensity = WTW.init.sunDirectionalIntensity;
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_common.js-getSunIntensity=' + ex.message);
@@ -1055,129 +1096,33 @@ WTWJS.prototype.getSunIntensity = function (zinclination, zazimuth) {
 	return zintensity;
 }
 
-WTWJS.prototype.loadSkyScene = function (zinclination, zluminance, zazimuth, zrayleigh, zturbidity, zmiedirectionalg, zmiecoefficient, zspeedratio) {
-	/* load sky material based on passed settings */
+WTWJS.prototype.setFog = function () {
+	/* Set fog settings if enabled */
 	try {
-		var zframescount = 100;
-		var zintensity = WTW.getSunIntensity(zinclination, zazimuth);
-		if (zinclination < .3 && zinclination > -.3 && zazimuth > .2) {
-			WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
-		} else if ((zinclination >= .3 || zinclination <= -.3) && zazimuth > .2) {
-		} else if (zazimuth < .2) {
-		}
-
-		var zconditionsun = new BABYLON.PredicateCondition(scene.actionManager, function () {
-			var ztest = false;
-			if (WTW.sun.intensity != zintensity) {
-				ztest = true;
+		scene.fogEnabled = WTW.init.sceneFogEnabled;
+		if (scene.fogEnabled) {
+			switch (WTW.init.sceneFogMode) {
+				case 'exponential':
+					scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+					break;
+				case 'exponential faster':
+					scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+					break;
+				case 'linear':
+					scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
+					break;
+				default: /* none */
+					scene.fogMode = BABYLON.Scene.FOGMODE_NONE;
+					break;
 			}
-			return ztest;
-		});
-		var zanimationsun = BABYLON.PlayAnimationAction(BABYLON.ActionManager.OnEveryFrameTrigger, WTW.sun.intensity, WTW.sun.intensity, zintensity, false, zconditionsun);
-
-		var zanimationinclination = new BABYLON.Animation('animationinclination', 'material.inclination', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zinclinationkeys = [
-            { frame: 0, value: WTW.sky.material.inclination },
-			{ frame: zframescount, value: zinclination }
-        ];
-		zanimationinclination.setKeys(zinclinationkeys);
-		WTW.sky.animations.push(zanimationinclination);
-		
-		var zanimationluminance = new BABYLON.Animation('animationluminance', 'material.luminance', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zluminancekeys = [
-            { frame: 0, value: WTW.sky.material.luminance },
-			{ frame: zframescount, value: zluminance }
-        ];
-		zanimationluminance.setKeys(zluminancekeys);
-		zanimationluminance.enableBlending = true;
-		zanimationluminance.blendingSpeed = 0.01;
-		WTW.sky.animations.push(zanimationluminance);
-
-		var zanimationazimuth = new BABYLON.Animation('animationazimuth', 'material.azimuth', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zazimuthkeys = [
-            { frame: 0, value: WTW.sky.material.azimuth },
-			{ frame: zframescount, value: zazimuth }
-        ];
-		zanimationazimuth.setKeys(zazimuthkeys);
-		zanimationazimuth.enableBlending = true;
-		zanimationazimuth.blendingSpeed = 0.01;
-		WTW.sky.animations.push(zanimationazimuth);
-		
-		var zanimationrayleigh = new BABYLON.Animation('animationrayleigh', 'material.rayleigh', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zrayleighkeys = [
-            { frame: 0, value: WTW.sky.material.rayleigh },
-			{ frame: zframescount, value: zrayleigh }
-        ];
-		zanimationrayleigh.setKeys(zrayleighkeys);
-		zanimationrayleigh.enableBlending = true;
-		zanimationrayleigh.blendingSpeed = 0.01;
-		WTW.sky.animations.push(zanimationrayleigh);
-
-		var zanimationturbidity = new BABYLON.Animation('animationturbidity', 'material.turbidity', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zturbiditykeys = [
-            { frame: 0, value: WTW.sky.material.turbidity },
-			{ frame: zframescount, value: zturbidity }
-        ];
-		zanimationturbidity.setKeys(zturbiditykeys);
-		zanimationturbidity.enableBlending = true;
-		zanimationturbidity.blendingSpeed = 0.01;
-		WTW.sky.animations.push(zanimationturbidity);
-
-		var zanimationmieDirectionalG = new BABYLON.Animation('animationmieDirectionalG', 'material.mieDirectionalG', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zdirectionalkeys = [
-            { frame: 0, value: WTW.sky.material.mieDirectionalG },
-			{ frame: zframescount, value: zmiedirectionalg }
-        ];
-		zanimationmieDirectionalG.setKeys(zdirectionalkeys);
-		zanimationmieDirectionalG.enableBlending = true;
-		zanimationmieDirectionalG.blendingSpeed = 0.01;
-		WTW.sky.animations.push(zanimationmieDirectionalG);
-
-		var zanimationmieCoefficient = new BABYLON.Animation('animationmieCoefficient', 'material.mieCoefficient', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-		var zcoefficientkeys = [
-            { frame: 0, value: WTW.sky.material.mieCoefficient },
-			{ frame: zframescount, value: zmiecoefficient }
-        ];
-		zanimationmieCoefficient.setKeys(zcoefficientkeys);
-		zanimationmieCoefficient.enableBlending = true;
-		zanimationmieCoefficient.blendingSpeed = 0.01;
-		WTW.sky.animations.push(zanimationmieCoefficient);
-
-		var zmovesky = scene.beginAnimation(WTW.sky, 0, zframescount, true);
-		zmovesky.speedRatio = zspeedratio;
-		
-		if (WTW.adminView == 1) {
-			/* in admin, add settings to form for update */
-			dGet('wtw_tskyinclination').value = Number(zinclination) + .6;
-			dGet('wtw_skyinclination').innerHTML = zinclination;
-			dGet('wtw_tskyluminance').value = zluminance;
-			dGet('wtw_skyluminance').innerHTML = zluminance;
-			dGet('wtw_tskyazimuth').value = zazimuth;
-			dGet('wtw_skyazimuth').innerHTML = zazimuth;
-			dGet('wtw_tskyrayleigh').value = zrayleigh;
-			dGet('wtw_skyrayleigh').innerHTML = zrayleigh;
-			dGet('wtw_tskyturbidity').value = zturbidity;
-			dGet('wtw_skyturbidity').innerHTML = zturbidity;
-			dGet('wtw_tskymiedirectionalg').value = zmiedirectionalg;
-			dGet('wtw_skymiedirectionalg').innerHTML = zmiedirectionalg;
-			dGet('wtw_tskymiecoefficient').value = zmiecoefficient;
-			dGet('wtw_skymiecoefficient').innerHTML = zmiecoefficient;
-		}
-		/* set global settings based on new sky */
-		WTW.init.skyInclination = zinclination;
-		WTW.init.skyLuminance = zluminance;
-		WTW.init.skyAzimuth = zazimuth;
-		WTW.init.skyRayleigh = zrayleigh;
-		WTW.init.skyTurbidity = zturbidity;
-		WTW.init.skyMieDirectionalG = zmiedirectionalg;
-		WTW.init.skyMieCoefficient = zmiecoefficient;
-		WTW.sun.intensity = zintensity;
-		if (WTW.extraGround.material != undefined) {
-			WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+			scene.fogDensity = WTW.init.sceneFogDensity;
+			scene.fogStart = WTW.init.sceneFogStart;
+			scene.fogEnd = WTW.init.sceneFogEnd;
+			scene.fogColor =  new BABYLON.Color3.FromHexString(WTW.init.sceneFogColor);
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_common.js-loadSkyScene=' + ex.message);
-	}  
+		WTW.log('core-scripts-prime-wtw_common.js-setFog=' + ex.message);
+	}
 }
 
 WTWJS.prototype.setMeshTransparentFog = function(zmold, zmaxz) {
@@ -1213,6 +1158,332 @@ WTWJS.prototype.setMeshTransparentFog = function(zmold, zmaxz) {
 		WTW.log('core-scripts-prime-wtw_common.js-setMeshTransparentFog=' + ex.message);
 	}
 };
+
+WTWJS.prototype.createSky = function () {
+	/* select method of sky creation and add sky */
+	try {
+		if (WTW.sky != null) {
+			WTW.sky.dispose();
+			WTW.sky = null;
+		}
+		switch (WTW.init.skyType) {
+			case "SkyBox":
+				WTW.sky = BABYLON.MeshBuilder.CreateBox("sky", {size:WTW.init.skySize}, scene);
+				var zskyboxmat = new BABYLON.StandardMaterial("skymat", scene);
+				zskyboxmat.backFaceCulling = false;
+				if (WTW.init.skyBoxFolder != '') {
+					zskyboxmat.reflectionTexture = new BABYLON.CubeTexture(WTW.init.skyBoxFolder, scene);
+				} else {
+					var zfiles = [
+						WTW.init.skyBoxImageLeft,
+						WTW.init.skyBoxImageUp,
+						WTW.init.skyBoxImageFront,
+						WTW.init.skyBoxImageRight,
+						WTW.init.skyBoxImageDown,
+						WTW.init.skyBoxImageBack,
+					];
+					zskyboxmat.reflectionTexture = new BABYLON.CubeTexture.CreateFromImages(zfiles, scene);
+				}
+				zskyboxmat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+				zskyboxmat.diffuseColor = new BABYLON.Color3.FromHexString(WTW.init.skyBoxDiffuseColor);
+				zskyboxmat.specularColor = new BABYLON.Color3.FromHexString(WTW.init.skyBoxSpecularColor);
+				zskyboxmat.ambientColor = new BABYLON.Color3.FromHexString(WTW.init.skyBoxAmbientColor);
+				zskyboxmat.emissiveColor = new BABYLON.Color3.FromHexString(WTW.init.skyBoxEmissiveColor);
+				/* remove reflections of the sun on the sky */
+				zskyboxmat.disableLighting = true;
+				WTW.sky.material = zskyboxmat;
+				/* have skybox follow the camera position */
+				WTW.sky.infiniteDistance = true;
+				WTW.sky.renderingGroupId = 0;
+				WTW.sky.id = 'sky';
+				WTW.sky.name = 'sky';
+				break;
+			case "PBR SkyBox":
+				/* quick create sky box from dds file */
+				var zloadskytimer = window.setInterval(function() {
+					if (WTW.isInitCycle == 0 && WTW.sky == null) {
+						WTW.init.skyBoxFolder = '';
+						if (WTW.init.skyBoxFile == '' || WTW.init.skyBoxFile.toLowerCase().indexOf('.dds') == -1) {
+							WTW.init.skyBoxFile = '/content/system/skies/buildingenvironment.dds';
+						}
+						var zhdrtexture = new BABYLON.CubeTexture(WTW.init.skyBoxFile, scene);
+						WTW.sky = scene.createDefaultSkybox(zhdrtexture, WTW.init.skyBoxPBR, WTW.init.skySize, WTW.init.skyBoxBlur, WTW.init.skyBoxAsEnvironmentTexture);
+						/* have skybox follow the camera position */
+						WTW.sky.infiniteDistance = true;
+						WTW.sky.renderingGroupId = 0;
+						WTW.sky.id = 'sky';
+						WTW.sky.name = 'sky';
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					} else if (WTW.sky != null) {
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					}
+				},100);
+				break;
+			case "Reflective PBR SkyBox":
+				/* improves the absorbsion for reflective surfaces on 3D Objects */
+				var zloadskytimer = window.setInterval(function() {
+					if (WTW.isInitCycle == 0 && WTW.sky == null) {
+						WTW.init.skyBoxFolder = '';
+						if (WTW.init.skyBoxFile == '' || WTW.init.skyBoxFile.toLowerCase().indexOf('.dds') == -1) {
+							WTW.init.skyBoxFile = '/content/system/skies/roomenvironment.dds';
+						}
+						scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(WTW.init.skyBoxFile, scene);
+						WTW.sky = scene.createDefaultSkybox(scene.environmentTexture, WTW.init.skyBoxPBR, WTW.init.skySize, WTW.init.skyBoxBlur, WTW.init.skyBoxAsEnvironmentTexture);
+						/* have skybox follow the camera position */
+						WTW.sky.infiniteDistance = true;
+						WTW.sky.renderingGroupId = 0;
+						WTW.sky.id = 'sky';
+						WTW.sky.name = 'sky';
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					} else if (WTW.sky != null) {
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					}
+				},100);
+				break;
+			case "HDR SkyBox":
+				/* High-dynamic-range rendering preserves details in limiting contrast ratios. */
+				var zloadskytimer = window.setInterval(function() {
+					if (WTW.isInitCycle == 0 && WTW.sky == null) {
+						WTW.init.skyBoxFolder = '';
+						if (WTW.init.skyBoxFile == '' || WTW.init.skyBoxFile.toLowerCase().indexOf('.hdr') == -1) {
+							WTW.init.skyBoxFile = '/content/system/skies/room.hdr';
+						}
+						WTW.sky = BABYLON.MeshBuilder.CreateBox("sky", {size:WTW.init.skySize}, scene);
+						var zskyboxmat = new BABYLON.StandardMaterial("skymat", scene);
+						zskyboxmat.backFaceCulling = false;
+						zskyboxmat.reflectionTexture = new BABYLON.HDRCubeTexture(WTW.init.skyBoxFile, scene, 512);
+						zskyboxmat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+						WTW.sky.material = zskyboxmat;
+						WTW.sky.renderingGroupId = 0;
+						WTW.sky.id = 'sky';
+						WTW.sky.name = 'sky';
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					} else if (WTW.sky != null) {
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					}
+				},100);
+				break;
+			case "Equirectangular Panoramic SkyBox":
+				/* uses Equirectangular panoramic images */
+				var zloadskytimer = window.setInterval(function() {
+					if (WTW.isInitCycle == 0 && WTW.sky == null) {
+						WTW.init.skyBoxFolder = '';
+						if (WTW.init.skyBoxFile == '' || WTW.init.skyBoxFile.toLowerCase().indexOf('.jpg') == -1) {
+							WTW.init.skyBoxFile = '/content/system/skies/boatdock.jpg';
+						}
+						var zenvironmenttexture = new BABYLON.EquiRectangularCubeTexture(WTW.init.skyBoxFile, scene, 512);
+						scene.imageProcessingConfiguration.exposure = 1.0;
+						scene.imageProcessingConfiguration.contrast = 2.0;
+
+						WTW.sky = BABYLON.MeshBuilder.CreateBox("sky", {size:WTW.init.skySize}, scene);
+						var zskyboxmat = new BABYLON.PBRMaterial("skymat", scene);
+						zskyboxmat.backFaceCulling = false;
+						zskyboxmat.reflectionTexture = zenvironmenttexture.clone();
+						zskyboxmat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+						zskyboxmat.microSurface = WTW.init.skyBoxMicroSurface;
+						zskyboxmat.disableLighting = false;
+						WTW.sky.material = zskyboxmat;
+						/* have skybox follow the camera position */
+						WTW.sky.infiniteDistance = true;
+						/* set skybox to render behind everything else */
+						WTW.sky.renderingGroupId = 0;
+						WTW.sky.id = 'sky';
+						WTW.sky.name = 'sky';
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					} else if (WTW.sky != null) {
+						window.clearInterval(zloadskytimer);
+						zloadskytimer = null;
+					}
+				},100);
+				break;
+			default: 
+				/* initialize sky sphere - scaling and material settings */
+				WTW.init.skySize = 5000;
+				WTW.sky = BABYLON.MeshBuilder.CreateSphere('sky', {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
+				WTW.sky.scaling.x = WTW.init.skySize;
+				WTW.sky.scaling.y = WTW.init.skySize;
+				WTW.sky.scaling.z = WTW.init.skySize;
+				WTW.sky.position.x = WTW.init.startPositionX + WTW.init.skyPositionOffsetX;
+				WTW.sky.position.y = WTW.init.startPositionY + WTW.init.skyPositionOffsetY;
+				WTW.sky.position.z = WTW.init.startPositionZ + WTW.init.skyPositionOffsetZ;
+				WTW.sky.isPickable = false;
+				WTW.sky.disableLighting = true;
+				var zskyboxmat = new BABYLON.SkyMaterial('skymat', scene);
+				zskyboxmat.backFaceCulling = false;
+				WTW.sky.material = zskyboxmat;
+				window.setTimeout(function() {
+					WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
+				}, 1000);
+				WTW.sky.renderingGroupId = 0;
+				WTW.sky.id = 'sky';
+				WTW.sky.name = 'sky';
+				break;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_common.js-createSky=' + ex.message);
+	}
+}
+
+WTWJS.prototype.loadSkyScene = function (zinclination, zluminance, zazimuth, zrayleigh, zturbidity, zmiedirectionalg, zmiecoefficient, zspeedratio) {
+	/* load sky material based on passed settings */
+	try {
+		if (WTW.init.skyType == '') {
+			var zframescount = 100;
+			var zintensity = WTW.getSunIntensity(zinclination, zazimuth);
+			
+			if (zinclination < .3 && zinclination > -.3 && zazimuth > .2) {
+				WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
+			} else if ((zinclination >= .3 || zinclination <= -.3) && zazimuth > .2) {
+			} else if (zazimuth < .2) {
+			}
+
+			var zconditionsun = new BABYLON.PredicateCondition(scene.actionManager, function () {
+				var ztest = false;
+				if (WTW.sun.intensity != zintensity) {
+					ztest = true;
+				}
+				return ztest;
+			});
+			var zanimationsun = BABYLON.PlayAnimationAction(BABYLON.ActionManager.OnEveryFrameTrigger, WTW.sun.intensity, WTW.sun.intensity, zintensity, false, zconditionsun);
+
+			var zanimationinclination = new BABYLON.Animation('animationinclination', 'material.inclination', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zinclinationkeys = [
+				{ frame: 0, value: WTW.sky.material.inclination },
+				{ frame: zframescount, value: zinclination }
+			];
+			zanimationinclination.setKeys(zinclinationkeys);
+			WTW.sky.animations.push(zanimationinclination);
+			
+			var zanimationluminance = new BABYLON.Animation('animationluminance', 'material.luminance', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zluminancekeys = [
+				{ frame: 0, value: WTW.sky.material.luminance },
+				{ frame: zframescount, value: zluminance }
+			];
+			zanimationluminance.setKeys(zluminancekeys);
+			zanimationluminance.enableBlending = true;
+			zanimationluminance.blendingSpeed = 0.01;
+			WTW.sky.animations.push(zanimationluminance);
+
+			var zanimationazimuth = new BABYLON.Animation('animationazimuth', 'material.azimuth', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zazimuthkeys = [
+				{ frame: 0, value: WTW.sky.material.azimuth },
+				{ frame: zframescount, value: zazimuth }
+			];
+			zanimationazimuth.setKeys(zazimuthkeys);
+			zanimationazimuth.enableBlending = true;
+			zanimationazimuth.blendingSpeed = 0.01;
+			WTW.sky.animations.push(zanimationazimuth);
+			
+			var zanimationrayleigh = new BABYLON.Animation('animationrayleigh', 'material.rayleigh', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zrayleighkeys = [
+				{ frame: 0, value: WTW.sky.material.rayleigh },
+				{ frame: zframescount, value: zrayleigh }
+			];
+			zanimationrayleigh.setKeys(zrayleighkeys);
+			zanimationrayleigh.enableBlending = true;
+			zanimationrayleigh.blendingSpeed = 0.01;
+			WTW.sky.animations.push(zanimationrayleigh);
+
+			var zanimationturbidity = new BABYLON.Animation('animationturbidity', 'material.turbidity', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zturbiditykeys = [
+				{ frame: 0, value: WTW.sky.material.turbidity },
+				{ frame: zframescount, value: zturbidity }
+			];
+			zanimationturbidity.setKeys(zturbiditykeys);
+			zanimationturbidity.enableBlending = true;
+			zanimationturbidity.blendingSpeed = 0.01;
+			WTW.sky.animations.push(zanimationturbidity);
+
+			var zanimationmieDirectionalG = new BABYLON.Animation('animationmieDirectionalG', 'material.mieDirectionalG', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zdirectionalkeys = [
+				{ frame: 0, value: WTW.sky.material.mieDirectionalG },
+				{ frame: zframescount, value: zmiedirectionalg }
+			];
+			zanimationmieDirectionalG.setKeys(zdirectionalkeys);
+			zanimationmieDirectionalG.enableBlending = true;
+			zanimationmieDirectionalG.blendingSpeed = 0.01;
+			WTW.sky.animations.push(zanimationmieDirectionalG);
+
+			var zanimationmieCoefficient = new BABYLON.Animation('animationmieCoefficient', 'material.mieCoefficient', zframescount, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+			var zcoefficientkeys = [
+				{ frame: 0, value: WTW.sky.material.mieCoefficient },
+				{ frame: zframescount, value: zmiecoefficient }
+			];
+			zanimationmieCoefficient.setKeys(zcoefficientkeys);
+			zanimationmieCoefficient.enableBlending = true;
+			zanimationmieCoefficient.blendingSpeed = 0.01;
+			WTW.sky.animations.push(zanimationmieCoefficient);
+
+			var zmovesky = scene.beginAnimation(WTW.sky, 0, zframescount, true);
+			zmovesky.speedRatio = zspeedratio;
+			
+			if (WTW.adminView == 1) {
+				/* in admin, add settings to form for update */
+				dGet('wtw_tskyinclination').value = Number(zinclination) + .6;
+				dGet('wtw_skyinclination').innerHTML = zinclination;
+				dGet('wtw_tskyluminance').value = zluminance;
+				dGet('wtw_skyluminance').innerHTML = zluminance;
+				dGet('wtw_tskyazimuth').value = zazimuth;
+				dGet('wtw_skyazimuth').innerHTML = zazimuth;
+				dGet('wtw_tskyrayleigh').value = zrayleigh;
+				dGet('wtw_skyrayleigh').innerHTML = zrayleigh;
+				dGet('wtw_tskyturbidity').value = zturbidity;
+				dGet('wtw_skyturbidity').innerHTML = zturbidity;
+				dGet('wtw_tskymiedirectionalg').value = zmiedirectionalg;
+				dGet('wtw_skymiedirectionalg').innerHTML = zmiedirectionalg;
+				dGet('wtw_tskymiecoefficient').value = zmiecoefficient;
+				dGet('wtw_skymiecoefficient').innerHTML = zmiecoefficient;
+			}
+			/* set global settings based on new sky */
+			WTW.init.skyInclination = zinclination;
+			WTW.init.skyLuminance = zluminance;
+			WTW.init.skyAzimuth = zazimuth;
+			WTW.init.skyRayleigh = zrayleigh;
+			WTW.init.skyTurbidity = zturbidity;
+			WTW.init.skyMieDirectionalG = zmiedirectionalg;
+			WTW.init.skyMieCoefficient = zmiecoefficient;
+//			WTW.sun.intensity = zintensity;
+			if (WTW.extraGround.material != undefined) {
+				WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_common.js-loadSkyScene=' + ex.message);
+	}  
+}
+
+WTWJS.prototype.setExtendedGround = function () {
+	/* initialize extra ground (extended ground that never ends while the avatar walks) */
+	try {
+		if (WTW.extraGround != null) {
+			WTW.extraGround.dispose();
+			WTW.extraGround = null;
+		}
+		WTW.extraGround = BABYLON.MeshBuilder.CreateGround('communityeground-', {width: 5000, height: 5000, subdivisions: 2, updatable: true}, scene);
+		WTW.extraGround.position.x = 0;
+		WTW.extraGround.position.y = 0;
+		WTW.extraGround.position.z = 0;
+		WTW.extraGround.isPickable = true;
+		WTW.extraGround.checkCollisions = true;
+		WTW.extraGround.material = new BABYLON.StandardMaterial('mat-communityeground', scene);
+		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(WTW.init.groundTexturePath, scene);
+		WTW.extraGround.material.diffuseTexture.uScale = 500;
+		WTW.extraGround.material.diffuseTexture.vScale = 500;
+		/* set physics on ground */
+		WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
+		WTW.extraGround.renderingGroupId = 0;
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_common.js-setExtendedGround=' + ex.message);
+	}
+}
 
 
 /* main processing queues and functions */
@@ -1428,18 +1699,18 @@ WTWJS.prototype.processMoldQueue = function() {
 												}
 												if (WTW.shadowSet > 0 && zmoldname.indexOf('babylonfile') == -1) {
 													if (znode == null) {
-														WTW.shadows.addShadowCaster(zmold, true);
+//														WTW.shadows.addShadowCaster(zmold, true);
 													} else {
 														/* add shadows to child meshes and child node child meshes */
 														var zchildnodes = zmold.getChildTransformNodes(true);
 														var zchildmeshes = zmold.getChildMeshes();
 														for (var k=0;k < zchildmeshes.length;k++) {
-															WTW.shadows.addShadowCaster(zchildmeshes[k], true);
+//															WTW.shadows.addShadowCaster(zchildmeshes[k], true);
 														}
 														for (var j=0;j < zchildnodes.length;j++) {
 															zchildmeshes = zchildnodes[j].getChildMeshes();
 															for (var k=0;k < zchildmeshes.length;k++) {
-																WTW.shadows.addShadowCaster(zchildmeshes[k], true);
+//																WTW.shadows.addShadowCaster(zchildmeshes[k], true);
 															}
 														}
 														

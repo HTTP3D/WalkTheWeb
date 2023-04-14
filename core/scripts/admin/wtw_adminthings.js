@@ -347,7 +347,7 @@ WTWJS.prototype.getSelectThingsList = async function(zfilter) {
 			if (zfilter == 'all') {
 				zlistthings += "selected";
 			}
-			zlistthings += " wtw-rightradius' onclick=\"WTW.setThingsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+			zlistthings += " wtw-rightradius' onclick=\"WTW.setThingsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div><div class='wtw-mainmenuvalue'>Admins and Developer Roles can edit <b>All</b> 3D Things on this server.</div><hr /><div class='wtw-clear'></div>\r\n";
 		} else {
 			zlistthings = '<br /><br />';
 		}

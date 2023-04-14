@@ -464,6 +464,7 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								zresults.meshes[i].isPickable = true;
 								zresults.meshes[i].name = zchildmoldname;
 								zresults.meshes[i].id = zchildmoldname;
+								zresults.meshes[i].renderingGroupId = 1;
 //								zresults.meshes[i].convertToUnIndexedMesh();
 								zresults.meshes[i].isVisible = false;
 								
@@ -511,7 +512,7 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 									zresults.meshes[i].parent = zavatarparent;
 								}
 								if (WTW.shadows != null) {
-									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+//									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 								}
 								if (zresults.meshes[i].material != null) {
 									zresults.meshes[i].material.unfreeze();
@@ -925,6 +926,7 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 								zresults.meshes[i].isPickable = true;
 								zresults.meshes[i].name = zchildmoldname;
 								zresults.meshes[i].id = zchildmoldname;
+								zresults.meshes[i].renderingGroupId = 1;
 //								zresults.meshes[i].convertToUnIndexedMesh();
 								zresults.meshes[i].isVisible = true;
 								
@@ -1001,7 +1003,7 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 									zresults.meshes[i].parent = zavatarparent;
 								}
 								if (WTW.shadows != null) {
-									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+//									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 								}
 								if (zresults.meshes[i].material != null) {
 									zresults.meshes[i].material.unfreeze();

@@ -165,6 +165,7 @@ WTWJS.prototype.openHUD = function() {
 								zchildmoldname = zchildmoldname.replace(' ','_').toLowerCase();
 								zresults.meshes[i].id = zchildmoldname;
 								zresults.meshes[i].name = zchildmoldname;
+								zresults.meshes[i].renderingGroupId = 3;
 								
 								if (zobjectanimations != null) {
 //									WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
@@ -191,7 +192,7 @@ WTWJS.prototype.openHUD = function() {
 								}
 								if (WTW.shadows != null) {
 									/* add mesh to world shadow map */
-//									WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+									//WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 								}
 //								zresults.meshes[i].receiveShadows = true;
 								/* initiate and preload any event driven animations */
@@ -271,6 +272,7 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 			zmytext.name = 'hud-menutitle';
 			zmytext.parent = zmold;
 			zmytext.isPickable = false;
+			zmytext.renderingGroupId = 3;
 		}
 		/* clear any menu items already shown - parent box makes it easier to locate menu items to clear */
 		var zmenuitemsparent = WTW.getMeshOrNodeByID('hud-menuitems');
@@ -308,7 +310,7 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 						zmenuitems.scaling = new BABYLON.Vector3(1,1,1);
 					}
 					zmenuitems.parent = zhud;
-
+					
 					/* create the menu items */
 					for (var i=0;i < zresponse.length;i++) {
 						if (zresponse[i] != null) {
@@ -356,6 +358,7 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 							zmenuitemtext.name = 'hud-menuitemtext-' + zresponse[i].menuitemid;
 							zmenuitemtext.parent = zmenuitems;
 							zmenuitemtext.isPickable = false;
+							zmenuitemtext.renderingGroupId = 3;
 							
 							/* create button for menu item */
 							WTW.disposeClean('hud-menuitem-' + zresponse[i].menuitemid);
@@ -650,6 +653,7 @@ WTWJS.prototype.hudToggleCompass = function() {
 			zmold.rotation = new BABYLON.Vector3(WTW.getRadians(-30),0,WTW.getRadians(10));
 			zmold.scaling = new BABYLON.Vector3(.75,.75,.75);
 			zmold.parent = zcamerafront;
+			zmold.renderingGroupId = 3;
 			
 			BABYLON.SceneLoader.ImportMeshAsync('', zobjectfolder, zobjectfile, scene).then(
 				function (zresults) {
@@ -668,7 +672,8 @@ WTWJS.prototype.hudToggleCompass = function() {
 								zresults.meshes[i].id = zchildmoldname;
 								zresults.meshes[i].name = zchildmoldname;
 								zresults.meshes[i].isPickable = false;
-
+								zresults.meshes[i].renderingGroupId = 3;
+								
 								/* make sure all object meshes have a parent */
 								if (zresults.meshes[i].parent == null) {
 									zresults.meshes[i].parent = zmold;
@@ -968,6 +973,7 @@ WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid, zmenualignmen
 				zmytext.name = zmoldname + '-pageformtitle';
 				zmytext.parent = zpageformtitleparent;
 				zmytext.isPickable = false;
+				zmytext.renderingGroupId = 3;
 			}
 
 		}
@@ -1163,7 +1169,7 @@ WTWJS.prototype.setShadowSettings = function() {
 		
 		var zrenderlist = [];
         if (WTW.shadows != null) {
-			zrenderlist = WTW.shadows.getShadowMap().renderList;
+//			zrenderlist = WTW.shadows.getShadowMap().renderList;
             WTW.shadows.dispose();
             WTW.shadows = null;
         }
@@ -1185,7 +1191,7 @@ WTWJS.prototype.setShadowSettings = function() {
 //		} else {
 //			WTW.shadows.useBlurExponentialShadowMap = true;
 //		}
-		WTW.shadows.getShadowMap().renderList = zrenderlist;
+//		WTW.shadows.getShadowMap().renderList = zrenderlist;
         
 		if (WTW.extraGround != null) {
 			if (WTW.shadowSet > 0) {

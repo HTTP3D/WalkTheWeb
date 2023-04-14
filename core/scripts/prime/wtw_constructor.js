@@ -116,7 +116,7 @@ function WTWJS() {
 	this.enableOfflineSupportAdmin = true;
 	
 	/* Content Lost and Restore support - Babylon recreates in transparent way if the WebGL content is lost - consumes more memory - Default: true (off) */
-	this.doNotHandleContextLost = true;
+	this.doNotHandleContextLost = false;
 	
 	/* Texture caching buffers - set to true to clear buffer of texture paths to free up memory */
 	this.cleanCachedTextureBuffer = true;
@@ -213,18 +213,18 @@ function WTWJS() {
 	this.baseMoldCount = '';
 
 	/* WTW.sun - the light object added to the scene */
-	this.sun;
+	this.sun = null;
 
 	/* WTW.sunPositionY - height of the sun - as you fly up, it can rise... (work in progress) */
 	this.sunPositionY = 1000;
 
 	/* WTW.backLight - the indirect light object added to the scene so that things are slightly lit on the back sides */
-	this.backLight;
+	this.backLight = null;
 
 	/* WTW.extraGround - the plane that is the ground that extends off in the distance. */
 	/* extra ground is designed to stay right under your avatar and the texture moves like a conveyer belt as you move. */
 	/* which makes it a non-ending ground that will always be under your avatar */
-	this.extraGround;
+	this.extraGround = null;
 	
 	/* WTW.water - the plane of water that is automatically added at zero Y value. */
 	/* Only added IF the extended ground is set below zero. Otherwise, WTW.water remains null. */
@@ -235,7 +235,7 @@ function WTWJS() {
 	this.waterMat = null;
 
 	/* WTW.sky - sky sphere with the applied sky procedural texture */
-	this.sky;
+	this.sky = null;
 
 	/* WTW.shadows - Babylon Shadow Generator object for the 3D Scene - BABYLON.ShadowGenerator */
 	this.shadows = null;
@@ -243,6 +243,18 @@ function WTWJS() {
 	/* WTW.init - values are used to supply the initial 3D scene properties */
 	/* for admin of 3D Buildings and 3D Things these are the default settings */
 	/* for 3D Communities they are most often passed from the Database through PHP loading */
+	
+	
+	/* The 'clearColor' property on the scene object is the most rudimentary of environment properties/adjustments. Simply stated, this is how you change the background color of the scene. 
+	ambientColor - is used in conjunction with a mesh's StandardMaterial.ambientColor to determine a FINAL ambientColor for the mesh material (#000000 turns ambient color off).
+
+	sceneFogMode - 	none - BABYLON.Scene.FOGMODE_NONE - default one, fog is deactivated.
+					exponential - BABYLON.Scene.FOGMODE_EXP - the fog density is following an exponential function.
+					exponential faster - BABYLON.Scene.FOGMODE_EXP2 - same that above but faster.
+					linear - BABYLON.Scene.FOGMODE_LINEAR - the fog density is following a linear function.
+				If you choose the EXP, or EXP2 mode, then you can define the density option (default is 0.1):
+				if you choose LINEAR mode, then you can define where fog starts and where fog ends:
+	*/
 	/*	Notes about the sky Values ---
 			skyInclination = 0; //The sun position from Sunrise to Sunset. (-.60 to .60 increment .01) // range slider shows +.6 value	
 			skyLuminance = 1; // Controls the overall brightness of sky. (0 to 1 increment .01)
@@ -250,11 +262,67 @@ function WTWJS() {
 			skyRayleigh = 2.0; // Represents the global sky appearance. (0 to 5 increment .01)
 			skyTurbidity = 10; // The amount of haze scattering in the atmosphere. (0 to 50 increment 1)
 			skyMieDirectionalG = .8; // The amount of haze particles in the atmosphere. (.20 to .99 increment .01)
-			skyMieCoefficient = .005; // The haze particle size coefficient. (.001 to .999 increment .001) */	
+			skyMieCoefficient = .005; // The haze particle size coefficient. (.001 to .999 increment .001)
+			skyBoxPBR = true; // Physically based rendering (PBR) is a computer graphics to render images in a way that models light use in the real world.
+			skyBoxBlur = 0; //is only available when pbr is true, default is 0, no blur, maximum value is 1 */	
 		/* gravity was 9.8, temporarily set to less for hill climbing */
+
+/*
+		'skyBoxImageLeft':'/content/system/skies/space/space_left.jpg',
+		'skyBoxImageUp':'/content/system/skies/space/space_up.jpg',
+		'skyBoxImageFront':'/content/system/skies/space/space_front.jpg',
+		'skyBoxImageRight':'/content/system/skies/space/space_right.jpg',
+		'skyBoxImageDown':'/content/system/skies/space/space_down.jpg',
+		'skyBoxImageBack':'/content/system/skies/space/space_back.jpg',
+*/
+
 	this.init = {
 		'groundTextureID':'2391f1v9om09am77',
 		'groundTexturePath':'/content/system/stock/dirt-512x512.jpg',
+		'sceneAmbientColor':'#ffffff',
+		'sceneClearColor':'#000000',
+		'sceneUseClonedMeshMap': false,
+		'sceneBlockMaterialDirtyMechanism': false,
+		'sceneFogEnabled': false,
+		'sceneFogMode': '',
+		'sceneFogDensity':0.01,
+		'sceneFogStart':20.0,
+		'sceneFogEnd':60.0,
+		'sceneFogColor':'#c0c0c0',
+		'sunDirectionalIntensity':1,
+		'sunDiffuseColor':'#ffffff',
+		'sunSpecularColor':'#ffffff',
+		'sunGroundColor':'#000000',
+		'sunDirectionX':999,
+		'sunDirectionY':-999,
+		'sunDirectionZ':999,
+		'backLightIntensity':.5,
+		'backLightDiffuseColor':'#ffffff',
+		'backLightSpecularColor':'#ffffff',
+		'backLightDirectionX':-999,
+		'backLightDirectionY':999,
+		'backLightDirectionZ':-999,
+		'skyType':'',
+		'skySize':5000,
+		'skyBoxFolder':'',
+		'skyBoxFile':'',
+		'skyBoxImageLeft':'',
+		'skyBoxImageUp':'',
+		'skyBoxImageFront':'',
+		'skyBoxImageRight':'',
+		'skyBoxImageDown':'',
+		'skyBoxImageBack':'',
+		'skyPositionOffsetX':0,
+		'skyPositionOffsetY':0,
+		'skyPositionOffsetZ':0,
+		'skyBoxMicroSurface':1.0,
+		'skyBoxPBR':false,
+		'skyBoxAsEnvironmentTexture':false,
+		'skyBoxBlur':0,
+		'skyBoxDiffuseColor':'#000000',
+		'skyBoxSpecularColor':'#000000',
+		'skyBoxAmbientColor':'#000000',
+		'skyBoxEmissiveColor':'#000000',
 		'skyTextureID':'',
 		'skyTexturePath':'',
 		'skyInclination':0,
@@ -276,8 +344,8 @@ function WTWJS() {
 		'windDirectionZ':1,
 		'waterWaveHeight':.2,
 		'waterWaveLength':0.02,
-		'waterColorRefraction':'#23749C',
-		'waterColorReflection':'#52BCF1',
+		'waterColorRefraction':'#23749c',
+		'waterColorReflection':'#52bcf1',
 		'waterColorBlendFactor':0.2,
 		'waterColorBlendFactor2':0.2,
 		'waterAlpha': .9,		

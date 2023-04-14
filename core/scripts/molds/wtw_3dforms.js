@@ -196,6 +196,13 @@ WTWJS.prototype.addText = function(zeditdone) {
 				zmytext.name = WTW.selectedMoldName + '-text';
 				zmytext.parent = zmold;
 				zmytext.isPickable = false;
+				zmytext.renderingGroupId = 3;
+				if (zmytext.material != null) {
+					zmytext.material.diffuseColor = new BABYLON.Color3.FromHexString('#cfcfcf');
+					zmytext.material.emissiveColor = new BABYLON.Color3.FromHexString('#000000');
+					zmytext.material.specularColor = new BABYLON.Color3.FromHexString('#000000');
+					zmytext.material.ambientColor = new BABYLON.Color3.FromHexString('#000055');
+				}
 			}
 		}
 	} catch (ex) {

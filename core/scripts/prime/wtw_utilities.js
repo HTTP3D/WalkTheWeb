@@ -332,6 +332,67 @@ WTWJS.prototype.isHexColor = function(zhex) {
 	return zisvalid;
 }
 
+WTWJS.prototype.openColorSelector = function(zobj, ztitle) {
+	/* when form uses a color, the color wheel is opened and set to the current color settings */
+	try {
+		if (WTW.guiAdminColors != null) {
+			WTW.guiAdminColors.dispose();
+			WTW.guiAdminColors = null;
+		}
+		WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
+		var zpanel = new BABYLON.GUI.StackPanel();
+		zpanel.width = '300px';
+		zpanel.isVertical = true;
+		zpanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		zpanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		WTW.guiAdminColors.addControl(zpanel);
+
+		var zcolortitle = new BABYLON.GUI.TextBlock();
+		zcolortitle.text = ztitle;
+		zcolortitle.color = '#FFFFFF';
+		zcolortitle.fontSize = 20;
+		zcolortitle.height = '50px';
+		zpanel.addControl(zcolortitle);     
+	
+		var zcolorpicker = new BABYLON.GUI.ColorPicker();
+		var colorvalue = new BABYLON.Color3.FromHexString(zobj.value);
+		zcolorpicker.height = '250px';
+		zcolorpicker.width = '250px';
+		zcolorpicker.value = colorvalue;
+		zcolorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+		zcolorpicker.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		zcolorpicker.onValueChangedObservable.add(function(value) {
+			if (value != null) {
+				var zcolor = new BABYLON.Color3(value.r, value.g, value.b);
+				zobj.value = zcolor.toHexString().toLowerCase();
+				if (zobj.id.indexOf('sky') > -1) {
+					WTW.setSkyBox();
+				} else if (zobj.id.indexOf('scene') > -1 || zobj.id.indexOf('sun') > -1 || zobj.id.indexOf('backlight') > -1) {
+					WTW.setCommunityScene();
+				}
+			}
+		});
+		zpanel.addControl(zcolorpicker); 
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_utilities.js-openColorSelector=' + ex.message);
+	}
+}
+
+WTWJS.prototype.closeColorSelector = function(zcloseovercanvas) {
+	/* close and dispose color selector after use */
+	try {
+		if (zcloseovercanvas == undefined) {
+			zcloseovercanvas = true;
+		}
+		if ((zcloseovercanvas == false && WTW.guiAdminColors != null && WTW.canvasFocus == 0) || (zcloseovercanvas && WTW.guiAdminColors != null)) {
+			WTW.guiAdminColors.dispose();
+			WTW.guiAdminColors = null;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_utilities.js-closeColorSelector=' + ex.message);
+	}
+}
+
 WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
 	/* when the color is selected, the form updates the color to the background */
 	/* this also sets the text color to an opposite color than the background (default is black or white) */
@@ -1375,6 +1436,14 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setGroundWater();
+				} else if (zitem.indexOf('sky') > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
+					WTW.setSkyBox();
+				} else if (zitem.indexOf('scene') > -1 || zitem.indexOf('sun') > -1 || zitem.indexOf('backlight') > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
+					WTW.setCommunityScene();
 				} else if (zitem.indexOf('axis') > -1 || zitem.indexOf('actionzone') > -1) {
 					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 					dGet(zitem).value = (znvali.toFixed(2));
@@ -1418,6 +1487,14 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setGroundWater();
+					} else if (zitem.indexOf('sky') > -1) {
+						znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+						dGet(zitem).value = (znvali.toFixed(2));
+						WTW.setSkyBox();
+					} else if (zitem.indexOf('scene') > -1 || zitem.indexOf('sun') > -1 || zitem.indexOf('backlight') > -1) {
+						znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+						dGet(zitem).value = (znvali.toFixed(2));
+						WTW.setCommunityScene();
 					} else if (zitem.indexOf('axis') > -1 || zitem.indexOf('actionzone') > -1) {
 						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 						dGet(zitem).value = (znval.toFixed(2));
