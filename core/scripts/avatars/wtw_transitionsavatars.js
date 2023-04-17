@@ -1694,6 +1694,13 @@ WTWJS.prototype.cancelWalkToPosition = function() {
 				WTW.avatarTimer = null;
 			}
 		}
+		/* stop all current movements */
+		WTW.keyPressedRemove(1038); /* forward */
+		WTW.keyPressedRemove(2038); /* run forward */
+		WTW.keyPressedRemove(1039); /* rotate right */
+		WTW.keyPressedRemove(2039); /* rotate run right */
+		WTW.keyPressedRemove(1037); /* rotate left */
+		WTW.keyPressedRemove(2037); /* rotate run left */
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-cancelWalkToPosition=' + ex.message);
     }

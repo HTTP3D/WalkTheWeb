@@ -356,6 +356,9 @@ WTWJS.prototype.touchMoving = function(zevent) {
 	/* touch input - touch currently moving detected */
 	try {
 		if (WTW.canvasFocus == 1) {
+			if (WTW.isMouseDown == 1) {
+				WTW.cancelWalkToPosition();
+			}
 			WTW.setTouchMove(zevent);
 			WTW.inputMoving(zevent);
 		}
@@ -499,6 +502,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 					WTW.pluginsKeyDownSelectedMold(zevent);
 				}
 			} else {
+				WTW.cancelWalkToPosition();
 				WTW.keyPressed(zevent.keyCode);
 				return true;
 			}
@@ -547,6 +551,7 @@ WTWJS.prototype.keyPressed = function(keycode) {
 					WTW.hudToggle();
 					break;
 				default:
+					WTW.cancelWalkToPosition();
 					WTW.keyPressedAdd(keycode);
 					break;
 			}
@@ -785,6 +790,7 @@ WTWJS.prototype.mouseScroll1 = function(zevent) {
 	try {
 		zevent = zevent || window.event;
 		if (WTW.canvasFocus == 1) {
+			WTW.cancelWalkToPosition();
 			var zrolled = zevent.wheelDelta; 
 			WTW.mouseScroll(zrolled);
 			return (false);
