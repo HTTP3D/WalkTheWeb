@@ -141,7 +141,7 @@ WTWJS.prototype.mouseOverMoldAdmin = function(ztagmesh, zcurrentid) {
     }
 }
 
-WTWJS.prototype.selectPick = function(e) {
+WTWJS.prototype.selectPick = function(zevent) {
 	/* when WTW.pick global variable is set, mouse can click (and mouse down) on and select a mold in the 3D Scene */
 	/* this is used to merge molds, add molds to action zones (swinging door parts) */
 	try {
@@ -150,16 +150,11 @@ WTWJS.prototype.selectPick = function(e) {
 			/* nothing picked or no mold clicked on in 3D Scene */
 		} else if (WTW.pick == 2) {
 			/* mold selected */
-			var zpickedresult = scene.pick(WTW.mouseX, WTW.mouseY);
-			if (zpickedresult.pickedMesh == null) {
-				zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
+			var zpickedname = WTW.pickMoldNameByRenderingGroup(zevent);
+			if (zpickedname.indexOf('molds-') > -1) {
+				zmold = WTW.getMeshOrNodeByID(zpickedname);
 			}
-			var zmold = null;
-			if (zpickedresult.pickedMesh != null) {
-				if (zpickedresult.pickedMesh.name.indexOf('molds-') > -1) {
-					zmold = zpickedresult.pickedMesh;
-				}
-			}
+			
 			if (zmold != null && zmold != undefined) {
 				if (dGet('wtw_baddactionzonepart').innerHTML == 'Cancel Pick Shape') {
 					/* pick came from action zone form */

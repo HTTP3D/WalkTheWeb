@@ -358,8 +358,8 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.actionManager = new BABYLON.ActionManager(scene);
 		
 		/* set mouse over and mouse out functions for meshes in scene */
-		WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
-		WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
+//		WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
+//		WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
 		
 		if (WTW.highlightLayer == null) {
 			/* initialize highlight layer for scene - used when selecting objects as needed */

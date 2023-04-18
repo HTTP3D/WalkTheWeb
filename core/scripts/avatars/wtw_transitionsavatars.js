@@ -1529,7 +1529,7 @@ WTWJS.prototype.selectWalkToPosition = function(zavatarname, zmoldname, zrun) {
 		if (WTW.placeHolder == 0) {
 			/* only works if avatar is loaded */
 			var zmold = WTW.getMeshOrNodeByID(zmoldname);
-			var zpickinfo = scene.pick(WTW.mouseX, WTW.mouseY, function (mesh) { return mesh === zmold; });
+			var zpickinfo = scene.pick(WTW.mouseX, WTW.mouseY, function (zmesh) { return zmesh === zmold; });
 			if (zpickinfo.hit) {
 				var decalMaterial = new BABYLON.StandardMaterial("clicktomove-mat", scene);
 				decalMaterial.diffuseTexture = new BABYLON.Texture("/content/system/images/target.png", scene);

@@ -36,19 +36,16 @@ WTWJS.prototype.inputDown = function(zevent) {
 	try {
 		WTW.mouseTimestamp = new Date();
 		if (scene != undefined && WTW.hasInputMoved() == false) {
-			var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
-			if (zresult.pickedMesh == null) {
-				zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
-			}
-			if (zresult.pickedMesh != null) {
-				if (zresult.pickedMesh.name.indexOf('scrollboxup') > -1) {
-					WTW.scrollBoxMove(zresult.pickedMesh.name, 25);
-				} else if (zresult.pickedMesh.name.indexOf('scrollboxdown') > -1) {
-					WTW.scrollBoxMove(zresult.pickedMesh.name, -25);
-				} else if (zresult.pickedMesh.name.indexOf('-scrollboxtab') > -1) {
-					WTW.dragID = zresult.pickedMesh.name;
-				} else if (zresult.pickedMesh.name.indexOf('hud-') > -1) {
-					WTW.hudChangeCameraDistance(zresult.pickedMesh.name);
+			var zpickedname = WTW.pickMoldNameByRenderingGroup(zevent);
+			if (zpickedname != '') {
+				if (zpickedname.indexOf('scrollboxup') > -1) {
+					WTW.scrollBoxMove(zpickedname, 25);
+				} else if (zpickedname.indexOf('scrollboxdown') > -1) {
+					WTW.scrollBoxMove(zpickedname, -25);
+				} else if (zpickedname.indexOf('-scrollboxtab') > -1) {
+					WTW.dragID = zpickedname;
+				} else if (zpickedname.indexOf('hud-') > -1) {
+					WTW.hudChangeCameraDistance(zpickedname);
 				} else {
 				}
 			}
@@ -61,24 +58,20 @@ WTWJS.prototype.inputDown = function(zevent) {
 WTWJS.prototype.inputUp = function(zevent) {
 	/* process mouseUp and touchUp */
 	try {
-		WTW.keyPressedRemove(1038);
-		WTW.keyPressedRemove(2038);
-		WTW.keyPressedRemove(1040);
-		WTW.keyPressedRemove(2040);
-		WTW.keyPressedRemove(1037);
-		WTW.keyPressedRemove(2037);
-		WTW.keyPressedRemove(1039);
-		WTW.keyPressedRemove(2039);
-		WTW.keyPressedRemove(1082);
-		WTW.keyPressedRemove(1070);
+		WTW.keyPressedRemove(1040); /* backwards */
+		WTW.keyPressedRemove(2040); /* backwards */
+		WTW.keyPressedRemove(1082); /* look up */
+		WTW.keyPressedRemove(1070); /* look down */
+		WTW.cancelWalkToPosition();
 		WTW.vehicleStopTurn();
-		var zclicktomove = WTW.getMeshOrNodeByID('clicktomove');
-		if (zclicktomove == null) {
-			if (WTW.avatarTimer != null) {
-				window.clearInterval(WTW.avatarTimer);
-				WTW.avatarTimer = null;
-			}
+		if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
+			WTW.lastID = WTW.dragID;
+			WTW.dragID = WTW.dragID.replace('-scrollboxtab','');
+			WTW.resetScrollBox(WTW.dragID);
+		} else if (WTW.dragID.indexOf('hud-') > -1) {
+			WTW.hudChangeCameraDistance(WTW.dragID);
 		}
+		WTW.dragID = '';
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-inputUp=' + ex.message);
 	}
@@ -90,17 +83,7 @@ WTWJS.prototype.inputClick = function(zevent) {
 		var ztimestamp = new Date();
 		if ((ztimestamp - WTW.mouseTimestamp) < 350) {
 			if (WTW.hasInputMoved() == false) {
-				var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
-				var zpickedname = '';
-				if (zresult.pickedMesh == null) {
-					if (WTW.currentID != '') {
-						zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
-					}
-					zpickedname = WTW.currentID;
-				} else {
-					zpickedname = zresult.pickedMesh.name;
-				}
-
+				var zpickedname = WTW.pickMoldNameByRenderingGroup(zevent);
 				WTW.pluginsOnClick(zpickedname);
 				if (zpickedname != '') {
 					var zmold = WTW.getMeshOrNodeByID(zpickedname);
@@ -123,8 +106,6 @@ WTWJS.prototype.inputClick = function(zevent) {
 							} else if (zpickedname.substr(0,9) == 'hudlogin-') {
 								WTW.executeAnimationByName(zpickedname.replace('hudlogin-','HUDLOGIN').replace('-',''));
 								WTW.hudLoginClick(zpickedname);
-							} else if (zpickedname.substr(0,9) == 'myavatar-') {
-								WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
 							} else if (zpickedname.indexOf('-image') > -1) {
 								WTW.checkImageClick(zpickedname);
 							} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
@@ -151,9 +132,120 @@ WTWJS.prototype.inputClick = function(zevent) {
 					}
 				}
 			}
+		} else if (WTW.hasInputMoved() == false) {
+			 /* Long Click */
+			WTW.inputLongClick(zevent);
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-inputClick=' + ex.message);
+	}
+}
+
+WTWJS.prototype.inputLongClick = function(zevent) {
+	/* process long click or touch (hold longer without moving or swipe) */
+	try {
+		var zpickedname = WTW.pickMoldName(zevent);
+		if (zpickedname.substr(0,9) == 'myavatar-') {
+			WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-inputLongClick=' + ex.message);
+	}
+}
+
+WTWJS.prototype.pickMoldName = function(zevent) {
+	/* Pick mold name respective of rendering group id */
+	var zpickedname = '';
+	try {
+		var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
+		if (zresult.pickedMesh == null) {
+			if (WTW.currentID != '') {
+				zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
+			}
+			zpickedname = WTW.currentID;
+		} else {
+			zpickedname = zresult.pickedMesh.name;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-pickMoldName=' + ex.message);
+	}
+	return zpickedname;
+}
+
+WTWJS.prototype.pickMoldNameByRenderingGroup = function(zevent) {
+	/* Pick mold name respective of rendering group id */
+	var zpickedname = '';
+	try {
+		var zray = scene.createPickingRay(WTW.mouseX, WTW.mouseY, BABYLON.Matrix.Identity(), scene.activeCameras[0]);
+		var zresult = scene.multiPickWithRay(zray);
+		var zgreatestrendergroup = 0;
+		var zdist = 999999999;
+		for (var i = 0; i < zresult.length; i++){
+			if (zresult[i].pickedMesh.name.indexOf('myavatar') == -1 && zresult[i].pickedMesh.name.indexOf('actionzone') == -1 && zresult[i].pickedMesh.name.indexOf('connectinggrid') == -1) {
+				if (zresult[i].pickedMesh.renderingGroupId > zgreatestrendergroup) {
+					zgreatestrendergroup = zresult[i].pickedMesh.renderingGroupId;
+					zdist = zresult[i].distance;
+					zpickedname = zresult[i].pickedMesh.name;
+				} else if (zresult[i].pickedMesh.renderingGroupId == zgreatestrendergroup) {
+					if (zresult[i].distance < zdist) {
+						zdist = zresult[i].distance;
+						zpickedname = zresult[i].pickedMesh.name;
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-pickMoldNameByRenderingGroup=' + ex.message);
+	}
+	return zpickedname;
+}
+
+WTWJS.prototype.mouseOverByRenderingGroup = function(zevent) {
+	/* Pick mold name respective of rendering group id */
+	try {
+		if (WTW.canvasFocus == 1) {
+			var zpickedname = WTW.pickMoldNameByRenderingGroup(zevent);
+			if (zpickedname != WTW.currentID) {
+				/* mouseOver functions */
+				WTW.lastID = WTW.currentID;
+				WTW.currentID = zpickedname;
+				dGet('wtw_renderCanvas').style.cursor = 'default';
+				if (WTW.currentID != '') {
+					var zmold = WTW.getMeshOrNodeByID(WTW.currentID);
+					if (zmold != null) {
+						if (zmold.isPickable && WTW.currentID.indexOf('hud-background') == -1) {
+							dGet('wtw_renderCanvas').style.cursor = 'pointer';
+						}
+						WTW.checkHovers(zmold);
+					}
+				}
+				/* mouseOut functions */
+				WTW.mouseOutByRenderingGroup(zevent);
+			}
+		} else {
+			/* mouseOut functions */
+			WTW.mouseOutByRenderingGroup(zevent);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-mouseOverByRenderingGroup=' + ex.message);
+	}
+}
+
+WTWJS.prototype.mouseOutByRenderingGroup = function(zevent) {
+	/* mouse out mold name respective of rendering group id */
+	try {
+		WTW.hide('wtw_itooltip');
+		if (WTW.adminView == 1) {
+			if (dGet('wtw_bfocus') != null) {
+				if (dGet('wtw_bfocus').title == 'Focus Highlight is On' || WTW.highlightLayer != null) {
+					WTW.unhilightMold(WTW.lastID);
+				}
+			}
+		}
+		WTW.checkMoldEvent('onmouseout', WTW.lastID);
+		WTW.resetHovers();
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-mouseOutByRenderingGroup=' + ex.message);
 	}
 }
 
@@ -161,11 +253,11 @@ WTWJS.prototype.inputMoving = function(zevent) {
 	/* process mouseMove and touchMoving */
 	try {
 		/* swipe rotation for my avatar */
-		if (WTW.dragID == '' && WTW.isMouseDown == 1) {
+		if (WTW.dragID == '' && WTW.isMouseDown == 1 && WTW.hasInputMoved()) {
 			/* not dragging an object */
 			WTW.cancelWalkToPosition();
 			WTW.avatarTimer = window.setInterval(function(){
-				if (WTW.dragID == '' && WTW.isMouseDown == 1) {
+				if (WTW.dragID == '' && WTW.isMouseDown == 1 && WTW.hasInputMoved()) {
 					/* not dragging an object */
 					if (WTW.mouseX < WTW.sizeX/5) {
 						WTW.keyPressedRemove(1039);
@@ -342,6 +434,7 @@ WTWJS.prototype.setTouchMove = function(zevent) {
 				if (i == 0) {
 					WTW.mouseX = WTW.touch[i].pageX; 
 					WTW.mouseY = WTW.touch[i].pageY;
+					WTW.mouseOverByRenderingGroup(zevent);
 				}
 			}
 			WTW.touch = null;
@@ -691,14 +784,6 @@ WTWJS.prototype.mouseUp = function(zevent) {
 			if (WTW.adminView == 1) {
 				WTW.mouseUpAdmin(zevent);
 			}
-			if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
-				WTW.lastID = WTW.dragID;
-				WTW.dragID = WTW.dragID.replace('-scrollboxtab','');
-				WTW.resetScrollBox(WTW.dragID);
-			} else if (WTW.dragID.indexOf('hud-') > -1) {
-				WTW.hudChangeCameraDistance(WTW.dragID);
-			}
-			WTW.dragID = '';
 		}
 		WTW.inputUp(zevent);
 		return true;
@@ -777,6 +862,7 @@ WTWJS.prototype.mouseMove = function(zevent) {
 			if (zevent.clientX != undefined) {
 				WTW.mouseX = zevent.clientX; 
 				WTW.mouseY = zevent.clientY;
+				WTW.mouseOverByRenderingGroup(zevent);
 			}
 			WTW.inputMoving(zevent);
 		}
@@ -863,18 +949,19 @@ WTWJS.prototype.mouseOverMold = function(zmold) {
 	/* mouse related - execute when a mouse cursor hovers a mold */
 	/* mold has to have the event loaded using: WTW.registerMouseOver(mold); */
 	try {
-		if (WTW.canvasFocus == 1) {
+/*		if (WTW.canvasFocus == 1) {
 			scene.hoverCursor = 'default';
 			if (zmold.meshUnderPointer != null) {
 				WTW.lastID = WTW.currentID;
 				WTW.currentID = zmold.meshUnderPointer.name;
+WTW.log("id=" + WTW.currentID);
 				if (zmold.meshUnderPointer.isPickable && WTW.currentID.indexOf('hud-background') == -1) {
 					scene.hoverCursor = 'pointer';
 				}
 				WTW.checkHovers(zmold);
 			}
 		}
-	} catch(ex) {
+*/	} catch(ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-mouseOverMold=' + ex.message);
 	}
 }
@@ -883,7 +970,7 @@ WTWJS.prototype.mouseOutMold = function(zmold) {
 	/* mouse related - execute when a mouse cursor stops hovering a mold */
 	/* mold has to have the event loaded using: WTW.registerMouseOver(mold); */
 	try {
-		if (WTW.canvasFocus == 1) {
+/*		if (WTW.canvasFocus == 1) {
 			WTW.hide('wtw_itooltip');
 			if (WTW.adminView == 1) {
 				if (dGet('wtw_bfocus') != null) {
@@ -898,6 +985,7 @@ WTWJS.prototype.mouseOutMold = function(zmold) {
 			WTW.checkMoldEvent('onmouseout', WTW.lastID);
 			WTW.resetHovers();
 		}
+*/
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-mouseOutMold=' + ex.message);
 	}
@@ -1757,12 +1845,12 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 WTWJS.prototype.registerMouseOver = function(zmold) {
 	/* register mouse over creates a mouseover event on a mold hover in the 3D Scene */
 	try {
-		if (zmold != null) {
+/*		if (zmold != null) {
 			zmold.actionManager = new BABYLON.ActionManager(scene);	
 			zmold.actionManager.registerAction(WTW.mouseOver);
 			zmold.actionManager.registerAction(WTW.mouseOut);
 		}
-	} catch (ex) {
+*/	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-registerMouseOver=' + ex.message);
 	}
 }
@@ -2370,8 +2458,9 @@ WTWJS.prototype.checkHovers = function(zmold) {
 		var zmoldnameparts = WTW.getMoldnameParts(WTW.currentID);
 		var zmoldname = WTW.currentID;
 		var zshape = '';
-		WTW.checkMoldEvent('onmouseover', zmold.meshUnderPointer.name);
+//		WTW.checkMoldEvent('onmouseover', zmold.meshUnderPointer.name);
 		if (zmoldnameparts.molds.length > 0) {
+			/* process type *molds- */
 			if (WTW.adminView == 1) {
 				WTW.mouseOverMoldAdmin(zmold, WTW.currentID);
 			}
@@ -2398,6 +2487,7 @@ WTWJS.prototype.checkHovers = function(zmold) {
 				zshape = zmoldnameparts.shape;
 			}
 		} else {
+			/* process type avatar, hud, background, etc */
 			if (zmoldname.indexOf('person-') > -1 || zmoldname.indexOf('myavatar-') > -1) {
 				zshape = 'avatar';
 			} else if (zmoldname.indexOf('hud-') > -1) {
