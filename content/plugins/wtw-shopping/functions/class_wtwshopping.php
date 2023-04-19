@@ -135,8 +135,6 @@ class wtwshopping {
 			$wtwplugins->addScriptFunction("keydownselectedmold", "WTWShopping.keyDownSelectedMold(zevent);");
 			$wtwplugins->addScriptFunction("clearselectedmold", "WTWShopping.clearSelectedMold();");
 
-			$wtwplugins->addScriptFunction("moldqueueadd", "WTWShopping.moldQueueAdd(zmoldname, zmold);");
-
 			$wtwplugins->addScriptFunction("loadconnectinggrids", "WTWShopping.loadConnectingGrids(zconnectinggridind, zcommunityid, zbuildingid, zthingid);");
 			$wtwplugins->addScriptFunction("disposeclean", "WTWShopping.disposeClean(zmoldname);");
 			

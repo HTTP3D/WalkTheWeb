@@ -545,7 +545,6 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].isPickable = true;
 							zresults.meshes[i].renderingGroupId = 1;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zbasemold;
 							}
@@ -897,7 +896,6 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].isPickable = true;
 							zresults.meshes[i].renderingGroupId = 1;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
 							}
@@ -1119,9 +1117,7 @@ wtwshopping.prototype.addMoldStoreSign = function(zmoldname, zmolddef, zlenx, zl
 
 		if (WTW.adminView == 1) {
 			zimageframemold.isPickable = true;
-			WTW.registerMouseOver(zimageframemold);
 			ztitlemold2.isPickable = true;
-			WTW.registerMouseOver(ztitlemold2);
 		}
 		
 		WTWShopping.getStoreInfo(zmoldname);
@@ -1260,7 +1256,6 @@ wtwshopping.prototype.addMoldStoreViewCart = function(zmoldname, zmolddef, zlenx
 		zcarthover.material = zcarttexturehover;
 		WTW.wrapText(zcarthover, 'Click here to', '30px', '30px', 'center', 'top', 'white', 0, 0);
 		WTW.wrapText(zcarthover, 'View Shopping Cart', '85px', '50px', 'center', 'top', 'green', 0, 0);
-		WTW.registerMouseOver(zcarthover);
 	} catch (ex) {
 		WTW.log('plugins:wtw-shopping:scripts-wtwshoppingmolds.js-addMoldStoreViewCart=' + ex.message);
 	}
@@ -1386,11 +1381,8 @@ wtwshopping.prototype.addMoldStoreCategories = function(zmoldname, zmolddef, zle
 		
 		if (WTW.adminView == 1) {
 			zimageframemold.isPickable = true;
-			WTW.registerMouseOver(zimageframemold);
 			ztitlemold.isPickable = true;
-			WTW.registerMouseOver(ztitlemold);
 			ztitlemold2.isPickable = true;
-			WTW.registerMouseOver(ztitlemold2);
 		}
 
 		WTWShopping.productFetchCategories(zmoldname);
@@ -1514,7 +1506,6 @@ wtwshopping.prototype.addMoldProductSearch = function(zmoldname, zmolddef, zlenx
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].isPickable = true;
 							zresults.meshes[i].renderingGroupId = 1;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
 							}

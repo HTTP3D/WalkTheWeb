@@ -1211,7 +1211,6 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 		zcategorybuttontexturehoverall.diffuseTexture.vOffset = .88;
 		zcategorybuttonhoverall.material = zcategorybuttontexturehoverall;
 		WTW.wrapText(zcategorybuttonhoverall, 'All', '45px', '40px', 'center', 'top', 'yellow', 0, 0);
-		WTW.registerMouseOver(zcategorybuttonhoverall);
 		zincy -= 1;
 		if (zresponse != null) {
 			for (var i=0;i<zresponse.length;i++) {
@@ -1266,7 +1265,6 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 							zcategorybuttontexturehover.diffuseTexture.vOffset = .88;
 							zcategorybuttonhover.material = zcategorybuttontexturehover;
 							WTW.wrapText(zcategorybuttonhover, zcategoryname, '45px', '40px', 'center', 'top', 'yellow', 0, 0);
-							WTW.registerMouseOver(zcategorybuttonhover);
 
 							if (zlasty > zfirsty + zincy) {
 								zcategorybutton.visibility = 0;
@@ -1296,7 +1294,6 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 									zupbuttontexturehover.emissiveTexture = new BABYLON.Texture('/content/system/images/arrowscrollup2.jpg', scene);
 									zupbuttonhover.material = zupbuttontexturehover;
 									zupbuttonhover.material.alpha = 0;
-									WTW.registerMouseOver(zupbuttonhover);
 									zupbuttonhover.visibility = 0;
 
 									var zdownbutton = BABYLON.MeshBuilder.CreateBox(zmoldname + '-downbutton', {}, scene);
@@ -1321,7 +1318,6 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 									zdownbuttontexturehover.emissiveTexture = new BABYLON.Texture('/content/system/images/arrowscrolldown2.jpg', scene);
 									zdownbuttonhover.material = zdownbuttontexturehover;
 									zdownbuttonhover.material.alpha = 0;
-									WTW.registerMouseOver(zdownbuttonhover);
 									zonce = 1;
 								}
 							}
@@ -2085,21 +2081,6 @@ wtwshopping.prototype.resetMoldColor = function(zmoldname, zcolorgroup, zemissiv
 		}
 	} catch (ex) {
 		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-resetMoldColor=' + ex.message);
-	}
-}
-
-wtwshopping.prototype.moldQueueAdd = function(zmoldname, zmold) {
-	try {
-		if (WTW.adminView == 1) {
-			if (zmoldname.indexOf('storeproduct') > -1 || zmoldname.indexOf('storeaddtocart') > -1 || zmoldname.indexOf('storebuynow') > -1 || zmoldname.indexOf('storereadmore') > -1 || zmoldname.indexOf('storecheckout') > -1) {
-				if (zmold.actionManager != null) {
-					zmold.actionManager.unregisterAction(WTW.mouseOver);
-					zmold.actionManager.unregisterAction(WTW.mouseOut);
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-moldQueueAdd=' + ex.message);
 	}
 }
 
