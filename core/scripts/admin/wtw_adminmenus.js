@@ -1224,7 +1224,6 @@ WTWJS.prototype.setShowCSG = function() {
 						zmolds[i].covering = 'color';
 						zmolds[i].opacity = '30';
 						zcsgmold = WTW.addMold(zcsgmoldname, zmolds[i], zmolds[i].parentname, 'color');
-						WTW.registerMouseOver(zcsgmold);
 					}
 				}
 			}

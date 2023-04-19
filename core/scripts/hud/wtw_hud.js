@@ -178,11 +178,9 @@ WTWJS.prototype.openHUD = function() {
 								} else if (zmeshname == 'cornertopright') {
 									/* cornertopright is the close button */
 									zresults.meshes[i].isPickable = true;
-									WTW.registerMouseOver(zresults.meshes[i]);
 								} else if (zmeshname.indexOf('background') > -1) {
 									zresults.meshes[i].isPickable = true;
 									zresults.meshes[i].isVisible = true;
-									WTW.registerMouseOver(zresults.meshes[i]);
 								} else {
 									zresults.meshes[i].isPickable = false;
 								}
@@ -368,7 +366,6 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 							zmenuitem.isPickable = true;
 							zmenuitem.isVisible = true;
 							zmenuitem.parent = zmenuitems;
-							WTW.registerMouseOver(zmenuitem);
 							/* check to see if it closed before it finished loading */
 							zhud = WTW.getMeshOrNodeByID('hud-menuleft');
 							if (zhud == null) {

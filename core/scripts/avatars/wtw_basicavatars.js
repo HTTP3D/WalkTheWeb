@@ -507,7 +507,6 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 									zresults.meshes[i].material.dispose();
 									zresults.meshes[i].material = zcovering;
 								}
-								WTW.registerMouseOver(zresults.meshes[i]);
 								if (zresults.meshes[i].parent == null) {
 									zresults.meshes[i].parent = zavatarparent;
 								}
@@ -570,7 +569,6 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								var zchildmoldname = zavatarname + '-' + zmeshname;
 								zresults.skeletons[i].name = zchildmoldname;
 								zresults.skeletons[i].id = zchildmoldname;
-								WTW.registerMouseOver(zresults.skeletons[i]);
 								if (zresults.skeletons[i].parent == null) {
 									zresults.skeletons[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
 								}
@@ -998,7 +996,6 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 									zresults.meshes[i].material.dispose();
 									zresults.meshes[i].material = zcovering;
 								}
-								WTW.registerMouseOver(zresults.meshes[i]);
 								if (zresults.meshes[i].parent == null) {
 									zresults.meshes[i].parent = zavatarparent;
 								}
@@ -1060,7 +1057,6 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 								var zchildmoldname = zavatarname + '-' + zmeshname;
 								zresults.skeletons[i].name = zchildmoldname;
 								zresults.skeletons[i].id = zchildmoldname;
-								WTW.registerMouseOver(zresults.skeletons[i]);
 								if (zresults.skeletons[i].parent == null) {
 									zresults.skeletons[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
 								}

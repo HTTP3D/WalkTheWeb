@@ -74,7 +74,6 @@ WTWJS.prototype.hudAddTextbox = function(zvalue, zid, zpositionx, zpositiony, zp
 			ztextbox.isVisible = true;
 			ztextbox.parent = zmold;
 			ztextbox.renderingGroupId = 3;
-			WTW.registerMouseOver(ztextbox);
 
 			var zstyle = {
 				'font-family': 'Arial',
@@ -152,7 +151,6 @@ WTWJS.prototype.hudAddImageButton = function(zimageurl, zid, zpositionx, zpositi
 			zbuttoncovering.specularColor =  new BABYLON.Color3.FromHexString(zbgcolor);
 			zbuttoncovering.ambientColor =  new BABYLON.Color3.FromHexString(zbgcolor);
 			zbutton.material = zbuttoncovering;
-			WTW.registerMouseOver(zbutton);
 			
 			var zimage = BABYLON.MeshBuilder.CreatePlane('hud-imagebutton-image-' + zid, {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
 			var zcovering = new BABYLON.StandardMaterial('hud-imagebutton-image-' + zid + '-mat', scene);
@@ -228,7 +226,6 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zslidertab.isVisible = true;
 			zslidertab.parent = zmold;
 			zslidertab.renderingGroupId = 3;
-			WTW.registerMouseOver(zslidertab);
 			zslidertab.material = zcovering;
 
 			var zslider = zslidermaster.clone(zsliderid + '-track');
@@ -238,7 +235,6 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zslider.isVisible = true;
 			zslider.parent = zmold;
 			zslider.renderingGroupId = 3;
-			WTW.registerMouseOver(zslider);
 
 			var zsliderleft = zsliderleftmaster.clone(zsliderid + '-left');
 			zsliderleft.id = zsliderid + '-left';
@@ -247,7 +243,6 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zsliderleft.isVisible = true;
 			zsliderleft.parent = zmold;
 			zsliderleft.renderingGroupId = 3;
-			WTW.registerMouseOver(zsliderleft);
 			zsliderleft.material = zcovering;
 
 			var zsliderright = zsliderrightmaster.clone(zsliderid + '-right');
@@ -257,7 +252,6 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			zsliderright.isVisible = true;
 			zsliderright.parent = zmold;
 			zsliderright.renderingGroupId = 3;
-			WTW.registerMouseOver(zsliderright);
 			zsliderright.material = zcovering;
 
 		}
@@ -280,7 +274,6 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zsavebutton.isVisible = true;
 			zsavebutton.parent = zmold;
 			zsavebutton.renderingGroupId = 3;
-			WTW.registerMouseOver(zsavebutton);
 			var zcovering = new BABYLON.StandardMaterial('hud-save-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#082F0C');
 			zcovering.diffuseColor =  new BABYLON.Color3.FromHexString('#094A0F');
@@ -296,7 +289,6 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zcancelbutton.isVisible = true;
 			zcancelbutton.parent = zmold;
 			zcancelbutton.renderingGroupId = 3;
-			WTW.registerMouseOver(zcancelbutton);
 			var zcovering = new BABYLON.StandardMaterial('hud-save-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#30320B');
 			zcovering.diffuseColor =  new BABYLON.Color3.FromHexString('#464910');

@@ -377,7 +377,6 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 		zbasicmold1.checkcollisions = '1';
 		var ztextwall = WTW.addMold(zmoldname + '-simpletextboxwall', zbasicmold1, zbasicmold1.parentname, zbasicmold1.covering);
 		ztextwall.renderingGroupId = 1;
-		WTW.registerMouseOver(ztextwall);
 		ztextwall.WTW = zbasicmold1;
 		
 		var ztexture = new BABYLON.DynamicTexture(zmoldname + '-simpletextboxtexture', {width: 512,height: 512}, scene, true);
@@ -501,7 +500,6 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		}
 		zimagemold.renderingGroupId = 1;
 		zimagemold.parent = zbasemold;
-		WTW.registerMouseOver(zimagemold);
 		if (zimagehoverid != '' && zimagehoverid != 't1qlqxd6pzubzzzy') {
 			var zmolddefhoverimage = WTW.newMold();
 			zmolddefhoverimage.shape = 'box';
@@ -707,7 +705,6 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 		}
 		zimagemold.renderingGroupId = 1;
 		zimagemold.parent = zbasemold;
-		WTW.registerMouseOver(zimagemold);
 		if (zimagehoverid != '' && zimagehoverid != 't1qlqxd6pzubzzzy') {
 			var zmolddefhoverimage = WTW.newMold();
 			zmolddefhoverimage.shape = 'box';
@@ -1025,7 +1022,6 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 							zresults.meshes[i].name = zchildmoldname;
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].renderingGroupId = 1;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
 							}
@@ -1156,7 +1152,6 @@ WTWJS.prototype.addMoldCreateSceneKiosk = function(zmoldname, zmolddef, zlenx, z
 							zresults.meshes[i].name = zchildmoldname;
 							zresults.meshes[i].id = zchildmoldname;
 							zresults.meshes[i].renderingGroupId = 1;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
 							}
@@ -1680,7 +1675,6 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									/* make sure child meshes are pickable */
 									if (WTW.adminView == 1 || zispickable) {
 										zresults.meshes[i].isPickable = true;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									}
 									/* make sure child meshes check collisions if flag is true (we are not forcing false, just inheriting original settings) */
 									if (zcheckcollisions) {
@@ -1732,7 +1726,6 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									/* append zmoldname to all child skeleton names */
 									var zchildmoldname = zmoldname + '-' + zmeshname;
 									zresults.skeletons[i].name = zchildmoldname;
-									/* WTW.registerMouseOver(zresults.skeletons[i]); */
 									/* make sure all bones have a parent set */
 									if (zresults.skeletons[i].parent == null) {
 										if (zbillboard == '1') {
@@ -1939,7 +1932,6 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold9.ispickable = '1';
 			var zscrollboxtab = WTW.addMold(zmoldname + '-scrollboxtab', zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
 			zscrollboxtab.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxtab);
 			zscrollboxtab.WTW = zbasicmold9;
 
 			var zbasicmold9b = WTW.newMold();
@@ -1975,7 +1967,6 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold5.ispickable = '1';
 			var zscrollboxup = WTW.addMold(zmoldname + '-scrollboxup', zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
 			zscrollboxup.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxup);
 			zscrollboxup.WTW = zbasicmold5;
 
 			var zbasicmold5b = WTW.newMold();
@@ -2016,7 +2007,6 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold7.ispickable = '1';
 			var zscrollboxdown = WTW.addMold(zmoldname + '-scrollboxdown', zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
 			zscrollboxdown.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxdown);
 			zscrollboxdown.WTW = zbasicmold7;
 
 			var zbasicmold7b = WTW.newMold();
@@ -2165,7 +2155,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		var zposttextgroove = WTW.addMold(zmoldname + '-posttextgroove', zbasicmold2, zbasicmold2.parentname, zbasicmold2.covering);
 		zposttextgroove.renderingGroupId = 1;
 		zposttextwall = WTW.processCSGAction(zmoldname + '-posttextwall', zposttextwall, zposttextgroove, 'subtract', zbasicmold);
-		WTW.registerMouseOver(zposttextwall);
 		
 		var zbasicmold3 = WTW.newMold();
 		zbasicmold3.shape = 'box';
@@ -2226,7 +2215,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold10.checkcollisions = '1';
 		var zscrollboxtbody = WTW.addMold(zmoldname + '-scrollboxtbody', zbasicmold10, zbasicmold10.parentname, zbasicmold10.covering);
 		zscrollboxtbody.renderingGroupId = 1;
-		WTW.registerMouseOver(zscrollboxtbody);
 		zscrollboxtbody.WTW = zbasicmold10;
 		
 		var zbasicmold11 = WTW.newMold();
@@ -2280,7 +2268,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold12.checkcollisions = '1';
 		var zposttextbpost = WTW.addMold(zmoldname + '-posttextbpost', zbasicmold12, zbasicmold12.parentname, zbasicmold12.covering);
 		zposttextbpost.renderingGroupId = 1;
-		WTW.registerMouseOver(zposttextbpost);
 		
 		var zbasicmold13 = WTW.newMold();
 		zbasicmold13.shape = 'box';
@@ -2317,7 +2304,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold14.checkcollisions = '1';
 		var zposttextbcancel = WTW.addMold(zmoldname + '-posttextbcancel', zbasicmold14, zbasicmold14.parentname, zbasicmold14.covering);
 		zposttextbcancel.renderingGroupId = 1;
-		WTW.registerMouseOver(zposttextbcancel);
 		
 		var zbasicmold15 = WTW.newMold();
 		zbasicmold15.shape = 'box';
@@ -2354,7 +2340,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold16.checkcollisions = '1';
 		var zposttextbpic = WTW.addMold(zmoldname + '-posttextbpic', zbasicmold16, zbasicmold16.parentname, zbasicmold16.covering);
 		zposttextbpic.renderingGroupId = 1;
-		WTW.registerMouseOver(zposttextbpic);
 		
 		var zbasicmold17 = WTW.newMold();
 		zbasicmold17.shape = 'box';
@@ -2389,7 +2374,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold9.checkcollisions = '1';
 			var zscrollboxtab = WTW.addMold(zmoldname + '-scrollboxtab', zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
 			zscrollboxtab.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxtab);
 
 			var zbasicmold5 = WTW.newMold();
 			zbasicmold5.shape = 'box';
@@ -2405,7 +2389,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold5.checkcollisions = '1';
 			var zscrollboxup = WTW.addMold(zmoldname + '-scrollboxup', zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
 			zscrollboxup.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxup);
 			
 			var zbasicmold6 = WTW.newMold();
 			zbasicmold6.shape = 'triangle';
@@ -2424,7 +2407,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold6.checkcollisions = '1';
 			var zscrollboxuparrow = WTW.addMold(zmoldname + '-scrollboxuparrow', zbasicmold6, zbasicmold6.parentname, zbasicmold6.covering);
 			zscrollboxuparrow.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxuparrow);
 			
 			var zbasicmold7 = WTW.newMold();
 			zbasicmold7.shape = 'box';
@@ -2440,7 +2422,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold7.checkcollisions = '1';
 			var zscrollboxdown = WTW.addMold(zmoldname + '-scrollboxdown', zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
 			zscrollboxdown.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxdown);
 			
 			var zbasicmold8 = WTW.newMold();
 			zbasicmold8.shape = 'triangle';
@@ -2459,7 +2440,6 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold8.checkcollisions = '1';
 			var zscrollboxdownarrow = WTW.addMold(zmoldname + '-scrollboxdownarrow', zbasicmold8, zbasicmold8.parentname, zbasicmold8.covering);
 			zscrollboxdownarrow.renderingGroupId = 1;
-			WTW.registerMouseOver(zscrollboxdownarrow);
 		}
 		if (zmoldname.indexOf('-') > -1) {
 			var znamepart = zmoldname.split('-');

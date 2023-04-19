@@ -150,9 +150,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[1].additionalparameters = '';
 
 				zobjectanimations[2] = WTW.newObjectAnimation();
-				zobjectanimations[2].animationname = 'HUDLOGINbuttonselectmyavatar';
+				zobjectanimations[2].animationname = 'HUDLOGINbuttonavatarselect';
 				zobjectanimations[2].moldevent = 'onclick';
-				zobjectanimations[2].moldnamepart = 'button-selectmyavatar';
+				zobjectanimations[2].moldnamepart = 'button-avatarselect';
 				zobjectanimations[2].startframe = 20;
 				zobjectanimations[2].endframe = 40;
 				zobjectanimations[2].animationloop = false;
@@ -161,9 +161,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[2].additionalparameters = '';
 
 				zobjectanimations[3] = WTW.newObjectAnimation();
-				zobjectanimations[3].animationname = 'HUDLOGINbuttoneditmyavatar';
+				zobjectanimations[3].animationname = 'HUDLOGINbuttoneditavatar';
 				zobjectanimations[3].moldevent = 'onclick';
-				zobjectanimations[3].moldnamepart = 'button-editmyavatar';
+				zobjectanimations[3].moldnamepart = 'button-editavatar';
 				zobjectanimations[3].startframe = 40;
 				zobjectanimations[3].endframe = 60;
 				zobjectanimations[3].animationloop = false;
@@ -454,11 +454,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else if (WTW.globalLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
@@ -479,11 +477,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else if (WTW.localLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
@@ -504,11 +500,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else if (WTW.anonymousLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
@@ -526,11 +520,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									if (zpage == 'Enter') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else if (WTW.isInitCycle == 1) {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = false;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
@@ -548,11 +540,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
 										zresults.meshes[i].isPickable = false;
 										zresults.meshes[i].isVisible = false;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									} else {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
-										WTW.registerMouseOver(zresults.meshes[i]);
 									}
 									break;
 								case 'button-closeloginmenutext':
@@ -563,13 +553,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
-								case 'hudlogin-button-editprofile':
-								case 'hudlogin-button-selectmyavatar':
-								case 'hudlogin-button-editmyavatar':
-								case 'hudlogin-button-logout':
+								case 'button-avatarselect':
 								case 'button-editprofile':
-								case 'button-selectmyavatar':
-								case 'button-editmyavatar':
+								case 'button-editavatar':
 								case 'button-logout':
 								case 'button-login':
 								case 'button-create':
@@ -591,7 +577,6 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								case 'preview':
 									zresults.meshes[i].isPickable = true;
 									zresults.meshes[i].isVisible = true;
-									WTW.registerMouseOver(zresults.meshes[i]);
 									break;
 								case 'invalidlogin':
 								case 'invalidpassword':
@@ -861,8 +846,8 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-loginlocal':
 			case 'hudlogin-button-loginguest':
 			case 'hudlogin-button-editprofile':
-			case 'hudlogin-button-selectmyavatar':
-			case 'hudlogin-button-editmyavatar':
+			case 'hudlogin-button-avatarselect':
+			case 'hudlogin-button-editavatar':
 			case 'hudlogin-button-logout':
 			case 'hudlogin-button-create':
 			case 'hudlogin-button-reset':
@@ -959,10 +944,10 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						/* open edit profile */
 						WTW.closeLoginHUD();
 						WTW.openLocalLogin('Edit Profile', .4, .6);
-					} else if (zmoldname == 'hudlogin-button-selectmyavatar') {
+					} else if (zmoldname == 'hudlogin-button-avatarselect') {
 						/* select my avatar */
 						WTW.openLoginHUD('Select My Avatar');
-					} else if (zmoldname == 'hudlogin-button-editmyavatar') {
+					} else if (zmoldname == 'hudlogin-button-editavatar') {
 						/* edit my avatar */
 						WTW.closeLoginHUD();
 						WTW.openAvatarDesigner();
@@ -1161,8 +1146,8 @@ WTWJS.prototype.hudLoginFocusText = function(zmoldname, zeditdone) {
 			'hudlogin-button-loginlocal',
 			'hudlogin-button-loginguest',
 			'hudlogin-button-editprofile',
-			'hudlogin-button-selectmyavatar',
-			'hudlogin-button-editmyavatar',
+			'hudlogin-button-avatarselect',
+			'hudlogin-button-editavatar',
 			'hudlogin-button-logout',
 			'hudlogin-email-email',
 			'hudlogin-password-password',

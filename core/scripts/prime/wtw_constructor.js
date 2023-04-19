@@ -507,12 +507,6 @@ function WTWJS() {
 	/* WTW.mouseMoveY - mouse vertical position after mouse button was held down, used to measure change in movement from mouseStartY */
 	this.mouseMoveY = -1;
 
-	/* WTW.mouseOver - sets the mouse over function tied to molds in the 3D Scene (Example: can result in hover-overs) */
-	this.mouseOver = null;
-
-	/* WTW.mouseOut - sets the mouse out function tied to molds in the 3D Scene (Example: can result in hover-overs ended to reset mold) */
-	this.mouseOut = null;
-
 	/* WTW.dragID - id of the mold that is currently being dragged. Example includes scroll bar being dragged on 3D Blog box. */
 	this.dragID = '';
 	

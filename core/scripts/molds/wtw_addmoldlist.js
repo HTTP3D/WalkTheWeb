@@ -494,10 +494,6 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 				zmolddef.checkcollisions = '0';
 				zmold.checkCollisions = false;
 			}
-			if (WTW.adminView == 1 || zmolddef.ispickable == '1') {
-				/* mouse over covers hovers in the 3D Scene - for admin mode */
-				WTW.registerMouseOver(zmold);
-			}
 			/* work in progress - currently disabled, freeze world matrix can speed up the scene with less calculations */
 			if (WTW.AdminView == 0 && zparentname.indexOf('actionzone') == -1 && zparentname != '') {
 				zmold.freezeWorldMatrix();

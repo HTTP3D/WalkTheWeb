@@ -544,7 +544,7 @@ WTWJS.prototype.postAsyncJSONProgress = function(zevent) {
 	try {
 		if (zevent.lengthComputable) {
 			var percentComplete = (zevent.loaded / zevent.total) * 100;  
-WTW.log("percentComplete=" + percentComplete);
+//WTW.log("percentComplete=" + percentComplete);
 		} 
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_utilities.js-postAsyncJSONProgress=' + ex.message);

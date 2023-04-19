@@ -295,18 +295,18 @@ WTWJS.prototype.initEnvironment = function() {
 		/* add mouse over for canvas */
 		/* sets WTW.canvasFocus variable to allow avatar movement only when canvas has focus */
 		/* also prevents animations an movement to keep going when mouse leaves the window */
-		dGet('wtw_renderCanvas').onmouseover = function() {WTW.canvasFocus = 1;};
-		dGet('wtw_renderCanvas').onmouseout = function() {WTW.canvasFocus = 0;WTW.keysPressed=[];};
+		dGet('wtw_renderCanvas').onmouseover = function() {WTW.canvasFocus = 1;WTW.mouseOverByRenderingGroup();};
+		dGet('wtw_renderCanvas').onmouseout = function() {WTW.canvasFocus = 0;WTW.keysPressed=[];WTW.mouseOutByRenderingGroup();};
 		
 		/* set up canvas for babylon */
 		canvas = dGet('wtw_renderCanvas');
 		/* event listener allows screen shots of the canvas */
 		canvas.addEventListener('webglcontextrestored', function (event) {/*initializeResources();*/}, false);
-		
 		/* initialize babylon game engine */
-//		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost, stencil: true});
 
+//		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost, stencil: true});
 		engine = new BABYLON.Engine(canvas, true);
+
 		/* add WalkTheWeb version to the console.log */
 		console.log('%c\r\n\r\nWalkTheWeb Open-Source 3D Internet\r\n' + wtw_versiontext + '\r\n', 'color:green;font-weight:bold;');
 		
@@ -328,6 +328,7 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.autoClear = false;
 		scene.autoClearDepthAndStencil = false;
 		scene.collisionsEnabled = true;
+		scene.doNotHandleCursors = true;
 		
 		/* tested some caching options */
 //		scene.useGeometryIdsMap = true;
@@ -356,10 +357,6 @@ WTWJS.prototype.initEnvironment = function() {
 				
 		/* initialize an action manager for the scene */
 		scene.actionManager = new BABYLON.ActionManager(scene);
-		
-		/* set mouse over and mouse out functions for meshes in scene */
-//		WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
-//		WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
 		
 		if (WTW.highlightLayer == null) {
 			/* initialize highlight layer for scene - used when selecting objects as needed */

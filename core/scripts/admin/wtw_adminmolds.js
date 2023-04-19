@@ -924,7 +924,6 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 		zmold = WTW.addMold(zmolds[zmoldind].moldname, zmolds[zmoldind], zmolds[zmoldind].parentname, zcoveringname);
 		zmold.isPickable = true;
 		WTW.setCoveringFormFields(zcoveringname);
-		WTW.registerMouseOver(zmold);
 		switch (zshape.toLowerCase()) {
 			case 'tube':
 				var zcoords = WTW.getNewCoordinates(50);
@@ -3671,9 +3670,6 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					if (zhasdependents == 1) {
 						zmold = WTW.getMoldCSG(zmold, zmolds[zmoldind]);
 					}
-				}
-				if (zrebuildmold == 1 && zshape != 'image') {
-					WTW.registerMouseOver(zmold);
 				}
 				WTW.openEditPoles(zmold);
 			}

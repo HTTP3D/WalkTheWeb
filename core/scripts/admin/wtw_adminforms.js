@@ -1747,9 +1747,8 @@ WTWJS.prototype.loadPreviewScene = async function(zind) {
 	try {
 		var zcanvasid = 'wtw_modelCanvas' + zind;
 		if (dGet(zcanvasid) != null) {
-//WTW.log(zcanvasid);
-//			var zview = engine.registerView(dGet(zcanvasid));
-/*			var scene1 = new BABYLON.Scene(engine);        
+/*			var zview = engine.registerView(dGet(zcanvasid));
+			var scene1 = new BABYLON.Scene(engine);        
 			scene1.name = 'wtw_modelcanvas' + zind;
 			scene1.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
 			scene1.autoClear = false;

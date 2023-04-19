@@ -514,9 +514,6 @@ WTWJS.prototype.processCSGAction = function(zcsgmoldname, zcsgmold, zmold, zcsga
 		if (zmolddef.alttag.name != undefined) {
 			zalttag = zmolddef.alttag.name;
 		}
-		if (WTW.adminView == 1 || zalttag != '') {
-			WTW.registerMouseOver(znewmold);
-		}
 		znewmold.checkCollisions = true;
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_common.js-processCSGAction=' + ex.message);
