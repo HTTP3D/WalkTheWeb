@@ -1327,6 +1327,9 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 				zloading = true;
 
 				WTW.openLoginHUD('Loading 3D Avatar');
+				/* load avatar from local copy */
+				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
+				/* save avatar local copy to global server for future use and when visiting other servers */
 				var zrequest = {
 					'useravatarid': zuseravatarid,
 					'function':'setuseravatarglobalhash'
@@ -1359,9 +1362,6 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 										/* note serror would contain errors */
 										if (zresponse.globaluseravatarid != undefined) {
 											WTW.setCookie('globaluseravatarid', zresponse.globaluseravatarid, 365);
-											WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zresponse.globaluseravatarid, zuseravatarid, zavatarid, true);
-										} else {
-											WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
 										}
 									}
 								);

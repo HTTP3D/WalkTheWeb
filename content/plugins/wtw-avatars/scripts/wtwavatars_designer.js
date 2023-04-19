@@ -63,10 +63,6 @@ WTWJS.prototype.createScene = function() {
 			zbgsphere.scaling = new BABYLON.Vector3(600, 600, 600); 
 			zbgsphere.isPickable = false;
 
-			WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
-			WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
-			scene.actionManager = new BABYLON.ActionManager(scene);
-			
 			gui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
 			
 			var zuseravatarid = WTW.getQuerystring('useravatarid','');
@@ -1553,7 +1549,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									'ambientcolor':zambientcolor
 								};
 							}
-							WTW.registerMouseOver(zresponse.meshes[i]);
 							if (zresponse.meshes[i].parent == null) {
 								zresponse.meshes[i].parent = zavatarscale;
 							}
@@ -1605,7 +1600,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 							var zchildmoldname = zavatarname + '-' + zmeshname;
 							zresponse.skeletons[i].name = zchildmoldname;
 							zresponse.skeletons[i].id = zchildmoldname;
-							WTW.registerMouseOver(zresponse.skeletons[i]);
 							if (zresponse.skeletons[i].parent == null) {
 								zresponse.skeletons[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
 							}
@@ -1653,7 +1647,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zheadtop.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-headtop', scene);
 									zheadtop.material.alpha = 0;
 									zheadtop.isPickable = true;
-									//WTW.registerMouseOver(zheadtop);
 									zheadtop.attachToBone(zresponse.skeletons[i].bones[zheadtopbone], zresponse.meshes[0]);
 									if (zavatarname == 'myavatar-' + dGet('wtw_tinstanceid').value) {
 										zavatarcamera.parent = zheadtop;
@@ -1667,7 +1660,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zchest.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-chest', scene);
 									zchest.material.alpha = 0;
 									zchest.isPickable = true;
-									//WTW.registerMouseOver(zchest);
 									zchest.attachToBone(zresponse.skeletons[i].bones[zspine2bone], zresponse.meshes[0]);
 								}
 								if (zrighthandbone > -1) {
@@ -1676,7 +1668,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zrighthand.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-righthand', scene);
 									zrighthand.material.alpha = 0;
 									zrighthand.isPickable = true;
-									//WTW.registerMouseOver(zrighthand);
 									zrighthand.attachToBone(zresponse.skeletons[i].bones[zrighthandbone], zresponse.meshes[0]);
 								}
 								if (zlefthandbone > -1) {
@@ -1685,7 +1676,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zlefthand.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-lefthand', scene);
 									zlefthand.material.alpha = 0;
 									zlefthand.isPickable = true;
-									//WTW.registerMouseOver(zlefthand);
 									zlefthand.attachToBone(zresponse.skeletons[i].bones[zlefthandbone], zresponse.meshes[0]);
 								}
 								if (zrightlegbone > -1) {
@@ -1694,7 +1684,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zrightleg.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-rightleg', scene);
 									zrightleg.material.alpha = 0;
 									zrightleg.isPickable = true;
-									//WTW.registerMouseOver(zrightleg);
 									zrightleg.attachToBone(zresponse.skeletons[i].bones[zrightlegbone], zresponse.meshes[0]);
 								}
 								if (zleftlegbone > -1) {
@@ -1703,7 +1692,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zleftleg.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-leftleg', scene);
 									zleftleg.material.alpha = 0;
 									zleftleg.isPickable = true;
-									//WTW.registerMouseOver(zleftleg);
 									zleftleg.attachToBone(zresponse.skeletons[i].bones[zleftlegbone], zresponse.meshes[0]);
 								}
 								if (zrightfootbone > -1) {
@@ -1712,7 +1700,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zrightfoot.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-rightfoot', scene);
 									zrightfoot.material.alpha = 0;
 									zrightfoot.isPickable = true;
-									//WTW.registerMouseOver(zrightfoot);
 									zrightfoot.attachToBone(zresponse.skeletons[i].bones[zrightfootbone], zresponse.meshes[0]);
 								}
 								if (zleftfootbone > -1) {
@@ -1721,7 +1708,6 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									zleftfoot.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-leftfoot', scene);
 									zleftfoot.material.alpha = 0;
 									zleftfoot.isPickable = true;
-									//WTW.registerMouseOver(zleftfoot);
 									zleftfoot.attachToBone(zresponse.skeletons[i].bones[zleftfootbone], zresponse.meshes[0]);
 								}
 							}

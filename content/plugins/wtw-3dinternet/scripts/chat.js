@@ -640,7 +640,6 @@ WTW_3DINTERNET.prototype.toggleChatPrompt = function() {
 								if (zmeshname.indexOf('background') > -1 || zmeshname.indexOf('outterbar') > -1) {
 									zresults.meshes[i].isPickable = true;
 									zresults.meshes[i].isVisible = true;
-									WTW.registerMouseOver(zresults.meshes[i]);
 								} else {
 									zresults.meshes[i].isPickable = false;
 								}
