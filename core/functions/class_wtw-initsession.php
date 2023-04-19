@@ -2675,7 +2675,7 @@ class wtw {
 			$zmainelements .= "<div id='wtw_iwalkarrow' class='wtw-hide'></div>\r\n";
 			$zmainelements .= "<div id='wtw_iwalkarrow2' class='wtw-hide'></div>\r\n";
 			$zmainelements .= "<div id='wtw_itooltip'></div>\r\n";
-			$zmainelements .= "<canvas id='wtw_renderCanvas' touch-action='none' style='cursor:default;'></canvas>\r\n";
+			$zmainelements .= "<canvas id='wtw_renderCanvas' ></canvas>\r\n";
 			$zmainelements .= "<div id='wtw_greyout'></div>\r\n";
 			$zmainelements .= "<div id='wtw_ibrowsediv' class='wtw-browsediv' style='display:none;' onclick='WTW.blockPassThrough();'>\r\n";
 			$zmainelements .= "	<div id='wtw_browseheader' class='wtw-browseheader'>\r\n";

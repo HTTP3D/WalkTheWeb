@@ -160,7 +160,7 @@ input:checked + .wtw-slider:before {
 	touch-action:auto;
 }
 #wtw_renderCanvas {
-	cursor:default;
+/*	cursor: auto; */
 	position:absolute;
 	z-index:1;
 	top:0;
