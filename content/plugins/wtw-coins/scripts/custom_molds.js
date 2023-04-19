@@ -170,7 +170,6 @@ WTW_COINS.prototype.addMoldPlatform = function(zobjectfile, zmoldname, zmolddef,
 							zresults.meshes[i].name = zchildmoldname;
 							/* make sure chile meshes are pickable */
 							zresults.meshes[i].isPickable = true;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							/* make sure all object meshes have a parent */
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
@@ -238,7 +237,6 @@ WTW_COINS.prototype.addMoldPlatformLift = function(zobjectfile, zmoldname, zmold
 							zresults.meshes[i].name = zchildmoldname;
 							/* make sure chile meshes are pickable */
 							zresults.meshes[i].isPickable = true;
-							WTW.registerMouseOver(zresults.meshes[i]);
 							/* make sure all object meshes have a parent */
 							if (zresults.meshes[i].parent == null) {
 								zresults.meshes[i].parent = zmold;
@@ -269,7 +267,6 @@ WTW_COINS.prototype.addMoldPlatformLift = function(zobjectfile, zmoldname, zmold
 							/* append zmoldname to all child skeleton names */
 							var zchildmoldname = zmoldname + '-' + zmeshname;
 							zresults.skeletons[i].name = zchildmoldname;
-							/* WTW.registerMouseOver(zresults.skeletons[i]); */
 							/* make sure all bones have a parent set */
 							if (zresults.skeletons[i].parent == null) {
 								zresults.skeletons[i].parent = zmold;

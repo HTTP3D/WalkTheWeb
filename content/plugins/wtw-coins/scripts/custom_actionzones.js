@@ -363,7 +363,6 @@ WTW_COINS.prototype.loadCoin = async function(zactionzonename, zvalue1, zscaling
 									var zmeshname = zresults.meshes[i].name;
 									var zchildmoldname = zactionzonename + '-' + zmeshname;
 									zresults.meshes[i].name = zchildmoldname;
-									WTW.registerMouseOver(zresults.meshes[i]);
 									zresults.meshes[i].parent = zactionzone;
 									zresults.meshes[i].scaling.x = 1 / zscalingx;
 									zresults.meshes[i].scaling.y = 1 / zscalingy;
