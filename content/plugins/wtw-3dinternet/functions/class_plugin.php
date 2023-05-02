@@ -127,7 +127,7 @@ class wtw3dinternet {
 			$wtwplugins->addScript('wtw-3dinternet-admin', null, WTW_3DINTERNET_URL . "/scripts/admin.js");
 			$wtwplugins->addScript('wtw-3dinternet-move', null, WTW_3DINTERNET_URL . "/scripts/move.js");
 			$wtwplugins->addScript('wtw-3dinternet-chat', null, WTW_3DINTERNET_URL . "/scripts/chat.js");
-			$wtwplugins->addScript('wtw-3dinternet-recordrtc', null, "/core/scripts/engine/recordrtc.min.js");
+			$wtwplugins->addScript('wtw-3dinternet-recordrtc', null, "/core/scripts/engine/socket.io/recordrtc.min.js");
 			$wtwplugins->addScript('wtw-3dinternet-voicechat', null, WTW_3DINTERNET_URL . "/scripts/voicechat.js");
 			
 			/* browse menu (bottom) settings Menu Items */

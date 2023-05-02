@@ -272,10 +272,10 @@ WTWJS.prototype.getDegrees = function(zradians) {
 WTWJS.prototype.mouseOverMold = function(zmold) {
 	try {
 		document.body.style.cursor = 'default';
-		if (zmold.meshUnderPointer != null) {
+		if (zmold != null) {
 			WTW.lastID = WTW.currentID;
-			WTW.currentID = zmold.meshUnderPointer.name;
-			if (zmold.meshUnderPointer.isPickable) {
+			WTW.currentID = zmold.name;
+			if (zmold.isPickable) {
 				document.body.style.cursor = 'pointer';
 			}
 		}
