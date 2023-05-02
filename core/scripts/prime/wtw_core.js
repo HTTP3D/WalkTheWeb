@@ -81,22 +81,35 @@ WTWJS.prototype.setContentRating = function() {
 				if (dGet('wtw_rating') != null) {
 					if (zresponse.unratedcontent == '1') {
 						dGet('wtw_rating').innerHTML = zresponse.rating + '*';
-						dGet('wtw_ratingmobiletext').innerHTML = zresponse.rating + '*';
 					} else {
 						dGet('wtw_rating').innerHTML = zresponse.rating;
-						dGet('wtw_ratingmobiletext').innerHTML = zresponse.rating;
 					}
 					dGet('wtw_rating').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
 					dGet('wtw_rating').onmouseout = function() {WTW.hideToolTip();};
-					dGet('wtw_ratingmobile').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
-					dGet('wtw_ratingmobiletext').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
-					dGet('wtw_ratingmobile').onmouseout = function() {WTW.hideToolTip();};
-					dGet('wtw_ratingmobiletext').onmouseout = function() {WTW.hideToolTip();};
-					
-					dGet('wtw_ratingmobile').title = 'Content Rating - Click for more';
-					dGet('wtw_ratingmobile').alt = 'Content Rating - Click for more';
 					
 					dGet('wtw_contentrating').innerHTML = atob(zresponse.contentrating);
+					if (dGet('wtw_ratingmobile') != null) {
+						if (zresponse.unratedcontent == '1') {
+							dGet('wtw_ratingmobile').innerHTML = zresponse.rating + '*';
+						} else {
+							dGet('wtw_ratingmobile').innerHTML = zresponse.rating;
+						}
+						dGet('wtw_ratingmobile').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
+						dGet('wtw_ratingmobile').onmouseout = function() {WTW.hideToolTip();};
+						
+						dGet('wtw_ratingmobile').title = 'Content Rating - Click for more';
+						dGet('wtw_ratingmobile').alt = 'Content Rating - Click for more';
+					}
+					if (dGet('wtw_ratingmobiletext') != null) {
+						if (zresponse.unratedcontent == '1') {
+							dGet('wtw_ratingmobiletext').innerHTML = zresponse.rating + '*';
+						} else {
+							dGet('wtw_ratingmobiletext').innerHTML = zresponse.rating;
+						}
+						dGet('wtw_ratingmobiletext').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
+						dGet('wtw_ratingmobiletext').onmouseout = function() {WTW.hideToolTip();};
+					}
+					
 				}
 			}
 		);
