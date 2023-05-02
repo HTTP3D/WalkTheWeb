@@ -1,5 +1,9 @@
 # BEGIN WalkTheWeb
 
+AddType image/vnd.ms-dds .dds
+AddType image/vnd.radiance .hdr
+AddType image/x-exr .exr
+AddType application/wasm .wasm
 AddType application/octet-stream .obj
 AddType application/octet-stream .glb
 AddType application/octet-stream .gltf
