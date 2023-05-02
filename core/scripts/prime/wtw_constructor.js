@@ -28,6 +28,8 @@ function WTWJS() {
 	/* WTW.loadAllActionZones - sets all load zones as if the avatar is in them so that it loads all sections of the map - great for getting snapshots and images */
 	this.loadAllActionZones = 0;
 
+	/* WTW.physicsViewer - Havok specific physics debug mode, shows the mesh physics objects */
+	this.physicsViewer = null;
 
 /* GLOBAL VARIABLES FOR BROWSE MODE (ALSO USED IN ADMIN MODE) */
 	
@@ -47,8 +49,11 @@ function WTWJS() {
 	/* WTW.highlightLayer - used to highlight any mesh in the active 3D Scene (implementation of BABYLON.HighlightLayer) */
 	this.highlightLayer = null;
 
-	/* enable physics engine */
-	this.enablePhysics = 1;
+	/* WTW.babylonVersion - selected Babylon Engine to run - should match the folder name under /core/scripts/engine/ */
+	this.babylonVersion = 'v5.x.x';
+
+	/* WTW.physicsEngine - physics engine when enabled (havok, cannon, oimo, or none) */
+	this.physicsEngine = 'none';
 
 	/* enable user email validation */
 	this.enableEmailValidation = 0;

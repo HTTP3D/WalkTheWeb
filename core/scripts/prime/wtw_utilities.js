@@ -1436,6 +1436,10 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setGroundWater();
+				} else if (zitem.indexOf('skysize2') > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
+					WTW.setSkySize();
 				} else if (zitem.indexOf('sky') > -1) {
 					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 					dGet(zitem).value = (znvali.toFixed(2));
@@ -1487,6 +1491,10 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setGroundWater();
+					} else if (zitem.indexOf('skysize2') > -1) {
+						znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+						dGet(zitem).value = (znvali.toFixed(2));
+						WTW.setSkySize();
 					} else if (zitem.indexOf('sky') > -1) {
 						znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 						dGet(zitem).value = (znvali.toFixed(2));

@@ -1637,6 +1637,70 @@ WTWJS.prototype.toggleBrowseMenu = function(zopen) {
 }
 
 
+/* Babylon debug tools */
+
+WTWJS.prototype.toggleDebugLayer = function(zshow) {
+	/* toggles the Babylon debugger */
+	try {
+		if (zshow == undefined) {
+			if (scene.debugLayer.isVisible() == true) {
+				zshow = false;
+			} else {
+				zshow = true;
+			}
+		}
+		if (zshow) {
+			scene.debugLayer.show({
+			  embedMode: true
+			});
+		} else {
+			scene.debugLayer.hide();
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud.js-toggleDebugLayer=' + ex.message);
+	}
+}
+
+WTWJS.prototype.togglePhysicsViewer = function(zshow) {
+	/* toggles the physics debugger with show physics on the meshes */
+	try {
+		if (zshow == undefined) {
+			if (WTW.physicsViewer == null) {
+				zshow = true;
+			} else {
+				zshow = false;
+			}
+		}
+		if (WTW.physicsViewer == null) {
+			WTW.physicsViewer = new BABYLON.Debug.PhysicsViewer();
+		}
+		if (zshow) {
+			for (var zmold of scene.rootNodes) {
+				if (zmold.physicsBody) {
+					var zdebugmold = WTW.physicsViewer.showBody(zmold.physicsBody);
+				}
+				if (zmold.physicsImposter) {
+					var zdebugmold = WTW.physicsViewer.showImpostor(zmold.physicsImpostor);
+				}
+			}
+		} else {
+			for (var zmold of scene.rootNodes) {
+				if (zmold.physicsBody) {
+					var zdebugmold = WTW.physicsViewer.hideBody(zmold.physicsBody);
+				}
+				if (zmold.physicsImpostor) {
+					var zdebugmold = WTW.physicsViewer.hideImpostor(zmold.physicsImpostor);
+				}
+			}
+			WTW.physicsViewer.dispose();
+			WTW.physicsViewer = null;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud.js-togglePhysicsViewer=' + ex.message);
+	}
+}
+
+
 /* these functions are used by admin menu - dev lists of objects for troubleshooting - prints results to the console log */
 
 WTWJS.prototype.listConnectingGrids = function() {

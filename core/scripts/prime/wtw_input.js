@@ -2389,7 +2389,7 @@ WTWJS.prototype.checkHovers = function(zmold) {
 		var zmoldnameparts = WTW.getMoldnameParts(WTW.currentID);
 		var zmoldname = WTW.currentID;
 		var zshape = '';
-//		WTW.checkMoldEvent('onmouseover', zmold.meshUnderPointer.name);
+//		WTW.checkMoldEvent('onmouseover', zmold.name);
 		if (zmoldnameparts.molds.length > 0) {
 			/* process type *molds- */
 			if (WTW.adminView == 1) {

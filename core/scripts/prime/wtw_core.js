@@ -21,6 +21,7 @@ WTWJS.prototype.initLoadSequence = function() {
 
 WTWJS.prototype.loadSequence = function() {
 	/* when babylon engine is supported, this is the load sequence of functions */
+	/* this will load through the Babylon engine */
 	/* each function can be found in order after this function */
 	try {
 		if (typeof WTW.adminInit == 'function') {
@@ -33,7 +34,16 @@ WTWJS.prototype.loadSequence = function() {
 		WTW.loadInitSettings();
 		/* sets up the environment with babylon engine */
 		WTW.initEnvironment();
-		/* see if user is logged in and set the associated settings */
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_core.js-loadSequence=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.continueLoadSequence = function() {
+	/* when babylon engine is supported, this is the load sequence of functions */
+	/* this will load after the babylon engine */
+	/* each function can be found in order after this function */
+	try {
 		WTW.loadLoginSettings();
 		/* load the main parent box, avatar placeholder, and camera */
 		WTW.loadParentAndCamera();
@@ -269,12 +279,18 @@ WTWJS.prototype.loadInitSettings = function() {
 			communityid = '';
 			buildingid = '';
 		}
+		if (dGet('wtw_tbabylonversion') != null) {
+			WTW.babylonVersion = dGet('wtw_tbabylonversion').value;
+		}
+		if (dGet('wtw_tphysicsengine') != null) {
+			WTW.physicsEngine = dGet('wtw_tphysicsengine').value;
+		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-loadInitSettings=' + ex.message);
 	} 
 }
 
-WTWJS.prototype.initEnvironment = function() {
+WTWJS.prototype.initEnvironment = async function() {
 	/* Initialize canvas, scene, and default settings for scene */
 	try {
 		/* every user has an instance assigned */
@@ -303,7 +319,14 @@ WTWJS.prototype.initEnvironment = function() {
 		/* event listener allows screen shots of the canvas */
 		canvas.addEventListener('webglcontextrestored', function (event) {/*initializeResources();*/}, false);
 		/* initialize babylon game engine */
-
+		
+		/* sky boxes need this setting to false or they show a darkened side */
+		if (WTW.init.skyType == '') {
+			WTW.doNotHandleContextLost = true;
+		} else {
+			WTW.doNotHandleContextLost = false;
+		}
+		
 //		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost, stencil: true});
 		engine = new BABYLON.Engine(canvas, true);
 
@@ -312,9 +335,9 @@ WTWJS.prototype.initEnvironment = function() {
 		
 		/* optional optimization settings */
 		if (WTW.adminView == 1) {
-			engine.enableOfflineSupport = WTW.enableOfflineSupportAdmin;
+//			engine.enableOfflineSupport = WTW.enableOfflineSupportAdmin;
 		} else {
-			engine.enableOfflineSupport = WTW.enableOfflineSupport;
+//			engine.enableOfflineSupport = WTW.enableOfflineSupport;
 		}
 		
 		/* initialize scene */
@@ -322,20 +345,41 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.name = 'WalkTheWeb';
 		scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
 		
-		/* initialize cannon physics engine */
-		var zphysicsplugin = new BABYLON.CannonJSPlugin();
-		scene.enablePhysics(scene.gravity, zphysicsplugin);
+		/* initialize physics engine if it is enabled */
+		switch (WTW.physicsEngine) {
+			case 'havok':
+				/* initialize Havok physics engine */
+				const zhavokinstance = await HavokPhysics();
+				// pass the engine to the plugin
+				const hk = new BABYLON.HavokPlugin(true, zhavokinstance);
+				// enable physics in the scene with a gravity
+				scene.enablePhysics(scene.gravity, hk);
+				break;
+			case 'cannon':
+				var zphysicsplugin = new BABYLON.CannonJSPlugin();
+				scene.enablePhysics(scene.gravity, zphysicsplugin);
+				break;
+			case 'oimo':
+				var zoimo = new BABYLON.OimoJSPlugin(undefined, OIMO);
+				scene.enablePhysics(scene.gravity, zoimo);
+				break;
+		}
+		
 		scene.autoClear = false;
 		scene.autoClearDepthAndStencil = false;
 		scene.collisionsEnabled = true;
 		scene.doNotHandleCursors = true;
-		
-		/* tested some caching options */
+//		scene.skipPointerMovePicking = true;
+//		scene.constantlyUpdateMeshUnderPointer = false;
+//		scene.getAnimationRatio();
 //		scene.useGeometryIdsMap = true;
 //		scene.useMaterialMeshMap = true;
-		scene.useClonedMeshMap = WTW.init.sceneUseClonedMeshMap;
+		
+//		scene.useClonedMeshMap = WTW.init.sceneUseClonedMeshMap;
 		/* set scene to be clearer */
-		scene.blockMaterialDirtyMechanism = WTW.init.sceneBlockMaterialDirtyMechanism;
+//		scene.blockMaterialDirtyMechanism = WTW.init.sceneBlockMaterialDirtyMechanism;
+		
+//		scene.performancePriority = BABYLON.ScenePerformancePriority.Intermediate;
 		
 		/* Add Scene Optimizer */
 /*		var zoptions = new BABYLON.SceneOptimizerOptions(30, 2000);
@@ -402,6 +446,8 @@ WTWJS.prototype.initEnvironment = function() {
 				WTW.show('wtw_mainmenudisplaynamemobile');
 			}
 		}
+		/* continue the load sequence for after the babylon engine */
+		WTW.continueLoadSequence();
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-initEnvironment=' + ex.message);
 	} 
@@ -886,7 +932,6 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 			WTW.water.position.y = WTW.init.waterPositionY;
 //			WTW.waterMat.addToRenderList(WTW.sky);
 			WTW.waterMat.addToRenderList(WTW.extraGround);
-//			WTW.water.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.water, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
 		}
 		
 		if (WTW.init.skyType == '') {

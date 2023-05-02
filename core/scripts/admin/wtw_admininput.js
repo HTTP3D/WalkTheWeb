@@ -115,21 +115,21 @@ WTWJS.prototype.mouseOverMoldAdmin = function(ztagmesh, zcurrentid) {
 				var znamepart = WTW.getMoldnameParts(zcurrentid);
 				var zmold = null;
 				if (znamepart.webset.indexOf('buildingmolds') > -1 && buildingid == '') {
-					if (ztagmesh.meshUnderPointer.parent != null) {
-						zmold = ztagmesh.meshUnderPointer.parent;
+					if (ztagmesh.parent != null) {
+						zmold = ztagmesh.parent;
 						while (zmold.name.indexOf('connectinggrids') == -1 && zmold.parent != null) {
 							zmold = zmold.parent;
 						}
 					}
 				} else if (znamepart.webset.indexOf('thingmolds') > -1 && thingid == '') {
-					if (ztagmesh.meshUnderPointer.parent != null) {
-						zmold = ztagmesh.meshUnderPointer.parent;
+					if (ztagmesh.parent != null) {
+						zmold = ztagmesh.parent;
 						while (zmold.name.indexOf('connectinggrids') == -1 && zmold.parent != null) {
 							zmold = zmold.parent;
 						}
 					}
 				} else if (znamepart.webset.indexOf('molds') > -1) {
-					zmold = ztagmesh.meshUnderPointer;
+					zmold = ztagmesh;
 				}
 				if (zmold != null) {
 					//add code to get parent mold (connecting grid) from moldname part

@@ -799,6 +799,12 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.openFullPageForm('settings','API Keys Access');
 						break;
 				/* Dev Tools Admin Items */
+					case 'wtw_admindebuglayer':
+						WTW.toggleDebugLayer();
+						break;
+					case 'wtw_adminphysicsviewer':
+						WTW.togglePhysicsViewer();
+						break;
 					case 'wtw_adminlistmeshes':
 						WTW.listMeshes();
 						break;

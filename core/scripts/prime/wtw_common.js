@@ -1191,6 +1191,7 @@ WTWJS.prototype.createSky = function () {
 				WTW.sky.material = zskyboxmat;
 				/* have skybox follow the camera position */
 				WTW.sky.infiniteDistance = true;
+				WTW.sky.isPickable = false;
 				WTW.sky.renderingGroupId = 0;
 				WTW.sky.id = 'sky';
 				WTW.sky.name = 'sky';
@@ -1207,6 +1208,7 @@ WTWJS.prototype.createSky = function () {
 						WTW.sky = scene.createDefaultSkybox(zhdrtexture, WTW.init.skyBoxPBR, WTW.init.skySize, WTW.init.skyBoxBlur, WTW.init.skyBoxAsEnvironmentTexture);
 						/* have skybox follow the camera position */
 						WTW.sky.infiniteDistance = true;
+						WTW.sky.isPickable = false;
 						WTW.sky.renderingGroupId = 0;
 						WTW.sky.id = 'sky';
 						WTW.sky.name = 'sky';
@@ -1230,6 +1232,7 @@ WTWJS.prototype.createSky = function () {
 						WTW.sky = scene.createDefaultSkybox(scene.environmentTexture, WTW.init.skyBoxPBR, WTW.init.skySize, WTW.init.skyBoxBlur, WTW.init.skyBoxAsEnvironmentTexture);
 						/* have skybox follow the camera position */
 						WTW.sky.infiniteDistance = true;
+						WTW.sky.isPickable = false;
 						WTW.sky.renderingGroupId = 0;
 						WTW.sky.id = 'sky';
 						WTW.sky.name = 'sky';
@@ -1255,6 +1258,7 @@ WTWJS.prototype.createSky = function () {
 						zskyboxmat.reflectionTexture = new BABYLON.HDRCubeTexture(WTW.init.skyBoxFile, scene, 512);
 						zskyboxmat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 						WTW.sky.material = zskyboxmat;
+						WTW.sky.isPickable = false;
 						WTW.sky.renderingGroupId = 0;
 						WTW.sky.id = 'sky';
 						WTW.sky.name = 'sky';
@@ -1285,6 +1289,7 @@ WTWJS.prototype.createSky = function () {
 						zskyboxmat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 						zskyboxmat.microSurface = WTW.init.skyBoxMicroSurface;
 						zskyboxmat.disableLighting = false;
+						WTW.sky.isPickable = false;
 						WTW.sky.material = zskyboxmat;
 						/* have skybox follow the camera position */
 						WTW.sky.infiniteDistance = true;
@@ -1302,7 +1307,6 @@ WTWJS.prototype.createSky = function () {
 				break;
 			default: 
 				/* initialize sky sphere - scaling and material settings */
-				WTW.init.skySize = 5000;
 				WTW.sky = BABYLON.MeshBuilder.CreateSphere('sky', {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
 				WTW.sky.scaling.x = WTW.init.skySize;
 				WTW.sky.scaling.y = WTW.init.skySize;
@@ -1315,12 +1319,12 @@ WTWJS.prototype.createSky = function () {
 				var zskyboxmat = new BABYLON.SkyMaterial('skymat', scene);
 				zskyboxmat.backFaceCulling = false;
 				WTW.sky.material = zskyboxmat;
-				window.setTimeout(function() {
-					WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
-				}, 1000);
 				WTW.sky.renderingGroupId = 0;
 				WTW.sky.id = 'sky';
 				WTW.sky.name = 'sky';
+				window.setTimeout(function() {
+					WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
+				}, 1000);
 				break;
 		}
 	} catch (ex) {
@@ -1334,7 +1338,6 @@ WTWJS.prototype.loadSkyScene = function (zinclination, zluminance, zazimuth, zra
 		if (WTW.init.skyType == '') {
 			var zframescount = 100;
 			var zintensity = WTW.getSunIntensity(zinclination, zazimuth);
-			
 			if (zinclination < .3 && zinclination > -.3 && zazimuth > .2) {
 				WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
 			} else if ((zinclination >= .3 || zinclination <= -.3) && zazimuth > .2) {
@@ -1446,7 +1449,7 @@ WTWJS.prototype.loadSkyScene = function (zinclination, zluminance, zazimuth, zra
 			WTW.init.skyTurbidity = zturbidity;
 			WTW.init.skyMieDirectionalG = zmiedirectionalg;
 			WTW.init.skyMieCoefficient = zmiecoefficient;
-//			WTW.sun.intensity = zintensity;
+
 			if (WTW.extraGround.material != undefined) {
 				WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 			}
@@ -1463,7 +1466,7 @@ WTWJS.prototype.setExtendedGround = function () {
 			WTW.extraGround.dispose();
 			WTW.extraGround = null;
 		}
-		WTW.extraGround = BABYLON.MeshBuilder.CreateGround('communityeground-', {width: 5000, height: 5000, subdivisions: 2, updatable: true}, scene);
+		WTW.extraGround = BABYLON.MeshBuilder.CreateGround('communityeground-', {width: 5000, height: 5000, subdivisions: 256, updatable: false}, scene);
 		WTW.extraGround.position.x = 0;
 		WTW.extraGround.position.y = 0;
 		WTW.extraGround.position.z = 0;
@@ -1475,7 +1478,16 @@ WTWJS.prototype.setExtendedGround = function () {
 		WTW.extraGround.material.diffuseTexture.uScale = 500;
 		WTW.extraGround.material.diffuseTexture.vScale = 500;
 		/* set physics on ground */
-		WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
+		switch (WTW.physicsEngine) {
+			case 'havok':
+				var zgroundaggregate = new BABYLON.PhysicsAggregate(WTW.extraGround, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+				break;
+			case 'oimo':
+			case 'cannon':
+				WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
+				break;
+		}
+
 		WTW.extraGround.renderingGroupId = 0;
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_common.js-setExtendedGround=' + ex.message);

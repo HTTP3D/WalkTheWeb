@@ -1643,7 +1643,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									zresults.meshes[i].name = zchildmoldname;
 									zresults.meshes[i].renderingGroupId = 1;
 //									zresults.meshes[i].convertToUnIndexedMesh();
-									zresults.meshes[i].cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION;
+									zresults.meshes[i].cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY; //BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION;
 									
 									var zcovering = null;
 									
@@ -1691,9 +1691,9 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 
 									/* this if statement will be moved to a plugin hook (minigolf related test) */
 									if (zresults.meshes[i].name.indexOf('ground') > -1) {
-										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
+//										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
 									} else if (zresults.meshes[i].name.indexOf('sides') > -1) {
-										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
+//										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
 									} else if (zresults.meshes[i].name.indexOf('hull') > -1) {
 //										zmold.physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, {ignoreParent: false,  mass: 1, friction: 1, restitution: .5 }, scene);
 									}
@@ -2686,7 +2686,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 			}
 			
 			/* create the impostors */
-			zspheres.forEach(function (point, idx) {
+/*			zspheres.forEach(function (point, idx) {
 				var zmass = idx < zsubdivisions ? 0 : 1;
 				point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.ParticleImpostor, { mass: zmass }, scene);
 				if (idx >= zsubdivisions) {
@@ -2696,7 +2696,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 					}
 				}
 			});
-			
+*/			
 			zflagcloth.registerBeforeRender(function () {
 				var zpositions = [];
 				zspheres.forEach(function (zsphere) {

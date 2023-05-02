@@ -636,24 +636,24 @@ WTWJS.prototype.openMediaPageForm = async function(zuploadid) {
 		dGet('wtw_mediaoriginal').src = '';
 		WTW.getAsyncJSON('/connect/uploadmedia.php?uploadid=' + zuploadid, 
 			function(zresponse) {
-				var zuploadinfo = JSON.parse(zresponse);
-				if (zuploadinfo != null) {
-					for (var i = 0; i < zuploadinfo.length; i++) {
-						if (zuploadinfo[i] != null) {
+				var zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i = 0; i < zresponse.length; i++) {
+						if (zresponse[i] != null) {
 							var zfiletitle = 'File Information';
-							if (zuploadinfo[i].uploadinfo != null) {
-								if (zuploadinfo[i].uploadinfo.title != undefined) {
-									zfiletitle = zuploadinfo[i].uploadinfo.title;
-									dGet('wtw_uploadfiletitle').innerHTML = zuploadinfo[i].uploadinfo.title;
+							if (zresponse[i].uploadinfo != null) {
+								if (zresponse[i].uploadinfo.title != undefined) {
+									zfiletitle = zresponse[i].uploadinfo.title;
+									dGet('wtw_uploadfiletitle').innerHTML = zresponse[i].uploadinfo.title;
 								}
-								if (zuploadinfo[i].uploadinfo.name != undefined) {
-									dGet('wtw_uploadfilename').innerHTML = zuploadinfo[i].uploadinfo.name;
+								if (zresponse[i].uploadinfo.name != undefined) {
+									dGet('wtw_uploadfilename').innerHTML = zresponse[i].uploadinfo.name;
 								}
-								if (zuploadinfo[i].uploadinfo.type != undefined) {
-									dGet('wtw_uploadfiletype').innerHTML = zuploadinfo[i].uploadinfo.type;
+								if (zresponse[i].uploadinfo.type != undefined) {
+									dGet('wtw_uploadfiletype').innerHTML = zresponse[i].uploadinfo.type;
 								}
-								if (zuploadinfo[i].uploadinfo.updatedate != undefined) {
-									dGet('wtw_uploadupdatedate').innerHTML = WTW.formatDateLong(zuploadinfo[i].uploadinfo.updatedate);
+								if (zresponse[i].uploadinfo.updatedate != undefined) {
+									dGet('wtw_uploadupdatedate').innerHTML = WTW.formatDateLong(zresponse[i].uploadinfo.updatedate);
 								}
 								dGet('wtw_uploadfiledelete').onclick = function() {
 									WTW.deleteUploadFiles(zuploadid);
@@ -661,53 +661,54 @@ WTWJS.prototype.openMediaPageForm = async function(zuploadid) {
 							}
 							
 							dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfiletitle + "</div>";
-							if (dGet('wtw_uploadfiletype').innerHTML.indexOf('image') > -1) {
-								if (zuploadinfo[i].thumbnail != null) {
-									if (zuploadinfo[i].thumbnail.data != undefined) {
-										dGet('wtw_mediathumbnail').src = zuploadinfo[i].thumbnail.data;
+
+							if (dGet('wtw_uploadfiletype').innerHTML.indexOf('image') > -1 && zresponse[i].uploadinfo.extension != 'dds' && zresponse[i].uploadinfo.extension != 'hdr' && zresponse[i].uploadinfo.extension != 'exr') {
+								if (zresponse[i].thumbnail != null) {
+									if (zresponse[i].thumbnail.data != undefined) {
+										dGet('wtw_mediathumbnail').src = zresponse[i].thumbnail.data;
 									}
-									if (zuploadinfo[i].thumbnail.size != undefined) {
-										dGet('wtw_mediathumbnailsize').innerHTML = WTW.formatDataSize(zuploadinfo[i].thumbnail.size);
+									if (zresponse[i].thumbnail.size != undefined) {
+										dGet('wtw_mediathumbnailsize').innerHTML = WTW.formatDataSize(zresponse[i].thumbnail.size);
 									}
-									if (zuploadinfo[i].thumbnail.width != undefined && zuploadinfo[i].thumbnail.height != undefined) {
-										dGet('wtw_mediathumbnaildimensions').innerHTML = WTW.formatNumber(zuploadinfo[i].thumbnail.width,0) + ' x ' + WTW.formatNumber(zuploadinfo[i].thumbnail.height,0);
+									if (zresponse[i].thumbnail.width != undefined && zresponse[i].thumbnail.height != undefined) {
+										dGet('wtw_mediathumbnaildimensions').innerHTML = WTW.formatNumber(zresponse[i].thumbnail.width,0) + ' x ' + WTW.formatNumber(zresponse[i].thumbnail.height,0);
 									}
-									if (zuploadinfo[i].thumbnail.path != undefined) {
-										dGet('wtw_mediathumbnail').src = zuploadinfo[i].thumbnail.path;
-										dGet('wtw_mediathumbnailpath').innerHTML = "<a href='" + zuploadinfo[i].thumbnail.path + "' target='_blank'>" + zuploadinfo[i].thumbnail.path + "</a>";
-										dGet('wtw_mediathumbnaildownload').href = zuploadinfo[i].thumbnail.path;
-									}
-								}
-								if (zuploadinfo[i].original != null) {
-									if (zuploadinfo[i].original.data != undefined) {
-										dGet('wtw_mediaoriginal').src = zuploadinfo[i].original.data;
-									}
-									if (zuploadinfo[i].original.size != undefined) {
-										dGet('wtw_mediaoriginalsize').innerHTML = WTW.formatDataSize(zuploadinfo[i].original.size);
-									}
-									if (zuploadinfo[i].original.width != undefined && zuploadinfo[i].original.height != undefined) {
-										dGet('wtw_mediaoriginaldimensions').innerHTML = WTW.formatNumber(zuploadinfo[i].original.width,0) + ' x ' + WTW.formatNumber(zuploadinfo[i].original.height,0);
-									}
-									if (zuploadinfo[i].original.path != undefined) {
-										dGet('wtw_mediaoriginal').src = zuploadinfo[i].original.path;
-										dGet('wtw_mediaoriginalpath').innerHTML = "<a href='" + zuploadinfo[i].original.path + "' target='_blank'>" + zuploadinfo[i].original.path + "</a>";
-										dGet('wtw_mediaoriginaldownload').href = zuploadinfo[i].original.path;
+									if (zresponse[i].thumbnail.path != undefined) {
+										dGet('wtw_mediathumbnail').src = zresponse[i].thumbnail.path;
+										dGet('wtw_mediathumbnailpath').innerHTML = "<a href='" + zresponse[i].thumbnail.path + "' target='_blank'>" + zresponse[i].thumbnail.path + "</a>";
+										dGet('wtw_mediathumbnaildownload').href = zresponse[i].thumbnail.path;
 									}
 								}
-								if (zuploadinfo[i].websize != null) {
-									if (zuploadinfo[i].websize.data != undefined) {
-										dGet('wtw_mediawebsize').src = zuploadinfo[i].websize.data;
+								if (zresponse[i].original != null) {
+									if (zresponse[i].original.data != undefined) {
+										dGet('wtw_mediaoriginal').src = zresponse[i].original.data;
 									}
-									if (zuploadinfo[i].websize.size != undefined) {
-										dGet('wtw_mediawebsizesize').innerHTML = WTW.formatDataSize(zuploadinfo[i].websize.size);
+									if (zresponse[i].original.size != undefined) {
+										dGet('wtw_mediaoriginalsize').innerHTML = WTW.formatDataSize(zresponse[i].original.size);
 									}
-									if (zuploadinfo[i].websize.width != undefined && zuploadinfo[i].websize.height != undefined) {
-										dGet('wtw_mediawebsizedimensions').innerHTML = WTW.formatNumber(zuploadinfo[i].websize.width,0) + ' x ' + WTW.formatNumber(zuploadinfo[i].websize.height,0);
+									if (zresponse[i].original.width != undefined && zresponse[i].original.height != undefined) {
+										dGet('wtw_mediaoriginaldimensions').innerHTML = WTW.formatNumber(zresponse[i].original.width,0) + ' x ' + WTW.formatNumber(zresponse[i].original.height,0);
 									}
-									if (zuploadinfo[i].websize.path != undefined) {
-										dGet('wtw_mediawebsize').src = zuploadinfo[i].websize.path;
-										dGet('wtw_mediawebsizepath').innerHTML = "<a href='" + zuploadinfo[i].websize.path + "' target='_blank'>" + zuploadinfo[i].websize.path + "</a>";
-										dGet('wtw_mediawebsizedownload').href = zuploadinfo[i].websize.path;
+									if (zresponse[i].original.path != undefined) {
+										dGet('wtw_mediaoriginal').src = zresponse[i].original.path;
+										dGet('wtw_mediaoriginalpath').innerHTML = "<a href='" + zresponse[i].original.path + "' target='_blank'>" + zresponse[i].original.path + "</a>";
+										dGet('wtw_mediaoriginaldownload').href = zresponse[i].original.path;
+									}
+								}
+								if (zresponse[i].websize != null) {
+									if (zresponse[i].websize.data != undefined) {
+										dGet('wtw_mediawebsize').src = zresponse[i].websize.data;
+									}
+									if (zresponse[i].websize.size != undefined) {
+										dGet('wtw_mediawebsizesize').innerHTML = WTW.formatDataSize(zresponse[i].websize.size);
+									}
+									if (zresponse[i].websize.width != undefined && zresponse[i].websize.height != undefined) {
+										dGet('wtw_mediawebsizedimensions').innerHTML = WTW.formatNumber(zresponse[i].websize.width,0) + ' x ' + WTW.formatNumber(zresponse[i].websize.height,0);
+									}
+									if (zresponse[i].websize.path != undefined) {
+										dGet('wtw_mediawebsize').src = zresponse[i].websize.path;
+										dGet('wtw_mediawebsizepath').innerHTML = "<a href='" + zresponse[i].websize.path + "' target='_blank'>" + zresponse[i].websize.path + "</a>";
+										dGet('wtw_mediawebsizedownload').href = zresponse[i].websize.path;
 									}
 								}
 								WTW.show('wtw_imagethumbnailinfo');
@@ -1015,9 +1016,13 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 							var zimagesrc = '';
 							var zthumbnailid = zresponse[i].thumbnailid;
 							var zwebsizeid = zresponse[i].websizeid;
-							if (zresponse[i].filetype.indexOf('image') > -1 && zresponse[i].filepath != '') {
+							var zisimage = false;
+							if (zresponse[i].filetype.indexOf('image') > -1 && zresponse[i].fileextension != 'dds' && zresponse[i].fileextension != 'hdr' && zresponse[i].fileextension != 'exr') {
+								zisimage = true;
+							}
+							if (zisimage && zresponse[i].filepath != '') {
 								zimagesrc = zresponse[i].filepath;
-							} else if (zresponse[i].filetype.indexOf('image') > -1) {
+							} else if (zisimage) {
 								zimagesrc = 'data:' + zresponse[i].filetype + ';base64,' + atob(zresponse[i].filedata);
 							} else if (zresponse[i].filetype.indexOf('audio') > -1) {
 								zimageid = 'wtw_sound' + zresponse[i].uploadid;
@@ -1029,9 +1034,14 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 								zimagesrc = '/content/system/images/iconvideo.png';
 								zthumbnailid = zresponse[i].uploadid;
 								zwebsizeid = zresponse[i].uploadid;
-							} else {
+							} else if (zresponse[i].filetype.indexOf('doc') > -1 || zresponse[i].filetype.indexOf('text') > -1 || zresponse[i].filetype.indexOf('rtf') > -1 || zresponse[i].filetype.indexOf('pdf') > -1) {
 								zimageid = 'wtw_doc' + zresponse[i].uploadid;
 								zimagesrc = '/content/system/images/icondoc.png';
+								zthumbnailid = zresponse[i].uploadid;
+								zwebsizeid = zresponse[i].uploadid;
+							} else {
+								zimageid = 'wtw_file' + zresponse[i].uploadid;
+								zimagesrc = '/content/system/images/iconfile.png';
 								zthumbnailid = zresponse[i].uploadid;
 								zwebsizeid = zresponse[i].uploadid;
 							}
@@ -1052,6 +1062,9 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 							break;
 						case 'doc':
 							zerror += "<h1 class='wtw-red'>No Uploaded Document Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Document File</strong>.";
+							break;
+						case 'file':
+							zerror += "<h1 class='wtw-red'>No Uploaded Files of this type Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a File</strong>.";
 							break;
 						case 'object':
 							zerror += "<h1 class='wtw-red'>No 3D Object Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a 3D Object File</strong>.";
@@ -4564,6 +4577,16 @@ WTWJS.prototype.openServerSettings = async function() {
 						zchmod = zresponse.chmod;
 					}
 					dGet('wtw_chmod').value = zchmod;
+					if (zresponse.babylonversion != undefined) {
+						WTW.setDDLValue('wtw_babylonversion', zresponse.babylonversion);
+					} else {
+						WTW.setDDLValue('wtw_babylonversion', WTW.babylonVersion);
+					}
+					if (zresponse.physicsengine != undefined) {
+						WTW.setDDLValue('wtw_physicsengine', zresponse.physicsengine);
+					} else {
+						WTW.setDDLValue('wtw_physicsengine', '');
+					}
 					if (zresponse.ftphost != undefined) {
 						dGet('wtw_ftphost').value = zresponse.ftphost;
 					} else {
@@ -4651,6 +4674,8 @@ WTWJS.prototype.saveServerSettings = async function(zreload) {
 			'adminname': dGet('wtw_adminname').value,
 			'umask': dGet('wtw_umask').value,
 			'chmod': dGet('wtw_chmod').value,
+			'babylonversion': WTW.getDDLValue('wtw_babylonversion'),
+			'physicsengine': WTW.getDDLValue('wtw_physicsengine'),
 			'ftphost': dGet('wtw_ftphost').value,
 			'ftpuser': dGet('wtw_ftpuser').value,
 			'ftppassword': btoa(dGet('wtw_ftppassword').value),

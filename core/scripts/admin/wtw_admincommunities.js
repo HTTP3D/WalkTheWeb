@@ -1176,7 +1176,9 @@ WTWJS.prototype.openCommunitySkyForm = function() {
 		}
 		WTW.setDDLValue('wtw_tskytype', WTW.init.skyType);
 		WTW.setDDLValue('wtw_tskyboxfolder', WTW.init.skyBoxFolder);
+		dGet('wtw_tskyboxfile').value = WTW.init.skyBoxFile;
 		dGet('wtw_tskysize').value = WTW.init.skySize;
+		dGet('wtw_tskysize2').value = WTW.init.skySize;
 		dGet('wtw_tskyboxblur').value = WTW.init.skyBoxBlur*100;
 		dGet('wtw_tskyboxmicrosurface').value = WTW.init.skyBoxMicroSurface*100;
 		dGet('wtw_tskyboxemissivecolor').value = WTW.init.skyBoxEmissiveColor;
@@ -1240,6 +1242,7 @@ WTWJS.prototype.changeSkyType = function () {
 		WTW.hide('wtw_skyboxsizediv');
 		WTW.hide('wtw_skyboxfolderdiv');
 		WTW.hide('wtw_skyboxfilesdiv');
+		WTW.hide('wtw_skyboxfilediv');
 		WTW.hide('wtw_skyboxcolorsdiv');
 		WTW.hide('wtw_skyboxblurdiv');
 		WTW.hide('wtw_skyboxpbrdiv');
@@ -1261,38 +1264,34 @@ WTWJS.prototype.changeSkyType = function () {
 				break;
 			case 'PBR SkyBox':
 				dGet('wtw_skyboxtitle').innerHTML = 'PBR SkyBox Settings';
+				WTW.init.skyBoxFile = dGet('wtw_tskyboxfile').value;
 				WTW.show('wtw_skyboxsizediv');
 				WTW.show('wtw_skyboxblurdiv');
 				WTW.show('wtw_skyboxpbrdiv');
 				WTW.show('wtw_skyboxenvironmentdiv');
-
-// WTW.init.skyBoxFile
-
+				WTW.show('wtw_skyboxfilediv');
 				break;
 			case 'Reflective PBR SkyBox':
 				dGet('wtw_skyboxtitle').innerHTML = 'Reflective PBR SkyBox Settings';
+				WTW.init.skyBoxFile = dGet('wtw_tskyboxfile').value;
 				WTW.show('wtw_skyboxsizediv');
 				WTW.show('wtw_skyboxblurdiv');
 				WTW.show('wtw_skyboxpbrdiv');
 				WTW.show('wtw_skyboxenvironmentdiv');
-
-// WTW.init.skyBoxFile
-
+				WTW.show('wtw_skyboxfilediv');
 				break;
 			case 'HDR SkyBox':
 				dGet('wtw_skyboxtitle').innerHTML = 'HDR SkyBox Settings';
+				WTW.init.skyBoxFile = dGet('wtw_tskyboxfile').value;
 				WTW.show('wtw_skyboxsizediv');
-
-// WTW.init.skyBoxFile
-
+				WTW.show('wtw_skyboxfilediv');
 				break;
 			case 'Equirectangular Panoramic SkyBox':
 				dGet('wtw_skyboxtitle').innerHTML = 'Equirectangular Panoramic SkyBox Settings';
+				WTW.init.skyBoxFile = dGet('wtw_tskyboxfile').value;
 				WTW.show('wtw_skyboxsizediv');
 				WTW.show('wtw_skyboxmicrosurfacediv');
-
-// WTW.init.skyBoxFile
-
+				WTW.show('wtw_skyboxfilediv');
 				break;
 			default:
 				WTW.hide('wtw_skyskybox');
@@ -1332,6 +1331,15 @@ WTWJS.prototype.setSkyBox = function () {
 		} else {
 			dGet('wtw_tskysize').value = Math.round(dGet('wtw_tskysize').value);
 		}
+		if (WTW.isNumeric(dGet('wtw_tskysize2').value) == false) {
+			dGet('wtw_tskysize2').value = 1000;
+		} else if (Number(dGet('wtw_tskysize2').value) > 5000) {
+			dGet('wtw_tskysize2').value = 5000;
+		} else if (Number(dGet('wtw_tskysize2').value) < 100) {
+			dGet('wtw_tskysize2').value = 100;
+		} else {
+			dGet('wtw_tskysize2').value = Math.round(dGet('wtw_tskysize2').value);
+		}
 		if (WTW.isNumeric(dGet('wtw_tskyboxblur').value) == false) {
 			dGet('wtw_tskyboxblur').value = '0.00';
 		} else if (Number(dGet('wtw_tskyboxblur').value) > 100) {
@@ -1346,7 +1354,13 @@ WTWJS.prototype.setSkyBox = function () {
 		} else if (Number(dGet('wtw_tskyboxmicrosurface').value) < 10) {
 			dGet('wtw_tskyboxmicrosurface').value = '10.00';
 		}
-		WTW.init.skySize = Number(dGet('wtw_tskysize').value);
+		if (WTW.init.skyType == '') {
+			WTW.init.skySize = Number(dGet('wtw_tskysize2').value);
+			dGet('wtw_tskysize').value = WTW.init.skySize;
+		} else {
+			WTW.init.skySize = Number(dGet('wtw_tskysize').value);
+			dGet('wtw_tskysize2').value = WTW.init.skySize;
+		}
 		WTW.init.skyBoxBlur = Number(dGet('wtw_tskyboxblur').value)/100;
 		WTW.init.skyBoxMicroSurface = Number(dGet('wtw_tskyboxmicrosurface').value)/100;
 		if (WTW.isHexColor(dGet('wtw_tskyboxemissivecolor').value)) {
@@ -1369,6 +1383,7 @@ WTWJS.prototype.setSkyBox = function () {
 		} else {
 			WTW.init.skyBoxAmbientColor = '#000000';
 		}
+		WTW.init.skyBoxFile = dGet('wtw_tskyboxfile').value;
 		WTW.init.skyBoxImageLeft = dGet('wtw_tskyboximageleft').value;
 		WTW.init.skyBoxImageUp = dGet('wtw_tskyboximageup').value;
 		WTW.init.skyBoxImageFront = dGet('wtw_tskyboximagefront').value;
@@ -1384,6 +1399,45 @@ WTWJS.prototype.setSkyBox = function () {
 	}
 }
 
+WTWJS.prototype.setSkySize = function () {
+	/* changes the sky box as you edit it using the form */
+	try {
+		if (WTW.isNumeric(dGet('wtw_tskysize').value) == false) {
+			dGet('wtw_tskysize').value = 1000;
+		} else if (Number(dGet('wtw_tskysize').value) > 5000) {
+			dGet('wtw_tskysize').value = 5000;
+		} else if (Number(dGet('wtw_tskysize').value) < 100) {
+			dGet('wtw_tskysize').value = 100;
+		} else {
+			dGet('wtw_tskysize').value = Math.round(dGet('wtw_tskysize').value);
+		}
+		if (WTW.isNumeric(dGet('wtw_tskysize2').value) == false) {
+			dGet('wtw_tskysize2').value = 1000;
+		} else if (Number(dGet('wtw_tskysize2').value) > 5000) {
+			dGet('wtw_tskysize2').value = 5000;
+		} else if (Number(dGet('wtw_tskysize2').value) < 100) {
+			dGet('wtw_tskysize2').value = 100;
+		} else {
+			dGet('wtw_tskysize2').value = Math.round(dGet('wtw_tskysize2').value);
+		}
+		if (WTW.init.skyType == '') {
+			WTW.init.skySize = Number(dGet('wtw_tskysize2').value);
+			dGet('wtw_tskysize').value = WTW.init.skySize;
+		} else {
+			WTW.init.skySize = Number(dGet('wtw_tskysize').value);
+			dGet('wtw_tskysize2').value = WTW.init.skySize;
+		}
+		var zskymold = WTW.getMeshOrNodeByID("sky");
+		if (zskymold != null) {
+			WTW.sky.scaling.x = WTW.init.skySize;
+			WTW.sky.scaling.y = WTW.init.skySize;
+			WTW.sky.scaling.z = WTW.init.skySize;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setSkySize=' + ex.message);
+	}
+}
+		
 WTWJS.prototype.setSkyScene = function (zkey, znewvalue, zincrement) {
 	/* set sky dome based on form settings (one value at a time updates) */
 	/* this sky dome uses sky procedure texture */
