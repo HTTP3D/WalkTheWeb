@@ -339,6 +339,11 @@ class wtwuploads {
 		/* function to upload a file to the database - if file is to be stored in the database */
 		global $wtwhandlers;
 		try {
+			$zisimage = false;
+			if (strpos($zfiletype, 'image') > -1 && $zfileextension != 'dds' && $zfileextension != 'hdr' && $zfileextension != 'exr') {
+				$zisimage = true;
+			}
+			$zfileextension = strtolower($zfileextension);
 			$zoriginalid = $wtwhandlers->getRandomString(16,1);
 			$zwebsizeid = $wtwhandlers->getRandomString(16,1);
 			$zthumbnailid = $wtwhandlers->getRandomString(16,1);
@@ -359,14 +364,14 @@ class wtwuploads {
 				}
 			}
 			$zfiledata = null;
-			if (strpos($zfiletype, 'image') > -1) {
+			if ($zisimage) {
 				$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 			}
 			$zissnapshot = strpos($zfilepath, 'snapshot');
 			if (empty($zfiletitle)) {
 				$zfiletitle = $zfilename;
 			}
-			if (strpos($zfiletype, 'image') > -1) {
+			if ($zisimage) {
 				$zimagedetails = getimagesize($zfilepath);
 				$zwidth = $zimagedetails[0];
 				$zheight = $zimagedetails[1];
@@ -379,7 +384,7 @@ class wtwuploads {
 			if (!isset($zfilesize) && empty($zfilesize)) {
 				$zfilesize = "null";
 			}
-			if (strpos($zfiletype, 'image') > -1) {
+			if ($zisimage) {
 				if (!isset($zwidth) && empty($zwidth)) {
 					$zwidth = imagesx($zfiledata);
 					if (!isset($zwidth) && empty($zwidth)) {
@@ -401,7 +406,7 @@ class wtwuploads {
 				$zfilename = $this->avoidDuplicateFileNames($zuploadpath, $zfilename);
 				copy($zfilepath, $zuploadpath.$zfilename);
 			}
-			if (strpos($zfiletype, 'image') > -1) {
+			if ($zisimage) {
 				if ($wtwhandlers->hasValue($zfiledata)) {
 					$this->updateFileInDb($zoriginalid,'original',$zoriginalid,$zwebsizeid,$zthumbnailid,$zfiletitle,$zfilename,$zfileextension,$zfilesize,$zfiletype,$zfiledata,$zwidth,$zheight,$zbrowsepath.$zfilename);
 				} else {
@@ -1888,6 +1893,7 @@ class wtwuploads {
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			$zitem = $wtwhandlers->getVal("item","");	
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
+				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media";
 				$zfileurl = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
 				$zisvalid = 1;
@@ -1901,7 +1907,7 @@ class wtwuploads {
 					echo "File already exists.";
 					$zisvalid = 0;
 				}
-				if ($zfilesize > 128000000) {
+				if ($zfilesize > $zmaxfilesize) {
 					echo "Your file is too large.";
 					$zisvalid = 0;
 				}
@@ -1939,6 +1945,7 @@ class wtwuploads {
 		try {
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
+				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
 				if (!file_exists($zfilepath)) {
 					umask(0);
@@ -1958,12 +1965,12 @@ class wtwuploads {
 					$zfilesize = $zuploadfiles["size"][$i];
 					$zfiletype = $zuploadfiles["type"][$i];
 					$ztargetfile = $zfilepath."/".$zpastfilename;
-					if ($zfilesize > 128000000) {
+					if ($zfilesize > $zmaxfilesize) {
 						$serror .= "Your file is too large.";
 						$zisvalid = 0;
 					}
-					if ((!strpos($zitem, 'sound') > -1) && (!strpos($zitem, 'audio') > -1) && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv") {
-						echo "Only JPG, JPEG, PNG, GIF, MP4, OGV, and WEBM files are allowed.";
+					if ((!strpos($zitem, 'sound') > -1) && (!strpos($zitem, 'audio') > -1) && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv" && strtolower($zfileextension) != "dds" && strtolower($zfileextension) != "hdr" && strtolower($zfileextension) != "exr") {
+						echo "Only JPG, JPEG, PNG, GIF, MP4, OGV, DDS, HDR, EXR, and WEBM files are allowed.";
 						$zisvalid = 0;
 					} elseif ((strpos($zitem, 'sound') > -1) && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "wma" && strtolower($zfileextension) != "m4a") {
 						echo "Only WAV, MP3, M4A, and WMA files are allowed.";
@@ -1999,6 +2006,7 @@ class wtwuploads {
 		try {
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
+				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart;
 				if (!file_exists($zfilepath)) {
 					umask(0);
@@ -2018,10 +2026,10 @@ class wtwuploads {
 					$zfilesize = $zuploadfiles["size"][$i];
 					$zfiletype = $zuploadfiles["type"][$i];
 					$ztargetfile = $zfilepath."/".$zpastfilename;
-					if ($zfilesize > 128000000) {
-						$serror .= "Your file is too large.";
-						$zisvalid = 0;
-					}
+//					if ($zfilesize > $zmaxfilesize) {
+//						$serror .= "Your file is too large.";
+//						$zisvalid = 0;
+//					}
 					if (strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "manifest" && strtolower($zfileextension) != "txt" && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "tif" && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv" && strtolower($zfileextension) != "bin" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "bgltf" && strtolower($zfileextension) != "glb" && strtolower($zfileextension) != "blend" && strtolower($zfileextension) != "blend1" && strtolower($zfileextension) != "obj" && strtolower($zfileextension) != "fbx" && strtolower($zfileextension) != "log") {
 						$serror .= "Only babylon, gltf, glb, obj, blend, and image files are allowed at this time.";
 						$zisvalid = 0;
@@ -2393,6 +2401,15 @@ class wtwuploads {
 								or u1.filetype like '%log%' 
 								or u1.filetype like '%txt%' 
 								or u1.filetype like '%rtf%')
+						when '".$zcategory."' = 'file' then
+							(u1.filetype like '%pdf%' 
+								or u1.filetype like '%doc%' 
+								or u1.filetype like '%log%' 
+								or u1.filetype like '%txt%' 
+								or u1.filetype like '%rtf%'
+								or u1.fileextension = 'dds'
+								or u1.fileextension = 'hdr'
+								or u1.fileextension = 'exr')
 						else
 							(u1.thumbnailid = u1.uploadid
 							and u1.filetype like '%image%')

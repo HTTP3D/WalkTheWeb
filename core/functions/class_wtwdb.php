@@ -1390,6 +1390,41 @@ class wtwdb {
 		}
 		return $zcheckval;
 	}
+
+	public function getMaximumFileUploadSize() {  
+		return min($this->convertPHPSizeToBytes(ini_get('post_max_size')), $this->convertPHPSizeToBytes(ini_get('upload_max_filesize')));  
+	}  
+
+	public function convertPHPSizeToBytes($zsize) {
+		$zvalue = 0;
+		try {
+			$zsuffix = strtoupper(substr($zsize, -1));
+			if (!in_array($zsuffix,array('P','T','G','M','K'))){
+				return (int)$zsize;  
+			} 
+			$zvalue = substr($zsize, 0, -1);
+			switch ($zsuffix) {
+				case 'P':
+					$zvalue *= 1024 * 1024 * 1024 * 1024 * 1024;
+					break;
+				case 'T':
+					$zvalue *= 1024 * 1024 * 1024 * 1024;
+					break;
+				case 'G':
+					$zvalue *= 1024 * 1024 * 1024;
+					break;
+				case 'M':
+					$zvalue *= 1024 * 1024;
+					break;
+				case 'K':
+					$zvalue *= 1024;
+					break;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-convertPHPSizeToBytes=".$e->getMessage());
+		}			
+		return $zvalue;
+	}      
 	
 	public function checkAlphaNumeric($zid) {
 		$zvalidid = "";

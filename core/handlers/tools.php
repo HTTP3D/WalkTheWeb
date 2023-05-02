@@ -26,6 +26,8 @@ try {
 	$zdefaultadminname = '';
 	$zdefaultumask = '';
 	$zdefaultchmod = '';
+	$zdefaultbabylonversion = '';
+	$zdefaultphysicsengine = '';
 	$zdefaultftphost = '';
 	$zdefaultftpuser = '';
 	$zdefaultftppassword = '';
@@ -68,6 +70,12 @@ try {
 	}
 	if (defined('wtw_chmod')) {
 		$zdefaultchmod = wtw_chmod;
+	}
+	if (defined('wtw_babylonversion')) {
+		$zdefaultbabylonversion = wtw_babylonversion;
+	}
+	if (defined('wtw_physicsengine')) {
+		$zdefaultphysicsengine = wtw_physicsengine;
 	}
 	if (defined('wtw_ftphost')) {
 		$zdefaultftphost = wtw_ftphost;
@@ -134,7 +142,8 @@ try {
 	$zadminname = $wtwhandlers->getPost('adminname',$zdefaultadminname);
 	$zumask = $wtwhandlers->getPost('umask',$zdefaultumask);
 	$zchmod = $wtwhandlers->getPost('chmod',$zdefaultchmod);
-
+	$zbabylonversion = $wtwhandlers->getPost('babylonversion',$zdefaultbabylonversion);
+	$zphysicsengine = $wtwhandlers->getPost('physicsengine',$zdefaultphysicsengine);
 	$zftphost = $wtwhandlers->getPost('ftphost',$zdefaultftphost);
 	$zftpuser = $wtwhandlers->getPost('ftpuser',$zdefaultftpuser);
 	$zftppassword = $wtwhandlers->getPost('ftppassword',$zdefaultftppassword);
@@ -174,7 +183,7 @@ try {
 			$zresponse = $wtwtools->getServerSettings();
 			break;
 		case "saveserversettings":
-			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftphost, $zftpuser, $zftppassword, $zftpbase);
+			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zbabylonversion, $zphysicsengine, $zftphost, $zftpuser, $zftppassword, $zftpbase);
 			break;
 		case "getlanguages":
 			$zresponse = $wtwtools->getLanguages();

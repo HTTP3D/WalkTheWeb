@@ -2176,6 +2176,7 @@ class wtwavatars {
 		try {
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = wtw_rootpath.$zobjectfolder;
 				if (!file_exists($zfilepath)) {
 					umask(0);
@@ -2198,7 +2199,7 @@ class wtwavatars {
 				$zfiletype = $zuploadfile["type"];
 				$zfilename = $wtwhandlers->getRandomString(16,1).".".$zfileextension;
 				$ztargetfile = $zfilepath.$zpastfilename;
-				if ($zfilesize > 128000000) {
+				if ($zfilesize > $zmaxfilesize) {
 					$zresponse = array(
 						'serror'=> "Your file is too large.",
 						'objectfolder'=> '',
@@ -2266,6 +2267,7 @@ class wtwavatars {
 		try {
 			$wtwhandlers->checkContentFolders('', '', '', $zavatarid);
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = wtw_rootpath.$zobjectfolder;
 				if (!file_exists($zfilepath)) {
 					umask(0);
@@ -2288,7 +2290,7 @@ class wtwavatars {
 					$zfilesize = $zuploadfiles["size"][$i];
 					$zfiletype = $zuploadfiles["type"][$i];
 					$ztargetfile = $zfilepath.$zpastfilename;
-					if ($zfilesize > 128000000) {
+					if ($zfilesize > $zmaxfilesize) {
 						$zresponse = array(
 							'serror'=> "Your file is too large.",
 							'objectfolder'=> '',

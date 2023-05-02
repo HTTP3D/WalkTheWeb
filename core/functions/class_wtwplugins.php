@@ -216,6 +216,16 @@ class wtwplugins {
 		return $wtwdb->checkNumber($val, $defaultval);
 	}
 
+	public function getMaximumFileUploadSize() {  
+		global $wtwdb;
+		return $wtwdb->getMaximumFileUploadSize();
+	}  
+
+	public function convertPHPSizeToBytes($zsize) {
+		global $wtwdb;
+		return $wtwdb->convertPHPSizeToBytes($zsize);
+	}
+	
 	public function checkAlphaNumeric($zid) {
 		global $wtwdb;
 		return $wtwdb->checkAlphaNumeric($zid);

@@ -158,7 +158,13 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 900, 'wtw_settings', 6, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				
 				$this->addAdminMenuItem('wtw_admindevtools', $this->__('Developer Tools'), 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
-				$this->addAdminMenuItem('wtw_admindevtoolsnote', $this->__('Click F12 to view the Console then click one of the following:'), 998, 'wtw_devtools', 1, 'wtw_toolsnote', '', $developerroles, "WTW.log('');");
+				$this->addAdminMenuItem('wtw_admindebuglayer', $this->__('Debug Layer'), 998, 'wtw_devtools', 4, 'wtw_debuglayer', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				if (defined('wtw_physicsengine')) {
+					if (wtw_physicsengine == 'havok') {
+						$this->addAdminMenuItem('wtw_adminphysicsviewer', $this->__('Physics Viewer'), 998, 'wtw_devtools', 5, 'wtw_physicsviewer', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+					}
+				}
+				$this->addAdminMenuItem('wtw_admindevtoolsnote', $this->__('Click F12 to view the Console then click one of the following:'), 998, 'wtw_devtools', 9, 'wtw_toolsnote', '', $developerroles, "WTW.log('');");
 				$this->addAdminMenuItem('wtw_adminlistmeshes', $this->__('List Current Meshes'), 998, 'wtw_devtools', 10, 'wtw_listmeshes', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminlisttransformnodes', $this->__('List Transform Nodes'), 998, 'wtw_devtools', 15, 'wtw_listtransformnodes', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminlistcgs', $this->__('List Connecting Grids'), 998, 'wtw_devtools', 20, 'wtw_listcgs', '', $developerroles, "WTW.adminMenuItemSelected(this);");
@@ -2198,12 +2204,12 @@ class wtwadminmenu {
 
 			$zmenu .= "		<h2>Sky Type</h2>\r\n";
 			$zmenu .= "		<select id='wtw_tskytype' onchange=\"WTW.changeSkyType();\">\r\n";
-			$zmenu .= "			<option>Default</option>\r\n";
-			$zmenu .= "			<option>SkyBox</option>\r\n";
-			$zmenu .= "			<option>PBR SkyBox</option>\r\n";
-/*			$zmenu .= "			<option>Reflective PBR SkyBox</option>\r\n"; // alternate method of rendering PBR */
-			$zmenu .= "			<option>HDR SkyBox</option>\r\n";
-			$zmenu .= "			<option>Equirectangular Panoramic SkyBox</option>\r\n";
+			$zmenu .= "			<option value=''>Default</option>\r\n";
+			$zmenu .= "			<option value='SkyBox'>SkyBox</option>\r\n";
+			$zmenu .= "			<option value='PBR SkyBox'>PBR SkyBox</option>\r\n";
+/*			$zmenu .= "			<option value='Reflective PBR SkyBox'>Reflective PBR SkyBox</option>\r\n"; // alternate method of rendering PBR */
+			$zmenu .= "			<option value='HDR SkyBox'>HDR SkyBox</option>\r\n";
+			$zmenu .= "			<option value='Equirectangular Panoramic SkyBox'>Equirectangular Panoramic SkyBox</option>\r\n";
 			$zmenu .= "		</select>\r\n";
 			$zmenu .= "		<br /><br />\r\n";
 
@@ -2217,6 +2223,13 @@ class wtwadminmenu {
 			$zmenu .= "			<input type='button' id='wtw_beditskysize2' class='wtw-smallprint' value='+10' onmousedown=\"WTW.changeNumberValue('wtw_tskysize', 10);\" onmouseup='WTW.changeStop();' />\r\n";
 			$zmenu .= "			<input type='button' id='wtw_beditskysize1' class='wtw-smallprint' value='+100' onmousedown=\"WTW.changeNumberValue('wtw_tskysize', 100);\" onmouseup='WTW.changeStop();' />\r\n";
 			$zmenu .= "		<div class='wtw-clear'></div><br /></div>\r\n";
+
+			$zmenu .= "		<div id='wtw_skyboxfilediv' class='wtw-onecol'>SkyBox File<br />\r\n";
+			$zmenu .= "			<input type='text' id='wtw_tskyboxfile' maxlength='256' class='wtw-secondcolcontent wtw-smallprintinput' />\r\n";
+			$zmenu .= "		<div class='wtw-clear'></div><br />\r\n";
+			$zmenu .= "		<input type='button' id='wtw_bselectskyfile' class='wtw-smallprint' value='Select File' onclick=\"WTW.openFullPageForm('medialibrary','file','skybox','','wtw_tskyboxfile','');\" />\r\n";
+			$zmenu .= "		<div class='wtw-clear'></div><br /></div>\r\n";
+
 			$zmenu .= "		<div id='wtw_skyboxfolderdiv' class='wtw-onecol'>Select SkyBox<br />\r\n";
 			$zmenu .= "			<select id='wtw_tskyboxfolder' class='wtw-secondcolcontent wtw-smallprintinput' onchange=\"WTW.changeSkyBox();\">\r\n";
 			$zmenu .= "				<option value=''>Custom SkyBox (Upload)</option>\r\n";
@@ -2299,6 +2312,15 @@ class wtwadminmenu {
 			$zmenu .= "		<div id='wtw_skysetsunset' class='wtw-menulevel2' onclick='WTW.adminMenuItemSelected(this);'>Set Sunset Scene</div>\r\n";
 			$zmenu .= "		<div id='wtw_skysetnight' class='wtw-menulevel2' onclick='WTW.adminMenuItemSelected(this);'>Set Night Scene</div><br />\r\n";
 			$zmenu .= "		<hr class='wtw-menuhr' />\r\n";
+
+			$zmenu .= "		<div id='wtw_skyboxsizediv' class='wtw-onecol'>SkyBox Size<br />\r\n";
+			$zmenu .= "			<input type='text' id='wtw_tskysize2' maxlength='16' class='wtw-secondcolcontent wtw-smallprintinput' onclick=\"WTW.checkKey(this, 'number', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'number', 0, 0);\" onblur=\"WTW.checkKey(this, 'number', 0, 1);WTW.setSkySize();\" />\r\n";
+			$zmenu .= "			<input type='button' id='wtw_beditskysizeb4' class='wtw-smallprint' value='-100' onmousedown=\"WTW.changeNumberValue('wtw_tskysize2', -100);\" onmouseup='WTW.changeStop();' />\r\n";
+			$zmenu .= "			<input type='button' id='wtw_beditskysizeb3' class='wtw-smallprint' value='-10' onmousedown=\"WTW.changeNumberValue('wtw_tskysize2', -10);\" onmouseup='WTW.changeStop();' />\r\n";
+			$zmenu .= "			<input type='button' id='wtw_beditskysizeb2' class='wtw-smallprint' value='+10' onmousedown=\"WTW.changeNumberValue('wtw_tskysize2', 10);\" onmouseup='WTW.changeStop();' />\r\n";
+			$zmenu .= "			<input type='button' id='wtw_beditskysizeb1' class='wtw-smallprint' value='+100' onmousedown=\"WTW.changeNumberValue('wtw_tskysize2', 100);\" onmouseup='WTW.changeStop();' />\r\n";
+			$zmenu .= "		<div class='wtw-clear'></div><br /></div>\r\n";
+
 			$zmenu .= "		<div id='wtw_skyadvancedoptslink' onclick=\"WTW.toggleAdvanced(this, 'wtw_skyadvancedopts');\" class='wtw-showhideadvanced'>-- Show Advanced Options --</div>\r\n";
 			$zmenu .= "		<div id='wtw_skyadvancedopts' style='display:none;visibility:hidden;'><br />\r\n";
 			$zmenu .= "			<h2>Solar Inclination</h2>\r\n";

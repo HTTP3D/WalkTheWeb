@@ -21,9 +21,10 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.6.2';
+	public $version = '3.6.3';
 	public $dbversion = '1.2.22';
-	public $versiondate = '2023-4-1';
+	public $versiondate = '2023-5-2';
+	public $defaultbabylonversion = 'v5.x.x';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -220,6 +221,12 @@ class wtw {
 			if (defined('wtw_adminname') == false) {
 				define("wtw_adminname", '');
 			}
+			if (defined('wtw_babylonversion') == false) {
+				define("wtw_babylonversion", $this->defaultbabylonversion);
+			}
+			if (defined('wtw_physicsengine') == false) {
+				define("wtw_physicsengine", '');
+			}
 			if (defined('wtw_ftpuser') == false) {
 				define("wtw_ftpuser", '');
 			}
@@ -397,7 +404,7 @@ class wtw {
 		return $zchecktext;
 	}	
 	
-	public function getRandomString($zlength,$zstringtype) {
+	public function getRandomString($zlength, $zstringtype) {
 		/* creates a random alpha numeric text string ov different lengths and character types */
 		/* note that most id values use type 1 */
 		$zrandomstring = '';
@@ -421,6 +428,86 @@ class wtw {
 			$this->serror("core-functions-class_wtw-initsession.php-getRandomString=".$e->getMessage());
 		}
 		return $zrandomstring;
+	}
+
+	public function mergeFiles($zbasefilepath, $zfileadditionspath) {
+		/* check line per line in the base file for the line additions and add as needed */
+		$zchanged = false;
+		try {
+			/* load array with file addition lines */
+			$zaddlines = array();
+			$zbaselines = array();
+			$zfileadditions = fopen($zfileadditionspath, "r");
+			if ($zfileadditions) {
+				$i = 0;
+				while (($zaddnewline = fgets($zfileadditions, 4096)) !== false) {
+					$zaddlines[$i] = $zaddnewline;
+					$i += 1;
+				}
+				fclose($zfileadditions);
+			}
+			$zbasefile = fopen($zbasefilepath, "r");
+			if ($zbasefile) {
+				$i = 0;
+				while (($zbaseline = fgets($zbasefile, 4096)) !== false) {
+					$zbaselines[$i] = $zbaseline;
+					$i += 1;
+				}
+				fclose($zbasefile);
+			}
+			/* open each line */
+			foreach ($zaddlines as $zaddline) {
+				$zaddline = trim($zaddline);
+				if (strlen($zaddline) > 0) {
+					/* open base file and check line per line */
+					$zbasefile = fopen($zbasefilepath, "r");
+					$zfound = false;
+					if ($zbasefile) {
+						while (($zbaseline = fgets($zbasefile, 4096)) !== false) {
+							$zbaseline = trim($zbaseline);
+							if (strlen($zbaseline) > 0) {
+								if ($zaddline == $zbaseline) {
+									/* add line found in base file */
+									$zfound = true;
+								}
+							}
+						}
+						fclose($zbasefile);
+					}
+					if ($zfound == false) {
+						/* line not found */
+						/* set zchanged to true to allow a page refresh after the new settings are in place */
+						$zchanged = true;
+						/* add line not found in base file, add the line */
+						if ($zbaselines[$i-1] == '# END WalkTheWeb') {
+							$zbaselines[$i-1] = $zaddline;
+							$zbaselines[$i] = '# END WalkTheWeb';
+						} else {
+							$zbaselines[$i] = $zaddline;
+						}
+						$i += 1;
+						
+						$zbasefile = fopen($zbasefilepath,'wb');
+						foreach ($zbaselines as $zbaseline) {
+							$zbaseline = preg_replace("/\r\n|\r|\n/", "", $zbaseline);
+							fwrite($zbasefile, $zbaseline."\r\n");
+						}
+						fclose($zbasefile);
+						umask(0);
+						chmod($zbasefilepath, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtw-initsession.php-mergeFiles=".$e->getMessage());
+		}
+		return $zchanged;
 	}
 	
 	public function checkDatabase() {
@@ -534,6 +621,15 @@ class wtw {
 					if (wtw_umask != '0') {
 						umask(octdec(wtw_umask));
 					}
+				}
+				/* refresh page with new file in place */
+				header("Location: ".$this->domainurl."/"); 
+				exit();
+			} else {
+				if ($this->mergeFiles(wtw_rootpath.'/.htaccess', wtw_rootpath.'/htaccess')) {
+					/* if change happened, refresh page */
+					header("Location: ".$this->domainurl."/"); 
+					exit();
 				}
 			}
 			/* if using plain text password - convert plain text password to encoded password */
@@ -2581,7 +2677,7 @@ class wtw {
             $zjsdata .= "	}\r\n";
 			$zjsdata .= "</script>"; 
 			$zjsdata .= "<script src='https://3dnet.walktheweb.network/socket.io/socket.io.js'></script>\r\n";
-//			$zjsdata .= "<script src='/core/scripts/engine/socket.io-stream.js'></script>\r\n";
+//			$zjsdata .= "<script src='/core/scripts/engine/socket.io/socket.io-stream.js'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_constructor.js?x=".$this->version."'></script>\r\n";
 			$zjsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
@@ -2596,6 +2692,10 @@ class wtw {
 		$zjsdata = "";
 		try {	
 			$zver = $this->version;
+			$zbabylonversion = $this->defaultbabylonversion;
+			if (defined('wtw_babylonversion')) {
+				$zbabylonversion = wtw_babylonversion;
+			}
 			/* alternative used during development to force reload every time */
 			$zver = date("Y-m-d-H-i-s");
 			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
@@ -2617,20 +2717,34 @@ class wtw {
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_profile.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_login.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/ammo.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/recast.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/cannon.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/oimo.js?x=".$zver."'></script>\r\n"; 
-			$zjsdata .= "<script src='/core/scripts/engine/earcut.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylon.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylon.gui.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylon.accessibility.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/pep.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/meshwriter.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/ammo.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/recast.js?x=".$zver."'></script>\r\n";
+			if (defined('wtw_physicsengine') && $zbabylonversion != 'v5.x.x') {
+				switch (wtw_physicsengine) {
+					case 'havok':
+						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/HavokPhysics_umd.js?x=".$zver."'></script>\r\n";
+						break;
+					case 'cannon':
+						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/cannon.js?x=".$zver."'></script>\r\n";
+						break;
+					case 'oimo':
+						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/oimo.js?x=".$zver."'></script>\r\n"; 
+						break;
+				}
+			} else {
+				$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/cannon.js?x=".$zver."'></script>\r\n";
+				$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/oimo.js?x=".$zver."'></script>\r\n"; 
+			}
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/earcut.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.gui.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.proceduralTextures.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.accessibility.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/pep.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/meshwriter.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_input.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."'></script>\r\n";			
@@ -2731,6 +2845,8 @@ class wtw {
 			$zhiddenfields .= "<input type='hidden' id='wtw_tuseremail' value='".$wtwuser->email."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tuserimageurl' value='".$wtwuser->userimageurl."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tuseraccess' value=\"".$wtwuser->useraccess."\" />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tbabylonversion' value='".wtw_babylonversion."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tphysicsengine' value='".wtw_physicsengine."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_trootpath' value='".wtw_rootpath."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tcontentpath' value='".$wtwuser->contentpath."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tuploadpathid' value='".$wtwuser->uploadpathid."' />\r\n";

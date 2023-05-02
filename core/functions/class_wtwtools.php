@@ -119,6 +119,8 @@ class wtwtools {
 			'googleanalytics'=>'',
 			'adminemail'=>'',
 			'adminname'=>'',
+			'babylonversion'=>'v5.x.x',
+			'physicsengine'=>'',
 			'ftphost'=>'',
 			'ftpuser'=>'',
 			'ftppassword'=>'',
@@ -172,6 +174,12 @@ class wtwtools {
 				if (defined('wtw_adminname')) {
 					$zresponse["adminname"] = wtw_adminname;
 				}
+				if (defined('wtw_babylonversion')) {
+					$zresponse["babylonversion"] = wtw_babylonversion;
+				}
+				if (defined('wtw_physicsengine')) {
+					$zresponse["physicsengine"] = wtw_physicsengine;
+				}
 				if (defined('wtw_ftphost')) {
 					$zresponse["ftphost"] = wtw_ftphost;
 				}
@@ -197,7 +205,7 @@ class wtwtools {
 		return $zresponse;
 	}
 
-	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftphost, $zftpuser, $zftppassword, $zftpbase) {
+	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zbabylonversion, $zphysicsengine, $zftphost, $zftpuser, $zftppassword, $zftpbase) {
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
 		try {
@@ -216,6 +224,8 @@ class wtwtools {
 				$this->updateConfigSetting('wtw_adminname', $zadminname);
 				$this->updateConfigSetting('wtw_umask', $zumask);
 				$this->updateConfigSetting('wtw_chmod', $zchmod);
+				$this->updateConfigSetting('wtw_babylonversion', $zbabylonversion);
+				$this->updateConfigSetting('wtw_physicsengine', $zphysicsengine);
 				$this->updateConfigSetting('wtw_ftphost', $zftphost);
 				$this->updateConfigSetting('wtw_ftpuser', $zftpuser);
 				$this->updateConfigSetting('wtw_ftppassword', $zftppassword);

@@ -31,6 +31,10 @@ class wtwadmin {
 		$zjsdata = "";
 		try {	
 			$zver = $wtw->version;
+			$zbabylonversion = $wtw->defaultbabylonversion;
+			if (defined('wtw_babylonversion')) {
+				$zbabylonversion = wtw_babylonversion;
+			}
 			/* alternative used during development to force reload every time */
 			/* $zver = date("Y-m-d-H-i-s"); */
 			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
@@ -52,20 +56,34 @@ class wtwadmin {
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_profile.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_login.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/ammo.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/recast.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/cannon.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/oimo.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/earcut.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylon.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylon.gui.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylon.accessibility.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/pep.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/meshwriter.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/ammo.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/recast.js?x=".$zver."'></script>\r\n";
+			if (defined('wtw_physicsengine')) {
+				switch (wtw_physicsengine) {
+					case 'havok':
+						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/HavokPhysics_umd.js?x=".$zver."'></script>\r\n";
+						break;
+					case 'cannon':
+						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/cannon.js?x=".$zver."'></script>\r\n";
+						break;
+					case 'oimo':
+						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/oimo.js?x=".$zver."'></script>\r\n"; 
+						break;
+				}
+			} else {
+				$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/cannon.js?x=".$zver."'></script>\r\n";
+				$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/oimo.js?x=".$zver."'></script>\r\n"; 
+			}
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/earcut.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.gui.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.proceduralTextures.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.accessibility.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/pep.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/meshwriter.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_input.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/admin/wtw_admininput.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."'></script>\r\n";
@@ -482,6 +500,7 @@ class wtwadmin {
 			$zpagedata .= "					<option value='video'>Videos</option>\r\n";
 			$zpagedata .= "					<option value='audio'>Sounds</option>\r\n";
 			$zpagedata .= "					<option value='doc'>Documents</option>\r\n";
+			$zpagedata .= "					<option value='file'>Files</option>\r\n";
 			$zpagedata .= "					<option value='object'>3D Models</option>\r\n";
 			$zpagedata .= "				</select>\r\n";
 			$zpagedata .= "			</div>\r\n";
@@ -783,6 +802,27 @@ class wtwadmin {
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardlabel'>File Permissions (default is 755)</div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardvalue'><input type='text' id='wtw_chmod' maxlength='15' /></div>\r\n";
+
+			$zpagedata .= "					<div class='wtw-clear'></div><hr />\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardlabel'>Select Babylon Version</div>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardvalue'>\r\n";
+			$zpagedata .= "						<select id='wtw_babylonversion'>\r\n";
+			$zpagedata .= "							<option value='v5.x.x'>v5.x.x</option>\r\n";
+			$zpagedata .= "							<option value='v6.x.x'>v6.x.x</option>\r\n";
+			$zpagedata .= "						</select></div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div><br />\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardlabel'>Physics Engine Enabled</div>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardvalue'>\r\n";
+			$zpagedata .= "						<select id='wtw_physicsengine'>\r\n";
+			$zpagedata .= "							<option value=''>- None -</option>\r\n";
+			$zpagedata .= "							<option value='havok'>Havok</option>\r\n";
+			$zpagedata .= "							<option value='cannon'>Cannon</option>\r\n";
+			$zpagedata .= "							<option value='oimo'>Oimo</option>\r\n";
+			$zpagedata .= "						</select></div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					<div>To load these settings, refresh your browser after saving.</div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 
 			$zpagedata .= "					<div class='wtw-clear'></div><hr />\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardlabel'>FTP Host (Server:port)</div>\r\n";
