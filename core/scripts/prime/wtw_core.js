@@ -45,8 +45,6 @@ WTWJS.prototype.continueLoadSequence = function() {
 	/* each function can be found in order after this function */
 	try {
 		WTW.loadLoginSettings();
-		/* load the main parent box, avatar placeholder, and camera */
-		WTW.loadParentAndCamera();
 		/* get user settings that were saved by cookies - implemented before the load scene function */
 		WTW.loadUserSettings();
 		/* load rest of scene starting with connecting grids, which trigger loading action zones, molds, and then automations */
@@ -409,9 +407,6 @@ WTWJS.prototype.initEnvironment = async function() {
 		scene.ambientColor = new BABYLON.Color3.FromHexString(WTW.init.sceneAmbientColor);
 		scene.clearColor = new BABYLON.Color3.FromHexString(WTW.init.sceneClearColor); //optional light setting  */
 		
-		/* set fog if enabled */
-		WTW.setFog();
-				
 		/* initialize an action manager for the scene */
 		scene.actionManager = new BABYLON.ActionManager(scene);
 		
@@ -420,6 +415,12 @@ WTWJS.prototype.initEnvironment = async function() {
 			WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 		}
 		
+		/* load the main parent box, avatar placeholder, and camera */
+		WTW.loadParentAndCamera();
+		
+		/* set fog if enabled */
+		WTW.setFog();
+				
 		/* set the sun and back light the 3D Scene */
 		WTW.setSunLight();
 		
@@ -463,6 +464,29 @@ WTWJS.prototype.initEnvironment = async function() {
 		WTW.continueLoadSequence();
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-initEnvironment=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.loadParentAndCamera = function() {
+	/* load the main parent box, avatar placeholder, and camera */
+	try {
+		/* create the parent most connecting grid box */
+		/* everything else parents to this reference point */
+		var zparent = new BABYLON.TransformNode(WTW.mainParent);
+		zparent.position = new BABYLON.Vector3(0,0,0);
+		zparent.rotation = new BABYLON.Vector3(0,0,0);
+		zparent.scaling = new BABYLON.Vector3(1,1,1);
+		zparent.name = WTW.mainParent;
+		zparent.id = WTW.mainParent;
+		/* main parent name is WTW.mainParent */
+		/* set global main parent mold WTW.mainParentMold */
+		WTW.mainParentMold= zparent;
+		/* load place holder for where my avatar will be loaded (allows camera to set in place) */
+		WTW.loadAvatarPlaceholder();
+		/* load primary camera */
+		WTW.loadPrimaryCamera();
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_core.js-loadParentAndCamera=' + ex.message);
 	} 
 }
 
@@ -554,29 +578,6 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-loadLoginAvatarSelect=' + ex.message);
-	} 
-}
-
-WTWJS.prototype.loadParentAndCamera = function() {
-	/* load the main parent box, avatar placeholder, and camera */
-	try {
-		/* create the parent most connecting grid box */
-		/* everything else parents to this reference point */
-		var zparent = new BABYLON.TransformNode(WTW.mainParent);
-		zparent.position = new BABYLON.Vector3(0,0,0);
-		zparent.rotation = new BABYLON.Vector3(0,0,0);
-		zparent.scaling = new BABYLON.Vector3(1,1,1);
-		zparent.name = WTW.mainParent;
-		zparent.id = WTW.mainParent;
-		/* main parent name is WTW.mainParent */
-		/* set global main parent mold WTW.mainParentMold */
-		WTW.mainParentMold= zparent;
-		/* load place holder for where my avatar will be loaded (allows camera to set in place) */
-		WTW.loadAvatarPlaceholder();
-		/* load primary camera */
-		WTW.loadPrimaryCamera();
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_core.js-loadParentAndCamera=' + ex.message);
 	} 
 }
 
