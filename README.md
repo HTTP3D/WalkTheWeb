@@ -44,6 +44,14 @@ https://php.iis.net/
 
 https://www.iis.net/downloads/microsoft/url-rewrite
 
+UPDATING WALKTHEWEB
+---------------------------------------------------------------------------
+1.  Backup your website files and database.
+2.  Log into your website and open Admin Home (tool icon in the menu).
+3.  For automated update - Requires the 3D Internet Plugin to be enabled. Go to Dashboard - Updates - click the update button if it appears.
+4.  For manual updates - Does not require the 3D Internet Plugin enabled. Download the code and unzip it to the root of the website. It will overwrite the necessary files in connect, core, content/system, and content/plugins (only on the bundled plugins).
+5.  Most Important: Refresh your website in the browser in Admin Mode. This will perform any needed database table updates and load the newly updated code.
+
 LEARNING
 ---------------------------------------------------------------------------
 There are videos at: https://www.youtube.com/c/WalkTheWeb3d
