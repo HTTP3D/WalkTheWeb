@@ -29,9 +29,9 @@ try {
 		where deleted=0 
 			and avatarid='".$zavatarid."'
 		order by avatarpart, avatarpartid;");
-	$i = 0;
+	$zpartind = 0;
 	foreach ($zresults as $zrow) {
-		$zavatarparts[$i] = array(
+		$zavatarparts[$zpartind] = array(
 			'avatarpartid'=> $zrow["avatarpartid"],
 			'avatarpart'=> $zrow["avatarpart"],
 			'diffusecolor'=> $zrow["diffusecolor"],
@@ -39,7 +39,7 @@ try {
 			'emissivecolor'=> $zrow["emissivecolor"],
 			'ambientcolor'=> $zrow["ambientcolor"]
 		);
-		$i += 1;
+		$zpartind += 1;
 	}
 
 	/* pull avatar animations by id */
@@ -49,7 +49,7 @@ try {
 		where avatarid='".$zavatarid."' 
 				and deleted=0
 		order by loadpriority desc, animationfriendlyname, animationevent, avataranimationid;");
-	$i = 0;
+	$zanimationind = 0;
 	$zevent = '';
 	foreach ($zresults as $zrow) {
 		/* avoid duplicate animations for the same event, except for optional ones */
@@ -58,7 +58,7 @@ try {
 			if ($zrow["animationloop"] != '1') {
 				$zanimationloop = false;
 			}
-			$zavataranimationdefs[$i] = array(
+			$zavataranimationdefs[$zanimationind] = array(
 				'animationind'=> -1,
 				'useravataranimationid'=> '',
 				'avataranimationid'=> $zrow["avataranimationid"],
@@ -84,7 +84,7 @@ try {
 				'soundpath'=> $zrow["soundpath"],
 				'soundmaxdistance'=> $zrow["soundmaxdistance"]
 			);
-			$i += 1;
+			$zanimationind += 1;
 			$zevent = $zrow["animationevent"];
 		}
 	}
@@ -146,7 +146,7 @@ try {
 	foreach ($zresults as $zrow) {
 
 		/* load the onwait animation if it is part of the main avatar file */
-		$zavataranimationdefs[$i] = array(
+		$zavataranimationdefs[$zanimationind] = array(
 			'animationind'=> -1,
 			'useravataranimationid'=> '',
 			'avataranimationid'=> '',
