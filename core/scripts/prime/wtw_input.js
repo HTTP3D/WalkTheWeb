@@ -84,7 +84,7 @@ WTWJS.prototype.inputClick = function(zevent) {
 		if ((ztimestamp - WTW.mouseTimestamp) < 350) {
 			if (WTW.hasInputMoved() == false) {
 				var zpickedname = WTW.pickMoldNameByRenderingGroup(zevent);
-				WTW.pluginsOnClick(zpickedname);
+				zpickedname = WTW.pluginsInputClick(zpickedname);
 				if (zpickedname != '') {
 					var zmold = WTW.getMeshOrNodeByID(zpickedname);
 					if (zpickedname.indexOf('-') > -1) {

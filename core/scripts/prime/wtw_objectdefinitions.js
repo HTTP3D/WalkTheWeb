@@ -361,7 +361,7 @@ WTWJS.prototype.newMold = function() {
 			'shown':'0',
 			'opacity':'100',
 			'checkcollisions':'1',
-			'ispickable':'',
+			'ispickable':'1',
 			'jsfunction':'',
 			'jsparameters':'',
 			'actionzoneid':'',

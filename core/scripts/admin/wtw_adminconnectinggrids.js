@@ -739,6 +739,7 @@ WTWJS.prototype.setFirstBuilding = function() {
 			zmold.rotation.z = WTW.getRadians(zbuildingrotationz);
 			zmold.isPickable = false;
 			zmold.checkCollisions = false;
+			zmold.renderingGroupId = 1;
 			zmold.position.x = zbuildingpositionx;
 			zmold.position.y = zbuildingpositiony;
 			zmold.position.z = zbuildingpositionz;			

@@ -27,77 +27,40 @@ WTWJS.prototype.mouseUpAdmin = function(e) {
     }
 }
 
-WTWJS.prototype.mouseClickAdmin = function(e) {
+WTWJS.prototype.mouseClickAdmin = function(zevent) {
 	/* mouse click event */
 	try {
-		WTW.selectPick(e);
+		WTW.selectPick(zevent);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admininput.js-mouseClickAdmin=' + ex.message);
     }
 }
 
-WTWJS.prototype.mouseClickRightAdmin = function(e) {
+WTWJS.prototype.mouseClickRightAdmin = function(zevent) {
 	/* mouse right click event */
 	try {
 		WTW.pick = 1;
-		var zpickedname = '';
-		var zpickedresult = scene.pick(e.clientX, e.clientY);
-		if (zpickedresult.pickedMesh == null) {
-			zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
-			zpickedname = WTW.currentID;
-		} else {
-			zpickedname = zpickedresult.pickedMesh.name;
-		}
-		if (zpickedname.indexOf('babylonfile-') > -1 && zpickedresult.pickedMesh == null) {
-			/* if babylon file, get the root mold - base name */
-			var znameparts = zpickedname.split('-');
-			zpickedname = znameparts[0] + '-' + znameparts[1] + '-' + znameparts[2] + '-' + znameparts[3] + '-' + znameparts[4] + '-' + znameparts[5];
-			zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(zpickedname);
-		}
-
-		/* allow plugins to use the picked name */
-		WTW.pluginsMouseClickRightAdmin(e, zpickedname);
-		
-		/* WalkTheWeb built-in right mouse click functions */
+		var zpickedname = WTW.pickMoldNameByRenderingGroup(zevent);
+		var zpickedmold = WTW.getMeshOrNodeByID(zpickedname);
 		if (avatarid != '' && zpickedname.indexOf('editavatar') > -1) {
 			/* edit avatar - for setting a color of a mold */
-			var zmold = WTW.getMeshOrNodeByID(zpickedname);
-			WTW.loadPickedObject(zmold);
-		} else if (zpickedresult.pickedMesh != null) {
-			var zpickedmesh = zpickedresult.pickedMesh;
-			if (dGet('wtw_tmoldname').value != '') {
-				var zfirstmold = null;
-				var znextmoldind = -1;
-				var zfound = 0;
-				var zresults = scene.multiPick(e.clientX, e.clientY);
-				for (var i=0;i < zresults.length;i++) {
-					zfirstmold = WTW.getMoldBase(zresults[0].pickedMesh);
-					var zresultmold = WTW.getMoldBase(zresults[i].pickedMesh);
-					if (zresultmold.name == dGet('wtw_tmoldname').value) {
-						znextmoldind = i + 1;
-						zfound = 1;
-					}
-				}
-				if (zfound == 0) {
-				} else if (zresults[znextmoldind] != null) {
-					zpickedmesh = WTW.getMoldBase(zresults[znextmoldind].pickedMesh);
-				} else if (zfirstmold != null) {
-					zpickedmesh = zfirstmold;
-				}
-			}
-			var zmold = WTW.getMoldBase(zpickedmesh);
-			if (zmold != null) {
-				dGet('wtw_tmoldname').value = zmold.name;
-				WTW.loadPickedObject(zmold);
-			}
+			zpickedmold = WTW.getMeshOrNodeByID(zpickedname);
 		} else if (zpickedname != '') {
+			/* get base name for molds with multiple parts */
 			var znameparts = zpickedname.split('-');
-			zpickedname = znameparts[0] + '-' + znameparts[1] + '-' + znameparts[2] + '-' + znameparts[3] + '-' + znameparts[4] + '-' + znameparts[5];
+			zpickedname = znameparts[0] + '-' + znameparts[1] + '-' + znameparts[2] + '-' + znameparts[3] + '-' + znameparts[4] + '-' + znameparts[5] + '-' + znameparts[6];
 			dGet('wtw_tmoldname').value = zpickedname;
-			var zmold = WTW.getMeshOrNodeByID(zpickedname);
-			WTW.loadPickedObject(zmold);
+			zpickedmold = WTW.getMeshOrNodeByID(zpickedname);
+			
 		}
-		e.preventDefault();
+		/* allow plugins to use the picked name */
+		WTW.pluginsMouseClickRightAdmin(zevent, zpickedname);
+		
+		/* WalkTheWeb built-in right mouse click functions */
+		if (zpickedmold != null) {
+			WTW.loadPickedObject(zpickedmold);
+		}
+		zevent.preventDefault();
 		return false;
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admininput.js-mouseClickRightAdmin=' + ex.message);

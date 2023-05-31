@@ -100,3 +100,14 @@ WTWJS.prototype.beforeUnload = function (e) {
 	}
 }
 
+window.onfocus = function () {
+	/* on focus, recheck login */
+	try {
+		if (typeof WTW.setWindowSize == 'function') {
+			WTW.checkLogin();
+		}
+	} catch (ex) {
+		WTW.log('init-onfocus=' + ex.message);
+	}
+}
+

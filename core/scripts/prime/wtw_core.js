@@ -907,6 +907,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		WTW.extraGround.material.dispose();
 		WTW.extraGround.material = zgroundcovering;
 		/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
+
 		if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != '')) {
 			WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
 			if (WTW.water != null) {
@@ -943,6 +944,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 			WTW.water.isPickable = false;
 			WTW.water.checkCollisions = false;
 			WTW.water.material = WTW.waterMat;
+			WTW.water.renderingGroupId = 1;
 			WTW.water.position.y = WTW.init.waterPositionY;
 //			WTW.waterMat.addToRenderList(WTW.sky);
 			WTW.waterMat.addToRenderList(WTW.extraGround);
@@ -1695,7 +1697,9 @@ WTWJS.prototype.startRender = function() {
 			WTW.pause = 0;
 			engine.runRenderLoop(function () {
 				/* defined render loop */
-				scene.render();
+				try {
+					scene.render();
+				} catch(ex) {}
 				try {
 					/* plugin hook so plugins can add code to the render loop */
 					WTW.pluginsRenderloop();

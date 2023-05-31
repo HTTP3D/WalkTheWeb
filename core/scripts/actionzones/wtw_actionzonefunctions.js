@@ -400,248 +400,293 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 				zteleportwebid = WTW.actionZones[zactionzoneindex].teleportwebid;
 				zspawnactionzoneid = WTW.actionZones[zactionzoneindex].spawnactionzoneid;
 				if (zteleportwebid != '') {
-					/* update the url to the new community id and enter url in history */
-					if (window.history.pushState) {       
-						var znewurl = new URL(window.location.href);       
-						znewurl.search = '?communityid=' + zteleportwebid;
-						window.history.pushState({ path: znewurl.href }, '', znewurl.href); 
-					}
-					/* get domaininfo, scene, and sky settings */
-					WTW.getAsyncJSON('/connect/domaininfo.php?communityid=' + zteleportwebid, 
-						function(zresponse) {
-							zresponse = JSON.parse(zresponse);
-							communityid = zteleportwebid;
-							buildingid = '';
-							thingid = '';
-							var zconnectinggrids = [];
-							if (zteleportwebid != zoldwebid || zteleportwebtype != zoldwebtype) {
+					if (zteleportwebid == zoldwebid) {
+						/* same 3D Scene - different avatar position */
+						/* hide avatar for reentry */
+						var zavatarparts = [];
+						var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+						if (zavatarscale != null) {
+							zavatarparts = zavatarscale.getChildren();
+						}
+						for (var i=0; i<zavatarparts.length; i++) {
+							if (zavatarparts[i] != null) {
+								zavatarparts[i].isVisible = false;
+								zavatarparts[i].visibility = 0;
+							}
+						}
+
+						/* start stand for avatar while scene loads */
+						/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
+						var zspawnpoint = WTW.getSpawnPoint(WTW.spawnZones, zspawnactionzoneid);
+						var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
+						zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
+						zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y-.49, zspawnpoint.position.z);
+						zstartstand.checkCollisions = true;
+						zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
+						zstartstand.material.alpha = 0;
+						
+						WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + 1, zspawnpoint.position.z);
+						WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
+						
+						WTW.avatarShowFadeSwirlLong('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
+						/* check the new position for what action zones the avatar is now inside */
+						WTW.checkZones = true;
+					} else {
+						/* move to new 3D Scene */
+						/* update the url to the new community id and enter url in history */
+						if (window.history.pushState) {       
+							var znewurl = new URL(window.location.href);       
+							znewurl.search = '?communityid=' + zteleportwebid;
+							window.history.pushState({ path: znewurl.href }, '', znewurl.href); 
+						}
+						/* get domaininfo, scene, and sky settings */
+						WTW.getAsyncJSON('/connect/domaininfo.php?communityid=' + zteleportwebid, 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								communityid = zteleportwebid;
+								buildingid = '';
+								thingid = '';
+								var zconnectinggrids = [];
 								/* new scene - clear current scene */
 								zconnectinggrids = WTW.unloadAllZones(zoldwebid, zoldwebtype);
-							} else {
-								/* same scene - let action zones handle the load / unload */
-							}
-							
-							/* hide avatar for reentry */
-							var zavatarparts = [];
-							var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
-							if (zavatarscale != null) {
-								zavatarparts = zavatarscale.getChildren();
-							}
-							for (var i=0; i<zavatarparts.length; i++) {
-								if (zavatarparts[i] != null) {
-									zavatarparts[i].isVisible = false;
-									zavatarparts[i].visibility = 0;
-								}
-							}
-							WTW.init = {
-								'groundTextureID':zresponse.communityinfo.textureid,
-								'groundTexturePath':zresponse.communityinfo.texturepath,
-								'skyTextureID':zresponse.communityinfo.skydomeid,
-								'skyTexturePath':zresponse.communityinfo.skydomepath,
-								'sceneAmbientColor':zresponse.communityinfo.sceneambientcolor,
-								'sceneClearColor':zresponse.communityinfo.sceneclearcolor,
-								'sceneUseClonedMeshMap':Number(zresponse.communityinfo.sceneuseclonedmeshmap),
-								'sceneBlockMaterialDirtyMechanism':Number(zresponse.communityinfo.sceneblockmaterialdirtymechanism),
-								'sceneFogEnabled':Number(zresponse.communityinfo.scenefogenabled),
-								'sceneFogMode':zresponse.communityinfo.scenefogmode,
-								'sceneFogDensity':Number(zresponse.communityinfo.scenefogdensity),
-								'sceneFogStart':Number(zresponse.communityinfo.scenefogstart),
-								'sceneFogEnd':Number(zresponse.communityinfo.scenefogend),
-								'sceneFogColor':zresponse.communityinfo.scenefogcolor,
-								'sunDirectionalIntensity':Number(zresponse.communityinfo.sundirectionalintensity),
-								'sunDiffuseColor':zresponse.communityinfo.sundiffusecolor,
-								'sunSpecularColor':zresponse.communityinfo.sunspecularcolor,
-								'sunGroundColor':zresponse.communityinfo.sungroundcolor,
-								'sunDirectionX':Number(zresponse.communityinfo.sundirectionx),
-								'sunDirectionY':Number(zresponse.communityinfo.sundirectiony),
-								'sunDirectionZ':Number(zresponse.communityinfo.sundirectionz),
-								'backLightIntensity':Number(zresponse.communityinfo.backlightintensity),
-								'backLightDirectionX':Number(zresponse.communityinfo.backlightdirectionx),
-								'backLightDirectionY':Number(zresponse.communityinfo.backlightdirectiony),
-								'backLightDirectionZ':Number(zresponse.communityinfo.backlightdirectionz),
-								'backLightDiffuseColor':zresponse.communityinfo.backlightdiffusecolor,
-								'backLightSpecularColor':zresponse.communityinfo.backlightspecularcolor,
-								'skyType':zresponse.communityinfo.skytype,
-								'skySize':Number(zresponse.communityinfo.skysize),
-								'skyBoxFolder':zresponse.communityinfo.skyboxfolder,
-								'skyBoxFile':zresponse.communityinfo.skyboxfile,
-								'skyBoxImageLeft':zresponse.communityinfo.skyboximageleft,
-								'skyBoxImageUp':zresponse.communityinfo.skyboximageup,
-								'skyBoxImageFront':zresponse.communityinfo.skyboximagefront,
-								'skyBoxImageRight':zresponse.communityinfo.skyboximageright,
-								'skyBoxImageDown':zresponse.communityinfo.skyboximagedown,
-								'skyBoxImageBack':zresponse.communityinfo.skyboximageback,
-								'skyPositionOffsetX':Number(zresponse.communityinfo.skypositionoffsetx),
-								'skyPositionOffsetY':Number(zresponse.communityinfo.skypositionoffsety),
-								'skyPositionOffsetZ':Number(zresponse.communityinfo.skypositionoffsetz),
-								'skyBoxMicroSurface':Number(zresponse.communityinfo.skyboxmicrosurface),
-								'skyBoxPBR':Number(zresponse.communityinfo.skyboxpbr),
-								'skyBoxAsEnvironmentTexture':Number(zresponse.communityinfo.skyboxasenvironmenttexture),
-								'skyBoxBlur':Number(zresponse.communityinfo.skyboxblur),
-								'skyBoxDiffuseColor':zresponse.communityinfo.skyboxdiffusecolor,
-								'skyBoxSpecularColor':zresponse.communityinfo.skyboxspecularcolor,
-								'skyBoxAmbientColor':zresponse.communityinfo.skyboxambientcolor,
-								'skyBoxEmissiveColor':zresponse.communityinfo.skyboxemissivecolor,
-								'skyInclination':Number(zresponse.communityinfo.skyinclination),
-								'skyLuminance':Number(zresponse.communityinfo.skyluminance),
-								'skyAzimuth':Number(zresponse.communityinfo.skyazimuth),
-								'skyRayleigh':Number(zresponse.communityinfo.skyrayleigh),
-								'skyTurbidity':Number(zresponse.communityinfo.skyturbidity),
-								'skyMieDirectionalG':Number(zresponse.communityinfo.skymiedirectionalg),
-								'skyMieCoefficient':Number(zresponse.communityinfo.skymiecoefficient),
-								'waterBumpHeight':Number(zresponse.communityinfo.waterbumpheight),
-								'waterSubdivisions':Number(zresponse.communityinfo.watersubdivisions),
-								'windForce':Number(zresponse.communityinfo.windforce),
-								'windDirectionX':Number(zresponse.communityinfo.winddirectionx),
-								'windDirectionY':Number(zresponse.communityinfo.winddirectiony),
-								'windDirectionZ':Number(zresponse.communityinfo.winddirectionz),
-								'waterWaveHeight':Number(zresponse.communityinfo.waterwaveheight),
-								'waterWaveLength':Number(zresponse.communityinfo.waterwavelength),
-								'waterColorRefraction':zresponse.communityinfo.watercolorrefraction,
-								'waterColorReflection':zresponse.communityinfo.watercolorreflection,
-								'waterColorBlendFactor':Number(zresponse.communityinfo.watercolorblendfactor),
-								'waterColorBlendFactor2':Number(zresponse.communityinfo.watercolorblendfactor2),
-								'waterAlpha':Number(zresponse.communityinfo.wateralpha),
-								'groundPositionY':Number(zresponse.startlocation.position.groundpositiony),
-								'waterPositionY':Number(zresponse.startlocation.position.waterpositiony),
-								'startPositionX':Number(zresponse.startlocation.position.x),
-								'startPositionY':Number(zresponse.startlocation.position.y),
-								'startPositionZ':Number(zresponse.startlocation.position.z),
-								'startScalingX':Number(zresponse.startlocation.scaling.x),
-								'startScalingY':Number(zresponse.startlocation.scaling.y),
-								'startScalingZ':Number(zresponse.startlocation.scaling.z),
-								'startRotationX':Number(zresponse.startlocation.rotation.x),
-								'startRotationY':Number(zresponse.startlocation.rotation.y),
-								'startRotationZ':Number(zresponse.startlocation.rotation.z),
-								'gravity':Number(zresponse.domaininfo.gravity),
-								'loaded':1
-							};
-
-							/* start stand for avatar while scene loads */
-							/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
-							var zspawnpoint = WTW.getSpawnPoint(zresponse.spawnzones, zspawnactionzoneid);
-							var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
-							zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
-							zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y-.49, zspawnpoint.position.z);
-							zstartstand.checkCollisions = true;
-							zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
-							zstartstand.material.alpha = 0;
-							
-							WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + 100, zspawnpoint.position.z);
-							WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
-							
-							WTW.avatarShowFadeSwirlLong('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
-
-							WTW.extraGround.position.y = Number(WTW.init.groundPositionY);
-							/* remove current water from the old scene */
-							if (WTW.water != null) {
-								WTW.water.material.dispose();
-								WTW.water.dispose();
-								WTW.water = null;
-							}
-							/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
-							if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != '')) {
-								WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
-								if (WTW.adminView == 1 && communityid != '' && WTW.init.groundPositionY == 0) {
-									WTW.init.waterPositionY = -50;
-								}
-								/* create water */
-								WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);
 								
-								WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
-								
-								WTW.waterMat.bumpTexture = new BABYLON.Texture('/content/system/images/waterbump.png', scene);
-								WTW.waterMat.bumpHeight = WTW.init.waterBumpHeight;
-
-								WTW.waterMat.windForce = WTW.init.windForce;
-								WTW.waterMat.windDirection = new BABYLON.Vector2(WTW.init.windDirectionX, WTW.init.windDirectionZ);
-
-								WTW.waterMat.waveHeight = WTW.init.waterWaveHeight;
-								WTW.waterMat.waveLength = WTW.init.waterWaveLength;	
-
-								/* water color blended with the refraction (near) */
-								WTW.waterMat.waterColor = new BABYLON.Color3.FromHexString(WTW.init.waterColorRefraction); 
-								WTW.waterMat.colorBlendFactor = WTW.init.waterColorBlendFactor;
-								/* water color blended with the reflection (far) */
-								WTW.waterMat.waterColor2 = new BABYLON.Color3.FromHexString(WTW.init.waterColorReflection); 
-								WTW.waterMat.colorBlendFactor2 = WTW.init.waterColorBlendFactor2;
-
-								WTW.waterMat.alpha = WTW.init.waterAlpha;
-								WTW.waterMat.backFaceCulling = true;
-								WTW.water.isPickable = false;
-								WTW.water.checkCollisions = false;
-								WTW.water.material = WTW.waterMat;
-								WTW.water.position.y = WTW.init.waterPositionY;
-								WTW.waterMat.addToRenderList(WTW.sky);
-								WTW.waterMat.addToRenderList(WTW.extraGround);
-					//			WTW.water.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.water, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
-							}
-
-							scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-							/* set new content rating */
-							WTW.setContentRating();
-							WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
-
-							/* set community and initial building name */
-							document.title = zresponse.communityinfo.communityname;
-							dGet('wtw_showcommunityname').innerHTML = zresponse.communityinfo.communityname;
-							dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + zresponse.communityinfo.communityname + '</b>';
-							dGet('wtw_showbuildingname').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
-							dGet('wtw_showbuildingnamemobile').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
-							/* checking for main parent - adding if needed */
-							WTW.mainParent = 'local-connectinggrids-0---';
-							var zmainparent = WTW.getMeshOrNodeByID(WTW.mainParent);
-							if (zmainparent == null) {
-								if (WTW.mainParentMold != null) {
-									WTW.mainParentMold.name = WTW.mainParent;
-									WTW.mainParentMold.id = WTW.mainParent;
-								} else {
-									/* create the parent most connecting grid box */
-									/* everything else parents to this reference point */
-									zmainparent = new BABYLON.TransformNode(WTW.mainParent);
-									zmainparent.position = new BABYLON.Vector3(0,0,0);
-									zmainparent.rotation = new BABYLON.Vector3(0,0,0);
-									zmainparent.scaling = new BABYLON.Vector3(1,1,1);
-									zmainparent.name = WTW.mainParent;
-									zmainparent.id = WTW.mainParent;
+								/* hide avatar for reentry */
+								var zavatarparts = [];
+								var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+								if (zavatarscale != null) {
+									zavatarparts = zavatarscale.getChildren();
 								}
-							}
-							/* set global main parent mold WTW.mainParentMold */
-							WTW.mainParentMold = zmainparent;
-							WTW.myAvatar.parent = zmainparent;
-							
-							/* remove connecting grids from old scene - if it is no longer the same scene */
-							if (zteleportwebid != zoldwebid || zteleportwebtype != zoldwebtype) {
-								for (var i=0; i<zconnectinggrids.length;i++) {
-									if (zconnectinggrids[i] != null) {
-										if (zconnectinggrids[i].moldname != WTW.mainParent) {
-											WTW.addUnloadConnectingGridToQueue(zconnectinggrids[i].connectinggridind);
-											WTW.disposeClean(zconnectinggrids[i].moldname);
-											WTW.connectingGrids[zconnectinggrids[i].connectinggridind] = null;
+								for (var i=0; i<zavatarparts.length; i++) {
+									if (zavatarparts[i] != null) {
+										zavatarparts[i].isVisible = false;
+										zavatarparts[i].visibility = 0;
+									}
+								}
+
+								/* start stand for avatar while scene loads */
+								/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
+								var zspawnpoint = WTW.getSpawnPoint(zresponse.spawnzones, zspawnactionzoneid);
+								var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
+								zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
+								zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y-.49, zspawnpoint.position.z);
+								zstartstand.checkCollisions = true;
+								zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
+								zstartstand.material.alpha = 0;
+								
+								WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + 1, zspawnpoint.position.z);
+								WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
+								
+								WTW.avatarShowFadeSwirlLong('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
+								
+								if (zteleportwebid != zoldwebid || zteleportwebtype != zoldwebtype) {
+									/* new 3D Community - load new scene settings */
+									WTW.init = {
+										'groundTextureID':zresponse.communityinfo.textureid,
+										'groundTexturePath':zresponse.communityinfo.texturepath,
+										'skyTextureID':zresponse.communityinfo.skydomeid,
+										'skyTexturePath':zresponse.communityinfo.skydomepath,
+										'sceneAmbientColor':zresponse.communityinfo.sceneambientcolor,
+										'sceneClearColor':zresponse.communityinfo.sceneclearcolor,
+										'sceneUseClonedMeshMap':Number(zresponse.communityinfo.sceneuseclonedmeshmap),
+										'sceneBlockMaterialDirtyMechanism':Number(zresponse.communityinfo.sceneblockmaterialdirtymechanism),
+										'sceneFogEnabled':Number(zresponse.communityinfo.scenefogenabled),
+										'sceneFogMode':zresponse.communityinfo.scenefogmode,
+										'sceneFogDensity':Number(zresponse.communityinfo.scenefogdensity),
+										'sceneFogStart':Number(zresponse.communityinfo.scenefogstart),
+										'sceneFogEnd':Number(zresponse.communityinfo.scenefogend),
+										'sceneFogColor':zresponse.communityinfo.scenefogcolor,
+										'sunDirectionalIntensity':Number(zresponse.communityinfo.sundirectionalintensity),
+										'sunDiffuseColor':zresponse.communityinfo.sundiffusecolor,
+										'sunSpecularColor':zresponse.communityinfo.sunspecularcolor,
+										'sunGroundColor':zresponse.communityinfo.sungroundcolor,
+										'sunDirectionX':Number(zresponse.communityinfo.sundirectionx),
+										'sunDirectionY':Number(zresponse.communityinfo.sundirectiony),
+										'sunDirectionZ':Number(zresponse.communityinfo.sundirectionz),
+										'backLightIntensity':Number(zresponse.communityinfo.backlightintensity),
+										'backLightDirectionX':Number(zresponse.communityinfo.backlightdirectionx),
+										'backLightDirectionY':Number(zresponse.communityinfo.backlightdirectiony),
+										'backLightDirectionZ':Number(zresponse.communityinfo.backlightdirectionz),
+										'backLightDiffuseColor':zresponse.communityinfo.backlightdiffusecolor,
+										'backLightSpecularColor':zresponse.communityinfo.backlightspecularcolor,
+										'skyType':zresponse.communityinfo.skytype,
+										'skySize':Number(zresponse.communityinfo.skysize),
+										'skyBoxFolder':zresponse.communityinfo.skyboxfolder,
+										'skyBoxFile':zresponse.communityinfo.skyboxfile,
+										'skyBoxImageLeft':zresponse.communityinfo.skyboximageleft,
+										'skyBoxImageUp':zresponse.communityinfo.skyboximageup,
+										'skyBoxImageFront':zresponse.communityinfo.skyboximagefront,
+										'skyBoxImageRight':zresponse.communityinfo.skyboximageright,
+										'skyBoxImageDown':zresponse.communityinfo.skyboximagedown,
+										'skyBoxImageBack':zresponse.communityinfo.skyboximageback,
+										'skyPositionOffsetX':Number(zresponse.communityinfo.skypositionoffsetx),
+										'skyPositionOffsetY':Number(zresponse.communityinfo.skypositionoffsety),
+										'skyPositionOffsetZ':Number(zresponse.communityinfo.skypositionoffsetz),
+										'skyBoxMicroSurface':Number(zresponse.communityinfo.skyboxmicrosurface),
+										'skyBoxPBR':Number(zresponse.communityinfo.skyboxpbr),
+										'skyBoxAsEnvironmentTexture':Number(zresponse.communityinfo.skyboxasenvironmenttexture),
+										'skyBoxBlur':Number(zresponse.communityinfo.skyboxblur),
+										'skyBoxDiffuseColor':zresponse.communityinfo.skyboxdiffusecolor,
+										'skyBoxSpecularColor':zresponse.communityinfo.skyboxspecularcolor,
+										'skyBoxAmbientColor':zresponse.communityinfo.skyboxambientcolor,
+										'skyBoxEmissiveColor':zresponse.communityinfo.skyboxemissivecolor,
+										'skyInclination':Number(zresponse.communityinfo.skyinclination),
+										'skyLuminance':Number(zresponse.communityinfo.skyluminance),
+										'skyAzimuth':Number(zresponse.communityinfo.skyazimuth),
+										'skyRayleigh':Number(zresponse.communityinfo.skyrayleigh),
+										'skyTurbidity':Number(zresponse.communityinfo.skyturbidity),
+										'skyMieDirectionalG':Number(zresponse.communityinfo.skymiedirectionalg),
+										'skyMieCoefficient':Number(zresponse.communityinfo.skymiecoefficient),
+										'waterBumpHeight':Number(zresponse.communityinfo.waterbumpheight),
+										'waterSubdivisions':Number(zresponse.communityinfo.watersubdivisions),
+										'windForce':Number(zresponse.communityinfo.windforce),
+										'windDirectionX':Number(zresponse.communityinfo.winddirectionx),
+										'windDirectionY':Number(zresponse.communityinfo.winddirectiony),
+										'windDirectionZ':Number(zresponse.communityinfo.winddirectionz),
+										'waterWaveHeight':Number(zresponse.communityinfo.waterwaveheight),
+										'waterWaveLength':Number(zresponse.communityinfo.waterwavelength),
+										'waterColorRefraction':zresponse.communityinfo.watercolorrefraction,
+										'waterColorReflection':zresponse.communityinfo.watercolorreflection,
+										'waterColorBlendFactor':Number(zresponse.communityinfo.watercolorblendfactor),
+										'waterColorBlendFactor2':Number(zresponse.communityinfo.watercolorblendfactor2),
+										'waterAlpha':Number(zresponse.communityinfo.wateralpha),
+										'groundPositionY':Number(zresponse.startlocation.position.groundpositiony),
+										'waterPositionY':Number(zresponse.startlocation.position.waterpositiony),
+										'startPositionX':Number(zresponse.startlocation.position.x),
+										'startPositionY':Number(zresponse.startlocation.position.y),
+										'startPositionZ':Number(zresponse.startlocation.position.z),
+										'startScalingX':Number(zresponse.startlocation.scaling.x),
+										'startScalingY':Number(zresponse.startlocation.scaling.y),
+										'startScalingZ':Number(zresponse.startlocation.scaling.z),
+										'startRotationX':Number(zresponse.startlocation.rotation.x),
+										'startRotationY':Number(zresponse.startlocation.rotation.y),
+										'startRotationZ':Number(zresponse.startlocation.rotation.z),
+										'gravity':Number(zresponse.domaininfo.gravity),
+										'loaded':1
+									};
+									WTW.extraGround.position.y = Number(WTW.init.groundPositionY);
+									/* remove current water from the old scene */
+									if (WTW.water != null) {
+										WTW.water.material.dispose();
+										WTW.water.dispose();
+										WTW.water = null;
+									}
+									/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
+									if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != '')) {
+										WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
+										if (WTW.adminView == 1 && communityid != '' && WTW.init.groundPositionY == 0) {
+											WTW.init.waterPositionY = -50;
+										}
+										/* create water */
+										WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);
+										
+										WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
+										
+										WTW.waterMat.bumpTexture = new BABYLON.Texture('/content/system/images/waterbump.png', scene);
+										WTW.waterMat.bumpHeight = WTW.init.waterBumpHeight;
+
+										WTW.waterMat.windForce = WTW.init.windForce;
+										WTW.waterMat.windDirection = new BABYLON.Vector2(WTW.init.windDirectionX, WTW.init.windDirectionZ);
+
+										WTW.waterMat.waveHeight = WTW.init.waterWaveHeight;
+										WTW.waterMat.waveLength = WTW.init.waterWaveLength;	
+
+										/* water color blended with the refraction (near) */
+										WTW.waterMat.waterColor = new BABYLON.Color3.FromHexString(WTW.init.waterColorRefraction); 
+										WTW.waterMat.colorBlendFactor = WTW.init.waterColorBlendFactor;
+										/* water color blended with the reflection (far) */
+										WTW.waterMat.waterColor2 = new BABYLON.Color3.FromHexString(WTW.init.waterColorReflection); 
+										WTW.waterMat.colorBlendFactor2 = WTW.init.waterColorBlendFactor2;
+
+										WTW.waterMat.alpha = WTW.init.waterAlpha;
+										WTW.waterMat.backFaceCulling = true;
+										WTW.water.isPickable = false;
+										WTW.water.checkCollisions = false;
+										WTW.water.renderingGroupId = 1;
+										WTW.water.material = WTW.waterMat;
+										WTW.water.position.y = WTW.init.waterPositionY;
+										WTW.waterMat.addToRenderList(WTW.sky);
+										WTW.waterMat.addToRenderList(WTW.extraGround);
+							//			WTW.water.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.water, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
+									}
+
+									scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
+									scene.ambientColor = new BABYLON.Color3.FromHexString(WTW.init.sceneAmbientColor);
+									scene.clearColor = new BABYLON.Color3.FromHexString(WTW.init.sceneClearColor); //optional light setting  */
+
+									/* set fog if enabled */
+									WTW.setFog();
+											
+									/* set the sun and back light the 3D Scene */
+									WTW.setSunLight();
+									
+									/* initialize sky - scaling and material settings */
+									WTW.createSky();
+
+									/* set new content rating */
+									WTW.setContentRating();
+								}
+								
+								/* set community and initial building name */
+								document.title = zresponse.communityinfo.communityname;
+								dGet('wtw_showcommunityname').innerHTML = zresponse.communityinfo.communityname;
+								dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + zresponse.communityinfo.communityname + '</b>';
+								dGet('wtw_showbuildingname').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
+								dGet('wtw_showbuildingnamemobile').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
+								/* checking for main parent - adding if needed */
+								WTW.mainParent = 'local-connectinggrids-0---';
+								var zmainparent = WTW.getMeshOrNodeByID(WTW.mainParent);
+								if (zmainparent == null) {
+									if (WTW.mainParentMold != null) {
+										WTW.mainParentMold.name = WTW.mainParent;
+										WTW.mainParentMold.id = WTW.mainParent;
+									} else {
+										/* create the parent most connecting grid box */
+										/* everything else parents to this reference point */
+										zmainparent = new BABYLON.TransformNode(WTW.mainParent);
+										zmainparent.position = new BABYLON.Vector3(0,0,0);
+										zmainparent.rotation = new BABYLON.Vector3(0,0,0);
+										zmainparent.scaling = new BABYLON.Vector3(1,1,1);
+										zmainparent.name = WTW.mainParent;
+										zmainparent.id = WTW.mainParent;
+									}
+								}
+								/* set global main parent mold WTW.mainParentMold */
+								WTW.mainParentMold = zmainparent;
+								WTW.myAvatar.parent = zmainparent;
+								
+								/* remove connecting grids from old scene - if it is no longer the same scene */
+								if (zteleportwebid != zoldwebid || zteleportwebtype != zoldwebtype) {
+									for (var i=0; i<zconnectinggrids.length;i++) {
+										if (zconnectinggrids[i] != null) {
+											if (zconnectinggrids[i].moldname != WTW.mainParent) {
+												WTW.addUnloadConnectingGridToQueue(zconnectinggrids[i].connectinggridind);
+												WTW.disposeClean(zconnectinggrids[i].moldname);
+												WTW.connectingGrids[zconnectinggrids[i].connectinggridind] = null;
+											}
 										}
 									}
 								}
-							}
-							
-							/* load new scene */
-							WTW.loadScene();
-							window.setTimeout(function() {
-								WTW.isInitCycle = 0;
-								WTW.resetActivityTimer();
-							}, 5000);
-							window.setTimeout(function() {
-								/* move avatar just in case the avatar sunk into the ground before it loaded the scene */
-								WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + .57, zspawnpoint.position.z);
-								WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
-								/* delete start stand after 10 seconds */
+								
+								/* load new scene */
+								WTW.loadScene();
 								window.setTimeout(function() {
-									if (WTW.isInitCycle == 0) {
-										zstartstand.dispose();
-									}
-								},10000);
-							},3000);
-						}
-					);
+									WTW.isInitCycle = 0;
+									WTW.resetActivityTimer();
+								}, 5000);
+								window.setTimeout(function() {
+									/* move avatar just in case the avatar sunk into the ground before it loaded the scene */
+									WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + .57, zspawnpoint.position.z);
+									WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
+									/* delete start stand after 10 seconds */
+									window.setTimeout(function() {
+										if (WTW.isInitCycle == 0) {
+											zstartstand.dispose();
+										}
+									},10000);
+								},3000);
+							}
+						);
+					}
 				}
 			}
 		}

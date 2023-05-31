@@ -1192,6 +1192,13 @@ WTWJS.prototype.hudLoginFocusText = function(zmoldname, zeditdone) {
 				WTW.offsetY = -1.35;
 				WTW.offsetZ = -1.15;
 				WTW.maxLength = 1;
+				if (dGet(WTW.selectedMoldName + '-textbox') != null) {
+					if (dGet(WTW.selectedMoldName + '-textbox').checked) {
+						dGet(WTW.selectedMoldName + '-textbox').checked = false;
+					} else {
+						dGet(WTW.selectedMoldName + '-textbox').checked = true;
+					}
+				}
 				break;
 			case 'hudlogin-name-displayname':
 				WTW.offsetY = 1.8;
@@ -1693,6 +1700,7 @@ WTWJS.prototype.hudLoginLoadAvatarsArray = function(zfilter) {
 						var zdefaulttimer = window.setInterval(function(){
 							if (dGet('hudlogin-name-displayname-textbox') != null) {
 								dGet('hudlogin-name-displayname-textbox').value = zdefaultdisplayname;
+								WTW.textCursor = zdefaultdisplayname.length;
 								window.clearInterval(zdefaulttimer);
 							}
 							zsafety += 1;
@@ -1761,6 +1769,7 @@ WTWJS.prototype.hudLoginLoadChoiceAvatarsArray = function(zfilter, zdefaultdispl
 						var zdefaulttimer = window.setInterval(function(){
 							if (dGet('hudlogin-name-displayname-textbox') != null) {
 								dGet('hudlogin-name-displayname-textbox').value = zdefaultdisplayname;
+								WTW.textCursor = zdefaultdisplayname.length;
 								window.clearInterval(zdefaulttimer);
 							}
 							zsafety += 1;

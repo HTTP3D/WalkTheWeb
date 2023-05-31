@@ -1244,23 +1244,26 @@ WTWJS.prototype.loadCommunityPage = async function(zcommunityid, zbuildingid, zt
 	}
 }	
 
-WTWJS.prototype.startUploadImage = function(zbuttontext) {
+WTWJS.prototype.startUploadImage = function(zbuttontext, zobjectfolder) {
 	/* upload image process (upload process is based on which text is on the button) */
 	/* some are single files and others are multi files select */
 	try {
+		if (zobjectfolder == undefined) {
+			zobjectfolder = '';
+		}
 		switch (zbuttontext) {
 			case 'Upload Primary 3D File':
 				dGet('wtw_fileupload').click();
 				break;
 			case 'Upload or Replace File(s)':
 				dGet('wtw_filesupload').onchange = function() {
-					WTW.uploadObjectFiles();
+					WTW.uploadObjectFiles('uploadobjectfiles', zobjectfolder);
 				}
 				dGet('wtw_filesupload').click();
 				break;
 			case 'Upload JavaScript File':
 				dGet('wtw_filesupload').onchange = function() {
-					WTW.uploadObjectFiles('uploadjavascriptfiles');
+					WTW.uploadObjectFiles('uploadjavascriptfiles', zobjectfolder);
 				}
 				dGet('wtw_filesupload').click();
 				break;
@@ -1336,7 +1339,7 @@ WTWJS.prototype.selectUploadFiles = function() {
 	/* open file selection based on one or more files available to select */
 	try {
 		if (dGet('wtw_bstartimageupload').innerHTML == 'Upload of Replace File(s)') {
-			WTWuploadObjectFiles();
+			WTW.uploadObjectFiles('uploadobjectfiles');
 		} else {
 			WTW.uploadFiles();
 		}
@@ -1883,12 +1886,15 @@ WTWJS.prototype.deleteUploadObject = function(zuploadobjectid, zpermanent) {
 	}
 }
 
-WTWJS.prototype.uploadObjectFiles = function(ztype) {
+WTWJS.prototype.uploadObjectFiles = function(ztype, zobjectfolder) {
 	/* upload 3D Object files using form post */
 	try {
 		if (dGet('wtw_filesupload').value != null) {
 			if (ztype == undefined) {
 				ztype = 'uploadobjectfiles';
+			}
+			if (zobjectfolder == undefined) {
+				zobjectfolder = '';
 			}
 			var zwebtype = 'communities';
 			if (buildingid != '') {
@@ -1905,6 +1911,7 @@ WTWJS.prototype.uploadObjectFiles = function(ztype) {
 				zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 			}
 			zformdata.append('action', 'POST');
+			zformdata.append('objectfolder', zobjectfolder);
 			zformdata.append('objectfilepart', zobjectfilepart);
 			zformdata.append('webtype', zwebtype);
 			zformdata.append('webid', communityid + buildingid + thingid);
@@ -1983,13 +1990,14 @@ WTWJS.prototype.uploadAsyncObjectFiles = function(ztype) {
 	}
 }
 
-WTWJS.prototype.deleteObjectFile = async function() {
+WTWJS.prototype.deleteObjectFile = async function(zobjectfolder) {
 	/* delete 3D Mold Object file */
 	try {
 		var zobjectfilepart = dGet('wtw_tobjectfile').value;
 		zobjectfilepart = zobjectfilepart.replace('.babylon','').replace('.glb','').replace('.gltf','').replace('.obj','');
 		var zrequest = {
 			'filename': dGet('wtw_tdeletefile').value,
+			'objectfolder': zobjectfolder,
 			'objectfilepart': zobjectfilepart,
 			'function':'deleteobjectfile'
 		};
@@ -2042,8 +2050,8 @@ WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobject
 						}
 					}
 				}
-				zfilesdiv += "<br /><br /><div id='wtw_uploadbutton' class='wtw-greenbutton' style='width:318px;' onclick=\"WTW.startUploadImage('Upload or Replace File(s)');\">Upload or Replace File(s)</div>";
-				zfilesdiv += "<div id='wtw_deletefile' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectFile();\">Delete File</div><div id='wtw_canceldelete' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='';WTW.hide('wtw_deletefile');WTW.hide('wtw_canceldelete');WTW.show('wtw_uploadbutton');\">Cancel</div>";
+				zfilesdiv += "<br /><br /><div id='wtw_uploadbutton' class='wtw-greenbutton' style='width:318px;' onclick=\"WTW.startUploadImage('Upload or Replace File(s)','" + zobjectfolder + "');\">Upload or Replace File(s)</div>";
+				zfilesdiv += "<div id='wtw_deletefile' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectFile('" + zobjectfolder + "');\">Delete File</div><div id='wtw_canceldelete' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='';WTW.hide('wtw_deletefile');WTW.hide('wtw_canceldelete');WTW.show('wtw_uploadbutton');\">Cancel</div>";
 				zfilesdiv += "</div></div>";
 				dGet('wtw_uploadedmodelsfilesdiv').innerHTML = zfilesdiv;
 			}

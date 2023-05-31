@@ -409,7 +409,7 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 			//zmold.isVisible = false;
 			zmold.position = new BABYLON.Vector3(zposx, zposy, zposz);
 			zmold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotx), WTW.getRadians(zroty), WTW.getRadians(zrotz));
-			zmold.isPickable = true;
+			
 			if (zmolddef.sound != undefined) {
 				if (zmolddef.sound.id != '') {
 					WTW.loadSoundToMold(zmold, zmoldname, zmolddef.sound.id, zmolddef.sound.path, zmolddef.sound.loop, zmolddef.sound.attenuation, zmolddef.sound.maxdistance, zmolddef.sound.rollofffactor, zmolddef.sound.refdistance, -1);
@@ -487,6 +487,9 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 			if (zmoldname.indexOf('terrain') > -1 || (ziswaterreflection == '1' && znode == null)) {
 				/* if mold is set to add reflection, add mold to the reflections array */
 				WTW.addReflectionRefraction(zmold);
+			}
+			if (WTW.adminView == 1 || zmolddef.ispickable == '1') {
+				zmold.isPickable = true;
 			}
 			if (zcheckcollisions == '1' && zcoveringname != 'none') {
 				zmold.checkCollisions = true; 

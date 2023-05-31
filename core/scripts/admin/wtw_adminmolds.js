@@ -1611,12 +1611,11 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 	/* open edit pole lines and position, rotation, and scale to mold */
 	try {
 		WTW.closeEditPoles();
-		scene.render();
 		var zmoldguide = scene.getTransformNodeByID(zmold.name + '-guide');
 		if (zmoldguide != null) {
 			zmold = zmoldguide;
 		}
-		if (zmold != null) {
+		if (zmold != null && (dGet('wtw_tmoldid').value != '' || dGet('wtw_tactionzoneid').value != '' || dGet('wtw_teditconnectinggridid').value != '')) {
 			var zpx = zmold.position.x;
 			var zpy = zmold.position.y;
 			var zpz = zmold.position.z;
@@ -1637,7 +1636,10 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 				WTW.lineZ.isPickable = false;
 				WTW.lineX.isPickable = false;
 				WTW.lineY.isPickable = false;
-
+				WTW.lineZ.renderingGroupId = 1;
+				WTW.lineX.renderingGroupId = 1;
+				WTW.lineY.renderingGroupId = 1;
+				
 				WTW.lineX1 = BABYLON.MeshBuilder.CreateLines('linex1', {points: [new BABYLON.Vector3(-.5, -.5, -100), new BABYLON.Vector3(-.5, -.5, 100)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineX2 = BABYLON.MeshBuilder.CreateLines('linex2', {points: [new BABYLON.Vector3(-.5, .5, -100), new BABYLON.Vector3(-.5, .5, 100)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineX3 = BABYLON.MeshBuilder.CreateLines('linex3', {points: [new BABYLON.Vector3(.5, -.5, -100), new BABYLON.Vector3(.5, -.5, 100)], useVertexAlpha: false, updatable: false}, scene);
@@ -1670,6 +1672,14 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 				WTW.lineX6.parent = zmold;
 				WTW.lineX7.parent = zmold;
 				WTW.lineX8.parent = zmold;
+				WTW.lineX1.renderingGroupId = 1;
+				WTW.lineX2.renderingGroupId = 1;
+				WTW.lineX3.renderingGroupId = 1;
+				WTW.lineX4.renderingGroupId = 1;
+				WTW.lineX5.renderingGroupId = 1;
+				WTW.lineX6.renderingGroupId = 1;
+				WTW.lineX7.renderingGroupId = 1;
+				WTW.lineX8.renderingGroupId = 1;
 
 				WTW.lineY1 = BABYLON.MeshBuilder.CreateLines('liney1', {points: [new BABYLON.Vector3(-.5, -100, -.5), new BABYLON.Vector3(-.5, 100, -.5)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineY2 = BABYLON.MeshBuilder.CreateLines('liney2', {points: [new BABYLON.Vector3(-.5, -100, .5), new BABYLON.Vector3(-.5, 100, .5)], useVertexAlpha: false, updatable: false}, scene);
@@ -1703,6 +1713,14 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 				WTW.lineY6.parent = zmold;
 				WTW.lineY7.parent = zmold;
 				WTW.lineY8.parent = zmold;
+				WTW.lineY1.renderingGroupId = 1;
+				WTW.lineY2.renderingGroupId = 1;
+				WTW.lineY3.renderingGroupId = 1;
+				WTW.lineY4.renderingGroupId = 1;
+				WTW.lineY5.renderingGroupId = 1;
+				WTW.lineY6.renderingGroupId = 1;
+				WTW.lineY7.renderingGroupId = 1;
+				WTW.lineY8.renderingGroupId = 1;
 
 				WTW.lineZ1 = BABYLON.MeshBuilder.CreateLines('linez1', {points: [new BABYLON.Vector3(-100, -.5, -.5), new BABYLON.Vector3(100, -.5, -.5)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineZ2 = BABYLON.MeshBuilder.CreateLines('linez2', {points: [new BABYLON.Vector3(-100, -.5, .5), new BABYLON.Vector3(100, -.5, .5)], useVertexAlpha: false, updatable: false}, scene);
@@ -1736,6 +1754,15 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 				WTW.lineZ6.parent = zmold;
 				WTW.lineZ7.parent = zmold;
 				WTW.lineZ8.parent = zmold;
+				WTW.lineZ1.renderingGroupId = 1;
+				WTW.lineZ2.renderingGroupId = 1;
+				WTW.lineZ3.renderingGroupId = 1;
+				WTW.lineZ4.renderingGroupId = 1;
+				WTW.lineZ5.renderingGroupId = 1;
+				WTW.lineZ6.renderingGroupId = 1;
+				WTW.lineZ7.renderingGroupId = 1;
+				WTW.lineZ8.renderingGroupId = 1;
+
 				var zalphamold = 1;
 				var zwx = .1;
 				var zwy = 1;

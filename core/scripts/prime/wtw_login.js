@@ -6,8 +6,6 @@
 /* login pages, select avatar, account, profile, options, and related functions */
 
 
-
-
 WTWJS.prototype.globalLogin = async function(zparameters) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and confirms the local values from login */
 	try {
@@ -88,6 +86,35 @@ WTWJS.prototype.globalLoginResponse = function(zresponse) {
 		WTW.log('core-scripts-prime-wtw_login.js-globalLoginResponse=' + ex.message);
 	}
 	return znoerror;
+}
+
+WTWJS.prototype.checkLogin = function() {
+	/* when window gets focus, this function checks to see if the user is still logged in */
+	try {
+		if (dGet('wtw_tuserid').value != '') {
+			/* only check if site was logged in previously */
+			var zrequest = {
+				'function':'isuserloggedin'
+			};
+			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					var zloggedin = false;
+					if (zresponse.loggedin != undefined) {
+						if (zresponse.loggedin == true || zresponse.loggedin == 'true') {
+							zloggedin = true;
+						}
+					}
+					if (zloggedin == false) {
+						WTW.logout();
+					}
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_login.js-checkLogin=' + ex.message);
+	}
 }
 
 WTWJS.prototype.openLoginMenu = function() {
@@ -555,9 +582,7 @@ WTWJS.prototype.logout = async function() {
 			dGet('wtw_showbuildingname').onclick = '';
 			dGet('wtw_showbuildingnamemobile').onclick = '';
 		}
-		if (window.location.href.indexOf('admin.php') > -1) {
-			window.location.href = '//' + wtw_domainname + '/';
-		} else {
+		if (window.location.href.indexOf('admin.php') == -1) {
 			WTW.logoutMyAvatar();
 		}
 		var zrequest = {
@@ -567,7 +592,11 @@ WTWJS.prototype.logout = async function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.openLoginHUDLogin();
+				if (window.location.href.indexOf('admin.php') > -1) {
+					window.location.href = '//' + wtw_domainname + '/';
+				} else {
+					WTW.openLoginHUDLogin();
+				}
 			}
 		);
 	} catch (ex) {

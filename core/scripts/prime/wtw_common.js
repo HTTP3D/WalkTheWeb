@@ -1488,7 +1488,7 @@ WTWJS.prototype.setExtendedGround = function () {
 				break;
 		}
 
-		WTW.extraGround.renderingGroupId = 0;
+		WTW.extraGround.renderingGroupId = 1;
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_common.js-setExtendedGround=' + ex.message);
 	}
@@ -1728,18 +1728,19 @@ WTWJS.prototype.processMoldQueue = function() {
 												if (zwaterreflection == '1' && WTW.waterMat != null && znode == null) {
 													WTW.waterMat.addToRenderList(zmold);
 												}
+												zmold.isPickable = true;
+												zmold.renderingGroupId = 1;
 											}
-											if (zmold != null && znode == null) {
+											if (znode == null) {
 												zmold.checkCollisions = false;
-												zmold.isPickable = false;
 												if (zmolddef.checkcollisions != undefined) {
 													if (zmolddef.checkcollisions == '1') {
 														zmold.checkCollisions = true;
 													}
 												}
 												if (zmolddef.ispickable != undefined) {
-													if (zmolddef.ispickable == '1') {
-														zmold.isPickable = true;
+													if (zmolddef.ispickable == '0' && WTW.adminView != 1) {
+														zmold.isPickable = false;
 													}
 												}
 											}

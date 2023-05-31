@@ -71,6 +71,7 @@ WTWJS.prototype.showActionZone = function(zactionzoneind) {
 				zactionzone.enableEdgesRendering(); 
 				zactionzone.edgesWidth = 4.0;
 				zactionzone.edgesColor = new BABYLON.Color4(0, 0, 1, 1);
+				zactionzone.renderingGroupId = 1;
 			}
 			if (zactionzoneaxle != null) {
 				zactionzoneaxle.isVisible = true;
@@ -127,6 +128,7 @@ WTWJS.prototype.hideActionZone = function(zactionzoneind) {
 			if (zactionzone != null) {
 				zactionzone.isVisible = false;
 				zactionzone.disableEdgesRendering(); 
+				zactionzone.renderingGroupId = 0;
 			}
 			if (zactionzoneaxle != null) {
 				zactionzoneaxle.isVisible = false;

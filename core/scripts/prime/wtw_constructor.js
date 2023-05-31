@@ -270,16 +270,6 @@ function WTWJS() {
 			skyMieCoefficient = .005; // The haze particle size coefficient. (.001 to .999 increment .001)
 			skyBoxPBR = true; // Physically based rendering (PBR) is a computer graphics to render images in a way that models light use in the real world.
 			skyBoxBlur = 0; //is only available when pbr is true, default is 0, no blur, maximum value is 1 */	
-		/* gravity was 9.8, temporarily set to less for hill climbing */
-
-/*
-		'skyBoxImageLeft':'/content/system/skies/space/space_left.jpg',
-		'skyBoxImageUp':'/content/system/skies/space/space_up.jpg',
-		'skyBoxImageFront':'/content/system/skies/space/space_front.jpg',
-		'skyBoxImageRight':'/content/system/skies/space/space_right.jpg',
-		'skyBoxImageDown':'/content/system/skies/space/space_down.jpg',
-		'skyBoxImageBack':'/content/system/skies/space/space_back.jpg',
-*/
 
 	this.init = {
 		'groundTextureID':'2391f1v9om09am77',
