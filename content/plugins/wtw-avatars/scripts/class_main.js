@@ -12,11 +12,11 @@ let wtwavatars = new WTW_AVATARS();
 
 /* Add functions as needed to your class */
 /* for simplicity, try to name the functions the same as the original WTW function name it is hooked into */
-/* this is an example of an onClick function */
-/* activate it with the core WTW.onclick function hook */
+/* this is an example of an inputClick function */
+/* activate it with the core WTW.inputClick function hook */
 /* in the plugin/functions/class_plugin.php initHooks and initAdminOnlyHooks functions. */
 
-WTW_AVATARS.prototype.onClick = function(zpickedname) {
+WTW_AVATARS.prototype.inputClick = function(zpickedname) {
 	try {
 		zpickedname = zpickedname.toLowerCase();
 		let zmoldnameparts = WTW.getMoldnameParts(zpickedname);
@@ -72,8 +72,9 @@ WTW_AVATARS.prototype.onClick = function(zpickedname) {
 			WTW.pickUpObject('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, 'righthand', zoffset);
 		}
 	} catch (ex) {
-		WTW.log('plugins:wtw-avatars:scripts-class_main.js-onClick=' + ex.message);
+		WTW.log('plugins:wtw-avatars:scripts-class_main.js-inputClick=' + ex.message);
 	} 
+	return zpickedname;
 }
 
 WTW_AVATARS.prototype.checkActionZone = function(zactionzonename, zactionzoneind, zmeinzone, zothersinzone) {

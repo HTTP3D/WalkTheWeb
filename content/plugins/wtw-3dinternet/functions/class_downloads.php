@@ -167,17 +167,7 @@ class wtw_3dinternet_downloads {
 				/* determine the new local path for uploaded files associated with this download */
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$znewwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$znewwebid;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 				if (isset($zrequest->users)) {
 					$this->downloadUsers(json_encode($zrequest->users), $zusertoken);
 				}
@@ -377,17 +367,7 @@ class wtw_3dinternet_downloads {
 				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$znewwebid;
 				$zresponse['newfolder'] = $znewfolder;
 				$zresponse['newurl'] = $znewurl;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("plugins:wtw-3dinternet:functions-class_downloads.php-downloadWebProgress=".$e->getMessage());
@@ -474,17 +454,7 @@ class wtw_3dinternet_downloads {
 				/* determine the new local path for uploaded files associated with this download */
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$zwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$zwebid;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 				
 				/* process all users associated to this download (for your reference) */
 				foreach ($zrequest->users as $zuser) {
@@ -558,17 +528,7 @@ class wtw_3dinternet_downloads {
 					
 					$znewuploadsfolder = $znewfolder.'/uploads';
 					$znewuploadsurl = $znewurl.'/uploads';
-					if (!file_exists($znewuploadsfolder)) {
-						umask(0);
-						mkdir($znewuploadsfolder, octdec(wtw_chmod), true);
-						chmod($znewuploadsfolder, octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
-					}
+					$wtwhandlers->verifyFolderExists($znewuploadsfolder);
 					if (!empty($zupload->filepath)) {
 						try {
 							/* check file types for valid downloads */
@@ -1273,30 +1233,10 @@ class wtw_3dinternet_downloads {
 					$znewanimationicon = '';
 					
 					$znewobjectfolder = $znewfolder.'/avataranimations';
-					if (!file_exists($znewobjectfolder)) {
-						umask(0);
-						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-						chmod($znewobjectfolder, octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
-					}
+					$wtwhandlers->verifyFolderExists($znewobjectfolder);
 					if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
 						$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zavataranimation->objectfile))));
-						if (!file_exists($znewobjectfolder)) {
-							umask(0);
-							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-							chmod($znewobjectfolder, octdec(wtw_chmod));
-							if (defined('wtw_umask')) {
-								/* reset umask */
-								if (wtw_umask != '0') {
-									umask(octdec(wtw_umask));
-								}
-							}
-						}
+						$wtwhandlers->verifyFolderExists($znewobjectfolder);
 						$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
 						if ($zfileext == 'babylon') {
 							try {
@@ -1647,17 +1587,7 @@ class wtw_3dinternet_downloads {
 					$znewscriptid = $wtwhandlers->getNewKey('scripts', "scriptid", $zscript->scriptid);
 					
 					$znewscriptfolder = $znewfolder.'/scripts';
-					if (!file_exists($znewscriptfolder)) {
-						umask(0);
-						mkdir($znewscriptfolder, octdec(wtw_chmod), true);
-						chmod($znewscriptfolder, octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
-					}
+					$wtwhandlers->verifyFolderExists($znewscriptfolder);
 					if (!empty($zscript->scriptpath)) {
 						$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
 						if ($zfileext == 'js') {
@@ -1959,23 +1889,10 @@ class wtw_3dinternet_downloads {
 					$i += 1;
 					
 					if ($wtwhandlers->hasValue($zuploadobject->uploadobjectid)) {
-						umask(0);
 						$znewobjectfolder = $znewfolder.'/objects';
-						if (!file_exists($znewobjectfolder)) {
-							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-							chmod($znewobjectfolder, octdec(wtw_chmod));
-						}
+						$wtwhandlers->verifyFolderExists($znewobjectfolder);
 						$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))));
-						if (!file_exists($znewobjectfolder)) {
-							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-							chmod($znewobjectfolder, octdec(wtw_chmod));
-						}
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
+						$wtwhandlers->verifyFolderExists($znewobjectfolder);
 						$znewobjecturl = $znewurl.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))))."/";
 						
 						/* get new foreign keys */
@@ -3045,17 +2962,7 @@ class wtw_3dinternet_downloads {
 				
 				$znewuploadsfolder = $znewfolder.'/uploads';
 				$znewuploadsurl = $znewurl.'/uploads';
-				if (!file_exists($znewuploadsfolder)) {
-					umask(0);
-					mkdir($znewuploadsfolder, octdec(wtw_chmod), true);
-					chmod($znewuploadsfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewuploadsfolder);
 				if (!empty($zupload->filepath)) {
 					try {
 						/* check file types for valid downloads */
@@ -3725,30 +3632,10 @@ class wtw_3dinternet_downloads {
 				$znewanimationicon = '';
 				
 				$znewobjectfolder = $znewfolder.'/avataranimations';
-				if (!file_exists($znewobjectfolder)) {
-					umask(0);
-					mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-					chmod($znewobjectfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewobjectfolder);
 				if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
 					$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zavataranimation->objectfile))));
-					if (!file_exists($znewobjectfolder)) {
-						umask(0);
-						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-						chmod($znewobjectfolder, octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
-					}
+					$wtwhandlers->verifyFolderExists($znewobjectfolder);
 					$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
 					if ($zfileext == 'babylon') {
 						try {
@@ -4105,17 +3992,7 @@ class wtw_3dinternet_downloads {
 				$znewscriptid = $wtwhandlers->getNewKey('scripts', "scriptid", $zscript->scriptid);
 				
 				$znewscriptfolder = $znewfolder.'/scripts';
-				if (!file_exists($znewscriptfolder)) {
-					umask(0);
-					mkdir($znewscriptfolder, octdec(wtw_chmod), true);
-					chmod($znewscriptfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewscriptfolder);
 				if (!empty($zscript->scriptpath)) {
 					$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
 					if ($zfileext == 'js') {
@@ -4504,23 +4381,10 @@ class wtw_3dinternet_downloads {
 				$i += 1;
 
 				if ($wtwhandlers->hasValue($zuploadobject->uploadobjectid)) {
-					umask(0);
 					$znewobjectfolder = $znewfolder.'/objects';
-					if (!file_exists($znewobjectfolder)) {
-						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-						chmod($znewobjectfolder, octdec(wtw_chmod));
-					}
+					$wtwhandlers->verifyFolderExists($znewobjectfolder);
 					$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))));
-					if (!file_exists($znewobjectfolder)) {
-						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
-						chmod($znewobjectfolder, octdec(wtw_chmod));
-					}
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
+					$wtwhandlers->verifyFolderExists($znewobjectfolder);
 					$znewobjecturl = $znewurl.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))))."/";
 					
 					/* get new foreign keys */
@@ -5480,17 +5344,7 @@ class wtw_3dinternet_downloads {
 				/* determine the new local path for uploaded files associated with this download */
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/avatars/'.$znewwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/avatars/'.$znewwebid;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 				
 				/* write main avatar record */
 				$zobjectfolder = "/content/uploads/avatars/".$znewwebid."/";
@@ -5602,17 +5456,7 @@ class wtw_3dinternet_downloads {
 				/* determine the new local path for uploaded files associated with this download */
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/avatars/'.$znewwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/avatars/'.$znewwebid;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 				
 				/* write main avatar record */
 				$zobjectfolder = "/content/uploads/avatars/".$znewwebid."/";
@@ -5804,17 +5648,7 @@ class wtw_3dinternet_downloads {
 			foreach ($zrequestfiles as $zfile) {
 				if (strpos($zfile->file,'/') !== false) {
 					list($zfolder, $zfilename) = explode('/', $zfile->file);
-					if (!file_exists(wtw_rootpath.$zobjectfolder.$zfolder)) {
-						umask(0);
-						mkdir(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod), true);
-						chmod(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
-					}
+					$wtwhandlers->verifyFolderExists(wtw_rootpath.$zobjectfolder.$zfolder);
 					$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zwebid.'/'.$zfolder.'/'.$zfilename, wtw_rootpath.$zobjectfolder.$zfolder.'/', $zfilename);
 				} else {
 					$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zwebid.'/'.$zfile->file, wtw_rootpath.$zobjectfolder, $zfile->file);
@@ -6129,17 +5963,7 @@ class wtw_3dinternet_downloads {
 				/* determine the new local path for uploaded files associated with this download */
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/avatars/'.$zwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/avatars/'.$zwebid;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 				
 				/* process all users associated to this download (for your reference) */
 				foreach ($zrequest->users as $zuser) {
@@ -6313,17 +6137,7 @@ class wtw_3dinternet_downloads {
 				foreach ($zrequest->files as $zfile) {
 					if (strpos($zfile->file,'/') !== false) {
 						list($zfolder, $zfilename) = explode('/', $zfile->file);
-						if (!file_exists(wtw_rootpath.$zobjectfolder.$zfolder)) {
-							umask(0);
-							mkdir(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod), true);
-							chmod(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod));
-							if (defined('wtw_umask')) {
-								/* reset umask */
-								if (wtw_umask != '0') {
-									umask(octdec(wtw_umask));
-								}
-							}
-						}
+						$wtwhandlers->verifyFolderExists(wtw_rootpath.$zobjectfolder.$zfolder);
 						$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zupdatewebid.'/'.$zfolder.'/'.$zfilename, wtw_rootpath.$zobjectfolder.$zfolder.'/', $zfilename);
 					} else {
 						$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zupdatewebid.'/'.$zfile->file, wtw_rootpath.$zobjectfolder, $zfile->file);
@@ -6661,17 +6475,7 @@ class wtw_3dinternet_downloads {
 				/* determine the new local path for uploaded files associated with this download */
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/useravatars/'.$zuseravatarid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/useravatars/'.$zuseravatarid;
-				if (!file_exists($znewfolder)) {
-					umask(0);
-					mkdir($znewfolder, octdec(wtw_chmod), true);
-					chmod($znewfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($znewfolder);
 				
 				/* process all users associated to this download (for your reference) */
 				foreach ($zrequest->users as $zuser) {
@@ -6761,17 +6565,7 @@ class wtw_3dinternet_downloads {
 				foreach ($zrequest->files as $zfile) {
 					if (strpos($zfile->file,'/') !== false) {
 						list($zfolder, $zfilename) = explode('/', $zfile->file);
-						if (!file_exists(wtw_rootpath.$zobjectfolder.$zfolder)) {
-							umask(0);
-							mkdir(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod), true);
-							chmod(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod));
-							if (defined('wtw_umask')) {
-								/* reset umask */
-								if (wtw_umask != '0') {
-									umask(octdec(wtw_umask));
-								}
-							}
-						}
+						$wtwhandlers->verifyFolderExists(wtw_rootpath.$zobjectfolder.$zfolder);
 						$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zupdatewebid.'/'.$zfolder.'/'.$zfilename, wtw_rootpath.$zobjectfolder.$zfolder.'/', $zfilename);
 					} else {
 						$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zupdatewebid.'/'.$zfile->file, wtw_rootpath.$zobjectfolder, $zfile->file);

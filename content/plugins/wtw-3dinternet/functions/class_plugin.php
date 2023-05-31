@@ -160,7 +160,7 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadMove();");
 			
 			$wtwplugins->addScriptFunction("onmessage", "wtw3dinternet.onMessage(zevent);");
-			$wtwplugins->addScriptFunction("onclick", "wtw3dinternet.onClick(zpickedname);");
+			$wtwplugins->addScriptFunction("inputclick", "wtw3dinternet.inputClick(zpickedname);");
 			$wtwplugins->addScriptFunction("hudloginclick", "wtw3dinternet.hudLoginClick(zmoldname);");
 			$wtwplugins->addScriptFunction("openlocallogin", "wtw3dinternet.openLocalLogin(zitem, zwidth, zheight);");
 			$wtwplugins->addScriptFunction("hudloginlogin", "wtw3dinternet.hudLoginLogin(zlocal, zemail, zpassword, zremembercheck);");

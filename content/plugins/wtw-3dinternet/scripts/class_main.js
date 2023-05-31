@@ -383,19 +383,25 @@ WTW_3DINTERNET.prototype.completedConfirmation = function(zoption) {
 	}
 }
 
-WTW_3DINTERNET.prototype.onClick = function(zpickedname) {
-	/* process onclick events for plugin */
+WTW_3DINTERNET.prototype.inputClick = function(zpickedname) {
+	/* process inputClick events for plugin */
 	try {
 		zpickedname = zpickedname.toLowerCase();
 		let zmoldnameparts = WTW.getMoldnameParts(zpickedname);
 		if (zpickedname.indexOf('person') > -1) {
 			wtw3dinternet.avatarConnectMenu(zmoldnameparts.instanceid);
+			/* clear zpickedname to not process any other clicks */
+			zpickedname = '';
 		} else if (zpickedname.indexOf('hud-textprompt-background') > -1) {
 			/* open text prompt */
 			wtw3dinternet.promptEditText('hud-textprompt-background');
+			/* clear zpickedname to not process any other clicks */
+			zpickedname = '';
 		} else if (zpickedname.indexOf('hud-textprompt-outterbar') > -1) {
 			/* close text prompt */
 			WTW.disposeClean('hud-textprompt');
+			/* clear zpickedname to not process any other clicks */
+			zpickedname = '';
 		} else {
 			if (dGet('hud-textprompt-background') != null) {
 				var zvalue = dGet('hud-textprompt-background').value;
@@ -407,8 +413,9 @@ WTW_3DINTERNET.prototype.onClick = function(zpickedname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-onClick=' + ex.message);
+		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-inputClick=' + ex.message);
 	} 
+	return zpickedname;
 }
 
 WTW_3DINTERNET.prototype.keyUp = function(zevent) {

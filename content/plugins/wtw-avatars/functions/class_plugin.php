@@ -161,7 +161,7 @@ class wtwavatars {
 			/* hook plugin script functions into existing wtw functions */
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */
 			/* examples: */
-			/* $wtwplugins->addScriptFunction("onclick", "wtwavatars.onClick(zpickedname);"); */
+			/* $wtwplugins->addScriptFunction("inputclick", "wtwavatars.inputClick(zpickedname);"); */
 			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setNewActionZoneFormFields(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("checkactionperzone", "wtwavatars.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
