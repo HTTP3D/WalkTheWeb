@@ -128,7 +128,7 @@ class wtwshopping {
 			$wtwplugins->addScript('wtw_shoppingmoldsscript', null, WTWSHOPPING_URL."/scripts/wtwshoppingmolds.js");
 			
 			/* hook plugin script functions into existing wtw functions */
-			$wtwplugins->addScriptFunction("onclick", "WTWShopping.onClick(zpickedname);");
+			$wtwplugins->addScriptFunction("inputclick", "WTWShopping.inputClick(zpickedname);");
 			$wtwplugins->addScriptFunction("checkhovers", "WTWShopping.checkHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("resethovers", "WTWShopping.resetHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("openmoldcolorselector", "WTWShopping.openMoldColorSelector(zmold, zmoldname, zshape, zcolorgroup);");

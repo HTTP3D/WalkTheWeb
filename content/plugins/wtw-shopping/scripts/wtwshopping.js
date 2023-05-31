@@ -53,7 +53,7 @@ wtwshopping.prototype.newFetch = function() {
 	return zfetch;
 }
 
-wtwshopping.prototype.onClick = function(zpickedname) {
+wtwshopping.prototype.inputClick = function(zpickedname) {
 	try {
 		zpickedname = zpickedname.toLowerCase();
 		if ((zpickedname.indexOf('-storeproduct') > -1 && zpickedname.indexOf('-readmore') > -1) || zpickedname.indexOf('-storereadmore') > -1) {
@@ -73,9 +73,14 @@ wtwshopping.prototype.onClick = function(zpickedname) {
 		} else if (zpickedname.indexOf('-productsearch') > -1 && zpickedname.indexOf('-searchtext') > -1) {
 			WTWShopping.searchProductsText(zpickedname);
 		}
+		if (zpickedname.indexOf('-store') > -1 || zpickedname.indexOf('-productsearch') > -1) {
+			/* if processed above, clear zpickedname to stop processing more clicks */
+			zpickedname = '';
+		}
 	} catch (ex) {
-		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-onClick=' + ex.message);
+		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-inputClick=' + ex.message);
 	} 
+	return zpickedname;
 }
 
 wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
