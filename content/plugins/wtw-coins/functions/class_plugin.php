@@ -113,7 +113,7 @@ class wtwcoins {
 			/* hook plugin script functions into existing wtw functions */
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */
 			/* examples: */
-			/* $wtwplugins->addScriptFunction("onclick", "wtwcoins.onClick(pickedname);"); */
+			/* $wtwplugins->addScriptFunction("inputclick", "wtwcoins.inputClick(pickedname);"); */
 			/* $wtwplugins->addScriptFunction("checkactionperzone", "wtwcoins.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
 			/* $wtwplugins->addScriptFunction("checkhovers", "wtwcoins.checkHovers(zmoldname, zshape);"); */
 			/* $wtwplugins->addScriptFunction("resethovers", "wtwcoins.resetHovers(zmoldname, zshape);"); */
