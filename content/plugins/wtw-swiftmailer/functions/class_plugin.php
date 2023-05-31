@@ -110,23 +110,6 @@ class wtwswiftmailer {
 			if ($wtwplugins->pagename == "admin.php") {
 				$dbversion = $wtwplugins->getSetting(WTW_SwiftMailer_PREFIX."dbversion","1.0.0");
 				if ($dbversion != $this->dbversion) {
-/*					$wtwplugins->deltaCreateTable("
-						CREATE TABLE `".WTW_SwiftMailer_PREFIX."tablename` (
-						  `fieldid` varchar(16) NOT NULL,
-						  `fieldname` varchar(255) DEFAULT '',
-						  `protectedname` varchar(255) DEFAULT '',
-						  `fieldurl` varchar(255) DEFAULT '',
-						  `createdate` datetime DEFAULT NULL,
-						  `createuserid` varchar(16) DEFAULT '',
-						  `updatedate` datetime DEFAULT NULL,
-						  `updateuserid` varchar(16) DEFAULT '',
-						  `deleteddate` datetime DEFAULT NULL,
-						  `deleteduserid` varchar(16) DEFAULT '',
-						  `deleted` int(11) DEFAULT '0',
-						  PRIMARY KEY (`fieldid`),
-						  UNIQUE KEY `".WTW_SwiftMailer_PREFIX."fieldid_UNIQUE` (`fieldid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-					"); */
 
 					$wtwplugins->saveSetting(WTW_SwiftMailer_PREFIX."dbversion", $this->dbversion);
 				}

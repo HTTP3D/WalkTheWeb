@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -12,11 +12,11 @@ let wtwswiftmailer = new WTW_SwiftMailer();
 
 /* Add functions as needed to your class */
 /* for simplicity, try to name the functions the same as the original WTW function name it is hooked into */
-/* this is an example of an onClick function */
-/* activate it with the core WTW.onclick function hook */
+/* this is an example of an inputClick function */
+/* activate it with the core WTW.inputClick function hook */
 /* in the plugin/functions/class_plugin.php initHooks and initAdminOnlyHooks functions. */
 
-WTW_SwiftMailer.prototype.onClick = function(zpickedname) {
+WTW_SwiftMailer.prototype.inputClick = function(zpickedname) {
 	try {
 		zpickedname = zpickedname.toLowerCase();
 		let zmoldnameparts = WTW.getMoldnameParts(zpickedname);
@@ -39,7 +39,8 @@ WTW_SwiftMailer.prototype.onClick = function(zpickedname) {
 		  see /core/scripts/prime/wtw_objectdefinitions.js for full object references
 		*/
 	} catch (ex) {
-		WTW.log('plugins:wtw-swiftmailer:scripts-class_main.js-onClick=' + ex.message);
+		WTW.log('plugins:wtw-swiftmailer:scripts-class_main.js-inputClick=' + ex.message);
 	} 
+	return zpickedname;
 }
 
