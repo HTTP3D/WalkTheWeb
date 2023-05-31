@@ -299,6 +299,11 @@ class wtwplugins {
 		return $wtwdb->userExists($zuserid);
 	}
 
+	public function verifyFolderExists($zfolder) {
+		global $wtwdb;
+		return $wtwdb->verifyFolderExists($zfolder);
+	}
+	
 	public function getSessionUserID() {
 		global $wtwdb;
 		try {
@@ -337,13 +342,13 @@ class wtwplugins {
 	}
 
 	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
-		/* save file using any available method fopen, curl, or ftp (added soon) */
+		/* save file using any available method fopen or curl */
 		global $wtwdb;
 		return $wtwdb->getFilefromURL($zfromurl, $zfilepath, $zfilename);
 	}
 
 	public function openFilefromURL($zfromurl, $zuseincludepath=false, $zcontext=null) {
-		/* open file using any available method fopen, curl, or ftp (added soon) */
+		/* open file using any available method fopen or curl */
 		global $wtwdb;
 		return $wtwdb->openFilefromURL($zfromurl, $zuseincludepath, $zcontext);
 	}
@@ -878,12 +883,13 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsOnClick = function(zpickedname) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsInputClick = function(zpickedname) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('onclick');
+			$jsdata .= 	$this->returnScriptFunction('inputclick','zpickedname');
 			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsOnClick=' + ex.message);\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsInputClick=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zpickedname;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsHudLoginClick = function(zmoldname) {\r\n";
@@ -1197,11 +1203,11 @@ class wtwplugins {
 			$jsdata .= "		return zmold;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsResetMoldColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsSetMoldColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('resetmoldcolor');
 			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsResetMoldColor=' + ex.message);\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsSetMoldColor=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 

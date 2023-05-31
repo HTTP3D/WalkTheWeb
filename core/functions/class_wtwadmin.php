@@ -95,6 +95,7 @@ class wtwadmin {
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dblog.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dforms.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dhtml.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/automations/wtw_basicautomations.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."'></script>\r\n";

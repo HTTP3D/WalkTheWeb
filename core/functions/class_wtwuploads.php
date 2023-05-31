@@ -23,27 +23,17 @@ class wtwuploads {
 	public function copyFile($zfile1, $zfilepath1, $zfile2, $zfilepath2, $zcommunityid, $zbuildingid, $zthingid) {
 		/* copies a file from one location to another - used after upload to place the temp file to the correct final location */
 		global $wtwhandlers;
-		$serror = "";
+		$zerror = "";
 		try {
 			$wtwhandlers->checkContentFolders($zcommunityid, $zbuildingid, $zthingid, '');
 			if (!file_exists($zfilepath1.$zfile1)) {
-				$serror = "Source File not Found. ".$zfilepath1.$zfile1;
+				$zerror = "Source File not Found. ".$zfilepath1.$zfile1;
 			}
-			if (!file_exists($zfilepath2)) {
-				umask(0);
-				mkdir($zfilepath2, octdec(wtw_chmod), true);
-				chmod($zfilepath2, octdec(wtw_chmod));
-				if (defined('wtw_umask')) {
-					/* reset umask */
-					if (wtw_umask != '0') {
-						umask(octdec(wtw_umask));
-					}
-				}
-			}
+			$wtwhandlers->verifyFolderExists($zfilepath2);
 			if (file_exists($zfilepath2.$zfile2)) {
-				$serror = "Destination File Already Exists. ".$zfilepath2.$zfile2;
+				$zerror = "Destination File Already Exists. ".$zfilepath2.$zfile2;
 			}
-			if ($serror == "") {
+			if ($zerror == "") {
 				umask(0);
 				copy($zfilepath1.$zfile1, $zfilepath2.$zfile2);
 				chmod($zfilepath2.$zfile2, octdec(wtw_chmod));
@@ -57,7 +47,7 @@ class wtwuploads {
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-copyFile=".$e->getMessage());
 		}	
-		return $serror;
+		return $zerror;
 	}
 
 	public function deleteFile($zfile1, $zfilepath1, $zcommunityid, $zbuildingid) {
@@ -566,21 +556,11 @@ class wtwuploads {
 			$zuploadpath = $wtwhandlers->contentpath;
 			if ($wtwhandlers->hasValue($_SESSION['wtw_uploadpathid'])) {
 				$pathname = pathinfo('/'.$zfilename);
-				$newfolder = $pathname['filename'];
-				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder)) {
-					umask(0);
-					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, octdec(wtw_chmod), true);
-					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
-				$zuploadpath = $zuploadpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
-				$zbrowsepath = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
-				$zobjectfolder = "/content/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
+				$znewfolder = $pathname['filename'];
+				$wtwhandlers->verifyFolderExists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$znewfolder);
+				$zuploadpath = $zuploadpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$znewfolder."/";
+				$zbrowsepath = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$znewfolder."/";
+				$zobjectfolder = "/content/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$znewfolder."/";
 			}
 			$zfilesize = filesize($zfilepath);
 			if (!isset($zfilesize) && empty($zfilesize)) {
@@ -1947,17 +1927,7 @@ class wtwuploads {
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
-				if (!file_exists($zfilepath)) {
-					umask(0);
-					mkdir($zfilepath, octdec(wtw_chmod), true);
-					chmod($zfilepath, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($zfilepath);
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
 					$zpastfilename = basename($zuploadfiles["name"][$i]);
@@ -1999,7 +1969,7 @@ class wtwuploads {
 		return $serror;
 	}
 
-	public function uploadObjectFiles($zuploadfiles, $zobjectfilepart) {
+	public function uploadObjectFiles($zuploadfiles, $zobjectfolder, $zobjectfilepart) {
 		/* upload 3D Object supplimentary files - overwrites any existing files for easy updates - remember users may need to clear cache to see changes immediately */
 		global $wtwhandlers;
 		$serror = "";
@@ -2007,18 +1977,15 @@ class wtwuploads {
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
+
+				/* can add one of your own files */
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart;
-				if (!file_exists($zfilepath)) {
-					umask(0);
-					mkdir($zfilepath, octdec(wtw_chmod), true);
-					chmod($zfilepath, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
+
+				if (isset($zobjectfolder) && !empty($zobjectfolder) && $wtwhandlers->isUserInRole("Admin")) {
+					/* admins can add files to other folders on server */
+					$zfilepath = $wtwhandlers->rootpath.$zobjectfolder;
 				}
+				$wtwhandlers->verifyFolderExists($zfilepath);
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
 					$zpastfilename = basename($zuploadfiles["name"][$i]);
@@ -2158,17 +2125,7 @@ class wtwuploads {
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/".$zwebtype."/".$zwebid;
-				if (!file_exists($zfilepath)) {
-					umask(0);
-					mkdir($zfilepath, octdec(wtw_chmod), true);
-					chmod($zfilepath, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($zfilepath);
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
 					$zpastfilename = basename($zuploadfiles["name"][$i]);
@@ -2266,18 +2223,23 @@ class wtwuploads {
 						and webid='".$zwebid."';");
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteObjectFile=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteJavaScriptFile=".$e->getMessage());
 		}
 		return $serror;
 	}
 
-	public function deleteObjectFile($zfilename, $zobjectfilepart) {
+	public function deleteObjectFile($zfilename, $zobjectfolder, $zobjectfilepart) {
 		/* deletes the 3D Object file - used to assist with overwrite functions */
 		global $wtwhandlers;
 		$serror = "";
 		try {
 			$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart."/".$zfilename;
-			if (file_exists($zfilepath)) {
+
+			if (file_exists($wtwhandlers->rootpath.$zobjectfolder.$zfilename) && $wtwhandlers->isUserInRole("Admin")) {
+				/* admins can delete in other folders on server */
+				unlink($wtwhandlers->rootpath.$zobjectfolder.$zfilename);
+			} else if (file_exists($zfilepath)) {
+				/* can delete if one of your own files */
 				unlink($zfilepath);
 			}
 		} catch (Exception $e) {

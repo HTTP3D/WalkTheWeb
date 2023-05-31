@@ -50,13 +50,13 @@ try {
 			);
 			break;
 		case "uploadobjectfiles":
-			$serror = $wtwuploads->uploadObjectFiles($zuploadfiles, $zobjectfilepart);
+			$serror = $wtwuploads->uploadObjectFiles($zuploadfiles, $zobjectfolder, $zobjectfilepart);
 			$zresponse = array(
 				'serror'=> $serror
 			);
 			break;
 		case "deleteobjectfile":
-			$wtwuploads->deleteObjectFile($zfilename, $zobjectfilepart);
+			$wtwuploads->deleteObjectFile($zfilename, $zobjectfolder, $zobjectfilepart);
 			break;
 		case "deleteuploadobject":
 			$wtwuploads->deleteUploadObject($zuploadobjectid, $zpermanent);

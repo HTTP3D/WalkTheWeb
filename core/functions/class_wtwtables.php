@@ -3754,15 +3754,7 @@ class wtwtables {
 					if (!file_exists($zdestinationfolder)) {
 						/* if folder does not exit, create it and copy the files into it */
 						/* this is a safe guard, so existing folders will not be overwritten (usually means is it already complete) */
-						umask(0);
-						mkdir($zdestinationfolder, octdec(wtw_chmod), true);
-						chmod($zdestinationfolder, octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
+						$wtwdb->verifyFolderExists($zdestinationfolder);
 						$wtwdb->copyContentSubFolderRecursive($zsourcefolder, $zdestinationfolder);
 					}
 					

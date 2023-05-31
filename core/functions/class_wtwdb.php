@@ -430,136 +430,45 @@ class wtwdb {
 	public function checkContentFolders($zcommunityid, $zbuildingid, $zthingid, $zavatarid) {
 		/* checks and adds content folders as needed for use with uploaded files */
 		try {
-			umask(0);
-			if (!file_exists($this->contentpath."/uploads")) {
-				mkdir($this->contentpath."/uploads", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads", octdec(wtw_chmod));
-			}
-			if (!file_exists($this->contentpath."/uploads/users")) {
-				mkdir($this->contentpath."/uploads/users", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads/users", octdec(wtw_chmod));
-			}
-			if (!file_exists($this->contentpath."/uploads/communities")) {
-				mkdir($this->contentpath."/uploads/communities", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads/communities", octdec(wtw_chmod));
-			}
-			if (!file_exists($this->contentpath."/uploads/buildings")) {
-				mkdir($this->contentpath."/uploads/buildings", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads/buildings", octdec(wtw_chmod));
-			}
-			if (!file_exists($this->contentpath."/uploads/things")) {
-				mkdir($this->contentpath."/uploads/things", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads/things", octdec(wtw_chmod));
-			}
-			if (!file_exists($this->contentpath."/uploads/avatars")) {
-				mkdir($this->contentpath."/uploads/avatars", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads/avatars", octdec(wtw_chmod));
-			}
-			if (!file_exists($this->contentpath."/uploads/useravatars")) {
-				mkdir($this->contentpath."/uploads/useravatars", octdec(wtw_chmod), true);
-				chmod($this->contentpath."/uploads/useravatars", octdec(wtw_chmod));
-			}
+			$this->verifyFolderExists($this->contentpath."/uploads");
+			$this->verifyFolderExists($this->contentpath."/uploads/users");
+			$this->verifyFolderExists($this->contentpath."/uploads/communities");
+			$this->verifyFolderExists($this->contentpath."/uploads/buildings");
+			$this->verifyFolderExists($this->contentpath."/uploads/things");
+			$this->verifyFolderExists($this->contentpath."/uploads/avatars");
+			$this->verifyFolderExists($this->contentpath."/uploads/useravatars");
 			if ($this->hasValue($zcommunityid)) {
-				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid)) {
-					mkdir($this->contentpath."/uploads/communities/".$zcommunityid, octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/communities/".$zcommunityid, octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid."/media")) {
-					mkdir($this->contentpath."/uploads/communities/".$zcommunityid."/media", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/communities/".$zcommunityid."/media", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots")) {
-					mkdir($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots", octdec(wtw_chmod));
-				}
+				$this->verifyFolderExists($this->contentpath."/uploads/communities/".$zcommunityid);
+				$this->verifyFolderExists($this->contentpath."/uploads/communities/".$zcommunityid."/media");
+				$this->verifyFolderExists($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots");
 			}
 			if ($this->hasValue($zbuildingid)) {
-				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid)) {
-					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid, octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/buildings/".$zbuildingid, octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid."/media")) {
-					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid."/media", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/buildings/".$zbuildingid."/media", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots")) {
-					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", octdec(wtw_chmod));
-				}
+				$this->verifyFolderExists($this->contentpath."/uploads/buildings/".$zbuildingid);
+				$this->verifyFolderExists($this->contentpath."/uploads/buildings/".$zbuildingid."/media");
+				$this->verifyFolderExists($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots");
 			}
 			if ($this->hasValue($zthingid)) {
-				if (!file_exists($this->contentpath."/uploads/things/".$zthingid)) {
-					mkdir($this->contentpath."/uploads/things/".$zthingid, octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/things/".$zthingid, octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/things/".$zthingid."/media")) {
-					mkdir($this->contentpath."/uploads/things/".$zthingid."/media", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/things/".$zthingid."/media", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/things/".$zthingid."/snapshots")) {
-					mkdir($this->contentpath."/uploads/things/".$zthingid."/snapshots", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/things/".$zthingid."/snapshots", octdec(wtw_chmod));
-				}
+				$this->verifyFolderExists($this->contentpath."/uploads/things/".$zthingid);
+				$this->verifyFolderExists($this->contentpath."/uploads/things/".$zthingid."/media");
+				$this->verifyFolderExists($this->contentpath."/uploads/things/".$zthingid."/snapshots");
 			}
 			if ($this->hasValue($zavatarid)) {
-				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid)) {
-					mkdir($this->contentpath."/uploads/avatars/".$zavatarid, octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/avatars/".$zavatarid, octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid."/textures")) {
-					mkdir($this->contentpath."/uploads/avatars/".$zavatarid."/textures", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/textures", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid."/animations")) {
-					mkdir($this->contentpath."/uploads/avatars/".$zavatarid."/animations", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/animations", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots")) {
-					mkdir($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots", octdec(wtw_chmod));
-				}
+				$this->verifyFolderExists($this->contentpath."/uploads/avatars/".$zavatarid);
+				$this->verifyFolderExists($this->contentpath."/uploads/avatars/".$zavatarid."/textures");
+				$this->verifyFolderExists($this->contentpath."/uploads/avatars/".$zavatarid."/animations");
+				$this->verifyFolderExists($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots");
 			}
 			if ($this->hasValue($_SESSION['wtw_uploadpathid'])) {
 				$syear = date('Y');
 				$smonth = date('m');
-				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'])) {
-					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear)) {
-					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth)) {
-					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects")) {
-					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media")) {
-					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots")) {
-					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/feedback")) {
-					mkdir($this->contentpath."/uploads/feedback", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/feedback", octdec(wtw_chmod));
-				}
-				if (!file_exists($this->contentpath."/uploads/feedback/snapshots")) {
-					mkdir($this->contentpath."/uploads/feedback/snapshots", octdec(wtw_chmod), true);
-					chmod($this->contentpath."/uploads/feedback/snapshots", octdec(wtw_chmod));
-				}
-			}
-			if (defined('wtw_umask')) {
-				/* reset umask */
-				if (wtw_umask != '0') {
-					umask(octdec(wtw_umask));
-				}
+				$this->verifyFolderExists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']);
+				$this->verifyFolderExists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear);
+				$this->verifyFolderExists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth);
+				$this->verifyFolderExists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects");
+				$this->verifyFolderExists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media");
+				$this->verifyFolderExists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots");
+				$this->verifyFolderExists($this->contentpath."/uploads/feedback");
+				$this->verifyFolderExists($this->contentpath."/uploads/feedback/snapshots");
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkContentFolders=".$e->getMessage());
@@ -571,17 +480,7 @@ class wtwdb {
 		try {
 			if (strpos($zsourcefolder, $this->contentpath) !== false && strpos($zdestinationfolder, $this->contentpath) !== false) {
 				$zfolder = opendir($zsourcefolder);
-				if (!file_exists($zdestinationfolder)) {
-					umask(0);
-					mkdir($zdestinationfolder, octdec(wtw_chmod), true);
-					chmod($zdestinationfolder, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$this->verifyFolderExists($zdestinationfolder);
 				while(false !== ($zfile = readdir($zfolder))) {
 					if (($zfile != '.') && ($zfile != '..')) {
 						if (is_dir($zsourcefolder.'/'.$zfile)) {
@@ -652,6 +551,7 @@ class wtwdb {
 		/* save file using any available method fopen, curl, or ftp (added soon) */
 		$zsuccess = true;
 		try {
+			$zfromurl = str_replace(' ', '%20', $zfromurl);
 			if (ini_get('allow_url_fopen') ) {
 				$zdata1 = file_get_contents($zfromurl);
 				$zsuccess2 = file_put_contents($zfilepath.$zfilename, $zdata1);	
@@ -687,6 +587,7 @@ class wtwdb {
 		/* open file using any available method fopen, curl, or ftp (added soon) */
 		$zresponse = null;
 		try {
+			$zfromurl = str_replace(' ', '%20', $zfromurl);
 			if (ini_get('allow_url_fopen') ) {
 				$zresponse = file_get_contents($zfromurl, $zuseincludepath, $zcontext);
 			} else if (extension_loaded('curl')) {
@@ -751,6 +652,30 @@ class wtwdb {
 		return $zexists;
 	}
 	
+	public function verifyFolderExists($zfolder) {
+		/* verify if folder exists, create if not */
+		$zexists = false;
+		try {
+			if (!file_exists($zfolder)) {
+				umask(0);
+				mkdir($zfolder, octdec(wtw_chmod), true);
+				chmod($zfolder, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
+				$zexists = true;
+			} else {
+				$zexists = true;
+			}
+		} catch (Exception $e) {
+			$this->$serrorText = "core-functions-class_wtwdb.php-verifyFolderExists=" . $e->getMessage();
+		}
+		return $zexists;
+	}	
+
 	public function getNewKey($ztablename, $zfieldid, $zdefaultkeyid) {
 		/* pass the tablename without prefix, id field name, and (optional) if you want a starting test value */
 		$zkeyid = '';

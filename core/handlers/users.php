@@ -62,6 +62,9 @@ try {
 			require_once(wtw_rootpath.'/core/functions/class_wtwtools.php');
 			$zresponse = $wtwusers->passwordRecovery($zuseremail);
 			break;
+		case "isuserloggedin":
+			$zresponse = $wtwusers->isUserLoggedIn();
+			break;
 		case "logout":
 			$wtwusers->logout();
 			break;

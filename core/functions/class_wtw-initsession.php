@@ -21,10 +21,10 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.6.3';
+	public $version = '3.6.4';
 	public $dbversion = '1.2.22';
-	public $versiondate = '2023-5-2';
-	public $defaultbabylonversion = 'v5.x.x';
+	public $versiondate = '2023-5-30';
+	public $defaultbabylonversion = 'v6.x.x';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -399,7 +399,7 @@ class wtw {
 				$zchecktext = htmlspecialchars($ztext, ENT_QUOTES, 'UTF-8');
 			}
 		} catch (Exception $e) {
-			$this->$serrorText = "core-functions-class_wtw-initsession.php-serror=" . $e->getMessage();
+			$this->$serrorText = "core-functions-class_wtw-initsession.php-escapeHTML=" . $e->getMessage();
 		}
 		return $zchecktext;
 	}	
@@ -430,6 +430,30 @@ class wtw {
 		return $zrandomstring;
 	}
 
+	public function verifyFolderExists($zfolder) {
+		/* verify if folder exists, create if not */
+		$zexists = false;
+		try {
+			if (!file_exists($zfolder)) {
+				umask(0);
+				mkdir($zfolder, octdec(wtw_chmod), true);
+				chmod($zfolder, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
+				$zexists = true;
+			} else {
+				$zexists = true;
+			}
+		} catch (Exception $e) {
+			$this->$serrorText = "core-functions-class_wtwdb.php-verifyFolderExists=" . $e->getMessage();
+		}
+		return $zexists;
+	}	
+	
 	public function mergeFiles($zbasefilepath, $zfileadditionspath) {
 		/* check line per line in the base file for the line additions and add as needed */
 		$zchanged = false;
@@ -519,17 +543,7 @@ class wtw {
 				$zsetupstep = 1;
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					/* database connectivity values submitted and processed */
-					if (!file_exists(wtw_rootpath.'/config')) {
-						umask(0);
-						mkdir(wtw_rootpath.'/config', octdec(wtw_chmod), true);
-						chmod(wtw_rootpath.'/config', octdec(wtw_chmod));
-						if (defined('wtw_umask')) {
-							/* reset umask */
-							if (wtw_umask != '0') {
-								umask(octdec(wtw_umask));
-							}
-						}
-					}
+					$this->verifyFolderExists(wtw_rootpath.'/config');
 					$zserver = $_POST["wtw_dbserver"];
 					$zdatabase = $_POST["wtw_dbname"];
 					$zdbuser = $_POST["wtw_dbusername"];
@@ -2755,6 +2769,7 @@ class wtw {
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dblog.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dforms.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dhtml.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/automations/wtw_basicautomations.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."'></script>\r\n";
@@ -2910,6 +2925,7 @@ class wtw {
 		/* open file using any available method fopen, curl, or ftp (added soon) */
 		$zresponse = null;
 		try {
+			$zfromurl = str_replace(' ', '%20', $zfromurl);
 			if (ini_get('allow_url_fopen')) {
 				$zresponse = file_get_contents($zfromurl, $zuseincludepath, $zcontext);
 			} else if (extension_loaded('curl')) {

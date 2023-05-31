@@ -329,6 +329,37 @@ class wtwusers {
 		return $zuser;
 	}
 	
+	public function isUserLoggedIn() {
+		/* log out the local session */
+		global $wtwdb;
+		global $wtwhandlers;
+		$zresponse = array(
+			'loggedin'=> false,
+			'serror'=>''
+		);
+		try {
+			if (!isset($wtwdb) && isset($wtwhandlers)) {
+				$wtwdb = $wtwhandlers;
+			}
+			if (session_status() == PHP_SESSION_NONE) {
+				session_start();
+			}
+			if (isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				$zresponse = array(
+					'loggedin'=> true,
+					'serror'=>''
+				);
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwusers.php-isUserLoggedIn=".$e->getMessage());
+			$zresponse = array(
+				'loggedin'=> false,
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
 	public function logout() {
 		/* log out the local session */
 		global $wtwdb;

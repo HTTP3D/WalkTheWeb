@@ -245,32 +245,21 @@ class wtwtools {
 			/* check languages folder for language files */
 			$i = 0;
 			$zfilepath = wtw_rootpath."/core/languages";
-			if (file_exists($zfilepath)) {
-				$zfiles = new DirectoryIterator($zfilepath);
-				foreach ($zfiles as $zfileinfo) {
-					if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
-						$zfilename = $zfileinfo->getFilename();
-						$zurl = $wtwhandlers->domainurl."/core/languages/".$zfilename;
-						$zrequest = $wtwhandlers->openFilefromURL($zurl);
-						if ($wtwhandlers->hasValue($zrequest)) {
-							$zrequest = json_decode($zrequest);
-						}
-					if ($wtwhandlers->hasValue($zrequest[0]->language) && $wtwhandlers->hasValue($zrequest[0]->abbreviation)) {
-							$zresponse[$i] = array(
-								'language'=>$zrequest[0]->language,
-								'abbreviation'=>$zrequest[0]->abbreviation
-							);
-						}
+			$wtwhandlers->verifyFolderExists($zfilepath);
+			$zfiles = new DirectoryIterator($zfilepath);
+			foreach ($zfiles as $zfileinfo) {
+				if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
+					$zfilename = $zfileinfo->getFilename();
+					$zurl = $wtwhandlers->domainurl."/core/languages/".$zfilename;
+					$zrequest = $wtwhandlers->openFilefromURL($zurl);
+					if ($wtwhandlers->hasValue($zrequest)) {
+						$zrequest = json_decode($zrequest);
 					}
-				}
-			} else {
-				umask(0);
-				mkdir($zfilepath, octdec(wtw_chmod), true);
-				chmod($zfilepath, octdec(wtw_chmod));
-				if (defined('wtw_umask')) {
-					/* reset umask */
-					if (wtw_umask != '0') {
-						umask(octdec(wtw_umask));
+				if ($wtwhandlers->hasValue($zrequest[0]->language) && $wtwhandlers->hasValue($zrequest[0]->abbreviation)) {
+						$zresponse[$i] = array(
+							'language'=>$zrequest[0]->language,
+							'abbreviation'=>$zrequest[0]->abbreviation
+						);
 					}
 				}
 			}
@@ -282,9 +271,7 @@ class wtwtools {
 				return ($a["language"] > $b["language"]) ? 1 : -1;
 			}
 			usort($zresponse, "arraysort");
-*/			
-			
-			
+*/
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwtools.php-getLanguages=".$e->getMessage());
 		}

@@ -33,86 +33,75 @@ class wtwpluginloader {
 			}
 			$i = 0;
 			$zfilepath = $zcontentpath."/plugins";
-			if (file_exists($zfilepath)) {
-				$zfolders = new DirectoryIterator($zfilepath);
-				foreach ($zfolders as $zfileinfo) {
-					if ($zfileinfo->isDir() && !$zfileinfo->isDot()) {
-						$zfolder = $zfileinfo->getFilename();
-						$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
-						if (file_exists($zpluginphp)) {
-							$zresponse[$i] = $this->getPluginPHP($zcontentpath, $zpluginphp, $zfolder, $zload);
-							$zallrequired = '0';
-							$zalloptional = '0';
-							$zwebsrequired = array();
-							$j = 0;
-							if (isset($wtwhandlers)) {
-								$zresults = $wtwhandlers->query("
-									select pr1.*,
-										c1.communityid,
-										c1.communityname,
-										b1.buildingid,
-										b1.buildingname,
-										t1.thingid,
-										t1.thingname
-									from ".wtw_tableprefix."pluginsrequired pr1
-										left join (select * from ".wtw_tableprefix."communities where deleted=0) c1
-											on pr1.webid=c1.communityid
-										left join (select * from ".wtw_tableprefix."buildings where deleted=0) b1
-											on pr1.webid=b1.buildingid
-										left join (select * from ".wtw_tableprefix."things where deleted=0) t1
-											on pr1.webid=t1.thingid
-									where pr1.deleted=0
-										and pr1.pluginname='".$zfolder."';");
-								foreach ($zresults as $zrow) {
-									$zallrequired = '1';
-									$zrequired = '1';
-									$zoptional = $zrow['optional'];
-									$zwebtype = '';
-									$zwebid = '';
-									$zwebname = '';
-									if ($zoptional == '1') {
-										$zalloptional = '1';
-										$zrequired = '0';
-									}
-									if ($wtwdb->hasValue($zrow['communityid'])) {
-										$zwebtype = 'Community';
-										$zwebid = $zrow['communityid'];
-										$zwebname = $zrow['communityname'];
-									} else if ($wtwdb->hasValue($zrow['buildingid'])) {
-										$zwebtype = 'Building';
-										$zwebid = $zrow['buildingid'];
-										$zwebname = $zrow['buildingname'];
-									} else if ($wtwdb->hasValue($zrow['thingid'])) {
-										$zwebtype = 'Thing';
-										$zwebid = $zrow['thingid'];
-										$zwebname = $zrow['thingname'];
-									}
-									$zwebsrequired[$j] = array(
-										'pluginsrequiredid'=> $zrow['pluginsrequiredid'],
-										'webid'=> $zwebid,
-										'webtype'=> $zwebtype,
-										'webname'=> $zwebname,
-										'required'=> $zrequired,
-										'optional'=> $zoptional,
-									);
-									$j += 1;
+			$wtwdb->verifyFolderExists($zfilepath);
+			$zfolders = new DirectoryIterator($zfilepath);
+			foreach ($zfolders as $zfileinfo) {
+				if ($zfileinfo->isDir() && !$zfileinfo->isDot()) {
+					$zfolder = $zfileinfo->getFilename();
+					$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
+					if (file_exists($zpluginphp)) {
+						$zresponse[$i] = $this->getPluginPHP($zcontentpath, $zpluginphp, $zfolder, $zload);
+						$zallrequired = '0';
+						$zalloptional = '0';
+						$zwebsrequired = array();
+						$j = 0;
+						if (isset($wtwhandlers)) {
+							$zresults = $wtwhandlers->query("
+								select pr1.*,
+									c1.communityid,
+									c1.communityname,
+									b1.buildingid,
+									b1.buildingname,
+									t1.thingid,
+									t1.thingname
+								from ".wtw_tableprefix."pluginsrequired pr1
+									left join (select * from ".wtw_tableprefix."communities where deleted=0) c1
+										on pr1.webid=c1.communityid
+									left join (select * from ".wtw_tableprefix."buildings where deleted=0) b1
+										on pr1.webid=b1.buildingid
+									left join (select * from ".wtw_tableprefix."things where deleted=0) t1
+										on pr1.webid=t1.thingid
+								where pr1.deleted=0
+									and pr1.pluginname='".$zfolder."';");
+							foreach ($zresults as $zrow) {
+								$zallrequired = '1';
+								$zrequired = '1';
+								$zoptional = $zrow['optional'];
+								$zwebtype = '';
+								$zwebid = '';
+								$zwebname = '';
+								if ($zoptional == '1') {
+									$zalloptional = '1';
+									$zrequired = '0';
 								}
+								if ($wtwdb->hasValue($zrow['communityid'])) {
+									$zwebtype = 'Community';
+									$zwebid = $zrow['communityid'];
+									$zwebname = $zrow['communityname'];
+								} else if ($wtwdb->hasValue($zrow['buildingid'])) {
+									$zwebtype = 'Building';
+									$zwebid = $zrow['buildingid'];
+									$zwebname = $zrow['buildingname'];
+								} else if ($wtwdb->hasValue($zrow['thingid'])) {
+									$zwebtype = 'Thing';
+									$zwebid = $zrow['thingid'];
+									$zwebname = $zrow['thingname'];
+								}
+								$zwebsrequired[$j] = array(
+									'pluginsrequiredid'=> $zrow['pluginsrequiredid'],
+									'webid'=> $zwebid,
+									'webtype'=> $zwebtype,
+									'webname'=> $zwebname,
+									'required'=> $zrequired,
+									'optional'=> $zoptional,
+								);
+								$j += 1;
 							}
-							$zresponse[$i]["websrequired"] = $zwebsrequired;
-							$zresponse[$i]["required"] = $zallrequired;
-							$zresponse[$i]["optional"] = $zalloptional;
-							$i += 1;
 						}
-					}
-				}
-			} else {
-				umask(0);
-				mkdir($zfilepath, octdec(wtw_chmod), true);
-				chmod($zfilepath, octdec(wtw_chmod));
-				if (defined('wtw_umask')) {
-					/* reset umask */
-					if (wtw_umask != '0') {
-						umask(octdec(wtw_umask));
+						$zresponse[$i]["websrequired"] = $zwebsrequired;
+						$zresponse[$i]["required"] = $zallrequired;
+						$zresponse[$i]["optional"] = $zalloptional;
+						$i += 1;
 					}
 				}
 			}
@@ -379,26 +368,9 @@ class wtwpluginloader {
 		try {
 			$ztempfilename = $zpluginname.str_replace(".","-",$zversion).".zip";
 			$ztempfilepath = $wtwhandlers->contentpath."/system/updates/".$zpluginname."/";
-			umask(0);
-			if (!file_exists($wtwhandlers->contentpath."/system")) {
-				mkdir($wtwhandlers->contentpath."/system", octdec(wtw_chmod), true);
-				chmod($wtwhandlers->contentpath."/system", octdec(wtw_chmod));
-			}
-			if (!file_exists($wtwhandlers->contentpath."/system/updates")) {
-				mkdir($wtwhandlers->contentpath."/system/updates", octdec(wtw_chmod), true);
-				chmod($wtwhandlers->contentpath."/system/updates", octdec(wtw_chmod));
-			}
-			if (!file_exists($wtwhandlers->contentpath."/system/updates/".$zpluginname)) {
-				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod), true);
-				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod));
-			}
-			if (defined('wtw_umask')) {
-				/* reset umask */
-				if (wtw_umask != '0') {
-					umask(octdec(wtw_umask));
-				}
-			}
-			
+			$wtwhandlers->verifyFolderExists($wtwhandlers->contentpath."/system");
+			$wtwhandlers->verifyFolderExists($wtwhandlers->contentpath."/system/updates");
+			$wtwhandlers->verifyFolderExists($wtwhandlers->contentpath."/system/updates/".$zpluginname);
 			$wtwhandlers->getFilefromURL($zupdateurl, $ztempfilepath, $ztempfilename);
 			
 			if (file_exists($ztempfilepath.$ztempfilename)) {

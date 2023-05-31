@@ -201,6 +201,11 @@ class wtwhandlers {
 		return $wtwdb->keyExists($ztablename, $zfieldid, $zkeyid);
 	}
 	
+	public function verifyFolderExists($zfolder) {
+		global $wtwdb;
+		return $wtwdb->verifyFolderExists($zfolder);
+	}
+	
 	public function getNewKey($ztablename, $zfieldid, $zdefaultkeyid) {
 		global $wtwdb;
 		return $wtwdb->getNewKey($ztablename, $zfieldid, $zdefaultkeyid);
@@ -482,13 +487,13 @@ class wtwhandlers {
 	}
 
 	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
-		/* save file using any available method fopen, curl, or ftp (added soon) */
+		/* save file using any available method fopen or curl */
 		global $wtwdb;
 		return $wtwdb->getFilefromURL($zfromurl, $zfilepath, $zfilename);
 	}
 
 	public function openFilefromURL($zfromurl, $zuseincludepath=false, $zcontext=null) {
-		/* open file using any available method fopen, curl, or ftp (added soon) */
+		/* open file using any available method fopen or curl */
 		global $wtwdb;
 		return $wtwdb->openFilefromURL($zfromurl, $zuseincludepath, $zcontext);
 	}

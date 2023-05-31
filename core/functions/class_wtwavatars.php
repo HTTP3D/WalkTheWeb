@@ -2178,17 +2178,7 @@ class wtwavatars {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = wtw_rootpath.$zobjectfolder;
-				if (!file_exists($zfilepath)) {
-					umask(0);
-					mkdir($zfilepath, octdec(wtw_chmod), true);
-					chmod($zfilepath, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($zfilepath);
 				if ($wtwhandlers->endsWith($zfilepath, "/") == false) {
 					$zfilepath .= "/";
 				}
@@ -2269,17 +2259,7 @@ class wtwavatars {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zmaxfilesize = $wtwhandlers->getMaximumFileUploadSize();
 				$zfilepath = wtw_rootpath.$zobjectfolder;
-				if (!file_exists($zfilepath)) {
-					umask(0);
-					mkdir($zfilepath, octdec(wtw_chmod), true);
-					chmod($zfilepath, octdec(wtw_chmod));
-					if (defined('wtw_umask')) {
-						/* reset umask */
-						if (wtw_umask != '0') {
-							umask(octdec(wtw_umask));
-						}
-					}
-				}
+				$wtwhandlers->verifyFolderExists($zfilepath);
 				if ($wtwhandlers->endsWith($zfilepath, "/") == false) {
 					$zfilepath .= "/";
 				}
