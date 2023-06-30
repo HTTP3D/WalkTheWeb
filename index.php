@@ -30,6 +30,7 @@ echo "<body>";
 	echo $wtwmenus->getMicMenu();
 	echo $wtwmenus->getContentRatingMenu();
 	echo $wtwmenus->getFeedbackMenu();
+	echo $wtwmenus->getCookiesMenu();
 	echo $wtwmenus->getMenuForms();
 echo "</body>";
 echo "</html>";
