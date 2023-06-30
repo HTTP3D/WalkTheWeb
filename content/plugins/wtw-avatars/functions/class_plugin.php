@@ -223,7 +223,7 @@ class wtwavatars {
 						  `deleted` int(11) DEFAULT '0',
 						  PRIMARY KEY (`fieldid`),
 						  UNIQUE KEY `".WTW_AVATARS_PREFIX."fieldid_UNIQUE` (`fieldid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					"); */
 
 					$wtwplugins->saveSetting(WTW_AVATARS_PREFIX."dbversion", $this->dbversion);

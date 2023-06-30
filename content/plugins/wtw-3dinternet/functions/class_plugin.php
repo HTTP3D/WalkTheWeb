@@ -539,7 +539,7 @@ class wtw3dinternet {
 						  `deleted` int(11) DEFAULT '0',
 						  PRIMARY KEY (`useravatarid`),
 						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."useravatarid_UNIQUE` (`useravatarid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_3DINTERNET_PREFIX."useravatarcolors` (
@@ -563,7 +563,7 @@ class wtw3dinternet {
 						  `deleted` int(11) DEFAULT '0',
 						  PRIMARY KEY (`avatarpartid`),
 						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."useravatarcolorid_UNIQUE` (`avatarpartid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_3DINTERNET_PREFIX."useravataranimations` (
@@ -598,7 +598,7 @@ class wtw3dinternet {
 						  PRIMARY KEY (`useravataranimationid`),
 						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."useravataranimationid_UNIQUE` (`useravataranimationid`),
 						  KEY `".WTW_3DINTERNET_PREFIX."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`animationevent`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_3DINTERNET_PREFIX."blockedinstances` (
@@ -623,7 +623,7 @@ class wtw3dinternet {
 						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."blockedinstanceid_UNIQUE` (`blockedinstanceid`),
 						  KEY `".WTW_3DINTERNET_PREFIX."idx_blockedinstances` 
 						  (`blockedinstanceid`,`instanceid`,`userid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					
 					/* updated 3.4.5 - set initial values for new fields */

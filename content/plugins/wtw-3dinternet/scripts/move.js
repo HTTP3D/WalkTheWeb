@@ -84,7 +84,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 								}
 								/* load avatar if not already loaded */
 								if (zdata.placeholder == 0) {
-//									WTW.getSavedAvatar('person-' + zdata.instanceid, zdata.globaluseravatarid, zdata.useravatarid, zdata.avatarid, false);
+									//WTW.getSavedAvatar('person-' + zdata.instanceid, zdata.globaluseravatarid, zdata.useravatarid, zdata.avatarid, false);
 								}
 							}
 						}
@@ -150,7 +150,6 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 					var zrotationy = zmovedata.rotation.y;
 					var zrotationz = zmovedata.rotation.z;
 					/* adjust for the offset of a building viewed without the community */
-
 					if (zmovedata.buildingid == buildingid && buildingid != '' && zmovedata.primary == 'building' && zmovedata.communityid != '') {
 
 						/* translate community avatar position to building centric position */
@@ -1075,87 +1074,89 @@ WTW_3DINTERNET.prototype.enterLoadZone = function(zmoldname, zmolddef) {
 			wtw3dinternet.addAvatarParameter();
 			/* process action zone */
 			if (zmolddef.actionzonename.toLowerCase().indexOf('extreme') > -1 && zmolddef.actionzonename.toLowerCase().indexOf('custom') == -1) {
-				var zstartmove = window.setInterval(function(){
-					if (wtw3dinternet.move != null) {
-						var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
-						if (zactionzone != null) {
-							var zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
-							if (zmeinzone) {
-								/* the next values are the Connecting Grid not the Action Zone */
-								var zpositionx = 0;
-								var zpositiony = 0;
-								var zpositionz = 0;
-								var zscalingx = 1;
-								var zscalingy = 1;
-								var zscalingz = 1;
-								var zrotationx = 0;
-								var zrotationy = 0;
-								var zrotationz = 0;
-								if (zmolddef.buildinginfo.buildingid != '' && zactionzone.parent != null) {
-									zpositionx = zactionzone.parent.position.x;
-									zpositiony = zactionzone.parent.position.y;
-									zpositionz = zactionzone.parent.position.z;
-									zscalingx = zactionzone.parent.scaling.x;
-									zscalingy = zactionzone.parent.scaling.y;
-									zscalingz = zactionzone.parent.scaling.z;
-									zrotationx = WTW.getDegrees(zactionzone.parent.rotation.x);
-									zrotationy = WTW.getDegrees(zactionzone.parent.rotation.y);
-									zrotationz = WTW.getDegrees(zactionzone.parent.rotation.z);
-								} else if (zmolddef.thinginfo.thingid != '' && zactionzone.parent != null) {
-									zpositionx = zactionzone.parent.position.x;
-									zpositiony = zactionzone.parent.position.y;
-									zpositionz = zactionzone.parent.position.z;
-									zscalingx = zactionzone.parent.scaling.x;
-									zscalingy = zactionzone.parent.scaling.y;
-									zscalingz = zactionzone.parent.scaling.z;
-									zrotationx = WTW.getDegrees(zactionzone.parent.rotation.x);
-									zrotationy = WTW.getDegrees(zactionzone.parent.rotation.y);
-									zrotationz = WTW.getDegrees(zactionzone.parent.rotation.z);
+				if (zmolddef.status == 0) {
+					/* status changes to 2 after this process - avoids executing multiple times */
+					var zstartmove = window.setInterval(function(){
+						if (wtw3dinternet.move != null) {
+							var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
+							if (zactionzone != null) {
+								var zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
+								if (zmeinzone) {
+									/* the next values are the Connecting Grid not the Action Zone */
+									var zpositionx = 0;
+									var zpositiony = 0;
+									var zpositionz = 0;
+									var zscalingx = 1;
+									var zscalingy = 1;
+									var zscalingz = 1;
+									var zrotationx = 0;
+									var zrotationy = 0;
+									var zrotationz = 0;
+									if (zmolddef.buildinginfo.buildingid != '' && zactionzone.parent != null) {
+										zpositionx = zactionzone.parent.position.x;
+										zpositiony = zactionzone.parent.position.y;
+										zpositionz = zactionzone.parent.position.z;
+										zscalingx = zactionzone.parent.scaling.x;
+										zscalingy = zactionzone.parent.scaling.y;
+										zscalingz = zactionzone.parent.scaling.z;
+										zrotationx = WTW.getDegrees(zactionzone.parent.rotation.x);
+										zrotationy = WTW.getDegrees(zactionzone.parent.rotation.y);
+										zrotationz = WTW.getDegrees(zactionzone.parent.rotation.z);
+									} else if (zmolddef.thinginfo.thingid != '' && zactionzone.parent != null) {
+										zpositionx = zactionzone.parent.position.x;
+										zpositiony = zactionzone.parent.position.y;
+										zpositionz = zactionzone.parent.position.z;
+										zscalingx = zactionzone.parent.scaling.x;
+										zscalingy = zactionzone.parent.scaling.y;
+										zscalingz = zactionzone.parent.scaling.z;
+										zrotationx = WTW.getDegrees(zactionzone.parent.rotation.x);
+										zrotationy = WTW.getDegrees(zactionzone.parent.rotation.y);
+										zrotationz = WTW.getDegrees(zactionzone.parent.rotation.z);
+									}
+									/* communityid is read from scene while building and thing are read from action zone */
+									wtw3dinternet.move.emit('enter zone', {
+										'serverinstanceid':dGet('wtw_serverinstanceid').value,
+										'serverip':dGet('wtw_serverip').value,
+										'communityid':communityid,
+										'buildingid':zmolddef.buildinginfo.buildingid,
+										'thingid':zmolddef.thinginfo.thingid,
+										'positionx':zpositionx,
+										'positiony':zpositiony,
+										'positionz':zpositionz,
+										'scalingx':zscalingx,
+										'scalingy':zscalingy,
+										'scalingz':zscalingz,
+										'rotationx':zrotationx,
+										'rotationy':zrotationy,
+										'rotationz':zrotationz,
+										'instanceid':dGet('wtw_tinstanceid').value,
+										'avatarid':dGet('wtw_tavatarid').value,
+										'globaluseravatarid':dGet('wtw_tglobaluseravatarid').value,
+										'useravatarid':dGet('wtw_tuseravatarid').value,
+										'userid':dGet('wtw_tuserid').value,
+										'placeholder':WTW.placeHolder,
+										'displayname':btoa(dGet('wtw_tdisplayname').value)
+									});
+									/* enter Chat Zone */
+									wtw3dinternet.enterChatLoadZone(zmoldname, zmolddef);
+									/* enter Voice Chat Zone */
+									wtw3dinternet.enterVoiceChatLoadZone(zmoldname, zmolddef);
+									/* add load zone to array of connecting grid offsets */
+									wtw3dinternet.addLoadZone(zmolddef.actionzoneid, communityid, zmolddef.buildinginfo.buildingid, zmolddef.thinginfo.thingid, zpositionx, zpositiony, zpositionz, zscalingx, zscalingy, zscalingz, zrotationx, zrotationy, zrotationz);
 								}
-								
-								/* communityid is read from scene while building and thing are read from action zone */
-								wtw3dinternet.move.emit('enter zone', {
-									'serverinstanceid':dGet('wtw_serverinstanceid').value,
-									'serverip':dGet('wtw_serverip').value,
-									'communityid':communityid,
-									'buildingid':zmolddef.buildinginfo.buildingid,
-									'thingid':zmolddef.thinginfo.thingid,
-									'positionx':zpositionx,
-									'positiony':zpositiony,
-									'positionz':zpositionz,
-									'scalingx':zscalingx,
-									'scalingy':zscalingy,
-									'scalingz':zscalingz,
-									'rotationx':zrotationx,
-									'rotationy':zrotationy,
-									'rotationz':zrotationz,
-									'instanceid':dGet('wtw_tinstanceid').value,
-									'avatarid':dGet('wtw_tavatarid').value,
-									'globaluseravatarid':dGet('wtw_tglobaluseravatarid').value,
-									'useravatarid':dGet('wtw_tuseravatarid').value,
-									'userid':dGet('wtw_tuserid').value,
-									'placeholder':WTW.placeHolder,
-									'displayname':btoa(dGet('wtw_tdisplayname').value)
-								});
-								/* enter Chat Zone */
-								wtw3dinternet.enterChatLoadZone(zmoldname, zmolddef);
-								/* enter Voice Chat Zone */
-								wtw3dinternet.enterVoiceChatLoadZone(zmoldname, zmolddef);
-								/* add load zone to array of connecting grid offsets */
-								wtw3dinternet.addLoadZone(zmolddef.actionzoneid, communityid, zmolddef.buildinginfo.buildingid, zmolddef.thinginfo.thingid, zpositionx, zpositiony, zpositionz, zscalingx, zscalingy, zscalingz, zrotationx, zrotationy, zrotationz);
 							}
+							window.clearInterval(zstartmove);
+							zstartmove = null;
 						}
-						window.clearInterval(zstartmove);
-						zstartmove = null;
-					}
-				},500);
-				var zstartadmin = window.setInterval(function(){
-					if (wtw3dinternet.admin != null) {
-						wtw3dinternet.admin.emit('zone totals', '');
-						window.clearInterval(zstartadmin);
-						zstartadmin = null;
-					}
-				},500);
+					},500);
+					var zstartadmin = window.setInterval(function(){
+						if (wtw3dinternet.admin != null) {
+							wtw3dinternet.admin.emit('zone totals', '');
+							window.clearInterval(zstartadmin);
+							zstartadmin = null;
+						}
+					},500);
+				}
 			}
 		}
 	} catch (ex) {
