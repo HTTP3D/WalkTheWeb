@@ -5,7 +5,7 @@
 /* These functions provide many of the common functions for browse and admin modes */
 /* avatar functions are used to control various animations or interactions betwen avatars and molds */
 
-WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
+WTWJS.prototype.moveAvatar = async function(zavatar, zkeyspressed) {
 	/* provides animation and movement to avatar based on keys pressed (keyboard, mouse, and touch) */
 	try {
 		if (zavatar == undefined) {
@@ -20,7 +20,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 		if (zavatar != null && WTW.cameraFocus == 1 && WTW.placeHolder == 0) {
 			zavatar.rotation.x = 0;
 			zavatar.rotation.z = 0;
-			var zincrement = .2;
+			var zincrement = .5;
 			var zactivecount = 0;
 			var zmoveevents = [];
 			if (zavatar.WTW != null) {

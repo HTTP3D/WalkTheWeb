@@ -1003,8 +1003,6 @@ WTWJS.prototype.hudClearForm = function() {
 }
 
 
-
-
 /* User Menu Settings functions */
 
 WTWJS.prototype.changeCameraDistance = function() {
@@ -1602,6 +1600,9 @@ WTWJS.prototype.toggleBrowseMenu = function(zopen) {
 			} else {
 				WTW.show('wtw_menuexpandedmobile');
 			}
+			if (dGet('wtw_mobilemenuscroll') != null) {
+				dGet('wtw_mobilemenuscroll').style.height = (WTW.sizeY - 80) + 'px';
+			}
 			WTW.hide('wtw_profileimagesmmobile');
 			WTW.hide('wtw_profileimagesmmobiletext');
 			WTW.hide('wtw_modecommunitymobiletext');
@@ -1632,7 +1633,7 @@ WTWJS.prototype.toggleBrowseMenu = function(zopen) {
 			WTW.hide('wtw_menuexpandedmobile');
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-hud-wtw_hud.js-toggleMobileMenu=' + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud.js-toggleBrowseMenu=' + ex.message);
 	}
 }
 

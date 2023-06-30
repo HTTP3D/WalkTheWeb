@@ -103,6 +103,12 @@ function WTWJS() {
 	/* WTW.anonymousLogins - toggle off or on the use of anonymous avatars - 0 to require login */
 	this.anonymousLogins = '1'; 
 
+	/* WTW.allowCookies - used per session to store if cookies should be used - true and a cookie will remember your choice, false and you will be prompted on each visit, and null will retrieve previous setting from cookies if it exists, or prompt for answer. */
+	this.allowCookies = null;
+	
+	/* WTW.pendingCookies - is an array of cookies to be set if the user chooses to allow cookies */
+	this.pendingCookies = [];
+	
 	/* WTW.roles - provides an array of roles the user is assigned to. Changing this array does not provide any additional access, it is only a mask for relevant visual options. All Access is verified on the php side when making updates and retrieving information. */
 	this.roles = [];
 	

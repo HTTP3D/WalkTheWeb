@@ -30,7 +30,7 @@ if (zmolddef == undefined) {
 }
 		WTW.getAsyncJSON(zwebaddress, 
 			function(zresponse) {
-WTW.log(zresponse);
+//WTW.log(zresponse);
 				/* replace line breaks and tabs with a space */
 				while (zresponse.indexOf('\n') > -1) {
 					zresponse = zresponse.replace(/[\n\r\t]/g,' ');
@@ -42,7 +42,7 @@ WTW.log(zresponse);
 				var zhtml = document.createElement('html');
 				zhtml.innerHTML = zresponse; 
 				var zhtmlarray = WTW.getNodesAsArray(zhtml);
-WTW.log(JSON.stringify(zhtmlarray),'pink');
+//WTW.log(JSON.stringify(zhtmlarray),'pink');
 				WTW.create3DPageBox(zmoldname, zhtmlarray, zmolddef, zlenx, zleny, zlenz);
 			}
 		);

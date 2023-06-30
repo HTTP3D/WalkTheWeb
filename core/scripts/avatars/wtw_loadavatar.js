@@ -150,8 +150,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		zavatardef.start.rotation.x = 0;
 		zavatardef.start.rotation.y = WTW.init.startRotationY;
 		zavatardef.start.rotation.z = 0;
-		/* colors are not updating (updateAvatarColors) so temporarily making all changes refresh the entire avatar with 1==1, this will be changed in a future release as we go to hex colors in the database */
-		if (zavatarid != zavataridold || 1==1) {
+		if (zavatarid != zavataridold) {
 			/* if the previously loaded avatar is not the same as the new avatar meshes - fully reload */
 			WTW.disposeAnimations(zavatarname);
 			/* transfer avatar sets the avatar scale old box as parent and renames the old meshes */
@@ -234,7 +233,9 @@ WTWJS.prototype.transferAvatar = function(zavatarname) {
 						var znewname = zchildmeshes[i].id + '-wtwold';
 						zchildmeshes[i].name = znewname;
 						zchildmeshes[i].id = znewname;
-						zchildmeshes[i].parent = zavatarscaleold;
+						if (zchildmeshes[i].parent.id == zavatarname + '-scale') {
+							zchildmeshes[i].parent = zavatarscaleold;
+						}
 					}
 				}
 			}
@@ -383,12 +384,12 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 						let zanimation = zavatar.WTW.animations[zanimationind];
 						if (zanimation.objectfolder != '' && zanimation.objectfile != '') {
 							/* fetch and load the animation file */
-							BABYLON.SceneLoader.ImportMeshAsync('', zanimation.objectfolder, zanimation.objectfile, scene).then( function (walkresults) {
+							BABYLON.SceneLoader.ImportMeshAsync('', zanimation.objectfolder, zanimation.objectfile, scene).then( function (zresponse) {
 								let zavatarparent = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 								let zframetotal = WTW.getLastAnimationKey(zavatar) + zanimationind;
-								let zwalkskeleton = walkresults.skeletons[0];
-								if (zwalkskeleton.parent == null) {
-									zwalkskeleton.parent = zavatarparent;
+								let zskeleton = zresponse.skeletons[0];
+								if (zskeleton.parent == null) {
+									zskeleton.parent = zavatarparent;
 								}
 								/* uses weights to set animations on and off at various levels and blends */
 								if (zanimation.startweight == undefined) {
@@ -399,23 +400,23 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 									zanimation.animationevent = 'onoption' + zanimation.avataranimationid;
 								}
 								/* read the animation frame range from the imported file */
-								zwalkskeleton.createAnimationRange(zanimation.animationevent, Number(zanimation.startframe), Number(zanimation.endframe));
+								zskeleton.createAnimationRange(zanimation.animationevent, Number(zanimation.startframe), Number(zanimation.endframe));
 								/* dispose any meshes in the animation */
-								for (let m=0; m<walkresults.meshes.length; m++) {
-									if (walkresults.meshes[m] != null) {
-										walkresults.meshes[m].dispose();
+								for (let i = 0; i < zresponse.meshes.length; i++) {
+									if (zresponse.meshes[i] != null) {
+										zresponse.meshes[i].dispose();
 									}
 								}
 								if (zavatar.WTW.skeleton != undefined) {
 									/* copy the animation frame range to the current avatar */
-									zavatar.WTW.skeleton.copyAnimationRange(zwalkskeleton, zanimation.animationevent, true);
+									zavatar.WTW.skeleton.copyAnimationRange(zskeleton, zanimation.animationevent, true);
 									/* easing function defines how an animation starts and stops */
 									var zeasingfunction = new BABYLON.QuinticEase(); /* alternative is QuadraticEase() */
 									zeasingfunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
 
 									if (zeasingfunction != undefined && zeasingfunction != null) {
-										for (let c=0; c<zavatar.WTW.skeleton.bones.length; c++) {
-											zavatar.WTW.skeleton.bones[c].animations[0].setEasingFunction(zeasingfunction);
+										for (let j = 0; j < zavatar.WTW.skeleton.bones.length; j++) {
+											zavatar.WTW.skeleton.bones[j].animations[0].setEasingFunction(zeasingfunction);
 										}
 									}
 									let ztotalframes = Number(zanimation.endframe) - Number(zanimation.startframe);

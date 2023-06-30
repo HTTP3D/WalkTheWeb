@@ -33,6 +33,7 @@ WTWJS.prototype.checkActionZones = function() {
 								/* my avatar in load zone - triggers loading of molds */
 								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
 									if (WTW.actionZones[i].status == 0) {
+										/* loads molds in the zone */
 										WTW.addLoadZoneToQueue(i);
 									}
 								}
@@ -50,6 +51,7 @@ WTWJS.prototype.checkActionZones = function() {
 								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
 									/* if avatar left zone, unload zone */
 									if (WTW.actionZones[i].status == 2) {
+										/* unload molds in zone */
 										WTW.addUnloadZoneToQueue(i);
 									}
 								}

@@ -218,8 +218,12 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 			dGet('wtw_listoptionalanimations').innerHTML = zlistoptionalanimations;
 			WTW.show('wtw_menuoptionalanimations');
 			var zmenuwidth = dGet('wtw_menuoptionalanimations').clientWidth;
+			if (zmenuwidth > (WTW.sizeX - 80)) {
+				zmenuwidth = (WTW.sizeX - 80);
+			}
 			if (dGet('wtw_menuoptionanimations') != null) {
 				dGet('wtw_menuoptionalanimations').style.left = (WTW.sizeX/2 + 12 - (zmenuwidth/2)) + 'px';
+				dGet('wtw_menuoptionalanimations').style.width = (zmenuwidth) + 'px';
 			}
 		} else {
 			WTW.hide('wtw_menuoptionalanimations');
@@ -240,6 +244,8 @@ WTWJS.prototype.avatarAnimationMode = function(zmode) {
 			for (var i=0;i < zanimbuttons.length;i++) {
 				if (zanimbuttons[i].id.indexOf('fight') > -1) {
 					WTW.showInline(zanimbuttons[i].id);
+				} else {
+					WTW.hide(zanimbuttons[i].id);
 				}
 			}
 		} else {
@@ -249,6 +255,8 @@ WTWJS.prototype.avatarAnimationMode = function(zmode) {
 			for (var i=0;i < zanimbuttons.length;i++) {
 				if (zanimbuttons[i].id.indexOf('fight') > -1) {
 					WTW.hide(zanimbuttons[i].id);
+				} else {
+					WTW.showInline(zanimbuttons[i].id);
 				}
 			}
 		}
@@ -1537,7 +1545,7 @@ WTWJS.prototype.selectWalkToPosition = function(zavatarname, zmoldname, zrun) {
 				decalMaterial.zOffset = -2;			
 				zclicktomove = BABYLON.MeshBuilder.CreateDecal("clicktomove", zmold, {position: zpickinfo.pickedPoint, normal: zpickinfo.getNormal(true), size: new BABYLON.Vector3(4, 4, 4)});
 				zclicktomove.material = decalMaterial;			
-				
+				zclicktomove.renderingGroupId = 1;				
 				WTW.walkToPosition('myavatar-' + dGet('wtw_tinstanceid').value, zpickinfo.pickedPoint, null, zrun, null, null);
 			}
 		}
@@ -1569,6 +1577,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zabspos, zmoldtomatch, zr
 				var zpointangle = WTW.getDegrees(-Math.atan2(zdz,zdx));
 				var zleft = 0;
 				var zright = 0;
+				var zrotating = false;
 				/* calculate degrees to turn left or right to see which is less */
 				if (zpointangle < zavatarangle) {
 					zleft = zavatarangle - zpointangle;
@@ -1611,6 +1620,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zabspos, zmoldtomatch, zr
 								WTW.keyPressedAdd(1037); /* rotate left */
 							}
 						}
+						zrotating = true;
 					} else if (Math.round(zright) < Math.round(zleft)) {
 						/* need to rotate right */
 						if (Math.round(zright) < 5) {
@@ -1643,6 +1653,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zabspos, zmoldtomatch, zr
 								WTW.keyPressedAdd(1039); /* rotate right */
 							}
 						}
+						zrotating = true;
 					} else {
 						if (zrun) {
 							WTW.keyPressedAdd(2038); /* run forward */
@@ -1650,27 +1661,17 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zabspos, zmoldtomatch, zr
 							WTW.keyPressedAdd(1038); /* forward */
 						}
 					}
-					zolddist = zdist;
-				} else {
-					/* remove point */
-					var zclicktomove = WTW.getMeshOrNodeByID('clicktomove');
-					if (zclicktomove != null) {
-						zclicktomove.dispose();
+					if (zolddist != zdist || zrotating) {
+						zolddist = zdist;
+					} else {
+						/* stop walking if avatar is not moving closer */
+						WTW.cancelWalkToPosition();
 					}
-					/* stop all movement and animations */
-					WTW.keyPressedRemove(1038); /* forward */
-					WTW.keyPressedRemove(2038); /* run forward */
-					WTW.keyPressedRemove(1039); /* rotate right */
-					WTW.keyPressedRemove(2039); /* rotate run right */
-					WTW.keyPressedRemove(1037); /* rotate left */
-					WTW.keyPressedRemove(2037); /* rotate run left */
+				} else {
+					WTW.cancelWalkToPosition();
 					/* move to final point */
 					zavatar.position.x = zabspos.x;
 					zavatar.position.z = zabspos.z;
-					if (WTW.avatarTimer != null) {
-						window.clearInterval(WTW.avatarTimer);
-						WTW.avatarTimer = null;
-					}
 					if (zfunctionname != '') {
 						/* execute a function on arrival to point */
 						WTW.executeFunctionByName(zfunctionname, window, zparameters);

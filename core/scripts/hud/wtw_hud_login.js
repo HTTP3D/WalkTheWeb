@@ -399,26 +399,37 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[2].additionalparameters = '';
 
 				zobjectanimations[3] = WTW.newObjectAnimation();
-				zobjectanimations[3].animationname = 'HUDLOGINbuttonsave';
+				zobjectanimations[3].animationname = 'HUDLOGINbuttoncancelselect';
 				zobjectanimations[3].moldevent = 'onclick';
-				zobjectanimations[3].moldnamepart = 'button-save';
-				zobjectanimations[3].startframe = 60;
-				zobjectanimations[3].endframe = 80;
+				zobjectanimations[3].moldnamepart = 'button-cancelselect';
+				zobjectanimations[3].startframe = 40;
+				zobjectanimations[3].endframe = 60;
 				zobjectanimations[3].animationloop = false;
 				zobjectanimations[3].speedratio = 1.00;
 				zobjectanimations[3].additionalscript = '';
 				zobjectanimations[3].additionalparameters = '';
 
 				zobjectanimations[4] = WTW.newObjectAnimation();
-				zobjectanimations[4].animationname = 'HUDLOGINbuttonclose';
+				zobjectanimations[4].animationname = 'HUDLOGINbuttonsave';
 				zobjectanimations[4].moldevent = 'onclick';
-				zobjectanimations[4].moldnamepart = 'button-close';
-				zobjectanimations[4].startframe = 100;
-				zobjectanimations[4].endframe = 120;
+				zobjectanimations[4].moldnamepart = 'button-save';
+				zobjectanimations[4].startframe = 60;
+				zobjectanimations[4].endframe = 80;
 				zobjectanimations[4].animationloop = false;
 				zobjectanimations[4].speedratio = 1.00;
 				zobjectanimations[4].additionalscript = '';
 				zobjectanimations[4].additionalparameters = '';
+
+				zobjectanimations[5] = WTW.newObjectAnimation();
+				zobjectanimations[5].animationname = 'HUDLOGINbuttonclose';
+				zobjectanimations[5].moldevent = 'onclick';
+				zobjectanimations[5].moldnamepart = 'button-close';
+				zobjectanimations[5].startframe = 100;
+				zobjectanimations[5].endframe = 120;
+				zobjectanimations[5].animationloop = false;
+				zobjectanimations[5].speedratio = 1.00;
+				zobjectanimations[5].additionalscript = '';
+				zobjectanimations[5].additionalparameters = '';
 
 				break;
 		}
@@ -563,6 +574,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								case 'button-createlink':
 								case 'button-forgot':
 								case 'button-cancellogin':
+								case 'button-cancelselect':
 								case 'button-cancelreset':
 								case 'button-cancelcreate':
 								case 'email-email':
@@ -874,6 +886,7 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-createlink':
 			case 'hudlogin-button-forgot':
 			case 'hudlogin-button-cancellogin':
+			case 'hudlogin-button-cancelselect':
 			case 'hudlogin-button-cancelcreate':
 			case 'hudlogin-button-cancelreset':
 			case 'hudlogin-button-close':
@@ -1001,6 +1014,9 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 					} else if (zmoldname == 'hudlogin-button-save' || zmoldname == 'hudlogin-preview') {
 						/* select avatar - save selection and display name */
 						WTW.hudLoginSaveAvatar();
+					} else if (zmoldname == 'hudlogin-button-cancelselect') {
+						/* cancel select avatar */
+						WTW.closeLoginHUD();
 					} else if (zmoldname == 'hudlogin-button-close' || zmoldname == 'hudlogin-button-closeloginmenu') {
 						WTW.closeLoginHUD();
 					}
@@ -1060,7 +1076,7 @@ WTWJS.prototype.hudLoginEnter = function() {
 						}
 					}
 					WTW.closeLoginHUD();
-					WTW.setCookie("avatarid",zavatarid);
+					WTW.setCookie('avatarid', zavatarid, 365);
 					WTW.onMyAvatarSelect('', '', zavatarid);
 				}
 			);
@@ -1586,17 +1602,22 @@ WTWJS.prototype.hudLoginCreateResponse = function(zresponse) {
 WTWJS.prototype.hudLoginSaveAvatar = function() {
 	/* save avatar selection */
 	try {
-		var zdisplayname = dGet('hudlogin-name-displayname-textbox').value.replace('|','');
+		var zdisplayname = 'Anonymous';
+		if (dGet('hudlogin-name-displayname-textbox') != null) {
+			if (dGet('hudlogin-name-displayname-textbox').value.length > 0) {
+				zdisplayname = dGet('hudlogin-name-displayname-textbox').value.replace('|','');
+			}
+		}
 		WTW.openLoginHUD('Loading 3D Avatar');
 		/* save cookie and load avatar */
 		if (WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid != '') {
-			WTW.setCookie("globaluseravatarid", WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid);
+			WTW.setCookie('globaluseravatarid', WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid, 365);
 			WTW.onMyAvatarSelect(WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid, '', '');
 		} else if (WTW.selectAvatars[WTW.selectedAvatar].useravatarid != '') {
-			WTW.setCookie("useravatarid", WTW.selectAvatars[WTW.selectedAvatar].useravatarid);
+			WTW.setCookie('useravatarid', WTW.selectAvatars[WTW.selectedAvatar].useravatarid, 365);
 			WTW.onMyAvatarSelect('', WTW.selectAvatars[WTW.selectedAvatar].useravatarid, '');
 		} else {
-			WTW.setCookie("avatarid", WTW.selectAvatars[WTW.selectedAvatar].avatarid);
+			WTW.setCookie('avatarid', WTW.selectAvatars[WTW.selectedAvatar].avatarid, 365);
 			WTW.onMyAvatarSelect('', '', WTW.selectAvatars[WTW.selectedAvatar].avatarid);
 		}
 		/* save displayname */
@@ -1650,11 +1671,11 @@ WTWJS.prototype.hudLoginLoadAvatarsArray = function(zfilter) {
 						for (var i=0;i<zresponse.avatars.length;i++) {
 							if (zresponse.avatars[i] != null) {
 								if (zfilter == 'my') {
-									if (zresponse.avatars[i].displayname != '' && zdefaultdisplayname == 'Anonymous') {
+									if (zresponse.avatars[i].displayname != '' && zresponse.avatars[i].displayname != null && zdefaultdisplayname == 'Anonymous') {
 										zdefaultdisplayname = zresponse.avatars[i].displayname;
 									}
 								} else {
-									if (zresponse.avatars[i].defaultdisplayname != '' && zdefaultdisplayname == 'Anonymous') {
+									if (zresponse.avatars[i].defaultdisplayname != '' && zresponse.avatars[i].defaultdisplayname != null && zdefaultdisplayname == 'Anonymous') {
 										zdefaultdisplayname = zresponse.avatars[i].defaultdisplayname;
 									}
 								}
@@ -1800,69 +1821,71 @@ WTWJS.prototype.hudLoginShowAvatar = function(zindex) {
 		if (zglobalserverdecal != null) {
 			zglobalserverdecal.isVisible = false;
 		}
-		if (WTW.selectAvatars[zindex] != null) {
-			WTW.selectedAvatar = zindex;
-			var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
-			var zhudlogindisplayname = WTW.getMeshOrNodeByID('hudlogin-preview-displayname');
-			var zpreview = WTW.getMeshOrNodeByID('hudlogin-preview');
-			if (zhudlogindisplayname != null) {
-				zhudlogindisplayname.dispose();
-			}
-			if (zpreview != null) {
-				if (zpreview.material != null) {
-					zpreview.material.dispose();
+		if (WTW.selectAvatars.length > 0) {
+			if (WTW.selectAvatars[zindex] != null) {
+				WTW.selectedAvatar = zindex;
+				var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
+				var zhudlogindisplayname = WTW.getMeshOrNodeByID('hudlogin-preview-displayname');
+				var zpreview = WTW.getMeshOrNodeByID('hudlogin-preview');
+				if (zhudlogindisplayname != null) {
+					zhudlogindisplayname.dispose();
 				}
-				var zimagepath = WTW.selectAvatars[zindex].snapshots.full;
-				var zcovering = new BABYLON.StandardMaterial('hudlogin-preview-mat', scene);
-				zcovering.diffuseTexture = new BABYLON.Texture(zimagepath, scene);
-				zcovering.diffuseTexture.uScale = 1000;
-				zcovering.diffuseTexture.vScale = 500;
-				zcovering.diffuseColor = new BABYLON.Color3.FromHexString('#ffffff');
-				zcovering.emissiveColor = new BABYLON.Color3.FromHexString('#000000');
-				zcovering.specularColor = new BABYLON.Color3.FromHexString('#000000');
-				zcovering.ambientColor = new BABYLON.Color3.FromHexString('#ffffff');
-				zpreview.material = zcovering;
-				zpreview.renderingGroupId = 3;
-			}
+				if (zpreview != null) {
+					if (zpreview.material != null) {
+						zpreview.material.dispose();
+					}
+					var zimagepath = WTW.selectAvatars[zindex].snapshots.full;
+					var zcovering = new BABYLON.StandardMaterial('hudlogin-preview-mat', scene);
+					zcovering.diffuseTexture = new BABYLON.Texture(zimagepath, scene);
+					zcovering.diffuseTexture.uScale = 1000;
+					zcovering.diffuseTexture.vScale = 500;
+					zcovering.diffuseColor = new BABYLON.Color3.FromHexString('#ffffff');
+					zcovering.emissiveColor = new BABYLON.Color3.FromHexString('#000000');
+					zcovering.specularColor = new BABYLON.Color3.FromHexString('#000000');
+					zcovering.ambientColor = new BABYLON.Color3.FromHexString('#ffffff');
+					zpreview.material = zcovering;
+					zpreview.renderingGroupId = 3;
+				}
 
-			var zmolddef = WTW.newMold();
-			zmolddef.webtext.webtext = WTW.selectAvatars[zindex].displayname;
-			zmolddef.webtext.webstyle = JSON.stringify({
-				'anchor':'center',
-				'letter-height':.6,
-				'letter-thickness':.20,
-				'color':'#FFFD89',
-				'alpha':1.00,
-				'colors':{
-					'diffuse':'#FFFD89',
-					'specular':'#000000',
-					'ambient':'#808080',
-					'emissive':'#FFFD89'
+				var zmolddef = WTW.newMold();
+				zmolddef.webtext.webtext = WTW.selectAvatars[zindex].displayname;
+				zmolddef.webtext.webstyle = JSON.stringify({
+					'anchor':'center',
+					'letter-height':.6,
+					'letter-thickness':.20,
+					'color':'#FFFD89',
+					'alpha':1.00,
+					'colors':{
+						'diffuse':'#FFFD89',
+						'specular':'#000000',
+						'ambient':'#808080',
+						'emissive':'#FFFD89'
+					}
+				});
+				znamemold = WTW.addMold3DText('hudlogin-preview-displayname', zmolddef, 1, 1, 1);
+				znamemold.parent = zhudlogin;
+				znamemold.position.x = 2;
+				znamemold.position.y = -4.7;
+				znamemold.rotation.y = WTW.getRadians(-90);
+				znamemold.renderingGroupId = 3;
+				
+				if (WTW.selectAvatars[zindex].globaluseravatarid != '') {
+					if (zglobalserverdecal != null) {
+						zglobalserverdecal.isVisible = true;
+					}
+				} else if (WTW.selectAvatars[zindex].useravatarid != '') {
+					if (zlocalserverdecal != null) {
+						zlocalserverdecal.isVisible = true;
+					}
 				}
-			});
-			znamemold = WTW.addMold3DText('hudlogin-preview-displayname', zmolddef, 1, 1, 1);
-			znamemold.parent = zhudlogin;
-			znamemold.position.x = 2;
-			znamemold.position.y = -4.7;
-			znamemold.rotation.y = WTW.getRadians(-90);
-			znamemold.renderingGroupId = 3;
-			
-			if (WTW.selectAvatars[zindex].globaluseravatarid != '') {
-				if (zglobalserverdecal != null) {
-					zglobalserverdecal.isVisible = true;
-				}
-			} else if (WTW.selectAvatars[zindex].useravatarid != '') {
-				if (zlocalserverdecal != null) {
-					zlocalserverdecal.isVisible = true;
-				}
-			}
-		} else {
-			if (zindex < 0) {
-				/* beginning of the list, go back to end */
-				WTW.hudLoginShowAvatar(WTW.selectAvatars.length - 1);
 			} else {
-				/* end of the list, go back to start */
-				WTW.hudLoginShowAvatar(0);
+				if (zindex < 0) {
+					/* beginning of the list, go back to end */
+					WTW.hudLoginShowAvatar(WTW.selectAvatars.length - 1);
+				} else {
+					/* end of the list, go back to start */
+					WTW.hudLoginShowAvatar(0);
+				}
 			}
 		}
 	} catch (ex) {

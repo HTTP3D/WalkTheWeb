@@ -139,7 +139,6 @@ WTWJS.prototype.addAvatarPlaceholder = function(zavatarname, zavatardef) {
 		}
 		zavatarscaleold.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		zavatarscaleold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx), WTW.getRadians(zrotationy), WTW.getRadians(zrotationz));
-		zavatarscaleold.scaling = new BABYLON.Vector3(zscalingx, zscalingy, zscalingz);
 		
 		/* this box is the parent to the cameras as needed */
 		var zavatarcamera = WTW.getMeshOrNodeByID(zavatarname + '-camera');
@@ -381,7 +380,6 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 			zavatarscaleold = new BABYLON.TransformNode(zavatarname + '-scaleold');
 			zavatarscaleold.parent = zavatar;
 		}
-		zavatarscaleold.scaling = new BABYLON.Vector3(zscalingx, zscalingy, zscalingz);
 		zavatarscaleold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx), WTW.getRadians(zrotationy), WTW.getRadians(zrotationz));
 		zavatarscaleold.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		
@@ -412,7 +410,7 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 		}
 
 		var zobjectanimations = null;
-		var zobjectfolder = '/content/system/avatars/male/';
+		var zobjectfolder = '/content/uploads/avatars/3b9bt5c70igtmqux/';
 		var zobjectfile = 'maleidle.babylon';
 		var zavatarparts = [];
 		var zavataranimationdefs = [];
@@ -840,9 +838,8 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 			zavatarscaleold = new BABYLON.TransformNode(zavatarname + '-scaleold');
 			zavatarscaleold.parent = zavatar;
 		}
-		zavatarscaleold.scaling = new BABYLON.Vector3(zscalingx, zscalingy, zscalingz);
-		zavatarscale.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx), WTW.getRadians(zrotationy), WTW.getRadians(zrotationz));
-		zavatarscale.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		zavatarscaleold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx), WTW.getRadians(zrotationy), WTW.getRadians(zrotationz));
+		zavatarscaleold.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		
 		/* this box is the parent to the cameras as needed */
 		var zavatarcamera = WTW.getMeshOrNodeByID(zavatarname + '-camera');
@@ -871,7 +868,7 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 		}
 
 		var zobjectanimations = null;
-		var zobjectfolder = '/content/system/avatars/male/';
+		var zobjectfolder = '/content/uploads/avatars/3b9bt5c70igtmqux/';
 		var zobjectfile = 'maleidle.babylon';
 		var zavatarparts = [];
 		var zavataranimationdefs = [];

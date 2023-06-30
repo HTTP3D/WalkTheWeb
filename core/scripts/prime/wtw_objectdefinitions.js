@@ -677,7 +677,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			{
 				'useravatarid':'',
 				'uploadobjectid':'',
-				'folder':'/content/system/avatars/male/',
+				'folder':'/content/uploads/avatars/3b9bt5c70igtmqux/',
 				'file':'maleidle.babylon',
 				'walkspeed':'.5',
 				'objectanimations':null,

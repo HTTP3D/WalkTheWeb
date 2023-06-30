@@ -28,6 +28,8 @@ WTWJS.prototype.loadSequence = function() {
 			/* check if loading in admin mode, if so, the function is loaded - sets WTW.adminView variable */
 			WTW.adminView = 1;
 		}
+		/* check if they allow cookies */
+		WTW.checkAllowCookies();
 		/* load the content rating */
 		WTW.setContentRating();
 		/* load the 3D Community or default setings to the 3D Scene */
@@ -792,28 +794,46 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 				}
 			}
 			if (WTW.communityName == 'WalkTheWeb' || WTW.communityName == 'WalkTheWeb') {
-				dGet('wtw_showcommunityname').innerHTML = 'WalkTheWeb';
-				dGet('wtw_showcommunityname').style.cursor = 'default';
-				dGet('wtw_showcommunitynamemobile').innerHTML = 'WalkTheWeb';
-				dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
+				if (dGet('wtw_showcommunityname') != null) {
+					dGet('wtw_showcommunityname').innerHTML = 'WalkTheWeb';
+					dGet('wtw_showcommunityname').style.cursor = 'default';
+				}
+				if (dGet('wtw_showcommunitynamemobile') != null) {
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'WalkTheWeb';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
+				}
 			} else {
-				dGet('wtw_showcommunityname').innerHTML = WTW.decode(WTW.communityName);
-				dGet('wtw_showcommunityname').style.cursor = 'pointer';
-				dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + WTW.decode(WTW.communityName) + '</b>';
-				if (WTW.adminView == 1 && communityid != '') {
-					dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
+				if (dGet('wtw_showcommunityname') != null) {
+					dGet('wtw_showcommunityname').innerHTML = WTW.decode(WTW.communityName);
+					dGet('wtw_showcommunityname').style.cursor = 'pointer';
+				}
+				if (dGet('wtw_showcommunitynamemobile') != null) {
+					dGet('wtw_showcommunitynamemobile').innerHTML = '3D Community: <b>' + WTW.decode(WTW.communityName) + '</b>';
+					if (WTW.adminView == 1 && communityid != '') {
+						dGet('wtw_showcommunitynamemobile').style.cursor = 'pointer';
+					}
 				}
 			}
 		} else {
 			if (window.location.href.indexOf('/building/') > -1 || window.location.href.indexOf('/buildings/') > -1) {
-				dGet('wtw_showcommunityname').innerHTML = 'View Building';
-				dGet('wtw_showcommunitynamemobile').innerHTML = 'View Building';
+				if (dGet('wtw_showcommunityname') != null) {
+					dGet('wtw_showcommunityname').innerHTML = 'View Building';
+					dGet('wtw_showcommunityname').style.cursor = 'default';
+				}
+				if (dGet('wtw_showcommunitynamemobile') != null) {
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'View Building';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
+				}
 			} else if (window.location.href.indexOf('/thing/') > -1 || window.location.href.indexOf('/things/') > -1) {
-				dGet('wtw_showcommunityname').innerHTML = 'View Thing';
-				dGet('wtw_showcommunitynamemobile').innerHTML = 'View Thing';
+				if (dGet('wtw_showcommunityname') != null) {
+					dGet('wtw_showcommunityname').innerHTML = 'View Thing';
+					dGet('wtw_showcommunityname').style.cursor = 'default';
+				}
+				if (dGet('wtw_showcommunitynamemobile') != null) {
+					dGet('wtw_showcommunitynamemobile').innerHTML = 'View Thing';
+					dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
+				}
 			}
-			dGet('wtw_showcommunityname').style.cursor = 'default';
-			dGet('wtw_showcommunitynamemobile').style.cursor = 'default';
 		}
 		/* only a 3D Community has environment settings (sky, ground, water level), building and things use a default environment */
 		if (WTW.communities != null) {

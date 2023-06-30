@@ -931,16 +931,30 @@ WTWJS.prototype.getQuerystring = function(zkey, zdefault) {
 WTWJS.prototype.setCookie = function(zname, zvalue, zdays) {
 	/* set cookie will use https if available */
 	try {
-		var zexpires = '';
-		if (zdays) {
-			var zdate = new Date();
-			zdate.setTime(zdate.getTime() + (zdays*24*60*60*1000));
-			zexpires = '; expires=' + zdate.toGMTString();
-		}
-		if (wtw_protocol == 'https://') {
-			document.cookie = zname + '=' + zvalue + zexpires + '; domain=' + wtw_domainname + ';SameSite=Strict;path=/;secure';
-		} else {
-			document.cookie = zname + 'non=' + zvalue + zexpires + ';SameSite=Strict;path=/';
+		var zallowcookies = WTW.checkAllowCookies();
+		if (zallowcookies == true) {
+			var zexpires = '';
+			if (zdays) {
+				var zdate = new Date();
+				zdate.setTime(zdate.getTime() + (zdays*24*60*60*1000));
+				zexpires = '; expires=' + zdate.toGMTString();
+			} else {
+				var zdate = new Date();
+				zdate.setTime(zdate.getTime() - 2 * 24 * 60 * 60 * 1000);
+				zexpires = '; expires=' + zdate.toUTCString();
+			}
+			if (wtw_protocol == 'https://') {
+				document.cookie = zname + '=' + zvalue + zexpires + '; domain=' + wtw_domainname + ';SameSite=Strict;path=/;secure';
+			} else {
+				document.cookie = zname + 'non=' + zvalue + zexpires + ';SameSite=Strict;path=/';
+			}
+		} else if (zallowcookies == null) {
+			/* have not answered prompt yet, store possible cookies in an array */
+			WTW.pendingCookies[WTW.pendingCookies.length] = {
+				'name': zname,
+				'value': zvalue,
+				'days': zdays
+			}
 		}
     } catch (ex) {
         WTW.log('core-scripts-prime-wtw_utilities.js-setCookie=' +ex.message);
@@ -951,25 +965,33 @@ WTWJS.prototype.getCookie = function(zname) {
 	/* get cookie by name */
 	var zvalue = '';
 	try {
-		if (wtw_protocol != 'https://') {
-			zname += 'non=';
+		var zallowcookies = false;
+		if (zname == 'allowcookies') {
+			zallowcookies = true;
+		} else {
+			zallowcookies = WTW.checkAllowCookies();
 		}
-		var zcookies = document.cookie.split(';');
-		for(var i=0;i < zcookies.length;i++) {
-			var zcook = zcookies[i];
-			while (zcook.charAt(0)==' ') {
-				zcook = zcook.substring(1,zcook.length);
+		if (zallowcookies) {
+			if (wtw_protocol != 'https://') {
+				zname += 'non=';
 			}
-			if (zcook.indexOf(zname) == 0) {
-				zvalue = zcook.substring(zname.length,zcook.length);
+			var zcookies = document.cookie.split(';');
+			for(var i=0;i < zcookies.length;i++) {
+				var zcook = zcookies[i].trim();
+				while (zcook.charAt(0)==' ') {
+					zcook = zcook.substring(1,zcook.length);
+				}
+				if (zcook.indexOf(zname) == 0) {
+					zvalue = zcook.substring(zname.length,zcook.length);
+				}
 			}
-		}
-		if (zvalue == '') {
-			zvalue = null;
-		} else if (zvalue.indexOf('non=') > -1) {
-			zvalue = zvalue.replace('non=','');
-		} else if (zvalue.indexOf('=') > -1) {
-			zvalue = zvalue.replace('=','');
+			if (zvalue == '') {
+				zvalue = null;
+			} else if (zvalue.indexOf('non=') > -1) {
+				zvalue = zvalue.replace('non=','');
+			} else if (zvalue.indexOf('=') > -1) {
+				zvalue = zvalue.replace('=','');
+			}
 		}
     } catch (ex) {
         WTW.log('core-scripts-prime-wtw_utilities.js-getCookie=' +ex.message);
@@ -979,7 +1001,74 @@ WTWJS.prototype.getCookie = function(zname) {
 
 WTWJS.prototype.deleteCookie = function(zname) {
 	/* delete cookie by name (expire immediately) */
-    WTW.setCookie(zname,'',-1);
+	try {
+		var zdate = new Date();
+		zdate.setTime(zdate.getTime() - 2 * 24 * 60 * 60 * 1000);
+		var zexpires = '; expires=' + zdate.toUTCString();
+		if (wtw_protocol == 'https://') {
+			document.cookie = zname + '=' + zexpires + '; domain=' + wtw_domainname + ';SameSite=Strict;path=/;secure';
+		} else {
+			document.cookie = zname + 'non=' + zexpires + ';SameSite=Strict;path=/';
+		}
+    } catch (ex) {
+        WTW.log('core-scripts-prime-wtw_utilities.js-getCookie=' +ex.message);
+    }
+}
+
+WTWJS.prototype.checkAllowCookies = function() {
+	/* check if cookies are allowed */
+	var zallowcookies = null;
+	try {
+		if (WTW.allowCookies == null) {
+			/* has not been answered this session */
+			/* check if allow was saved to a cookie in past session */
+			zallowcookies = WTW.getCookie('allowcookies');
+			if (zallowcookies == true || zallowcookies == 'true') {
+				zallowcookies = true;
+			} else if (zallowcookies == false || zallowcookies == 'false') {
+				zallowcookies = false;
+			}
+		} else {
+			zallowcookies = WTW.allowCookies;
+		}
+		if (zallowcookies == null) {
+			/* show the prompt for user response */
+			WTW.show('wtw_menucookies');
+		}
+    } catch (ex) {
+        WTW.log('core-scripts-prime-wtw_utilities.js-checkAllowCookies=' +ex.message);
+    }
+	return zallowcookies;
+}
+
+WTWJS.prototype.saveAllowCookies = function(zallowcookies) {
+	/* save response if cookies are allowed */
+	try {
+		if (zallowcookies) {
+			/* true - set global variable and save response to a cookie for next time */
+			WTW.allowCookies = true;
+			WTW.setCookie('allowcookies', true, 365);
+			/* process any pending cookies */
+			for (var i=0;i < WTW.pendingCookies.length;i++) {
+				if (WTW.pendingCookies[i] != null) {
+					WTW.setCookie(WTW.pendingCookies[i].name, WTW.pendingCookies[i].value, WTW.pendingCookies[i].days);
+				}
+			}
+		} else {
+			/* false - remove all existing cookies for this site */
+			WTW.allowCookies = false;
+			var zcookies = document.cookie.split(';');
+			for(var i=0;i < zcookies.length;i++) {
+				var zname = zcookies[i].split("=")[0].trim();
+				WTW.deleteCookie(zname);
+			}
+		}
+		WTW.hide('wtw_menucookies');
+		/* clear the pending cookies array */
+		WTW.pendingCookies = [];
+    } catch (ex) {
+        WTW.log('core-scripts-prime-wtw_utilities.js-saveAllowCookies=' +ex.message);
+    }
 }
 
 

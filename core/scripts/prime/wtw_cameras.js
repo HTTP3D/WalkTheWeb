@@ -184,7 +184,6 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 		} else {
 			WTW.cameraOne.lockedTarget = null;
 		}
-		WTW.setCookie('cameradistance',WTW.cameraDistance,365);
 		WTW.cameraOne.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		scene.activeCameras[0] = WTW.cameraOne;
 		scene.activeCameras[0].attachControl(canvas, true);
