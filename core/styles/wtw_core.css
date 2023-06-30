@@ -2140,6 +2140,10 @@ iframe {
 	overflow-x:auto;
 	overflow-y:none;
 }
+.wtw-mobilemenuscroll {
+	overflow-y:auto;
+	overflow-x:hidden;
+}
 
 /* loading, progress, and blinking */
 .wtw-loadingnotice {

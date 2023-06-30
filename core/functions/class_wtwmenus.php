@@ -153,7 +153,7 @@ class wtwmenus {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-getMainMenu=".$e->getMessage());
 		}
 		/* create mobile menu display */
-		$zmainmenu = "<div id='wtw_wtwmessage' class='wtw-wtwmessage'></div><div id='wtw_menubase' class='wtw-menubase'><div id='wtw_menucollapsed' class='wtw-menucollapsed' onclick=\"WTW.toggleBrowseMenu();WTW.hudLoginShowEnter();\"><img id='wtw_menucollapseimg' src='/content/system/images/menumobile32.png' title='Browse Menu' alt='Toggle Menu' onmouseover=\"dGet('wtw_menucollapsed').style.backgroundColor='yellow';\" onmouseout=\"dGet('wtw_menucollapsed').style.backgroundColor='#ffffff';\" /></div><div id='wtw_menuexpandedmobile' class='wtw-menuexpandedmobile'><img onclick='WTW.toggleBrowseMenu(0);' class='wtw-closeright' src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\"><div class='wtw-menuheading'>Browse Menu</div>".$zmobilemenu.$zmobilemenuright.$zmobilemenucenter."</div><div id='wtw_menuexpanded' class='wtw-menuexpanded'><div class='wtw-indentright'>&nbsp;</div>".$zbrowsemenu."</div></div>";
+		$zmainmenu = "<div id='wtw_wtwmessage' class='wtw-wtwmessage'></div><div id='wtw_menubase' class='wtw-menubase'><div id='wtw_menucollapsed' class='wtw-menucollapsed' onclick=\"WTW.toggleBrowseMenu();WTW.hudLoginShowEnter();\"><img id='wtw_menucollapseimg' src='/content/system/images/menumobile32.png' title='Browse Menu' alt='Toggle Menu' onmouseover=\"dGet('wtw_menucollapsed').style.backgroundColor='yellow';\" onmouseout=\"dGet('wtw_menucollapsed').style.backgroundColor='#ffffff';\" /></div><div id='wtw_menuexpandedmobile' class='wtw-menuexpandedmobile'><img onclick='WTW.toggleBrowseMenu(0);' class='wtw-closeright' src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\"><div class='wtw-menuheading'>Browse Menu</div><div id='wtw_mobilemenuscroll' class='wtw-mobilemenuscroll'>".$zmobilemenu.$zmobilemenuright.$zmobilemenucenter."</div></div><div id='wtw_menuexpanded' class='wtw-menuexpanded'><div class='wtw-indentright'>&nbsp;</div>".$zbrowsemenu."</div></div>";
 		return $zmainmenu;
 	}
 	
@@ -445,7 +445,7 @@ class wtwmenus {
 			$zmenu .= "	</div>\r\n";
 			$zmenu .= "</div>\r\n";
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwmenus.php-getProfileMenu=".$e->getMessage());
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getContentRatingMenu=".$e->getMessage());
 		}
 		return $zmenu;
 	}
@@ -775,6 +775,36 @@ class wtwmenus {
 			$zmenu .= "</div>\r\n";
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-getFeedbackMenu=".$e->getMessage());
+		}
+		return $zmenu;
+	}
+	
+	public function getCookiesMenu() {
+		global $wtwdb;
+		$zmenu = "";
+		try {
+			$zmenu .= "<div id='wtw_menucookies' class='wtw-slideupmenuright wtw-hide'>\r\n";
+			$zmenu .= "	<img class='wtw-closeright' onclick='WTW.closeMenus();' src='/content/system/images/menuclose.png' alt=\"".$this->__('Close')."\" title=\"".$this->__('Close')."\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
+			$zmenu .= "	<div class='wtw-menuheading'>".$this->__('Allow Cookies')."</div>\r\n";
+			$zmenu .= "	<div id='wtw_menucookiesscroll' class='wtw-mainmenuscrollmin'>\r\n";
+			$zmenu .= "		<div id='wtw_cookies' class='wtw-menunote'>Cookies can be used to store your user settings and preferences including selected avatar, avatar speed, and login. Without cookies you will need to set these settings each time you visit this site.<br /><br />Please select:<br />\r\n";
+			$zmenu .= "			<ul class='wtw-menuli'>\r\n";
+			$zmenu .= "				<li class='wtw-submenublockli' onclick='WTW.saveAllowCookies(true);'>\r\n";
+			$zmenu .= "					<div class='wtw-menusubtext'>\r\n";
+			$zmenu .= "						<div class='wtw-feedbackbutton'>Allow Cookies</div>\r\n";
+			$zmenu .= "					</div>\r\n";
+			$zmenu .= "				</li>\r\n";
+			$zmenu .= "				<li class='wtw-submenublockli' onclick='WTW.saveAllowCookies(false);'>\r\n";
+			$zmenu .= "					<div class='wtw-menusubtext'>\r\n";
+			$zmenu .= "						<div class='wtw-feedbackbutton'>Deny Cookies</div>\r\n";
+			$zmenu .= "					</div>\r\n";
+			$zmenu .= "				</li>\r\n";
+			$zmenu .= "			</ul>\r\n";
+			$zmenu .= "		</div>\r\n";
+			$zmenu .= "	</div>\r\n";
+			$zmenu .= "</div>\r\n";
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getCookiesMenu=".$e->getMessage());
 		}
 		return $zmenu;
 	}

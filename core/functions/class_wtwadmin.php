@@ -1213,7 +1213,7 @@ class wtwadmin {
 				$zpagedata .= "			</div>\r\n";
 			}
 			
-			if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid)) {
+			if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid) || !empty($wtw->avatarid)) {
 					/* plugins required to load for this 3D Web */
 				$zpagedata .= "			<div class='wtw-controlpaneldiv'>\r\n";
 				$zpagedata .= "				<div class='wtw-controlpaneltitlediv'>Required 3D Plugins</div>\r\n";
