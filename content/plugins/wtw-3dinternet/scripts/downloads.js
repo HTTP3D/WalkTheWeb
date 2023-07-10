@@ -1346,11 +1346,13 @@ WTW_3DINTERNET.prototype.completedWebDownload = function(zoriginalnewwebid, zori
 			WTW.hide('wtw_thingtempsearchresults');
 			WTW.hide('wtw_avatartempsearchresults');
 			WTW.show('wtw_downloadcomplete');
+			var zhmenu = '';
 			switch (zoriginalwebtype) {
 				case 'community':
 					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:';
 					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Community in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','communities'); };
+					zhmenu = '25';
 					WTW.hideAdminMenu();
 					WTW.getSelectCommunitiesList();
 					WTW.show('wtw_adminmenu22');
@@ -1359,6 +1361,7 @@ WTW_3DINTERNET.prototype.completedWebDownload = function(zoriginalnewwebid, zori
 					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Building</b> in the <b>Admin Menu</b><br />or select from the following:';
 					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Building in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','buildings'); };
+					zhmenu = '5';
 					WTW.hideAdminMenu();
 					WTW.getSelectBuildingsList();
 					WTW.show('wtw_adminmenu2');
@@ -1367,6 +1370,7 @@ WTW_3DINTERNET.prototype.completedWebDownload = function(zoriginalnewwebid, zori
 					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Thing</b> in the <b>Admin Menu</b><br />or select from the following:';
 					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Thing in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','things'); };
+					zhmenu = '35';
 					WTW.hideAdminMenu();
 					WTW.getSelectThingsList();
 					WTW.show('wtw_adminmenu32');
@@ -1375,12 +1379,13 @@ WTW_3DINTERNET.prototype.completedWebDownload = function(zoriginalnewwebid, zori
 					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Avatar</b> in the <b>Admin Menu</b><br />or select from the following:';
 					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Avatar in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','avatars'); };
+					zhmenu = '';
 					WTW.hideAdminMenu();
 					WTW.openSelectAvatar();
 					WTW.show('wtw_adminSelectAvatarDiv');
 					break;
 			}
-			dGet('wtw_bopenwebdownload').onclick = function() { window.location.href = '/admin.php?'+ zoriginalwebtype + 'id=' + zoriginalnewwebid; };
+			dGet('wtw_bopenwebdownload').onclick = function() { window.location.href = '/admin.php?'+ zoriginalwebtype + 'id=' + zoriginalnewwebid + '&hmenu=' + zhmenu; };
 			WTW.show('wtw_selectwebform');
 		}		
 		

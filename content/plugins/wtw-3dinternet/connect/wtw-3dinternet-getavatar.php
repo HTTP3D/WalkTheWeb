@@ -176,7 +176,7 @@ try {
 				$j += 1;
 			}
 			
-			/* format requrn data set */
+			/* format return data set */
 			$zavatardef = array(
 				'name'=> "person-".$zpersoninstanceid, 
 				'useravatarid'=> $zuseravatarid, 
@@ -191,7 +191,7 @@ try {
 				'displayname'=> $zdisplayname, 
 				'opacity'=>'1',
 				'graphics'=> $zgraphics,
-				'checkcollisions'=>'0',
+				'checkcollisions'=>'1',
 				'ispickable'=>'1',
 				'parentname'=>'',
 				'moveevents'=> '',

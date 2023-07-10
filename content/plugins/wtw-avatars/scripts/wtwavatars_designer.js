@@ -1744,6 +1744,8 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 							};
 							if (zendframe > 0) {
 								WTW.myAvatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 1, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
+								WTW.myAvatar.WTW.animations.running[zavataranimationdefs[0].animationevent].starttime = null;
+								WTW.myAvatar.WTW.animations.running[zavataranimationdefs[0].animationevent].endtime = null;
 								WTW.avatarMinLoadEnter(zavatarname);
 							} else {
 								WTW.loadAvatarAnimations(zavatarname);

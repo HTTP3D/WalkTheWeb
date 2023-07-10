@@ -312,7 +312,6 @@ class wtw_3dinternet_templates {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?buildingid=".$zbuildingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
-
 				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
 				$zresponse = json_decode($zresponse, true);
 			}
