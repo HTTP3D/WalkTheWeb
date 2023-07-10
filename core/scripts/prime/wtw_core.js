@@ -1400,7 +1400,6 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		var zmoldsurl = '/connect/moldsbywebid.php?webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel;
 		
 		zmoldsurl = WTW.pluginsGetMoldsByWebID(zmoldsurl, zserver, zcommunityid, zbuildingid, zthingid, zactionzoneid, zactionzoneind, zconnectinggridid, zconnectinggridind, zgraphiclevel);
-		
 		WTW.getAsyncJSON(zmoldsurl, 
 			function(zresponse) {
 				WTW.loadMolds(JSON.parse(zresponse));

@@ -601,6 +601,7 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		zmytext.id = zmoldname + '-text';
 		zmytext.parent = zmold;
 		zmytext.isPickable = true;
+		zmytext.renderingGroupId = 1;
 	} catch (ex) {
 		WTW.log('core-scripts-molds-wtw_3dblog.js-addMold3DText=' + ex.message);
 	}

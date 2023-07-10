@@ -1344,11 +1344,11 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				ziswaterreflection = '1';
 			}
 			zmolds[zmoldind].graphics.waterreflection = ziswaterreflection;
-			var zcheckcollisions = '0';
-			if (dGet('wtw_tmoldcheckcollisions').checked) {
-				zcheckcollisions = '1';
+			if (dGet('wtw_tmoldcheckcollisions').checked == true) {
+				zmolds[zmoldind].checkcollisions = '1';
+			} else {
+				zmolds[zmoldind].checkcollisions = '0';
 			}
-			zmolds[zmoldind].checkcollisions = zcheckcollisions;
 			var zispickable = '0';
 			if (dGet('wtw_tmoldispickable').checked) {
 				zispickable = '1';
@@ -2687,28 +2687,32 @@ WTWJS.prototype.openMoldColorSelector = function(zobj, ztitle, zcolorgroup) {
 WTWJS.prototype.resetMoldColor = function(zmoldname, zspecularcolor, zemissivecolor, zdiffusecolor, zambientcolor) {
 	/* reset the mold color and save settings to form fields and array */
 	try {
+		var zsetspecularcolor = zspecularcolor;
+		var zsetemissivecolor = zemissivecolor;
+		var zsetdiffusecolor = zdiffusecolor;
+		var zsetambientcolor = zambientcolor;
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zspecularcolor) == false) {
-				zspecularcolor = '#ffffff';
+				zsetspecularcolor = '#ffffff';
 			}
 			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zemissivecolor) == false) {
-				zemissivecolor = '#000000';
+				zsetemissivecolor = '#000000';
 			}
 			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zdiffusecolor) == false) {
-				zdiffusecolor = '#686868';
+				zsetdiffusecolor = '#686868';
 			}
 			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zambientcolor) == false) {
-				zambientcolor = '#575757';
+				zsetambientcolor = '#575757';
 			}
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 			var zmesh = scene.getMeshByID(zmoldname);
 			if (zmesh != null) {
 				var zcovering = zmesh.material.clone();
-				zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-				zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-				zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+				zcovering.specularColor = new BABYLON.Color3.FromHexString(zsetspecularcolor);
+				zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zsetemissivecolor);
+				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zsetdiffusecolor);
+				zcovering.ambientColor = new BABYLON.Color3.FromHexString(zsetambientcolor);
 				zmesh.material.dispose();
 				zmesh.material = zcovering;
 			} else {
@@ -2719,10 +2723,10 @@ WTWJS.prototype.resetMoldColor = function(zmoldname, zspecularcolor, zemissiveco
 						if (zchildmeshes[i] != null) {
 							if (zchildmeshes[i].material != null) {
 								var zcovering = zchildmeshes[i].material.clone();
-								zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+								zcovering.specularColor = new BABYLON.Color3.FromHexString(zsetspecularcolor);
+								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zsetemissivecolor);
+								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zsetdiffusecolor);
+								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zsetambientcolor);
 								zchildmeshes[i].material.dispose();
 								zchildmeshes[i].material = zcovering;
 							}
@@ -2731,10 +2735,10 @@ WTWJS.prototype.resetMoldColor = function(zmoldname, zspecularcolor, zemissiveco
 				}					
 			}
 			if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
-				zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor = zdiffusecolor;
-				zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor = zemissivecolor;
-				zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor = zspecularcolor;
-				zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor = zambientcolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor = zsetdiffusecolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor = zsetemissivecolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor = zsetspecularcolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor = zsetambientcolor;
 			}
 			dGet('wtw_tmolddiffusecolor').value = zdiffusecolor;
 			dGet('wtw_tmoldemissivecolor').value = zemissivecolor;

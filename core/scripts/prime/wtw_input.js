@@ -63,6 +63,8 @@ WTWJS.prototype.inputUp = function(zevent) {
 		WTW.keyPressedRemove(1082); /* look up */
 		WTW.keyPressedRemove(1070); /* look down */
 		WTW.cancelWalkToPosition();
+		WTW.swipeDirection.x = 0;
+		WTW.swipeDirection.y = 0;
 		WTW.vehicleStopTurn();
 		if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
 			WTW.lastID = WTW.dragID;
@@ -248,45 +250,91 @@ WTWJS.prototype.inputMoving = function(zevent) {
 			WTW.cancelWalkToPosition();
 			WTW.avatarTimer = window.setInterval(function(){
 				if (WTW.dragID == '' && WTW.isMouseDown == 1 && WTW.hasInputMoved()) {
-					/* not dragging an object */
-					if (WTW.mouseX < WTW.sizeX/5) {
-						WTW.keyPressedRemove(1039);
-						WTW.keyPressedRemove(2039);
-						WTW.keyPressedAdd(2037);
-					} else if (WTW.mouseX < WTW.sizeX/2 - 100) {
-						WTW.keyPressedRemove(1039);
-						WTW.keyPressedRemove(2039);
-						WTW.keyPressedAdd(1037);
-					} else if (WTW.mouseX > WTW.sizeX*4/5) {
-						WTW.keyPressedRemove(1037);
-						WTW.keyPressedRemove(2037);
-						WTW.keyPressedAdd(2039);
-					} else if (WTW.mouseX > WTW.sizeX/2 + 100) {
-						WTW.keyPressedRemove(1037);
-						WTW.keyPressedRemove(2037);
-						WTW.keyPressedAdd(1039);
+					/* not dragging an object, mouse is down, and mouse or touch has moved */
+					/* determine and set horizontal swipe direction */
+					if (WTW.mouseStartX < WTW.mouseX) {
+						WTW.swipeDirection.x = 1;
+					} else if (WTW.mouseStartX > WTW.mouseX) {
+						WTW.swipeDirection.x = -1;
 					} else {
-						WTW.keyPressedRemove(1039);
-						WTW.keyPressedRemove(2039);
-						WTW.keyPressedRemove(1037);
-						WTW.keyPressedRemove(2037);
+						WTW.swipeDirection.x = 0;
 					}
-					if (WTW.mouseY < WTW.sizeY/4) {
-						WTW.keyPressedRemove(1070);
-						WTW.keyPressedAdd(1082);
-					} else if (WTW.mouseY > WTW.sizeY*3/4) {
-						WTW.keyPressedRemove(1082);
-						WTW.keyPressedAdd(1070);
+					/* set turn animation key pressed and swipe direction intensity */
+					if (WTW.swipeDirection.x > 0) {
+						/* remove turn left */
+						WTW.keyPressedRemove(1037);
+						WTW.keyPressedRemove(2037);
+						if (WTW.mouseX - WTW.mouseStartX < WTW.sizeX / 4) {
+							/* turn right */
+							WTW.keyPressedRemove(2039);
+							WTW.keyPressedAdd(1039);
+							WTW.swipeDirection.x = 1;
+						} else {
+							/* runturn right */
+							WTW.keyPressedRemove(1039);
+							WTW.keyPressedAdd(2039);
+							WTW.swipeDirection.x = 2;
+						}
+					} else if (WTW.swipeDirection.x < 0) {
+						/* remove turn right */
+						WTW.keyPressedRemove(1039);
+						WTW.keyPressedRemove(2039);
+						if (WTW.mouseStartX - WTW.mouseX < WTW.sizeX / 4) {
+							/* turn left */
+							WTW.keyPressedRemove(2037);
+							WTW.keyPressedAdd(1037);
+							WTW.swipeDirection.x = -1;
+						} else {
+							/* runturn left */
+							WTW.keyPressedRemove(1037);
+							WTW.keyPressedAdd(2037);
+							WTW.swipeDirection.x = -2;
+						}
+					}
+
+					/* determine and set vertical swipe direction */
+					if (WTW.mouseStartY < WTW.mouseY) {
+						WTW.swipeDirection.y = 1;
+					} else if (WTW.mouseStartY > WTW.mouseY) {
+						WTW.swipeDirection.y = -1;
 					} else {
-						WTW.keyPressedRemove(1082);
+						WTW.swipeDirection.y = 0;
+					}
+					/* set turn animation key pressed and swipe direction intensity */
+					if (WTW.swipeDirection.y > 0) {
+						/* remove turn left */
 						WTW.keyPressedRemove(1070);
-						WTW.keyPressedAdd(1070);
+						WTW.keyPressedRemove(2070);
+						if (WTW.mouseY - WTW.mouseStartY < WTW.sizeY / 4) {
+							/* turn right */
+							WTW.keyPressedRemove(2082);
+							WTW.keyPressedAdd(1082);
+							WTW.swipeDirection.y = 1;
+						} else {
+							/* runturn right */
+							WTW.keyPressedRemove(1082);
+							WTW.keyPressedAdd(2082);
+							WTW.swipeDirection.y = 2;
+						}
+					} else if (WTW.swipeDirection.y < 0) {
+						/* remove turn right */
+						WTW.keyPressedRemove(1082);
+						WTW.keyPressedRemove(2082);
+						if (WTW.mouseStartY - WTW.mouseY < WTW.sizeY / 4) {
+							/* turn left */
+							WTW.keyPressedRemove(2070);
+							WTW.keyPressedAdd(1070);
+							WTW.swipeDirection.y = -1;
+						} else {
+							/* runturn left */
+							WTW.keyPressedRemove(1070);
+							WTW.keyPressedAdd(2070);
+							WTW.swipeDirection.y = -2;
+						}
 					}
 				}
 			},10);
 		}
-		WTW.mouseMoveX = WTW.mouseX;
-		WTW.mouseMoveY = WTW.mouseY;
 		WTW.setToolTipLocation();
 		if (WTW.isMouseDown == 1) {
 			/* check if you are dragging something */
@@ -353,13 +401,9 @@ WTWJS.prototype.touchDown = function(zevent) {
 		}
 		WTW.mouseX = WTW.touch[0].pageX; 
 		WTW.mouseY = WTW.touch[0].pageY;
-		WTW.mouseStartX = WTW.mouseX;
+		WTW.mouseStartX = WTW.mouseX; 
 		WTW.mouseStartY = WTW.mouseY;
-		if (WTW.mouseX < WTW.sizeX/2) {
-			WTW.touchLeftTimer = new Date();
-		} else {
-			WTW.touchRightTimer = new Date();
-		}
+		WTW.touchTimer = new Date();
 		WTW.inputDown(zevent);
 		if (WTW.pause == 1) {
 			WTW.startRender();
@@ -383,13 +427,8 @@ WTWJS.prototype.touchUp = function(zevent) {
 		if (WTW.hasInputMoved() == false) {
 			/* check if it was a click */
 			var ztouchtimer = new Date();
-			if (WTW.touchLeftTimer != null) {
-				if (ztouchtimer - WTW.touchLeftTimer < 240) {
-					zsetclick = true;
-				}
-			}
-			if (WTW.touchRightTimer != null) {
-				if (ztouchtimer - WTW.touchRightTimer < 240) {
+			if (WTW.touchTimer != null) {
+				if (ztouchtimer - WTW.touchTimer < 240) {
 					zsetclick = true;
 				}
 			}
@@ -744,10 +783,10 @@ WTWJS.prototype.mouseDown = function(zevent) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
-			WTW.mouseStartX = zevent.clientX; 
-			WTW.mouseStartY = zevent.clientY;
-			WTW.mouseMoveX = zevent.clientX; 
-			WTW.mouseMoveY = zevent.clientY;
+			WTW.mouseX = zevent.clientX; 
+			WTW.mouseY = zevent.clientY;
+			WTW.mouseStartX = WTW.mouseX; 
+			WTW.mouseStartY = WTW.mouseY;
 			if (WTW.adminView == 1) {
 				WTW.mouseDownAdmin(zevent);
 			}

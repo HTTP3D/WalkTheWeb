@@ -491,8 +491,10 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 			if (WTW.adminView == 1 || zmolddef.ispickable == '1') {
 				zmold.isPickable = true;
 			}
-			if (zcheckcollisions == '1' && zcoveringname != 'none') {
-				zmold.checkCollisions = true; 
+			if (zcheckcollisions == '1') {
+				if (zcoveringname != 'none') {
+					zmold.checkCollisions = true; 
+				}
 			} else {
 				zmolddef.checkcollisions = '0';
 				zmold.checkCollisions = false;

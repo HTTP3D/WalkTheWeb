@@ -343,6 +343,8 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
 					};
 					/* start the onwait animation */
 					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 0, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
+					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].starttime = null;
+					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].endtime = null;
 					zavatar.WTW.animations[0].totalframes = Number(zavataranimationdefs[0].endframe);
 					zavatar.WTW.animations[0].totalstartframe = Number(zavataranimationdefs[0].startframe);
 					zavatar.WTW.animations[0].totalendframe = Number(zavataranimationdefs[0].endframe);
@@ -430,9 +432,13 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 									/* start animation - may be set to weight 0 and not executing, but running */
 									if (zenteranimate) {
 										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
+										zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
+										zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
 									}
 									if (zenteranimate == false) {
 										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
+										zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
+										zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
 									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
 										/* there are more animations to load - so load the next one */
 										if (zanimationind == 11) {

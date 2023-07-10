@@ -1263,16 +1263,21 @@ WTWJS.prototype.openSelectActionZoneForm = function() {
 	try {
 		WTW.getActionZoneList();
 		if (WTW.actionZones.length > 0) {
+			var zactionzonesarray = JSON.parse(JSON.stringify(WTW.actionZones));
 			dGet('wtw_selectactionzoneid').onchange = function() {};
 			WTW.clearDDL('wtw_selectactionzoneid');
 			var actionzonecount = 0;
 			dGet('wtw_selectactionzoneid').options[actionzonecount] = new Option('-- Select Action Zone --', '-1');
 			actionzonecount += 1;
-			for (var i = 0; i < WTW.actionZones.length; i++) {
-				if (WTW.actionZones[i] != null) {
-					if ((WTW.actionZones[i].communityinfo.communityid == communityid && communityid != '') || (WTW.actionZones[i].buildinginfo.buildingid == buildingid && buildingid != '') || (WTW.actionZones[i].thinginfo.thingid == thingid && thingid != '')) {
-						if (WTW.actionZones[i].actionzonename.length > 0 && WTW.actionZones[i].defaulteditform == '0') {
-							dGet('wtw_selectactionzoneid').options[actionzonecount] = new Option(WTW.actionZones[i].actionzonename, WTW.actionZones[i].actionzoneid);
+			/* sort the action zones for listing */
+			zactionzonesarray.sort(function (a, b) {
+				return (+(a.actionzonename > b.actionzonename) || +(a.actionzonename === b.actionzonename) - 1);
+			});
+			for (var i = 0; i < zactionzonesarray.length; i++) {
+				if (zactionzonesarray[i] != null) {
+					if ((zactionzonesarray[i].communityinfo.communityid == communityid && communityid != '') || (zactionzonesarray[i].buildinginfo.buildingid == buildingid && buildingid != '') || (zactionzonesarray[i].thinginfo.thingid == thingid && thingid != '')) {
+						if (zactionzonesarray[i].actionzonename.length > 0 && zactionzonesarray[i].defaulteditform == '0') {
+							dGet('wtw_selectactionzoneid').options[actionzonecount] = new Option(zactionzonesarray[i].actionzonename, zactionzonesarray[i].actionzoneid);
 							actionzonecount += 1;
 						}
 					}

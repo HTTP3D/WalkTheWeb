@@ -416,6 +416,12 @@ function WTWJS() {
 	/* WTW.keysPressed - keys pressed Array of values that are translated into movement and animation */
 	this.keysPressed = [];
 	
+	/* WTW.swipeDirection - direction of mouse or touch swipe, x and y values are stored */
+	this.swipeDirection = {
+		'x':0,
+		'y':0
+	};
+	
 	/* WTW.mouseTimestamp - mouse Timestamp is used to decide between mouse hold and a mouse click (touch hold vs touch ) */
 	this.mouseTimestamp = null;
 
@@ -472,11 +478,8 @@ function WTWJS() {
 	/* WTW.touch - Array created by touches event (also captures handles multi-touch) */
 	this.touch = null;
 	
-	/* WTW.touchLeftTimer - left side of the screen is tracked separate from right for movement types. This timer helps determine if it is a swipe or click */
-	this.touchLeftTimer = null;
-	
-	/* WTW.touchRightTimer - right side of the screen is tracked separate from left for movement types. This timer helps determine if it is a swipe or click */
-	this.touchRightTimer = null;
+	/* WTW.touchTimer - This timer helps determine if it is a swipe or click */
+	this.touchTimer = null;
 	
 	/* WTW.scrollTimer - scroll wheel is used to move the avatar forward or backwards, this timer decides increments of movement and pace (walk vs run) */
 	this.scrollTimer = null;
@@ -501,12 +504,6 @@ function WTWJS() {
 
 	/* WTW.mouseStartY - mouse vertical position when mouse button was held down */
 	this.mouseStartY = -1;
-
-	/* WTW.mouseMoveX - mouse horizontal position after mouse button was held down, used to measure change in movement from mouseStartX */
-	this.mouseMoveX = -1;
-
-	/* WTW.mouseMoveY - mouse vertical position after mouse button was held down, used to measure change in movement from mouseStartY */
-	this.mouseMoveY = -1;
 
 	/* WTW.dragID - id of the mold that is currently being dragged. Example includes scroll bar being dragged on 3D Blog box. */
 	this.dragID = '';

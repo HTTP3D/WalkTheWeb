@@ -59,7 +59,7 @@ WTWJS.prototype.checkActionZones = function() {
 								WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 0 means unloaded */
 								WTW.actionZones[i].status = 0;
-							} else if (zmeinzone && zmoldname.indexOf('teleportzone') > -1 && WTW.actionZones[i].status != 2 && WTW.isInitCycle == 0) {
+							} else if (zmeinzone && zmoldname.indexOf('teleportzone') > -1 && WTW.actionZones[i].status != 2) {
 								/* entered teleport */
 								WTW.actionZones[i].status = 2;
 								WTW.teleport(i);
@@ -99,6 +99,9 @@ WTWJS.prototype.checkActionZones = function() {
 							} else if (zmoldname.indexOf('door') > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
 								/* door status 2 means closing door, status 0 means door closed */
 								WTW.actionZones[i].status = 2;
+							} else if (zmoldname.indexOf('teleportzone') > -1 && WTW.actionZones[i].status != 0) {
+								/* exited teleport */
+								WTW.actionZones[i].status = 0;
 							} else if (zmoldname.indexOf('mirror') > -1 && WTW.actionZones[i].status != 2) {
 								/* mirror status 0 means not in zone, unload reflection list */
 								WTW.actionZones[i].status = 0;
@@ -377,7 +380,7 @@ WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 	}
 }
 
-WTWJS.prototype.teleport = function(zactionzoneindex) {
+WTWJS.prototype.teleport = function(zactionzoneind) {
 	/* teleport to new community */
 	try {
 		WTW.isInitCycle = 1;
@@ -397,10 +400,10 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 		} else {
 			
 		}
-		if (WTW.actionZones[zactionzoneindex] != null) {
-			if (WTW.actionZones[zactionzoneindex].teleportwebid != undefined) {
-				zteleportwebid = WTW.actionZones[zactionzoneindex].teleportwebid;
-				zspawnactionzoneid = WTW.actionZones[zactionzoneindex].spawnactionzoneid;
+		if (WTW.actionZones[zactionzoneind] != null) {
+			if (WTW.actionZones[zactionzoneind].teleportwebid != undefined) {
+				zteleportwebid = WTW.actionZones[zactionzoneind].teleportwebid;
+				zspawnactionzoneid = WTW.actionZones[zactionzoneind].spawnactionzoneid;
 				if (zteleportwebid != '') {
 					if (zteleportwebid == zoldwebid) {
 						/* same 3D Scene - different avatar position */
@@ -430,7 +433,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 						WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + 1, zspawnpoint.position.z);
 						WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
 						
-						WTW.avatarShowFadeSwirlLong('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
+						WTW.avatarShowVisible('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
 						/* check the new position for what action zones the avatar is now inside */
 						WTW.checkZones = true;
 					} else {
@@ -679,6 +682,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 									/* move avatar just in case the avatar sunk into the ground before it loaded the scene */
 									WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + .57, zspawnpoint.position.z);
 									WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
+									WTW.checkZones = true;
 									/* delete start stand after 10 seconds */
 									window.setTimeout(function() {
 										if (WTW.isInitCycle == 0) {
@@ -691,6 +695,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 					}
 				}
 			}
+			WTW.actionZones[zactionzoneind].status = 0;
 		}
 /* 	remember log off from multiplayer avatars scenes
 	load domain settings

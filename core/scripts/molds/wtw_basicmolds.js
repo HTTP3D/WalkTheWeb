@@ -1555,7 +1555,19 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 				}
 			}
 		}
-		
+		/* validate colors and set defaults if not valid */
+		if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zspecularcolor) == false) {
+			zspecularcolor = '#ffffff';
+		}
+		if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zemissivecolor) == false) {
+			zemissivecolor = '#000000';
+		}
+		if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zdiffusecolor) == false) {
+			zdiffusecolor = '#686868';
+		}
+		if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zambientcolor) == false) {
+			zambientcolor = '#575757';
+		}
 		/* read objectid, folder path, and file values */
 		if (zmolddef.objects.uploadobjectid != undefined) {
 			if (zmolddef.objects.uploadobjectid != '') {

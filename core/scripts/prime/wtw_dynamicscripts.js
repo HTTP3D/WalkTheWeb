@@ -427,6 +427,10 @@ WTWJS.prototype.resetActiveAnimations = function(zavatar) {
 						for(var zevent in zavatar.WTW.animations.running) {
 							if (zavatar.WTW.animations.running[zevent] != null) {
 								zavatar.WTW.animations.running[zevent].active = 0;
+								if (zavatar.WTW.animations.running[zevent].endtime == null) {
+									zavatar.WTW.animations.running[zevent].starttime = null;
+									zavatar.WTW.animations.running[zevent].endtime = new Date();
+								}
 							}
 						}
 					}

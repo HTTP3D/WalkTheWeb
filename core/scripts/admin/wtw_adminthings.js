@@ -27,6 +27,10 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 							if (WTW.things[i].thinginfo.thingid != undefined) {
 								if (WTW.things[i].thinginfo.thingid != null) {
 									if (zthingid == WTW.things[i].thinginfo.thingid) {
+										var zanalyticsid = '';
+										if (WTW.things[i].thinginfo.analyticsid != undefined && WTW.things[i].thinginfo.analyticsid != 'undefined' && WTW.things[i].thinginfo.analyticsid == '' && WTW.things[i].thinginfo.analyticsid != null) {
+											zanalyticsid = WTW.things[i].thinginfo.analyticsid;
+										}
 										dGet('wtw_tinfothingversion').disabled = false;
 										dGet('wtw_tinfothingversiondesc').disabled = false;
 										dGet('wtw_tthingind').value = i;
@@ -37,6 +41,7 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 										dGet('wtw_tthingdescription').value = WTW.decode(WTW.things[i].thinginfo.thingdescription);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
+										dGet('wtw_tthinganalyticsid').value = zanalyticsid;
 										dGet('wtw_tinfothingversion').disabled = true;
 										dGet('wtw_tinfothingversiondesc').disabled = true;
 									}
@@ -100,7 +105,7 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 										dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
 										dGet('wtw_tinfothingversiondesc').value = WTW.decode(WTW.things[i].thinginfo.versiondesc);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
-										dGet('wtw_tthinganalyticsid').value = WTW.things[i].thinginfo.analytics;
+										dGet('wtw_tthinganalyticsid').value = WTW.things[i].thinginfo.analyticsid;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
 									}
 								}
@@ -173,7 +178,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 								WTW.things[i].thinginfo.versionid = dGet('wtw_tversionid').value;
 								WTW.things[i].thinginfo.version = dGet('wtw_tinfothingversion').value;
 								WTW.things[i].thinginfo.versiondesc = WTW.encode(dGet('wtw_tinfothingversiondesc').value);
-								WTW.things[i].thinginfo.analytics = dGet('wtw_tthinganalyticsid').value;
+								WTW.things[i].thinginfo.analyticsid = dGet('wtw_tthinganalyticsid').value;
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tthingname').value;
 								dGet('wtw_showbuildingnamemobile').innerHTML = 'Closest 3D Thing: <b>' + dGet('wtw_tthingname').value + '</b>';
 							}
@@ -213,7 +218,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 							dGet('wtw_tversionid').value = WTW.things[i].thinginfo.versionid;
 							dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
 							dGet('wtw_tinfothingversiondesc').value = WTW.decode(WTW.things[i].thinginfo.versiondesc);
-							dGet('wtw_tthinganalyticsid').value = WTW.things[i].thinginfo.analytics;
+							dGet('wtw_tthinganalyticsid').value = WTW.things[i].thinginfo.analyticsid;
 							dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
 						}
 					}

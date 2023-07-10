@@ -264,7 +264,7 @@ WTWJS.prototype.setShownMolds = function() {
 		/* load community molds first, then buildings and things */
 		/* false means that there were no more community molds loaded this cycle */
 		if (WTW.setShownMoldsByWeb('community') == false) {
-			if (WTW.isInitCycle == 0 || communityid == '') {
+			if ((WTW.isInitCycle == 0 || communityid == '') || communityid != '') {
 				if (WTW.setShownMoldsByWeb('building') == false) {
 					if (WTW.setShownMoldsByWeb('thing')) {
 						zisloading = true;
@@ -387,7 +387,6 @@ WTWJS.prototype.setShownMoldsByWeb = function(zwebtype) {
 							if (WTW.adminView == 1) {
 								if (dGet('wtw_bmerged') != null && zcsgmoldid != '') {
 									if (zwebid != '' && dGet('wtw_bmerged').title == 'Merged Shapes are Shown' && zmold == null) {
-										zmolds[i].checkcollisions = '0';
 										WTW.addMold(zmolds[i].moldname, zmolds[i], zmolds[i].parentname, zmolds[i].covering);
 										zfound = true;
 									} else if (dGet('wtw_bmerged').title == 'Merged Shapes are Hidden' && zmold != null) {
@@ -492,6 +491,7 @@ WTWJS.prototype.processCSGAction = function(zcsgmoldname, zcsgmold, zmold, zcsga
 		var zcsgmain = BABYLON.CSG.FromMesh(zcsgmold);
 		var zcsgsub = BABYLON.CSG.FromMesh(zmold);
 		var zcsgmerge;
+		var zcheckcollisions = zcsgmain.checkCollisions;
 		switch (zcsgaction.toLowerCase()) {
 			case 'subtract':
 				zcsgmerge = zcsgmain.subtract(zcsgsub);
@@ -514,7 +514,7 @@ WTWJS.prototype.processCSGAction = function(zcsgmoldname, zcsgmold, zmold, zcsga
 		if (zmolddef.alttag.name != undefined) {
 			zalttag = zmolddef.alttag.name;
 		}
-		znewmold.checkCollisions = true;
+		znewmold.checkCollisions = zcheckcollisions;
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_common.js-processCSGAction=' + ex.message);
 	} 
