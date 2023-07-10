@@ -537,8 +537,7 @@ class wtwadmin {
 			$zpagedata .= "				<div id='wtw_uploadedmodeldetailsdiv' class='wtw-fullpage' style='display:none;'>\r\n";
 			$zpagedata .= "					<div class='wtw-roundedbox'><b>3D Models</b> can be downloaded off the Internet or created from scratch using software like <a href='https://www.blender.org/' target='_blank'>Blender.org</a>. <b>3D Models</b> can be added to any 3D Community Scene, 3D Building, or 3D Thing. Recommended formats are .blender, .obj, .glb, or .gltf.<br /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "					<div id='wtw_uploadedmodelpreviewdiv' class='wtw-dashboardboxleftdouble' style='display:block-inline;float:right;min-height:400px;padding:10px;'><br /><br /><br /><br /></div>\r\n";
-			$zpagedata .= "					<div class='wtw-dashboardboxleft'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxlefthalf'>\r\n";
 			$zpagedata .= "						<div id='wtw_uploadedmodelsnamediv'></div>\r\n";
 			$zpagedata .= "						<div id='wtw_uploadedmodelsfilesdiv'></div>\r\n";
 			$zpagedata .= "						<div id='wtw_uploadedmodelsanimationsdiv'></div>\r\n";
@@ -606,6 +605,7 @@ class wtwadmin {
 			$zpagedata .= "							</div>\r\n";
 			$zpagedata .= "						</div>\r\n";
 			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "					<div id='wtw_uploadedmodelpreviewdiv' class='wtw-dashboardboxlefthalf' style='display:block-inline;float:right;min-height:400px;padding:10px;'><br /><br /><br /><br /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-yellowbutton' style='width:150px;margin-left:25px;text-align:center;' onclick='WTW.loadUploadedObjectsDiv(true);'>Close</div><br /><br />\r\n";
 			$zpagedata .= "				</div>\r\n";
