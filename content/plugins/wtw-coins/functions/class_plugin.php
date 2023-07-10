@@ -202,7 +202,7 @@ class wtwcoins {
 						  PRIMARY KEY (`wtwcoinid`),
 						  UNIQUE KEY `".WTW_COINS_PREFIX."wtwcoinid_UNIQUE` (`wtwcoinid`),
 						  KEY `".WTW_COINS_PREFIX."idx_usercoins` (`userid`,`webid`,`actionzoneid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 
 					$wtwplugins->deltaCreateTable("
@@ -220,7 +220,7 @@ class wtwcoins {
 						  PRIMARY KEY (`cointotalid`),
 						  UNIQUE KEY `".WTW_COINS_PREFIX."cointotalid_UNIQUE` (`cointotalid`),
 						  KEY `".WTW_COINS_PREFIX."idx_coins_totals` (`userid`,`totalcoins`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 
 					$wtwplugins->saveSetting(WTW_COINS_PREFIX."dbversion", $this->dbversion);
