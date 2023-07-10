@@ -286,7 +286,7 @@ class wtwshopping {
 						  `deleted` int(11) DEFAULT '0',
 						  PRIMARY KEY (`storeid`),
 						  UNIQUE KEY `".WTWSHOPPING_PREFIX."storeid_UNIQUE` (`storeid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTWSHOPPING_PREFIX."connectstores` (
@@ -305,7 +305,7 @@ class wtwshopping {
 						  `deleted` int(11) DEFAULT '0',
 						  PRIMARY KEY (`connectid`),
 						  UNIQUE KEY `".WTWSHOPPING_PREFIX."connectid_UNIQUE` (`connectid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTWSHOPPING_PREFIX."molds` (
@@ -329,7 +329,7 @@ class wtwshopping {
 						  PRIMARY KEY (`shoppingmoldid`),
 						  UNIQUE KEY `".WTWSHOPPING_PREFIX."shoppingmoldid_UNIQUE` (`shoppingmoldid`),
 						  KEY `idx_".WTWSHOPPING_PREFIX."molds` (`communityid`,`buildingid`,`thingid`,`allowsearch`,`moldid`,`shoppingmoldid`)
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+						) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 					");
 					$wtwplugins->saveSetting(WTWSHOPPING_PREFIX."dbversion", $this->dbversion);
 				}
