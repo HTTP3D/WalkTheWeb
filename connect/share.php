@@ -917,86 +917,86 @@ try {
 				}
 				$zwaterbumpid = $zrow["waterbumpid"];
 
-				$zsceneambientcolor => $zrow["sceneambientcolor"];
-				$zsceneclearcolor => $zrow["sceneclearcolor"];
+				$zsceneambientcolor = $zrow["sceneambientcolor"];
+				$zsceneclearcolor = $zrow["sceneclearcolor"];
 				if (isset($zrow["sceneuseclonedmeshmap"])) {
-					$zsceneuseclonedmeshmap => $zrow["sceneuseclonedmeshmap"];
+					$zsceneuseclonedmeshmap = $zrow["sceneuseclonedmeshmap"];
 				}
 				if (isset($zrow["sceneblockmaterialdirtymechanism"])) {
-					$zsceneblockmaterialdirtymechanism => $zrow["sceneblockmaterialdirtymechanism"];
+					$zsceneblockmaterialdirtymechanism = $zrow["sceneblockmaterialdirtymechanism"];
 				}
 				if (isset($zrow["sundirectionalintensity"])) {
-					$zsundirectionalintensity => $zrow["sundirectionalintensity"];
+					$zsundirectionalintensity = $zrow["sundirectionalintensity"];
 				}
-				$zsundiffusecolor => $zrow["sundiffusecolor"];
-				$zsunspecularcolor => $zrow["sunspecularcolor"];
-				$zsungroundcolor => $zrow["sungroundcolor"];
+				$zsundiffusecolor = $zrow["sundiffusecolor"];
+				$zsunspecularcolor = $zrow["sunspecularcolor"];
+				$zsungroundcolor = $zrow["sungroundcolor"];
 				if (isset($zrow["sundirectionx"])) {
-					$zsundirectionx => $zrow["sundirectionx"];
+					$zsundirectionx = $zrow["sundirectionx"];
 				}
 				if (isset($zrow["sundirectiony"])) {
-					$zsundirectiony => $zrow["sundirectiony"];
+					$zsundirectiony = $zrow["sundirectiony"];
 				}
 				if (isset($zrow["sundirectionz"])) {
-					$zsundirectionz => $zrow["sundirectionz"];
+					$zsundirectionz = $zrow["sundirectionz"];
 				}
 				if (isset($zrow["backlightintensity"])) {
-					$zbacklightintensity => $zrow["backlightintensity"];
+					$zbacklightintensity = $zrow["backlightintensity"];
 				}
 				if (isset($zrow["backlightdirectionx"])) {
-					$zbacklightdirectionx => $zrow["backlightdirectionx"];
+					$zbacklightdirectionx = $zrow["backlightdirectionx"];
 				}
 				if (isset($zrow["backlightdirectiony"])) {
-					$zbacklightdirectiony => $zrow["backlightdirectiony"];
+					$zbacklightdirectiony = $zrow["backlightdirectiony"];
 				}
 				if (isset($zrow["backlightdirectionz"])) {
-					$zbacklightdirectionz => $zrow["backlightdirectionz"];
+					$zbacklightdirectionz = $zrow["backlightdirectionz"];
 				}
-				$zbacklightdiffusecolor => $zrow["backlightdiffusecolor"];
-				$zbacklightspecularcolor => $zrow["backlightspecularcolor"];
-				$zscenefogenabled => $zrow["scenefogenabled"];
-				$zscenefogmode => $zrow["scenefogmode"];
-				$zscenefogdensity => $zrow["scenefogdensity"];
-				$zscenefogstart => $zrow["scenefogstart"];
-				$zscenefogend => $zrow["scenefogend"];
-				$zscenefogcolor => $zrow["scenefogcolor"];
-				$zskytype => $zrow["skytype"];
+				$zbacklightdiffusecolor = $zrow["backlightdiffusecolor"];
+				$zbacklightspecularcolor = $zrow["backlightspecularcolor"];
+				$zscenefogenabled = $zrow["scenefogenabled"];
+				$zscenefogmode = $zrow["scenefogmode"];
+				$zscenefogdensity = $zrow["scenefogdensity"];
+				$zscenefogstart = $zrow["scenefogstart"];
+				$zscenefogend = $zrow["scenefogend"];
+				$zscenefogcolor = $zrow["scenefogcolor"];
+				$zskytype = $zrow["skytype"];
 				if (isset($zrow["skysize"])) {
-					$zskysize => $zrow["skysize"];
+					$zskysize = $zrow["skysize"];
 				}
-				$zskyboxfolder => $zrow["skyboxfolder"];
-				$zskyboxfile => $zrow["skyboxfile"];
-				$zskyboximageleft => $zrow["skyboximageleft"];
-				$zskyboximageup => $zrow["skyboximageup"];
-				$zskyboximagefront => $zrow["skyboximagefront"];
-				$zskyboximageright => $zrow["skyboximageright"];
-				$zskyboximagedown => $zrow["skyboximagedown"];
-				$zskyboximageback => $zrow["skyboximageback"];
+				$zskyboxfolder = $zrow["skyboxfolder"];
+				$zskyboxfile = $zrow["skyboxfile"];
+				$zskyboximageleft = $zrow["skyboximageleft"];
+				$zskyboximageup = $zrow["skyboximageup"];
+				$zskyboximagefront = $zrow["skyboximagefront"];
+				$zskyboximageright = $zrow["skyboximageright"];
+				$zskyboximagedown = $zrow["skyboximagedown"];
+				$zskyboximageback = $zrow["skyboximageback"];
 				if (isset($zrow["skypositionoffsetx"])) {
-					$zskypositionoffsetx => $zrow["skypositionoffsetx"];
+					$zskypositionoffsetx = $zrow["skypositionoffsetx"];
 				}
 				if (isset($zrow["skypositionoffsety"])) {
-					$zskypositionoffsety => $zrow["skypositionoffsety"];
+					$zskypositionoffsety = $zrow["skypositionoffsety"];
 				}
 				if (isset($zrow["skypositionoffsetz"])) {
-					$zskypositionoffsetz => $zrow["skypositionoffsetz"];
+					$zskypositionoffsetz = $zrow["skypositionoffsetz"];
 				}
 				if (isset($zrow["skyboxmicrosurface"])) {
-					$zskyboxmicrosurface => $zrow["skyboxmicrosurface"];
+					$zskyboxmicrosurface = $zrow["skyboxmicrosurface"];
 				}
 				if (isset($zrow["skyboxpbr"])) {
-					$zskyboxpbr => $zrow["skyboxpbr"];
+					$zskyboxpbr = $zrow["skyboxpbr"];
 				}
 				if (isset($zrow["skyboxasenvironmenttexture"])) {
-					$zskyboxasenvironmenttexture => $zrow["skyboxasenvironmenttexture"];
+					$zskyboxasenvironmenttexture = $zrow["skyboxasenvironmenttexture"];
 				}
 				if (isset($zrow["skyboxblur"])) {
-					$zskyboxblur => $zrow["skyboxblur"];
+					$zskyboxblur = $zrow["skyboxblur"];
 				}
-				$zskyboxdiffusecolor => $zrow["skyboxdiffusecolor"];
-				$zskyboxspecularcolor => $zrow["skyboxspecularcolor"];
-				$zskyboxambientcolor => $zrow["skyboxambientcolor"];
-				$zskyboxemissivecolor => $zrow["skyboxemissivecolor"];
+				$zskyboxdiffusecolor = $zrow["skyboxdiffusecolor"];
+				$zskyboxspecularcolor = $zrow["skyboxspecularcolor"];
+				$zskyboxambientcolor = $zrow["skyboxambientcolor"];
+				$zskyboxemissivecolor = $zrow["skyboxemissivecolor"];
 				if (isset($zrow["skyinclination"])) {
 					$zskyinclination = $zrow["skyinclination"];
 				}
@@ -1051,12 +1051,13 @@ try {
 			}
 
 			$zresponse = array(
-				'serverinstanceid'=>wtw_serverinstanceid,
-				'domainurl'=>$wtwconnect->domainurl,
+				'serverinstanceid' => wtw_serverinstanceid,
+				'domainurl' => $wtwconnect->domainurl,
 				$zwebtype.'id' => $zrow[$zwebtype."id"],
 				'past'.$zwebtype.'id' => $zrow["past".$zwebtype."id"],
 				$zwebtype.'name' => $wtwconnect->escapeHTML($zrow[$zwebtype."name"]),
 				$zwebtype.'description' => $wtwconnect->escapeHTML($zrow[$zwebtype."description"]),
+				'analyticsid' => '',
 				'versionid' => $zrow["versionid"],
 				'version' => $zrow["version"],
 				'versionorder' => $zrow["versionorder"],
@@ -1160,17 +1161,17 @@ try {
 				'createuserid' => $zrow["createuserid"],
 				'updatedate' => $zrow["updatedate"],
 				'updateuserid' => $zrow["updateuserid"],
-				'connectinggrids'=>$zconnectinggrids,
-				'childconnectinggrids'=>$zchildconnectinggrids,
-				'actionzones'=>$zactionzones,
-				'molds'=>$zmolds,
-				'uploadobjects'=>$zuploadobjects,
-				'uploads'=>$zuploads,
-				'scripts'=>$zscripts,
-				'contentratings'=>$zcontentratings,
-				'pluginsrequired'=>$zpluginsrequired,
-				'avataranimations'=>$zavataranimations,
-				'users'=>$zusers
+				'connectinggrids' => $zconnectinggrids,
+				'childconnectinggrids' => $zchildconnectinggrids,
+				'actionzones' => $zactionzones,
+				'molds' => $zmolds,
+				'uploadobjects' => $zuploadobjects,
+				'uploads' => $zuploads,
+				'scripts' => $zscripts,
+				'contentratings' => $zcontentratings,
+				'pluginsrequired' => $zpluginsrequired,
+				'avataranimations' => $zavataranimations,
+				'users' => $zusers
 			);
 		}
 	}
