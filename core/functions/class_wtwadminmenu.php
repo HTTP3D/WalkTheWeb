@@ -245,7 +245,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 60, $zupdateroles, "");
-			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityscene', '<div class="wtw-altkey">ctrl+s</div>Edit <u>S</u>cene', 65, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityscene', '<div class="wtw-altkey">ctrl+s</div>Edit 3D <u>S</u>cene', 65, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 100, $zupdateroles, "");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 

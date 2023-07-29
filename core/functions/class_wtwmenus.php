@@ -568,12 +568,12 @@ class wtwmenus {
 			$zmenu .= "		<ul class='wtw-menuli'>\r\n";
 			$zmenu .= "			<li class='wtw-menuliholder'><img src='/content/system/images/menuwalk.png' alt=\"".$this->__('Walk Animation Speed')."\" title=\"".$this->__('Walk Animation Speed')."\" class='wtw-menulefticon' />".$this->__('Walk Animation Speed')."</li>\r\n";
 			$zmenu .= "			<li class='wtw-submenuli'>\r\n";
-			$zmenu .= "				<input id='wtw_twalkanimationspeed' type='range' min='.1' max='2.9' value='1.5' step='.01' class='wtw-menuslider' onchange='WTW.changeWalkAnimationSpeed();this.blur();'/></li>\r\n";
+			$zmenu .= "				<input id='wtw_twalkanimationspeed' type='range' min='1.0' max='3.9' value='2.6' step='.01' class='wtw-menuslider' onchange='WTW.changeWalkAnimationSpeed();this.blur();'/></li>\r\n";
 			$zmenu .= "		</ul>\r\n";
 			$zmenu .= "		<ul class='wtw-menuli'>\r\n";
 			$zmenu .= "			<li class='wtw-menuliholder'><img src='/content/system/images/menuwalk.png' alt=\"".$this->__('Walk Distance Traveled')."\" title=\"".$this->__('Walk Distance Traveled')."\" class='wtw-menulefticon' />".$this->__('Walk Distance Traveled')."</li>\r\n";
 			$zmenu .= "			<li class='wtw-submenuli'>\r\n";
-			$zmenu .= "				<input id='wtw_twalkspeed' type='range' min='.1' max='2.9' value='1.5' step='.01' class='wtw-menuslider' onchange='WTW.changeWalkSpeed();this.blur();'/></li>\r\n";
+			$zmenu .= "				<input id='wtw_twalkspeed' type='range' min='1.0' max='3.9' value='2.6' step='.01' class='wtw-menuslider' onchange='WTW.changeWalkSpeed();this.blur();'/></li>\r\n";
 			$zmenu .= "		</ul>\r\n";
 			$zmenu .= "		<ul class='wtw-menuli'>\r\n";
 			$zmenu .= "			<li class='wtw-menuliholder'><img src='/content/system/images/menuwalk.png' alt=\"".$this->__('Turn Animation Speed')."\" title=\"".$this->__('Turn Animation Speed')."\" class='wtw-menulefticon' />".$this->__('Turn Animation Speed')."</li>\r\n";

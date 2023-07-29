@@ -757,6 +757,9 @@ class wtwcommunities {
 						 t2.attachmoldid,
 						 t2.loadactionzoneid,
 						 t2.parentactionzoneid,
+						 t2.teleportwebid,
+						 t2.teleportwebtype,
+						 t2.spawnactionzoneid,
 						 t2.actionzonename,
 						 t2.actionzonetype,
 						 t2.actionzoneshape,
@@ -801,6 +804,9 @@ class wtwcommunities {
 							 attachmoldid,
 							 loadactionzoneid,
 							 parentactionzoneid,
+							 teleportwebid,
+							 teleportwebtype,
+							 spawnactionzoneid,
 							 actionzonename,
 							 actionzonetype,
 							 actionzoneshape,
@@ -843,6 +849,9 @@ class wtwcommunities {
 							 '".$zrow["attachmoldid"]."',
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["parentactionzoneid"]."',
+							 '".$zrow["teleportwebid"]."',
+							 '".$zrow["teleportwebtype"]."',
+							 '".$zrow["spawnactionzoneid"]."',
 							 '".$zrow["actionzonename"]."',
 							 '".$zrow["actionzonetype"]."',
 							 '".$zrow["actionzoneshape"]."',
@@ -1663,6 +1672,15 @@ class wtwcommunities {
 					set t1.parentactionzoneid=t2.actionzoneid
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.parentactionzoneid='')
+						and (not t2.actionzoneid is null);");
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."actionzones t1
+					left join (select * from ".wtw_tableprefix."actionzones 
+							where communityid='".$zcommunityid."' and (not communityid='')) t2
+						on t1.spawnactionzoneid=t2.pastactionzoneid
+					set t1.spawnactionzoneid=t2.actionzoneid
+					where t1.communityid='".$zcommunityid."'
+						and (not t1.spawnactionzoneid='')
 						and (not t2.actionzoneid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1

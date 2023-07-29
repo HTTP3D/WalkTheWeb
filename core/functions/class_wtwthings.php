@@ -359,6 +359,9 @@ class wtwthings {
 						 t2.attachmoldid,
 						 t2.loadactionzoneid,
 						 t2.parentactionzoneid,
+						 t2.teleportwebid,
+						 t2.teleportwebtype,
+						 t2.spawnactionzoneid,
 						 t2.actionzonename,
 						 t2.actionzonetype,
 						 t2.actionzoneshape,
@@ -403,6 +406,9 @@ class wtwthings {
 							 attachmoldid,
 							 loadactionzoneid,
 							 parentactionzoneid,
+							 teleportwebid,
+							 teleportwebtype,
+							 spawnactionzoneid,
 							 actionzonename,
 							 actionzonetype,
 							 actionzoneshape,
@@ -445,6 +451,9 @@ class wtwthings {
 							 '".$zrow["attachmoldid"]."',
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["parentactionzoneid"]."',
+							 '".$zrow["teleportwebid"]."',
+							 '".$zrow["teleportwebtype"]."',
+							 '".$zrow["spawnactionzoneid"]."',
 							 '".$zrow["actionzonename"]."',
 							 '".$zrow["actionzonetype"]."',
 							 '".$zrow["actionzoneshape"]."',
@@ -1328,6 +1337,17 @@ class wtwthings {
 					set t1.parentactionzoneid=t2.actionzoneid
 					where t1.thingid='".$zthingid."'
 						and not t1.parentactionzoneid='';");
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."actionzones t1
+						inner join (select * 
+							from ".wtw_tableprefix."actionzones 
+							where thingid='".$zthingid."' 
+								and deleted=0 
+								and (not thingid='')) t2
+						on t1.spawnactionzoneid=t2.pastactionzoneid
+					set t1.spawnactionzoneid=t2.actionzoneid
+					where t1.thingid='".$zthingid."'
+						and not t1.spawnactionzoneid='';");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 						inner join (select * 

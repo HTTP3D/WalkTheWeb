@@ -283,6 +283,9 @@ class wtwbuildings {
 						 t2.attachmoldid,
 						 t2.loadactionzoneid,
 						 t2.parentactionzoneid,
+						 t2.teleportwebid,
+						 t2.teleportwebtype,
+						 t2.spawnactionzoneid,
 						 t2.actionzonename,
 						 t2.actionzonetype,
 						 t2.actionzoneshape,
@@ -327,6 +330,9 @@ class wtwbuildings {
 					$zattachmoldid = $zrow["attachmoldid"];
 					$zloadactionzoneid = $zrow["loadactionzoneid"];
 					$zparentactionzoneid = $zrow["parentactionzoneid"];
+					$zteleportwebid = $zrow["teleportwebid"];
+					$zteleportwebtype = $zrow["teleportwebtype"];
+					$zspawnactionzoneid = $zrow["spawnactionzoneid"];
 					$zactionzonename = $zrow["actionzonename"];
 					$zactionzonetype = $zrow["actionzonetype"];
 					$zactionzoneshape = $zrow["actionzoneshape"];
@@ -367,6 +373,9 @@ class wtwbuildings {
 							 attachmoldid,
 							 loadactionzoneid,
 							 parentactionzoneid,
+							 teleportwebid,
+							 teleportwebtype,
+							 spawnactionzoneid,
 							 actionzonename,
 							 actionzonetype,
 							 actionzoneshape,
@@ -409,6 +418,9 @@ class wtwbuildings {
 							'".$zattachmoldid."',
 							'".$zloadactionzoneid."',
 							'".$zparentactionzoneid."',
+							'".$zteleportwebid."',
+							'".$zteleportwebtype."',
+							'".$zspawnactionzoneid."',
 							'".$wtwhandlers->escapeHTML($zactionzonename)."',
 							'".$zactionzonetype."',
 							'".$zactionzoneshape."',
@@ -1398,6 +1410,14 @@ class wtwbuildings {
 					set t1.parentactionzoneid=t2.actionzoneid
 					where t1.buildingid='".$zbuildingid."'
 						and (not t1.parentactionzoneid='')
+						and (not t2.actionzoneid is null);");
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."actionzones t1
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
+						on t1.spawnactionzoneid=t2.pastactionzoneid
+					set t1.spawnactionzoneid=t2.actionzoneid
+					where t1.buildingid='".$zbuildingid."'
+						and (not t1.spawnactionzoneid='')
 						and (not t2.actionzoneid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
