@@ -269,6 +269,11 @@ class wtw3dinternet {
 			
 			/* multiplayer setings conects to the multiplayer/chat hub server */
 			$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">WalkTheWeb Broadcasts</div>\r\n";
+
+			$zformdata .= "				<div id=\"wtw3dinternet_broadcaststext\" class=\"wtw-disabledlabel\" style=\"float:right;\"></div>";
+
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablebroadcasts\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablebroadcaststext\" class=\"wtw-disabledlabel\">Broadcasts Disabled</div><div style=\"clear:both;\"></div><br />\r\n";
 			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Multiplayer Settings</div>\r\n";
 
 			$zformdata .= "				<div id=\"wtw3dinternet_multiplayertext\" class=\"wtw-disabledlabel\" style=\"float:right;\"></div>";

@@ -61,10 +61,12 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 			});
 
 			wtw3dinternet.admin.on('wtwbroadcast', function(zmessage) {
-				zmessage = atob(zmessage);
-				WTW.log(zmessage,'yellow');
-				dGet('wtw_wtwmessage').innerHTML = "<span class='wtw-wtwmessagetext'>" + zmessage + "</span>";
-				window.setTimeout(function(){dGet('wtw_wtwmessage').innerHTML = '';},5000);
+				if (wtw3dinternet.masterBroadcasts == '1') {
+					zmessage = atob(zmessage);
+					WTW.log(zmessage,'yellow');
+					dGet('wtw_wtwmessage').innerHTML = "<span class='wtw-wtwmessagetext'>" + zmessage + "</span>";
+					window.setTimeout(function(){dGet('wtw_wtwmessage').innerHTML = '';},5000);
+				}
 			}); 
 			
 			wtw3dinternet.admin.on('serror', function(zresponse) {

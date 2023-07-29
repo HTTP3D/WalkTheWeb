@@ -6,6 +6,7 @@ function WTW_3DINTERNET() {
 	/* Add your global variables as needed here */
 	this.ver = '1.1.0';
 	this.checkConnection = null; /* connection heartbeat for Admin Channel */
+	this.masterBroadcasts = '1'; /* toggle off or on WalkTheWeb Broadcasts (server level) */
 	this.masterMove = '0'; /* toggle off or on Multiplayer Movement tracking (server level) */
 	this.masterChat = '0'; /* toggle off or on Chat (server level) */
 	this.masterVoiceChat = '0'; /* toggle off or on Voice Chat (server level) */
@@ -272,6 +273,7 @@ WTW_3DINTERNET.prototype.adminMenuItemSelected = function(zobj) {
 		if (zobj != null) {
 			if (zobj.id != undefined) {
 				switch (zobj.id) {
+					case 'wtw_admin3dinternetmenu':
 					case 'wtw_admincommunityaddbuilding':
 						wtw3dinternet.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
 						break;
@@ -744,6 +746,15 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 					dGet('wtw3dinternet_enableanonymoustext').innerHTML = 'Anonymous (Guest) Avatars Disabled';
 					dGet('wtw3dinternet_enableanonymous').checked = false;
 				}
+				if (wtw3dinternet.masterBroadcasts == '1') {
+					dGet('wtw3dinternet_enablebroadcaststext').className = 'wtw-enablelabel';
+					dGet('wtw3dinternet_enablebroadcaststext').innerHTML = 'Broadcasts Enabled';
+					dGet('wtw3dinternet_enablebroadcasts').checked = true;
+				} else {
+					dGet('wtw3dinternet_enablebroadcaststext').className = 'wtw-disabledlabel';
+					dGet('wtw3dinternet_enablebroadcaststext').innerHTML = 'Broadcasts Disabled';
+					dGet('wtw3dinternet_enablebroadcasts').checked = false;
+				}
 				if (wtw3dinternet.masterMove == '1') {
 					dGet('wtw3dinternet_enablemultiplayertext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablemultiplayertext').innerHTML = 'Multiplayer Enabled';
@@ -853,6 +864,9 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 			case 'wtw3dinternet_enableanonymous':
 				WTW.anonymousLogins = zchecked;
 				break;
+			case 'wtw3dinternet_enablebroadcasts':
+				wtw3dinternet.enableBroadcasts(zchecked);
+				break;
 			case 'wtw3dinternet_enablemultiplayer':
 				wtw3dinternet.enableMultiplayer(zchecked);
 				break;
@@ -930,6 +944,20 @@ WTW_3DINTERNET.prototype.serviceCheck = async function(zservice) {
 		);
 	} catch (ex) {
 		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-serviceCheck=' + ex.message);
+	} 
+}
+
+WTW_3DINTERNET.prototype.enableBroadcasts = function(zchecked) {
+	/* toggle multiplayer on or off */
+	try {
+		wtw3dinternet.masterBroadcasts = zchecked;
+		if (wtw3dinternet.masterBroadcasts == '1') {
+			dGet('wtw3dinternet_enablebroadcaststext').innerHTML = 'Broadcasts Enabled';
+		} else {
+			dGet('wtw3dinternet_enablebroadcaststext').innerHTML = 'Broadcasts Disabled';
+		}
+	} catch (ex) {
+		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-enableBroadcasts=' + ex.message);
 	} 
 }
 
@@ -1821,10 +1849,13 @@ WTW_3DINTERNET.prototype.toggleAdminSubMenu = function(zobj) {
 	try {
 		switch (zobj.id) {
 			case 'wtw_admin3dinternetmenu':
-				if ((dGet('wtw_3dinternetloginspage').style.display == 'none' || dGet('wtw_3dinternetloginspage').style.display == '')) {
+				if ((dGet('wtw_3dinternetloginspage').style.display == 'none' || dGet('wtw_3dinternetloginspage').style.display == '') && (dGet('wtw_3dinternetmultiplayerpage').style.display == 'none' || dGet('wtw_3dinternetmultiplayerpage').style.display == '') && (dGet('wtw_3dinternettemplatespage').style.display == 'none' || dGet('wtw_3dinternettemplatespage').style.display == '') && (dGet('wtw_3dinternetfranchisingpage').style.display == 'none' || dGet('wtw_3dinternetfranchisingpage').style.display == '')) {
 					WTW.openFullPageForm('fullpage','3D Internet','wtw_3dinternetloginspage');
 				} else {
 					WTW.hide('wtw_3dinternetloginspage');
+					WTW.hide('wtw_3dinternetmultiplayerpage');
+					WTW.hide('wtw_3dinternettemplatespage');
+					WTW.hide('wtw_3dinternetfranchisingpage');
 					WTW.closeFullPageForm();
 				}
 				break;

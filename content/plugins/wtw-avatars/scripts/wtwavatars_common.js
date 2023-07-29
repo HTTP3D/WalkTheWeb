@@ -15,8 +15,8 @@ function WTWJS() {
 	this.lastID = '';
 	this.currentID = '';
 	this.highlightLayer = null;
-	this.walkSpeed = 1;
-	this.walkAnimationSpeed = 1;
+	this.walkSpeed = 2.6;
+	this.walkAnimationSpeed = 2.6;
 	this.turnSpeed = 1;
 	this.turnAnimationSpeed = 1;
 		this.init = {

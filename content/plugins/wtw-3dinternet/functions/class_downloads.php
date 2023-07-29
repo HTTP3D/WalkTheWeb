@@ -1370,6 +1370,9 @@ class wtw_3dinternet_downloads {
 								attachmoldid='".$zactionzone->attachmoldid."',
 								loadactionzoneid='".$zactionzone->loadactionzoneid."',
 								parentactionzoneid='".$zactionzone->parentactionzoneid."',
+								teleportwebid='".$zactionzone->teleportwebid."',
+								teleportwebtype='".$zactionzone->teleportwebtype."',
+								spawnactionzoneid='".$zactionzone->spawnactionzoneid."',
 								actionzonename='".$zactionzone->actionzonename."',
 								actionzonetype='".$zactionzone->actionzonetype."',
 								actionzoneshape='".$zactionzone->actionzoneshape."',
@@ -1418,6 +1421,9 @@ class wtw_3dinternet_downloads {
 								attachmoldid,
 								loadactionzoneid,
 								parentactionzoneid,
+								teleportwebid,
+								teleportwebtype,
+								spawnactionzoneid,
 								actionzonename,
 								actionzonetype,
 								actionzoneshape,
@@ -1460,6 +1466,9 @@ class wtw_3dinternet_downloads {
 								'".$zactionzone->attachmoldid."',
 								'".$zactionzone->loadactionzoneid."',
 								'".$zactionzone->parentactionzoneid."',
+								'".$zactionzone->teleportwebid."',
+								'".$zactionzone->teleportwebtype."',
+								'".$zactionzone->spawnactionzoneid."',
 								'".$zactionzone->actionzonename."',
 								'".$zactionzone->actionzonetype."',
 								'".$zactionzone->actionzoneshape."',
@@ -1570,11 +1579,13 @@ class wtw_3dinternet_downloads {
 					/* get new foreign keys */
 					$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["loadactionzoneid"]);
 					$znewparentactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["parentactionzoneid"]);
+					$znewspawnactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["spawnactionzoneid"]);
 
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones
 						set loadactionzoneid='".$znewloadactionzoneid."',
-							parentactionzoneid='".$znewparentactionzoneid."'
+							parentactionzoneid='".$znewparentactionzoneid."',
+							spawnactionzoneid='".$znewspawnactionzoneid."'
 						where actionzoneid='".$zrow["actionzoneid"]."'
 						limit 1;");
 				}
@@ -3807,6 +3818,9 @@ class wtw_3dinternet_downloads {
 						attachmoldid,
 						loadactionzoneid,
 						parentactionzoneid,
+						teleportwebid,
+						teleportwebtype,
+						spawnactionzoneid,
 						actionzonename,
 						actionzonetype,
 						actionzoneshape,
@@ -3849,6 +3863,9 @@ class wtw_3dinternet_downloads {
 						'".$zactionzone->attachmoldid."',
 						'".$zactionzone->loadactionzoneid."',
 						'".$zactionzone->parentactionzoneid."',
+						'".$zactionzone->teleportwebid."',
+						'".$zactionzone->teleportwebtype."',
+						'".$zactionzone->spawnactionzoneid."',
 						'".$zactionzone->actionzonename."',
 						'".$zactionzone->actionzonetype."',
 						'".$zactionzone->actionzoneshape."',
@@ -3933,11 +3950,13 @@ class wtw_3dinternet_downloads {
 				/* get new foreign keys */
 				$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["loadactionzoneid"]);
 				$znewparentactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["parentactionzoneid"]);
+				$znewspawnactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["spawnactionzoneid"]);
 
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set loadactionzoneid='".$znewloadactionzoneid."',
-						parentactionzoneid='".$znewparentactionzoneid."'
+						parentactionzoneid='".$znewparentactionzoneid."',
+						spawnactionzoneid='".$znewspawnactionzoneid."'
 					where actionzoneid='".$zrow["actionzoneid"]."'
 					limit 1;");
 			}
