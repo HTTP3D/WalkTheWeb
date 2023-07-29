@@ -124,7 +124,11 @@ WTWJS.prototype.openLoginMenu = function() {
 		if (dGet('wtw_tuserid').value != '') {
 			WTW.openLoginHUD('User Menu');
 		} else {
-			WTW.openLoginHUDLogin();
+			if (WTW.isInitCycle == 1) {
+				WTW.openLoginHUD('Enter Menu');
+			} else {
+				WTW.openLoginHUDLogin();
+			}
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-openLoginMenu=' + ex.message);

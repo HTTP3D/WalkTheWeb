@@ -441,10 +441,10 @@ function WTWJS() {
 /* user settings */	
 
 	/* WTW.walkSpeed - Avatar Related - value set by the menu to adjust the avatar walk speed movement */
-	this.walkSpeed = 2;
+	this.walkSpeed = 2.6;
 	
 	/* WTW.walkAnimationSpeed - Avatar Related - value set by the menu to adjust the avatar walk animation speed */
-	this.walkAnimationSpeed = 2;
+	this.walkAnimationSpeed = 2.6;
 	
 	/* WTW.turnSpeed - Avatar Related - value set by the menu to adjust the avatar turn speed movement */
 	this.turnSpeed = 1;

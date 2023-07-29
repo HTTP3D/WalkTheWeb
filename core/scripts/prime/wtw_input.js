@@ -61,7 +61,9 @@ WTWJS.prototype.inputUp = function(zevent) {
 		WTW.keyPressedRemove(1040); /* backwards */
 		WTW.keyPressedRemove(2040); /* backwards */
 		WTW.keyPressedRemove(1082); /* look up */
+		WTW.keyPressedRemove(2082); /* look up */
 		WTW.keyPressedRemove(1070); /* look down */
+		WTW.keyPressedRemove(2070); /* look down */
 		WTW.cancelWalkToPosition();
 		WTW.swipeDirection.x = 0;
 		WTW.swipeDirection.y = 0;
@@ -626,13 +628,39 @@ WTWJS.prototype.keyDown = function(zevent) {
 				}
 			} else {
 				WTW.cancelWalkToPosition();
-				WTW.keyPressed(zevent.keyCode);
-				return true;
+				if (document.activeElement.id.indexOf('wtw_chatadd-') == -1) {
+					if (zevent.repeat == false) {
+						WTW.keyPressed(zevent.keyCode);
+					}
+				}
 			}
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-keyDown=' + ex.message);
 	}
+}
+
+WTWJS.prototype.keyPressed = function(zkeycode) {
+	/* keyboard pressed, process keys */
+	try {
+		switch (zkeycode) {
+			case 67: /* c */
+				WTW.hudToggleCompass();
+				break;
+			case 76: /* l */
+				WTW.hudLoginToggle();
+				break;
+			case 72: /* h */
+			case 77: /* m */
+				WTW.hudToggle();
+				break;
+			default:
+				WTW.keyPressedAdd(zkeycode);
+				break;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_input.js-keyPressed=' + ex.message);
+    }
 }
 
 WTWJS.prototype.keyUp = function(zevent) {
@@ -658,54 +686,48 @@ WTWJS.prototype.keyUp = function(zevent) {
     }
 }
 
-WTWJS.prototype.keyPressed = function(keycode) {
-	/* keyboard pressed, process keys */
-	try {
-		if (document.activeElement.id.indexOf('wtw_chatadd-') == -1) {
-			switch (keycode) {
-				case 67: /* c */
-					WTW.hudToggleCompass();
-					break;
-				case 76: /* l */
-					WTW.hudLoginToggle();
-					break;
-				case 72: /* h */
-				case 77: /* m */
-					WTW.hudToggle();
-					break;
-				default:
-					WTW.cancelWalkToPosition();
-					WTW.keyPressedAdd(keycode);
-					break;
-			}
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_input.js-keyPressed=' + ex.message);
-    }
-}
-
-WTWJS.prototype.keyPressedAdd = function(keycode) {
+WTWJS.prototype.keyPressedAdd = function(zkeycode) {
 	/* add a keycode or term to the WTW.keysPressed Array to be handled by the avatar movement */
 	/* entered through code function and not necessarily tied to a keyboard */
 	try {
-		if (keycode != undefined) {
-			keycode += '';
-			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
+		if (zkeycode != undefined) {
+			zkeycode += '';
+			if (WTW.canvasFocus == 1 || zkeycode.indexOf('onoption') > -1) {
 				var zfound = false;
+				var zcancel = false;
+				/* check directions to make sure not opposites that should cancel out each other (like right and left at same time) */
+				var zopposite = [];
+				if (zkeycode == 37 || zkeycode == 65 || zkeycode == 1037 || zkeycode == 2037) { /* turn left */
+					zopposite = [39,68,1039,2039];
+				}
+				if (zkeycode == 39 || zkeycode == 68 || zkeycode == 1039 || zkeycode == 2039) { /* turn right */
+					zopposite = [37,65,1037,2037];
+				}
+				if (zkeycode == 81 || zkeycode == 1081 || zkeycode == 2081) { /* strafe left */
+					zopposite = [69,1069,2069];
+				}
+				if (zkeycode == 69 || zkeycode == 1069 || zkeycode == 2069) { /* strafe right */
+					zopposite = [81,1081,2081];
+				}
+				if (zkeycode == 38 || zkeycode == 87 || zkeycode == 1038 || zkeycode == 2038) { /* forward */
+					zopposite = [40,83,1040,2040];
+				}
+				if (zkeycode == 40 || zkeycode == 83 || zkeycode == 1040 || zkeycode == 2040) { /* backwards */
+					zopposite = [38,87,1038,2038];
+				}
 				if (WTW.keysPressed != null) {
-					for (var i=0;i < WTW.keysPressed.length;i++) {
-						if (WTW.keysPressed[i] != null) {
-							if (WTW.keysPressed[i] == keycode) {
-								zfound = true;
-							}
+					for (var i=WTW.keysPressed.length-1;i > -1;i--) {
+						if (WTW.isInArray(zopposite, WTW.keysPressed[i])) {
+							/* opposite found remove it */
+							WTW.keysPressed.splice(i,1);
 						}
 					}
 				}
-				if (zfound == false) {
-					if (WTW.isNumeric(keycode)) {
-						WTW.keysPressed[WTW.keysPressed.length] = Number(keycode);
+				if (WTW.isInArray(WTW.keysPressed, zkeycode) == false) {
+					if (WTW.isNumeric(zkeycode)) {
+						WTW.keysPressed[WTW.keysPressed.length] = Number(zkeycode);
 					} else {
-						WTW.keysPressed[WTW.keysPressed.length] = keycode;
+						WTW.keysPressed[WTW.keysPressed.length] = zkeycode;
 					}
 				}
 			}
@@ -715,20 +737,20 @@ WTWJS.prototype.keyPressedAdd = function(keycode) {
     }
 }
 
-WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
+WTWJS.prototype.keyPressedReplace = function(zreplacekeycode, zkeycode) {
 	/* replace a keycode or term in the WTW.keysPressed Array to be handled by the avatar movement */
 	/* entered through code function and not necessarily tied to a keyboard */
 	try {
-		if (keycode != undefined) {
-			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
+		if (zkeycode != undefined) {
+			if (WTW.canvasFocus == 1 || zkeycode.indexOf('onoption') > -1) {
 				var zfound = false;
 				if (WTW.keysPressed != null) {
 					for (var i=WTW.keysPressed.length-1;i > -1;i--) {
 						if (WTW.keysPressed[i] != null) {
-							if (WTW.keysPressed[i] == replacekeycode) {
+							if (WTW.keysPressed[i] == zreplacekeycode) {
 								WTW.keysPressed.splice(i, 1);
 							}
-							if (WTW.keysPressed[i] == keycode) {
+							if (WTW.keysPressed[i] == zkeycode) {
 								zfound = true;
 							}
 						} else {
@@ -737,7 +759,7 @@ WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
 					}
 				}
 				if (zfound == false) {
-					WTW.keysPressed[WTW.keysPressed.length] = keycode;
+					WTW.keysPressed[WTW.keysPressed.length] = zkeycode;
 				}
 			}
 		}
@@ -746,20 +768,21 @@ WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
     }
 }
 
-WTWJS.prototype.keyPressedRemove = function(keycode) {
+WTWJS.prototype.keyPressedRemove = function(zkeycode) {
 	/* remove a keycode or term from the WTW.keysPressed Array to be handled by the avatar movement */
 	/* entered through code function and not necessarily tied to a keyboard */
 	try {
-		if (keycode != undefined) {
+		if (zkeycode != undefined) {
 			var zonoption = -1;
-			if (WTW.isNumeric(keycode) == false) {
-				zonoption = keycode.indexOf('onoption');
+			if (WTW.isNumeric(zkeycode) == false) {
+				zonoption = zkeycode.indexOf('onoption');
 			}
 			if (WTW.canvasFocus == 1 || zonoption > -1) {
-				if (WTW.keysPressed != null) {
+				/* clear if not space bar */
+				if (WTW.keysPressed != null && zkeycode != 32) {
 					for (var i=WTW.keysPressed.length-1;i > -1;i--) {
 						if (WTW.keysPressed[i] != null) {
-							if (WTW.keysPressed[i] == keycode) {
+							if (WTW.keysPressed[i] == zkeycode) {
 								WTW.keysPressed.splice(i, 1);
 							}
 						} else {
@@ -1328,6 +1351,8 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				case 9: // tab
 					break;
 				case 13: //String.fromCharCode(182).toLowerCase()
+					break;
+				case 17: // ctrl
 					break;
 				case 27: // esc
 					break;

@@ -397,8 +397,6 @@ WTWJS.prototype.teleport = function(zactionzoneind) {
 		} else if (thingid != '') {
 			zoldwebid = thingid;
 			zoldwebtype = 'thing';
-		} else {
-			
 		}
 		if (WTW.actionZones[zactionzoneind] != null) {
 			if (WTW.actionZones[zactionzoneind].teleportwebid != undefined) {

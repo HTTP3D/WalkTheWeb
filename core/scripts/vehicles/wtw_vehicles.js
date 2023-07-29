@@ -95,8 +95,8 @@ WTWJS.prototype.moveAvatarVehicle = function(zavatar, zkeyspressed) {
 								WTW.keyPressedRemove(1040);
 								WTW.keyPressedRemove(2040);
 								break;
-							case 37: //arrow q rotate left
-							case 81: //q rotate left
+							case 37: //arrow rotate left
+							case 65: //a rotate left
 							case 1037: //mouse rotate left
 							case 2037: //mouse rotate left
 								if (WTW.shiftKey) {
@@ -105,8 +105,8 @@ WTWJS.prototype.moveAvatarVehicle = function(zavatar, zkeyspressed) {
 									zanim = 'onturnleft';
 								}
 								break;
-							case 39: //arrow e rotate right
-							case 69: //e rotate right
+							case 39: //arrow rotate right
+							case 68: //d rotate right
 							case 1039: //mouse rotate right
 							case 2039: //mouse rotate right
 								if (WTW.shiftKey) {
@@ -115,18 +115,18 @@ WTWJS.prototype.moveAvatarVehicle = function(zavatar, zkeyspressed) {
 									zanim = 'onturnright';
 								}
 								break;
-							case 65: //a strafe left
-							case 1065: //mouse strafe left
-							case 2065: //mouse strafe left
+							case 81: //q strafe left
+							case 1081: //mouse strafe left
+							case 2081: //mouse strafe left
 								if (WTW.shiftKey) {
 									zanim = 'onrunstrafeleft';
 								} else {
 									zanim = 'onstrafeleft';
 								}
 								break;
-							case 68: //d strafe right
-							case 1068: //mouse strafe right
-							case 2068: //mouse strafe right
+							case 69: //e strafe right
+							case 1069: //mouse strafe right
+							case 2069: //mouse strafe right
 								if (WTW.shiftKey) {
 									zanim = 'onrunstraferight';
 								} else {

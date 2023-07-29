@@ -1724,6 +1724,11 @@ WTWJS.prototype.setGroundWater = function() {
 			var zwaterpositiony = -50;
 			var zwatercolorrefraction = '#23749C';
 			var zwatercolorreflection = '#52BCF1';
+			if (WTW.water != null) {
+				WTW.water.material.dispose();
+				WTW.water.dispose();
+				WTW.water = null;
+			}
 
 			if (WTW.isNumeric(dGet('wtw_tgroundpositiony').value)) {
 				zgroundpositiony = Number(dGet('wtw_tgroundpositiony').value);
@@ -1738,125 +1743,130 @@ WTWJS.prototype.setGroundWater = function() {
 			if (WTW.extraGround != null) {
 				WTW.extraGround.position.y = zgroundpositiony;
 			}
-			if (WTW.water != null) {
-
-				if (dGet('wtw_twaterbumppath').value == '') {
-					dGet('wtw_twaterbumppath').value = '/content/system/images/waterbump.png';
-				}
-				if (WTW.water != null) {
-					WTW.water.material.dispose();
-					WTW.water.dispose();
-					WTW.water = null;
-				}
-				/* create water */
-				if (WTW.isNumeric(dGet('wtw_twatersubdivisions').value)) {
-					if (Number(dGet('wtw_twatersubdivisions').value) < 2) {
-						dGet('wtw_twatersubdivisions').value = 2;
-					}
-				} else {
+			if (dGet('wtw_twaterbumppath').value == '') {
+				dGet('wtw_twaterbumppath').value = '/content/system/images/waterbump.png';
+			}
+			if (WTW.isNumeric(dGet('wtw_twatersubdivisions').value)) {
+				if (Number(dGet('wtw_twatersubdivisions').value) < 2) {
 					dGet('wtw_twatersubdivisions').value = 2;
 				}
-			
-				WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(Number(dGet('wtw_twatersubdivisions').value)), scene, false);
-			
-				WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
-				WTW.waterMat.bumpTexture = new BABYLON.Texture(dGet('wtw_twaterbumppath').value, scene);
-				WTW.water.position.y = zwaterpositiony;
-				WTW.init.waterBumpPath = dGet('wtw_twaterbumppath').value;
-				WTW.init.waterSubdivisions = dGet('wtw_twatersubdivisions').value;
-				if (WTW.isNumeric(dGet('wtw_twaterbumpheight').value)) {
-					if (Number(dGet('wtw_twaterbumpheight').value) < 0) {
-						dGet('wtw_twaterbumpheight').value = 0;
-					}
-					WTW.waterMat.bumpHeight = Number(dGet('wtw_twaterbumpheight').value);
-				} else {
-					WTW.waterMat.bumpHeight = 0;
-				}
-				if (WTW.isHexColor(dGet('wtw_twatercolorrefraction').value)) {
-					zwatercolorrefraction = dGet('wtw_twatercolorrefraction').value;
-				}
-				if (WTW.isHexColor(dGet('wtw_twatercolorreflection').value)) {
-					zwatercolorreflection = dGet('wtw_twatercolorreflection').value;
-				}
-				WTW.waterMat.waterColor = new BABYLON.Color3.FromHexString(zwatercolorrefraction); 
-				/* water color blended with the refraction (near) */
-				WTW.waterMat.waterColor2 = new BABYLON.Color3.FromHexString(zwatercolorreflection); 
-				/* water color blended with the reflection (far) */
-				if (WTW.isNumeric(dGet('wtw_twatercolorblendfactor').value)) {
-					if (Number(dGet('wtw_twatercolorblendfactor').value) < 0) {
-						dGet('wtw_twatercolorblendfactor').value = 0;
-					} else if (Number(dGet('wtw_twatercolorblendfactor').value) > 10) {
-						dGet('wtw_twatercolorblendfactor').value = 10;
-					}
-					WTW.waterMat.colorBlendFactor = Number(dGet('wtw_twatercolorblendfactor').value);
-				} else {
-					WTW.waterMat.colorBlendFactor = .2;
-				}
-				if (WTW.isNumeric(dGet('wtw_twatercolorblendfactor2').value)) {
-					if (Number(dGet('wtw_twatercolorblendfactor2').value) < 0) {
-						dGet('wtw_twatercolorblendfactor2').value = 0;
-					} else if (Number(dGet('wtw_twatercolorblendfactor2').value) > 10) {
-						dGet('wtw_twatercolorblendfactor2').value = 10;
-					}
-					WTW.waterMat.colorBlendFactor2 = Number(dGet('wtw_twatercolorblendfactor2').value);
-				} else {
-					WTW.waterMat.colorBlendFactor2 = .2;
-				}
-				if (WTW.isNumeric(dGet('wtw_twaterwindforce').value)) {
-					WTW.waterMat.windForce = dGet('wtw_twaterwindforce').value;
-				} else {
-					WTW.waterMat.windForce = -10;
-				}
-				if (WTW.isNumeric(dGet('wtw_twaterwinddirectionx').value) && WTW.isNumeric(dGet('wtw_twaterwinddirectionz').value)) {
-					if (Number(dGet('wtw_twaterwinddirectionx').value) < -1) {
-						dGet('wtw_twaterwinddirectionx').value = -1;
-					} else if (Number(dGet('wtw_twaterwinddirectionx').value) > 1) {
-						dGet('wtw_twaterwinddirectionx').value = 1;
-					}
-					if (Number(dGet('wtw_twaterwinddirectionz').value) < -1) {
-						dGet('wtw_twaterwinddirectionz').value = -1;
-					} else if (Number(dGet('wtw_twaterwinddirectionz').value) > 1) {
-						dGet('wtw_twaterwinddirectionz').value = 1;
-					}
-					WTW.waterMat.windDirection = new BABYLON.Vector2(Number(dGet('wtw_twaterwinddirectionx').value), Number(dGet('wtw_twaterwinddirectionz').value));
-				} else {
-					WTW.waterMat.windDirection = new BABYLON.Vector2(1, 1);
-				}
-				if (WTW.isNumeric(dGet('wtw_twaterwaveheight').value)) {
-					if (Number(dGet('wtw_twaterwaveheight').value) < 0) {
-						dGet('wtw_twaterwaveheight').value = 0;
-					}
-					WTW.waterMat.waveHeight = Number(dGet('wtw_twaterwaveheight').value);
-				} else {
-					WTW.waterMat.waveHeight = .2;
-				}
-				if (WTW.isNumeric(dGet('wtw_twaterwavelength').value)) {
-					if (Number(dGet('wtw_twaterwavelength').value) < 0) {
-						dGet('wtw_twaterwavelength').value = 0;
-					}
-					WTW.waterMat.waveLength = Number(dGet('wtw_twaterwavelength').value);	
-				} else {
-					WTW.waterMat.waveLength = .02;	
-				}
-				if (WTW.isNumeric(dGet('wtw_twateralpha').value)) {
-					if (Number(dGet('wtw_twateralpha').value) < 0) {
-						dGet('wtw_twateralpha').value = 0;
-					} else if (Number(dGet('wtw_twateralpha').value) > 100) {
-						dGet('wtw_twateralpha').value = 100;
-					}
-					WTW.waterMat.alpha = Number(dGet('wtw_twateralpha').value) / 100;
-				} else {
-					WTW.waterMat.alpha = .9;
-				}
-				WTW.waterMat.backFaceCulling = true;
-				WTW.water.isPickable = false;
-				WTW.water.checkCollisions = false;
-				WTW.water.material = WTW.waterMat;
-				WTW.waterMat.addToRenderList(WTW.sky);
-				WTW.waterMat.addToRenderList(WTW.extraGround);
+			} else {
+				dGet('wtw_twatersubdivisions').value = 2;
 			}
-			dGet('wtw_twaterpositiony').value = zwaterpositiony;
+			if (WTW.isNumeric(dGet('wtw_twaterbumpheight').value)) {
+				if (Number(dGet('wtw_twaterbumpheight').value) < 0) {
+					dGet('wtw_twaterbumpheight').value = 0;
+				}
+			} else {
+				dGet('wtw_twaterbumpheight').value = 0;
+			}
+			if (WTW.isNumeric(dGet('wtw_twaterwindforce').value) == false) {
+				dGet('wtw_twaterwindforce').value = -10;
+			}
+			if (WTW.isNumeric(dGet('wtw_twaterwinddirectionx').value) && WTW.isNumeric(dGet('wtw_twaterwinddirectionz').value)) {
+				if (Number(dGet('wtw_twaterwinddirectionx').value) < -1) {
+					dGet('wtw_twaterwinddirectionx').value = -1;
+				} else if (Number(dGet('wtw_twaterwinddirectionx').value) > 1) {
+					dGet('wtw_twaterwinddirectionx').value = 1;
+				}
+				if (Number(dGet('wtw_twaterwinddirectionz').value) < -1) {
+					dGet('wtw_twaterwinddirectionz').value = -1;
+				} else if (Number(dGet('wtw_twaterwinddirectionz').value) > 1) {
+					dGet('wtw_twaterwinddirectionz').value = 1;
+				}
+			} else {
+				dGet('wtw_twaterwinddirectionx').value = 1;
+				dGet('wtw_twaterwinddirectionz').value = 1;
+			}
+			if (WTW.isHexColor(dGet('wtw_twatercolorrefraction').value) == false) {
+				zwatercolorrefraction = dGet('wtw_twatercolorrefraction').value;
+			}
+			if (WTW.isHexColor(dGet('wtw_twatercolorreflection').value) == false) {
+				zwatercolorreflection = dGet('wtw_twatercolorreflection').value;
+			}
+			if (WTW.isNumeric(dGet('wtw_twatercolorblendfactor').value)) {
+				if (Number(dGet('wtw_twatercolorblendfactor').value) < 0) {
+					dGet('wtw_twatercolorblendfactor').value = 0;
+				} else if (Number(dGet('wtw_twatercolorblendfactor').value) > 10) {
+					dGet('wtw_twatercolorblendfactor').value = 10;
+				}
+			} else {
+				dGet('wtw_twatercolorblendfactor').value = 0.2;
+			}
+			if (WTW.isNumeric(dGet('wtw_twatercolorblendfactor2').value)) {
+				if (Number(dGet('wtw_twatercolorblendfactor2').value) < 0) {
+					dGet('wtw_twatercolorblendfactor2').value = 0;
+				} else if (Number(dGet('wtw_twatercolorblendfactor2').value) > 10) {
+					dGet('wtw_twatercolorblendfactor2').value = 10;
+				}
+			} else {
+				dGet('wtw_twatercolorblendfactor2').value = 0.2;
+			}
+			if (WTW.isNumeric(dGet('wtw_twaterwaveheight').value)) {
+				if (Number(dGet('wtw_twaterwaveheight').value) < 0) {
+					dGet('wtw_twaterwaveheight').value = 0;
+				}
+			} else {
+				dGet('wtw_twaterwaveheight').value = 0.2;
+			}
+			if (WTW.isNumeric(dGet('wtw_twaterwavelength').value)) {
+				if (Number(dGet('wtw_twaterwavelength').value) < 0) {
+					dGet('wtw_twaterwavelength').value = 0;
+				}
+			} else {
+				dGet('wtw_twaterwavelength').value = 0.2;
+			}
+			if (WTW.isNumeric(dGet('wtw_twateralpha').value)) {
+				if (Number(dGet('wtw_twateralpha').value) < 0) {
+					dGet('wtw_twateralpha').value = 0;
+				} else if (Number(dGet('wtw_twateralpha').value) > 100) {
+					dGet('wtw_twateralpha').value = 100;
+				}
+			} else {
+				dGet('wtw_twateralpha').value = 0.9;
+			}
+			/* create water */
+			WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
+			if (WTW.water != null) {
+				WTW.water.material.dispose();
+				WTW.water.dispose();
+				WTW.water = null;
+			}
+			if (WTW.adminView == 1 && communityid != '' && WTW.init.groundPositionY == 0) {
+				zwaterpositiony = -50;
+			}
+			/* create water */
+			WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(Number(dGet('wtw_twatersubdivisions').value)), scene, false);
+			
+			WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
+			
+			WTW.waterMat.bumpTexture = new BABYLON.Texture(dGet('wtw_twaterbumppath').value, scene);
+			WTW.waterMat.bumpHeight = Number(dGet('wtw_twaterbumpheight').value);
+
+			WTW.waterMat.windForce = Number(dGet('wtw_twaterwindforce').value);
+			WTW.waterMat.windDirection = new BABYLON.Vector2(Number(dGet('wtw_twaterwinddirectionx').value), Number(dGet('wtw_twaterwinddirectionz').value));
+
+			WTW.waterMat.waveHeight = Number(dGet('wtw_twaterwaveheight').value);
+			WTW.waterMat.waveLength = Number(dGet('wtw_twaterwavelength').value);	
+
+			/* water color blended with the refraction (near) */
+			WTW.waterMat.waterColor = new BABYLON.Color3.FromHexString(zwatercolorrefraction); 
+			WTW.waterMat.colorBlendFactor = Number(dGet('wtw_twatercolorblendfactor').value);
+			/* water color blended with the reflection (far) */
+			WTW.waterMat.waterColor2 = new BABYLON.Color3.FromHexString(zwatercolorreflection); 
+			WTW.waterMat.colorBlendFactor2 = Number(dGet('wtw_twatercolorblendfactor2').value);
+
+			WTW.waterMat.alpha = Number(dGet('wtw_twateralpha').value);
+			WTW.waterMat.backFaceCulling = true;
+			WTW.water.isPickable = false;
+			WTW.water.checkCollisions = false;
+			WTW.water.material = WTW.waterMat;
+			WTW.water.renderingGroupId = 1;
+			WTW.water.position.y = zwaterpositiony;
+			WTW.waterMat.addToRenderList(WTW.sky);
+			WTW.waterMat.addToRenderList(WTW.extraGround);
 		}
+		dGet('wtw_twaterpositiony').value = zwaterpositiony;
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admincommunities.js-setGroundWater=' + ex.message);
 	}

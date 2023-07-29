@@ -390,6 +390,10 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 								let zavatarparent = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 								let zframetotal = WTW.getLastAnimationKey(zavatar) + zanimationind;
 								let zskeleton = zresponse.skeletons[0];
+								let zanimationloop = true;
+								if (zanimation.animationloop != 1) {
+									zanimationloop = false;
+								}
 								if (zskeleton.parent == null) {
 									zskeleton.parent = zavatarparent;
 								}
@@ -429,14 +433,47 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										zavatar.WTW.animations[zanimationind].totalstartframe = ztotalstartframe;
 										zavatar.WTW.animations[zanimationind].totalendframe = ztotalendframe;
 									}
+									let zonanimationloop = null;
+									if (zanimation.animationevent.indexOf('jump') > -1) {
+										zonanimationloop = function() {
+											var zanimationevent = zanimation.animationevent;
+											var zstartframe = zframetotal;
+											var zendframe = ztotalendframe;
+											/* remove space bar from keysPressed */
+											if (zavatar.WTW.animations.running[zanimationevent].weight == 1) {
+												if (WTW.keysPressed != null) {
+													for (var i=WTW.keysPressed.length-1;i > -1;i--) {
+														if (WTW.keysPressed[i] != null) {
+															if (WTW.keysPressed[i] == 32) {
+																WTW.keysPressed.splice(i, 1);
+															}
+														}
+													}
+												}
+												/* allow animation to become inactive */
+												zavatar.WTW.animations.running[zanimationevent].weight = .99;
+												zavatar.WTW.animations.running[zanimationevent].active = 0;
+											}
+										};
+									}
 									/* start animation - may be set to weight 0 and not executing, but running */
 									if (zenteranimate) {
-										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
+										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
+										if (zonanimationloop != null) {
+											zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
+										}
+										zavatar.WTW.animations.running[zanimation.animationevent].startframe = zframetotal;
+										zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
 										zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
 										zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
 									}
 									if (zenteranimate == false) {
-										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
+										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
+										if (zonanimationloop != null) {
+											zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
+										}
+										zavatar.WTW.animations.running[zanimation.animationevent].startframe = zframetotal;
+										zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
 										zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
 										zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
 									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {

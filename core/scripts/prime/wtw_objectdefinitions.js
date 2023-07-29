@@ -171,6 +171,7 @@ WTWJS.prototype.newActionZone = function() {
 			'parentactionzoneid':'',
 			'teleportwebid':'',
 			'teleportwebtype':'',
+			'spawnactionzoneid':'',
 			'movementtype':'',
 			'rotatespeed':'1.00',
 			'value1':'0.00',

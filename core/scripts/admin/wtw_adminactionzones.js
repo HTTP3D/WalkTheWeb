@@ -741,10 +741,14 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 			var zactionzoneind = Number(dGet('wtw_tactionzoneind').value);
 			var zloadactionzoneid = WTW.getDDLValue('wtw_tazloadactionzoneid');
 			var zteleportwebtype = '';
-			var zteleportwebid = WTW.getDDLValue('wtw_tazteleportzoneid');
-			var zspawnactionzoneid = WTW.getDDLValue('wtw_tazspawnzoneid');
-			if (zteleportwebid != '') {
-				zteleportwebtype = 'community';
+			var zteleportwebid = '';
+			var zspawnactionzoneid = '';
+			if (dGet('wtw_tactionzonetype').value == 'teleportzone') {
+				zteleportwebid = WTW.getDDLValue('wtw_tazteleportzoneid');
+				zspawnactionzoneid = WTW.getDDLValue('wtw_tazspawnzoneid');
+				if (zteleportwebid != '') {
+					zteleportwebtype = 'community';
+				}
 			}
 			if (zactionzonename == 'Extreme Load Zone') {
 				zloadactionzoneid = '';

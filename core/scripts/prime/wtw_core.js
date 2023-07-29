@@ -352,7 +352,9 @@ WTWJS.prototype.initEnvironment = async function() {
 		} else {
 //			engine.enableOfflineSupport = WTW.enableOfflineSupport;
 		}
-		
+		/* prevent 3d Scene unloading when browser tab is not in focus */
+		engine.renderEvenInBackground = true;
+
 		/* initialize scene */
 		scene = new BABYLON.Scene(engine);        
 		scene.name = 'WalkTheWeb';
@@ -966,7 +968,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 			WTW.water.material = WTW.waterMat;
 			WTW.water.renderingGroupId = 1;
 			WTW.water.position.y = WTW.init.waterPositionY;
-//			WTW.waterMat.addToRenderList(WTW.sky);
+			WTW.waterMat.addToRenderList(WTW.sky);
 			WTW.waterMat.addToRenderList(WTW.extraGround);
 		}
 		

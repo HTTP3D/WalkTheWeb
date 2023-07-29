@@ -53,7 +53,6 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[0].additionalscript = '';
 				zobjectanimations[0].additionalparameters = '';
 				break;
-			case "Enter":
 			case "Login Menu":
 				zobjectfile = 'wtw-loginmenu.babylon';
 				
@@ -111,17 +110,43 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[4].speedratio = 1.00;
 				zobjectanimations[4].additionalscript = '';
 				zobjectanimations[4].additionalparameters = '';
+				break;
+			case "Enter":
+			case "Enter Menu":
+				zobjectfile = 'wtw-entermenu.babylon';
+				
+				zobjectanimations[0] = WTW.newObjectAnimation();
+				zobjectanimations[0].animationname = 'HUDLOGINonloadentermenu';
+				zobjectanimations[0].moldevent = 'onload';
+				zobjectanimations[0].moldnamepart = '';
+				zobjectanimations[0].startframe = 80;
+				zobjectanimations[0].endframe = 100;
+				zobjectanimations[0].animationloop = false;
+				zobjectanimations[0].speedratio = 1.00;
+				zobjectanimations[0].additionalscript = '';
+				zobjectanimations[0].additionalparameters = '';
+				
+				zobjectanimations[1] = WTW.newObjectAnimation();
+				zobjectanimations[1].animationname = 'HUDLOGINbuttonenter';
+				zobjectanimations[1].moldevent = 'onclick';
+				zobjectanimations[1].moldnamepart = 'button-enter';
+				zobjectanimations[1].startframe = 1;
+				zobjectanimations[1].endframe = 20;
+				zobjectanimations[1].animationloop = false;
+				zobjectanimations[1].speedratio = 1.00;
+				zobjectanimations[1].additionalscript = '';
+				zobjectanimations[1].additionalparameters = '';
 
-				zobjectanimations[5] = WTW.newObjectAnimation();
-				zobjectanimations[5].animationname = 'HUDLOGINbuttonenter';
-				zobjectanimations[5].moldevent = 'onclick';
-				zobjectanimations[5].moldnamepart = 'button-enter';
-				zobjectanimations[5].startframe = 100;
-				zobjectanimations[5].endframe = 120;
-				zobjectanimations[5].animationloop = false;
-				zobjectanimations[5].speedratio = 1.00;
-				zobjectanimations[5].additionalscript = '';
-				zobjectanimations[5].additionalparameters = '';
+				zobjectanimations[2] = WTW.newObjectAnimation();
+				zobjectanimations[2].animationname = 'HUDLOGINbuttonenterlogin';
+				zobjectanimations[2].moldevent = 'onclick';
+				zobjectanimations[2].moldnamepart = 'button-enterlogin';
+				zobjectanimations[2].startframe = 20;
+				zobjectanimations[2].endframe = 40;
+				zobjectanimations[2].animationloop = false;
+				zobjectanimations[2].speedratio = 1.00;
+				zobjectanimations[2].additionalscript = '';
+				zobjectanimations[2].additionalparameters = '';
 
 				break;
 			case "User Menu":
@@ -433,7 +458,6 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 
 				break;
 		}
-
 		BABYLON.SceneLoader.ImportMeshAsync('', zobjectfolder, zobjectfile, scene).then(
 			function (zresults) {
 				if (zresults.meshes != null) {
@@ -453,19 +477,16 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 							
 							/* make sure child meshes are pickable */
 							switch (zmeshname) {
+								case 'entermenubox':
+									zresults.meshes[i].isPickable = false;
+									zresults.meshes[i].isVisible = false;
+									break;
 								case 'loginmenubox':
 									zresults.meshes[i].isPickable = false;
-									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
-										zresults.meshes[i].isVisible = false;
-									} else {
-										zresults.meshes[i].isVisible = true;
-									}									
+									zresults.meshes[i].isVisible = true;
 									break;
 								case 'button-loginwtw':
-									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									} else if (WTW.globalLogins == '1') {
+									if (WTW.globalLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 									} else {
@@ -478,17 +499,14 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									break;
 								case 'button-loginwtwtext':
 									zresults.meshes[i].isPickable = false;
-									if (WTW.isInitCycle == 1 || WTW.globalLogins != '1' || zpage == 'Enter') {
+									if (WTW.globalLogins != '1') {
 										zresults.meshes[i].isVisible = false;
 									} else {
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
 								case 'button-loginlocal':
-									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									} else if (WTW.localLogins == '1') {
+									if (WTW.localLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 									} else {
@@ -501,17 +519,14 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									break;
 								case 'button-loginlocaltext':
 									zresults.meshes[i].isPickable = false;
-									if (WTW.isInitCycle == 1 || WTW.localLogins != '1' || zpage == 'Enter') {
+									if (WTW.localLogins != '1') {
 										zresults.meshes[i].isVisible = false;
 									} else {
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
 								case 'button-loginguest':
-									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									} else if (WTW.anonymousLogins == '1') {
+									if (WTW.anonymousLogins == '1') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 									} else {
@@ -521,14 +536,15 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									break;
 								case 'button-loginguesttext':
 									zresults.meshes[i].isPickable = false;
-									if (WTW.isInitCycle == 1 || WTW.anonymousLogins != '1' || zpage == 'Enter') {
+									if (WTW.anonymousLogins != '1') {
 										zresults.meshes[i].isVisible = false;
 									} else {
 										zresults.meshes[i].isVisible = true;
 									}
 									break;
+								case 'button-enterlogin':
 								case 'button-enter':
-									if (zpage == 'Enter') {
+									if (zpage == 'Enter Menu') {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = true;
 									} else if (WTW.isInitCycle == 1) {
@@ -539,30 +555,22 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
+								case 'button-enterlogintext':
 								case 'button-entertext':
 									zresults.meshes[i].isPickable = false;
-									if (zpage == 'Enter') {
+									if (zpage == 'Enter Menu') {
 										zresults.meshes[i].isVisible = true;
 									} else {
 										zresults.meshes[i].isVisible = false;
 									}
 									break;
 								case 'button-closeloginmenu':
-									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
-										zresults.meshes[i].isPickable = false;
-										zresults.meshes[i].isVisible = false;
-									} else {
-										zresults.meshes[i].isPickable = true;
-										zresults.meshes[i].isVisible = true;
-									}
+									zresults.meshes[i].isPickable = true;
+									zresults.meshes[i].isVisible = true;
 									break;
 								case 'button-closeloginmenutext':
 									zresults.meshes[i].isPickable = false;
-									if (WTW.isInitCycle == 1 || zpage == 'Enter') {
-										zresults.meshes[i].isVisible = false;
-									} else {
-										zresults.meshes[i].isVisible = true;
-									}
+									zresults.meshes[i].isVisible = true;
 									break;
 								case 'button-avatarselect':
 								case 'button-editprofile':
@@ -865,6 +873,7 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-reset':
 			case 'hudlogin-button-login':
 			case 'hudlogin-button-enter':
+			case 'hudlogin-button-enterlogin':
 			case 'hudlogin-button-save':
 				/* larger main buttons */
 				if (zhover == 1) {
@@ -942,22 +951,17 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 				window.setTimeout(function() {
 					if (zmoldname == 'hudlogin-button-loginlocal') {
 						/* login menu */
-						if (dGet('wtw_tuserid').value == '') {
-							WTW.openLoginHUD('3D Website Login');
-						} else {
+						if (dGet('wtw_tuserid').value != '') {
 							WTW.logout();
-							WTW.openLoginHUD('3D Website Login');
 						}
+						WTW.openLoginHUD('3D Website Login');
 					} else if (zmoldname == 'hudlogin-button-enter') {
 						WTW.hudLoginEnter();
-					} else if (zmoldname == 'hudlogin-button-loginguest') {
-						/* login menu */
-						WTW.openLoginHUD('Select My Avatar');
 					} else if (zmoldname == 'hudlogin-button-editprofile') {
 						/* open edit profile */
 						WTW.closeLoginHUD();
 						WTW.openLocalLogin('Edit Profile', .4, .6);
-					} else if (zmoldname == 'hudlogin-button-avatarselect') {
+					} else if (zmoldname == 'hudlogin-button-loginguest' || zmoldname == 'hudlogin-button-avatarselect') {
 						/* select my avatar */
 						WTW.openLoginHUD('Select My Avatar');
 					} else if (zmoldname == 'hudlogin-button-editavatar') {
@@ -990,20 +994,14 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						/* reset password */
 						//WTW.openLoginHUD('Reset Password'); /* 3d form is not ready */
 						WTW.openLocalLogin('Recover Login', .4, .5);
-					} else if (zmoldname == 'hudlogin-button-cancellogin') {
-						/* login */
-						WTW.openLoginHUDLogin();
 					} else if (zmoldname == 'hudlogin-button-create') {
 						/* create login */
 						WTW.hudLoginCreate();
-					} else if (zmoldname == 'hudlogin-button-cancelcreate') {
-						/* create login */
-						WTW.openLoginHUDLogin();
 					} else if (zmoldname == 'hudlogin-button-reset') {
 						/* reset password */
 						
-					} else if (zmoldname == 'hudlogin-button-cancelreset') {
-						/* cancel reset password */
+					} else if (zmoldname == 'hudlogin-button-enterlogin' || zmoldname == 'hudlogin-button-cancellogin' || zmoldname == 'hudlogin-button-cancelcreate' || zmoldname == 'hudlogin-button-cancelreset') {
+						/* open hud login */
 						WTW.openLoginHUDLogin();
 					} else if (zmoldname == 'hudlogin-button-next') {
 						/* select avatar - show next avatar */
@@ -1014,10 +1012,7 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 					} else if (zmoldname == 'hudlogin-button-save' || zmoldname == 'hudlogin-preview') {
 						/* select avatar - save selection and display name */
 						WTW.hudLoginSaveAvatar();
-					} else if (zmoldname == 'hudlogin-button-cancelselect') {
-						/* cancel select avatar */
-						WTW.closeLoginHUD();
-					} else if (zmoldname == 'hudlogin-button-close' || zmoldname == 'hudlogin-button-closeloginmenu') {
+					} else if (zmoldname == 'hudlogin-button-close' || zmoldname == 'hudlogin-button-closeloginmenu' || zmoldname == 'hudlogin-button-cancelselect') {
 						WTW.closeLoginHUD();
 					}
 					/* allow plugins to add code */
@@ -1034,20 +1029,28 @@ WTWJS.prototype.hudLoginShowEnter = function() {
 	/* show enter button */
 	try {
 		if (WTW.placeHolder == 1) {
-			var zloginmenubox = WTW.getMeshOrNodeByID('hudlogin-loginmenubox');
-			if (zloginmenubox != null) {
-				if (dGet('wtw_tuserid').value == '' && zloginmenubox.isVisible == false) {
+			var zentermenubox = WTW.getMeshOrNodeByID('hudlogin-entermenubox');
+			if (zentermenubox != null) {
+				if (dGet('wtw_tuserid').value == '' && zentermenubox.isVisible == false) {
 					var zenter = WTW.getMeshOrNodeByID('hudlogin-button-enter');
 					var zentertext = WTW.getMeshOrNodeByID('hudlogin-button-entertext');
+					var zenterlogin = WTW.getMeshOrNodeByID('hudlogin-button-enterlogin');
+					var zenterlogintext = WTW.getMeshOrNodeByID('hudlogin-button-enterlogintext');
 					if (zenter != null) {
 						zenter.isVisible = true;
 					}
 					if (zentertext != null) {
 						zentertext.isVisible = true;
 					}
+					if (zenterlogin != null) {
+						zenterlogin.isVisible = true;
+					}
+					if (zenterlogintext != null) {
+						zenterlogintext.isVisible = true;
+					}
 				}
 			} else {
-				WTW.openLoginHUD('Enter');
+				WTW.openLoginHUD('Enter Menu');
 			}
 		}
 	} catch (ex) {
