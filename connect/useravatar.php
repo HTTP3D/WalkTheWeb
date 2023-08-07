@@ -231,11 +231,32 @@ try {
 		/* get the user avatar animations (the rest are stored in the useravataranimations table) */
 		$i = 1;
 		$zresults = $wtwconnect->query("
-			select *	
-			from ".wtw_tableprefix."useravataranimations
-			where useravatarid='".$zfounduseravatarid."'
-				and deleted=0
-			order by loadpriority desc, animationevent, avataranimationid, useravataranimationid;");
+			select a1.* 
+				from ".wtw_tableprefix."useravataranimations a1
+				inner join (
+					select animationevent, max(updatedate) as updatedate, max(useravataranimationid) as useravataranimationid 
+					from ".wtw_tableprefix."useravataranimations 
+					where useravatarid='".$zfounduseravatarid."'
+						and deleted=0
+						and not animationevent='onoption'
+					group by animationevent) a2
+				on a1.useravataranimationid = a2.useravataranimationid
+				where a1.useravatarid='".$zfounduseravatarid."' 
+					and a1.deleted=0
+			union
+			select a3.* 
+				from ".wtw_tableprefix."useravataranimations a3
+				inner join (
+					select animationfriendlyname, max(updatedate) as updatedate, max(useravataranimationid) as useravataranimationid 
+					from ".wtw_tableprefix."useravataranimations 
+					where useravatarid='".$zfounduseravatarid."'
+						and deleted=0
+						and animationevent='onoption'
+					group by animationfriendlyname) a4
+				on a3.useravataranimationid = a4.useravataranimationid
+				where a3.useravatarid='".$zfounduseravatarid."' 
+					and a3.deleted=0
+			order by loadpriority desc, animationevent, animationfriendlyname, useravataranimationid;");
 		foreach ($zresults as $zrow) {
 			$zavataranimationdefs[$i] = array(
 				'animationind'=> $i,

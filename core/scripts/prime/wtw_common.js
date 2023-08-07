@@ -208,8 +208,10 @@ WTWJS.prototype.setShownActionZones = function() {
 						zloadazshown = WTW.actionZones[zloadazind].shown;
 					}
 				} else {
-					if (WTW.isNumeric(WTW.connectingGrids[zconnectinggridind].status)) {
-						zloadazstatus = Number(WTW.connectingGrids[zconnectinggridind].status);
+					if (WTW.connectingGrids[zconnectinggridind] != null) {
+						if (WTW.isNumeric(WTW.connectingGrids[zconnectinggridind].status)) {
+							zloadazstatus = Number(WTW.connectingGrids[zconnectinggridind].status);
+						}
 					}
 				}
 				if (WTW.actionZones[i].actionzonetype == 'loadzone' && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
@@ -1731,7 +1733,7 @@ WTWJS.prototype.processMoldQueue = function() {
 												zmold.isPickable = true;
 												zmold.renderingGroupId = 1;
 											}
-											if (znode == null) {
+											if (zmold != null && znode == null) {
 												zmold.checkCollisions = false;
 												if (zmolddef.checkcollisions != undefined) {
 													if (zmolddef.checkcollisions == '1') {

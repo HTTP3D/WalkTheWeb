@@ -44,11 +44,32 @@ try {
 
 	/* pull avatar animations by id */
 	$zresults = $wtwconnect->query("
-		select * 
-		from ".wtw_tableprefix."avataranimations
-		where avatarid='".$zavatarid."' 
-				and deleted=0
-		order by loadpriority desc, animationfriendlyname, animationevent, avataranimationid;");
+		select a1.* 
+			from ".wtw_tableprefix."avataranimations a1
+			inner join (
+				select animationevent, max(updatedate) as updatedate, max(avataranimationid) as avataranimationid 
+				from ".wtw_tableprefix."avataranimations 
+				where avatarid='".$zavatarid."'
+					and deleted=0
+					and not animationevent='onoption'
+				group by animationevent) a2
+			on a1.avataranimationid = a2.avataranimationid
+			where a1.avatarid='".$zavatarid."' 
+				and a1.deleted=0
+		union
+		select a3.* 
+			from ".wtw_tableprefix."avataranimations a3
+			inner join (
+				select animationfriendlyname, max(updatedate) as updatedate, max(avataranimationid) as avataranimationid 
+				from ".wtw_tableprefix."avataranimations 
+				where avatarid='".$zavatarid."'
+					and deleted=0
+					and animationevent='onoption'
+				group by animationfriendlyname) a4
+			on a3.avataranimationid = a4.avataranimationid
+			where a3.avatarid='".$zavatarid."' 
+				and a3.deleted=0
+		order by loadpriority desc, animationevent, animationfriendlyname, avataranimationid;");
 	$zanimationind = 0;
 	$zevent = '';
 	foreach ($zresults as $zrow) {

@@ -348,11 +348,32 @@ class wtwavatars {
 
 						/* add default animations for new user avatar */
 						$zresults = $wtwhandlers->query("
-							select * 
-							from ".wtw_tableprefix."avataranimations 
-							where avatarid='".$zavatarid."'
-								and deleted=0
-							order by loadpriority desc, animationevent, avataranimationid;");
+							select a1.* 
+								from ".wtw_tableprefix."avataranimations a1
+								inner join (
+									select animationevent, max(updatedate) as updatedate, max(avataranimationid) as avataranimationid 
+									from ".wtw_tableprefix."avataranimations 
+									where avatarid='".$zavatarid."'
+										and deleted=0
+										and not animationevent='onoption'
+									group by animationevent) a2
+								on a1.avataranimationid = a2.avataranimationid
+								where a1.avatarid='".$zavatarid."' 
+									and a1.deleted=0
+							union
+							select a3.* 
+								from ".wtw_tableprefix."avataranimations a3
+								inner join (
+									select animationfriendlyname, max(updatedate) as updatedate, max(avataranimationid) as avataranimationid 
+									from ".wtw_tableprefix."avataranimations 
+									where avatarid='".$zavatarid."'
+										and deleted=0
+										and animationevent='onoption'
+									group by animationfriendlyname) a4
+								on a3.avataranimationid = a4.avataranimationid
+								where a3.avatarid='".$zavatarid."' 
+									and a3.deleted=0
+							order by loadpriority desc, animationevent, animationfriendlyname, avataranimationid;");
 						foreach ($zresults as $zrow) {
 							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."useravataranimations
@@ -676,10 +697,32 @@ class wtwavatars {
 					u.speedratio as myspeedratio,
 					u.walkspeed as mywalkspeed
 				from ".wtw_tableprefix."avataranimations a 
-					left join (select * 
-						from ".wtw_tableprefix."useravataranimations 
-						where useravatarid='".$zfounduseravatarid."' 
-							and deleted=0) u
+					left join (
+						select a1.*
+							from ".wtw_tableprefix."useravataranimations a1
+							inner join (
+								select animationevent, max(updatedate) as updatedate, max(useravataranimationid) as useravataranimationid 
+								from ".wtw_tableprefix."useravataranimations 
+								where useravatarid='".$zfounduseravatarid."'
+									and deleted=0
+									and not animationevent='onoption'
+								group by animationevent) a2
+							on a1.useravataranimationid = a2.useravataranimationid
+							where a1.useravatarid='".$zfounduseravatarid."' 
+								and a1.deleted=0
+						union
+						select a3.* 
+							from ".wtw_tableprefix."useravataranimations a3
+							inner join (
+								select animationfriendlyname, max(updatedate) as updatedate, max(useravataranimationid) as useravataranimationid 
+								from ".wtw_tableprefix."useravataranimations 
+								where useravatarid='".$zfounduseravatarid."'
+									and deleted=0
+									and animationevent='onoption'
+								group by animationfriendlyname) a4
+							on a3.useravataranimationid = a4.useravataranimationid
+							where a3.useravatarid='".$zfounduseravatarid."' 
+								and a3.deleted=0) u
 					on a.avataranimationid = u.avataranimationid
 				where (a.userid='".$wtwhandlers->userid."' 
 					or a.userid='')
@@ -1255,10 +1298,32 @@ class wtwavatars {
 
 				/* get the avatar animations from the avataranimations table */
 				$zresults = $wtwhandlers->query("
-					select * 
-					from ".wtw_tableprefix."avataranimations
-					where avatarid='".$zavatarid."'
-						and deleted=0;");
+					select a1.* 
+						from ".wtw_tableprefix."avataranimations a1
+						inner join (
+							select animationevent, max(updatedate) as updatedate, max(avataranimationid) as avataranimationid 
+							from ".wtw_tableprefix."avataranimations 
+							where avatarid='".$zavatarid."'
+								and deleted=0
+								and not animationevent='onoption'
+							group by animationevent) a2
+						on a1.avataranimationid = a2.avataranimationid
+						where a1.avatarid='".$zavatarid."' 
+							and a1.deleted=0
+					union
+					select a3.* 
+						from ".wtw_tableprefix."avataranimations a3
+						inner join (
+							select animationfriendlyname, max(updatedate) as updatedate, max(avataranimationid) as avataranimationid 
+							from ".wtw_tableprefix."avataranimations 
+							where avatarid='".$zavatarid."'
+								and deleted=0
+								and animationevent='onoption'
+							group by animationfriendlyname) a4
+						on a3.avataranimationid = a4.avataranimationid
+						where a3.avatarid='".$zavatarid."' 
+							and a3.deleted=0
+					order by loadpriority desc, animationevent, animationfriendlyname, avataranimationid;");
 				foreach ($zresults as $zrow) {
 					$znewavataranimationid = $wtwhandlers->getRandomString(16,1);
 					$znewobjectfolder = str_replace($zavatarid, $znewavatarid, $zrow["objectfolder"]);

@@ -186,9 +186,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[2].additionalparameters = '';
 
 				zobjectanimations[3] = WTW.newObjectAnimation();
-				zobjectanimations[3].animationname = 'HUDLOGINbuttoneditavatar';
+				zobjectanimations[3].animationname = 'HUDLOGINbuttonavataredit';
 				zobjectanimations[3].moldevent = 'onclick';
-				zobjectanimations[3].moldnamepart = 'button-editavatar';
+				zobjectanimations[3].moldnamepart = 'button-avataredit';
 				zobjectanimations[3].startframe = 40;
 				zobjectanimations[3].endframe = 60;
 				zobjectanimations[3].animationloop = false;
@@ -574,7 +574,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 									break;
 								case 'button-avatarselect':
 								case 'button-editprofile':
-								case 'button-editavatar':
+								case 'button-avataredit':
 								case 'button-logout':
 								case 'button-login':
 								case 'button-create':
@@ -867,7 +867,7 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-loginguest':
 			case 'hudlogin-button-editprofile':
 			case 'hudlogin-button-avatarselect':
-			case 'hudlogin-button-editavatar':
+			case 'hudlogin-button-avataredit':
 			case 'hudlogin-button-logout':
 			case 'hudlogin-button-create':
 			case 'hudlogin-button-reset':
@@ -964,7 +964,7 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 					} else if (zmoldname == 'hudlogin-button-loginguest' || zmoldname == 'hudlogin-button-avatarselect') {
 						/* select my avatar */
 						WTW.openLoginHUD('Select My Avatar');
-					} else if (zmoldname == 'hudlogin-button-editavatar') {
+					} else if (zmoldname == 'hudlogin-button-avataredit') {
 						/* edit my avatar */
 						WTW.closeLoginHUD();
 						WTW.openAvatarDesigner();
@@ -1166,7 +1166,7 @@ WTWJS.prototype.hudLoginFocusText = function(zmoldname, zeditdone) {
 			'hudlogin-button-loginguest',
 			'hudlogin-button-editprofile',
 			'hudlogin-button-avatarselect',
-			'hudlogin-button-editavatar',
+			'hudlogin-button-avataredit',
 			'hudlogin-button-logout',
 			'hudlogin-email-email',
 			'hudlogin-password-password',
