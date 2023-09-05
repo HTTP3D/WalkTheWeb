@@ -23,9 +23,9 @@ class wtw3dinternet {
 		}
 	}	
 	
-	public $version = "1.2.0";
+	public $version = "1.2.1";
 	public $dbversion = "1.0.8";
-	public $versiondate = "2023-2-28";
+	public $versiondate = "2023-9-5";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {

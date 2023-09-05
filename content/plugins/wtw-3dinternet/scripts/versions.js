@@ -246,7 +246,7 @@ WTW_3DINTERNET.prototype.checkUpdatesForAllWebs = async function() {
 		dGet('wtw_updatewebslist').innerHTML = '';
 		WTW.hide('wtw_updatewebslist');
 		var zversioncheck = [];
-		WTW.getAsyncJSON('/connect/communities.php', 
+		WTW.getAsyncJSON('/connect/communities.php?filter=all', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {

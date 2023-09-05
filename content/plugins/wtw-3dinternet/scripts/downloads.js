@@ -1483,6 +1483,27 @@ WTW_3DINTERNET.prototype.downloadWebFromQueue = async function(ztemplatename, zd
 						}
 					}
 				}
+				if (dGet('wtw_adminmenudashboardbadge') != null) {
+					if (WTW.isNumeric(dGet('wtw_adminmenudashboardbadge').innerHTML)) {
+						var zbadges = Number(dGet('wtw_adminmenudashboardbadge').innerHTML);
+						zbadges -= 1;
+						dGet('wtw_adminmenudashboardbadge').innerHTML = zbadges;
+						if (zbadges < 1) {
+							WTW.hide('wtw_adminmenudashboardbadge');
+						}
+					}
+				}
+				if (dGet('wtw_admindashboardbadge') != null) {
+					if (WTW.isNumeric(dGet('wtw_admindashboardbadge').innerHTML)) {
+						var zbadges = Number(dGet('wtw_admindashboardbadge').innerHTML);
+						zbadges -= 1;
+						dGet('wtw_admindashboardbadge').innerHTML = zbadges;
+						if (zbadges < 1) {
+							WTW.hide('wtw_admindashboardbadge');
+						}
+					}
+				}
+				wtw3dinternet.updateBadges();
 			}
 		);
 		if (zprocess == '1') {
