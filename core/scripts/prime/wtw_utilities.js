@@ -332,6 +332,32 @@ WTWJS.prototype.isHexColor = function(zhex) {
 	return zisvalid;
 }
 
+WTWJS.prototype.clickVRStartButton = function() {
+	/* To activate VR, this clicks the onscreen start button */
+	try {
+		var zelements = document.getElementsByClassName('babylonVRicon');
+		for (var i=0;i<zelements.length;i++) {
+			if (zelements[i] != null) {
+				zelements[i].click();
+			}
+		}
+		var zbackgroundhelper = scene.getMeshByID('BackgroundHelper');
+		var zbackgroundplane = scene.getMeshByID('BackgroundPlane');
+		var zbackgroundskybox = scene.getMeshByID('BackgroundSkybox');
+		if (zbackgroundhelper != null) {
+			zbackgroundhelper.visibility = false;
+		}
+		if (zbackgroundplane != null) {
+			zbackgroundplane.visibility = false;
+		}
+		if (zbackgroundskybox != null) {
+			zbackgroundskybox.visibility = false;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_utilities.js-clickVRStartButton=' + ex.message);
+	}
+}
+
 WTWJS.prototype.openColorSelector = function(zobj, ztitle) {
 	/* when form uses a color, the color wheel is opened and set to the current color settings */
 	try {

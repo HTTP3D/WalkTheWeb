@@ -12,13 +12,18 @@ WTWJS.prototype.loadPrimaryCamera = function() {
 		} else {
             WTW.isMobile = false;
 		}
+		var zcamera = 'followcamera';
 		var zsettings = {
 			'parent': '',
 			'distance': -28,
 			'position': new BABYLON.Vector3(0, 0, 0),
 			'rotation': new BABYLON.Vector3(0, 0, 0)
 		};
-		WTW.initCamera(1, 'followcamera', zsettings);
+		if (WTW.isVRorAR) {
+			zcamera = 'vrgamepadcamera';
+			zsettings = null;
+		}
+		WTW.initCamera(1, zcamera, zsettings);
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_cameras.js-loadPrimaryCamera=' + ex.message);
 	}
@@ -53,7 +58,7 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 				zdefaultdistance = WTW.cameraTwo.cameraDistance;
 			}
 		}
-		if (zsettings == undefined) {
+		if (zsettings == undefined || zsettings == null) {
 			zsettings = {
 				'parent': zparent,
 				'distance': zdefaultdistance,
@@ -130,10 +135,8 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 					zcamera.id = 'arccamera';
 					break;
 				case 'webxrcamera':
-					/* https://doc.babylonjs.com/divingDeeper/webXR/webXRSessionManagers */
-					var zxrsession = new WebXRSessionManager(scene);
 					/* https://doc.babylonjs.com/divingDeeper/webXR/webXRCamera */
-					zcamera = new BABYLON.WebXRCamera('webxrcamera', scene, zxrsession);
+					zcamera = new BABYLON.WebXRCamera('webxrcamera', scene, WTW.xrHelper);
 					zcamera.id = 'webxrcamera';
 					break;
 				default:

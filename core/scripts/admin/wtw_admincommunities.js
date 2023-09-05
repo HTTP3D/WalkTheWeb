@@ -17,7 +17,7 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 		WTW.hide('wtw_adminmenu25b');
 		WTW.hide('wtw_adminmenu42b');
 		dGet('wtw_tcommunityalttag').value = '';
-		WTW.getAsyncJSON('/connect/communities.php', 
+		WTW.getAsyncJSON('/connect/communities.php?filter=all', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -85,7 +85,7 @@ WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 	/* load settings to the 3D Community Information Form */
 	try {
 		dGet('wtw_tcommunityalttag').value = '';
-		WTW.getAsyncJSON('/connect/communities.php', 
+		WTW.getAsyncJSON('/connect/communities.php?filter=all', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -328,7 +328,7 @@ WTWJS.prototype.copyMyCommunity = async function() {
 	/* make a copy of an existing 3D Community (use as backup or as a new 3D Community to edit and use) */
 	try {
 		dGet('wtw_tcommunityname').value = '';
-		WTW.getAsyncJSON('/connect/communities.php?userid=' + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON('/connect/communities.php?filter=all&userid=' + dGet('wtw_tuserid').value, 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -526,7 +526,7 @@ WTWJS.prototype.openShareCommunityForm = async function() {
 		dGet('wtw_tsharecommunitytags').value = '';
 		WTW.hide('wtw_adminmenu29b');
 		WTW.show('wtw_loadingsharecommunityform');
-		WTW.getAsyncJSON('/connect/communities.php', 
+		WTW.getAsyncJSON('/connect/communities.php?filter=all', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -2127,7 +2127,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 		WTW.hide('wtw_adminmenu69b');
 		WTW.show('wtw_loadingupdatesnapshot');
 		if (communityid != '') {
-			WTW.getAsyncJSON('/connect/communities.php', 
+			WTW.getAsyncJSON('/connect/communities.php?filter=all', 
 				function(zresponse) {
 					WTW.communities = JSON.parse(zresponse);
 					if (WTW.communities != null) {

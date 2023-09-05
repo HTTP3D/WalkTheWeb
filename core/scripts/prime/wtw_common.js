@@ -1702,38 +1702,40 @@ WTWJS.prototype.processMoldQueue = function() {
 												if (zcsgcount > 0) {
 													zmold = WTW.getMoldCSG(zmold, zmolddef);
 												}
-												if (zreceiveshadows == '1' && znode == null) {
-													zmold.material.unfreeze();
-													zmold.receiveShadows = true;
-												} else if (zmold.material != null && znode == null && WTW.adminView == 0) {
-													zmold.material.freeze();
-												}
-												if (WTW.shadowSet > 0 && zmoldname.indexOf('babylonfile') == -1) {
-													if (znode == null) {
-//														WTW.shadows.addShadowCaster(zmold, true);
-													} else {
-														/* add shadows to child meshes and child node child meshes */
-														var zchildnodes = zmold.getChildTransformNodes(true);
-														var zchildmeshes = zmold.getChildMeshes();
-														for (var k=0;k < zchildmeshes.length;k++) {
-//															WTW.shadows.addShadowCaster(zchildmeshes[k], true);
-														}
-														for (var j=0;j < zchildnodes.length;j++) {
-															zchildmeshes = zchildnodes[j].getChildMeshes();
-															for (var k=0;k < zchildmeshes.length;k++) {
-//																WTW.shadows.addShadowCaster(zchildmeshes[k], true);
-															}
-														}
-														
+												if (zmold != null) {
+													if (zreceiveshadows == '1' && znode == null) {
+														zmold.material.unfreeze();
+														zmold.receiveShadows = true;
+													} else if (zmold.material != null && znode == null && WTW.adminView == 0) {
+														zmold.material.freeze();
 													}
+													if (WTW.shadowSet > 0 && zmoldname.indexOf('babylonfile') == -1) {
+														if (znode == null) {
+	//														WTW.shadows.addShadowCaster(zmold, true);
+														} else {
+															/* add shadows to child meshes and child node child meshes */
+															var zchildnodes = zmold.getChildTransformNodes(true);
+															var zchildmeshes = zmold.getChildMeshes();
+															for (var k=0;k < zchildmeshes.length;k++) {
+	//															WTW.shadows.addShadowCaster(zchildmeshes[k], true);
+															}
+															for (var j=0;j < zchildnodes.length;j++) {
+																zchildmeshes = zchildnodes[j].getChildMeshes();
+																for (var k=0;k < zchildmeshes.length;k++) {
+	//																WTW.shadows.addShadowCaster(zchildmeshes[k], true);
+																}
+															}
+															
+														}
+													}
+													if (zwaterreflection == '1' && WTW.waterMat != null && znode == null) {
+														WTW.waterMat.addToRenderList(zmold);
+													}
+													zmold.isPickable = true;
+													zmold.renderingGroupId = 1;
 												}
-												if (zwaterreflection == '1' && WTW.waterMat != null && znode == null) {
-													WTW.waterMat.addToRenderList(zmold);
-												}
-												zmold.isPickable = true;
-												zmold.renderingGroupId = 1;
 											}
-											if (zmold != null && znode == null) {
+											if (zmold != null && zmolddef != null && znode == null) {
 												zmold.checkCollisions = false;
 												if (zmolddef.checkcollisions != undefined) {
 													if (zmolddef.checkcollisions == '1') {

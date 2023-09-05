@@ -1371,6 +1371,8 @@ WTWJS.prototype.loadChildLoadZones = function(zaddactionzones, zserver) {
 					var zactionzoneind = WTW.getNextCount(WTW.actionZones);
 					WTW.actionZones[zactionzoneind] = zaddactionzones.actionzones[i];
 					WTW.actionZones[zactionzoneind].actionzoneind = zactionzoneind;
+WTW.log("loadChildZones=" + zactionzoneind);
+
 					WTW.actionZones[zactionzoneind].status = 0;
 					WTW.actionZones[zactionzoneind].parentname = WTW.getParentName(WTW.actionZones[zactionzoneind].connectinggridind);
 					var zactionzonename = zserver + '-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;

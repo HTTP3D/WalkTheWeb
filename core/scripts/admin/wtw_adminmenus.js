@@ -836,12 +836,12 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.listMyAvatarLocation();
 						break;
 				/* close and exit Admin Items */
+					case 'wtw_bback28':
 					case 'wtw_cancel28':
 						WTW.disposeClean('firstbuilding-----babylonfile');
 						WTW.hideAdminMenu();
 						WTW.backToTools();
 						break;
-					case 'wtw_bback28':
 					case 'wtw_bback44':
 					case 'wtw_bback60':
 					case 'wtw_bback61':

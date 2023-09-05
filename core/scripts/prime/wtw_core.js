@@ -298,6 +298,10 @@ WTWJS.prototype.loadInitSettings = function() {
 		if (dGet('wtw_tphysicsengine') != null) {
 			WTW.physicsEngine = dGet('wtw_tphysicsengine').value;
 		}
+		/* check for VR browser */
+		if (/Oculus|Vibe|Mobile VR|MobileVR/i.test(navigator.userAgent)) {
+            WTW.isVRorAR = true;
+		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-loadInitSettings=' + ex.message);
 	} 
@@ -422,6 +426,18 @@ WTWJS.prototype.initEnvironment = async function() {
 		/* load the main parent box, avatar placeholder, and camera */
 		WTW.loadParentAndCamera();
 		
+		if (WTW.isVRorAR) {
+			/* set environment for XR support */
+			WTW.environment = scene.createDefaultEnvironment();
+
+			/* Create XR support */
+			WTW.xrHelper = await scene.createDefaultXRExperienceAsync({
+				floorMeshes: [WTW.environment.ground],
+			});
+			
+			WTW.clickVRStartButton();
+		}
+		
 		/* set fog if enabled */
 		WTW.setFog();
 				
@@ -433,7 +449,7 @@ WTWJS.prototype.initEnvironment = async function() {
 		
 		/* create the extended ground that never ends while the avatar walks */
 		WTW.setExtendedGround();
-
+		
 		/* start render cycle */
 		WTW.startRender();
 		
@@ -847,12 +863,16 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 						}
 						if (WTW.communities[i].graphics.sky.path != null) {
 							WTW.init.skyTexturePath = WTW.communities[i].graphics.sky.path;
+						} else if (WTW.communities[i].graphics.sky.path2 != null) {
+							WTW.init.skyTexturePath = WTW.communities[i].graphics.sky.path2;
 						}
 						if (WTW.communities[i].graphics.texture.id != null) {
 							WTW.init.groundTextureID = WTW.communities[i].graphics.texture.id;
 						}
 						if (WTW.communities[i].graphics.texture.path != null) {
 							WTW.init.groundTexturePath = WTW.communities[i].graphics.texture.path;
+						} else if (WTW.communities[i].graphics.texture.path2 != null) {
+							WTW.init.groundTexturePath = WTW.communities[i].graphics.texture.path2;
 						}
 						if (WTW.communities[i].ground.position.y != null) {
 							WTW.init.groundPositionY = Number(WTW.communities[i].ground.position.y);
@@ -867,6 +887,8 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 						}
 						if (WTW.communities[i].water.bump.path != '') {
 							WTW.init.waterBumpPath = WTW.communities[i].water.bump.path;
+						} else if (WTW.communities[i].water.bump.path2 != null) {
+							WTW.init.waterBumpPath = WTW.communities[i].water.bump.path2;
 						}
 						if (WTW.isNumeric(WTW.communities[i].water.bump.height)) {
 							WTW.init.waterBumpHeight = Number(WTW.communities[i].water.bump.height);
@@ -914,7 +936,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		}
 		/* set sky scene */
 		WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
-		
+
 		/* extended ground */
 		/* set ground emissive color based on scene lighting - day or night degrees of hue */
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
@@ -1155,7 +1177,7 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 							}
 							
 							zactionzonesurl = WTW.pluginsGetActionZonesByWebID(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, WTW.connectingGrids[zconnectinggridind].moldname, zconnectinggridid, zconnectinggridind);
-							
+
 							WTW.getJSON(zactionzonesurl, 
 								function(zresponse) {
 									WTW.loadActionZones(JSON.parse(zresponse), zserver);

@@ -13,7 +13,7 @@ WTWJS.prototype.checkActionZones = function() {
 				var zmoldname = WTW.actionZones[i].moldname;
 				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmoldname != undefined) {
-					if ((zmoldname.indexOf('loadzone') > -1 || zmoldname.indexOf('teleportzone') > -1) && WTW.actionZones[i].shown != '2') {
+					if ((zmoldname.indexOf('loadzone') > -1) && WTW.actionZones[i].shown != '2') {
 						WTW.actionZones[i].status = 0;
 					} else if (zactionzone != null) {
 						var zmeinzone = false;
@@ -398,10 +398,14 @@ WTWJS.prototype.teleport = function(zactionzoneind) {
 			zoldwebid = thingid;
 			zoldwebtype = 'thing';
 		}
+
 		if (WTW.actionZones[zactionzoneind] != null) {
 			if (WTW.actionZones[zactionzoneind].teleportwebid != undefined) {
 				zteleportwebid = WTW.actionZones[zactionzoneind].teleportwebid;
 				zspawnactionzoneid = WTW.actionZones[zactionzoneind].spawnactionzoneid;
+				if (zteleportwebid == '') {
+					zteleportwebid = zoldwebid;
+				}
 				if (zteleportwebid != '') {
 					if (zteleportwebid == zoldwebid) {
 						/* same 3D Scene - different avatar position */
@@ -693,7 +697,6 @@ WTWJS.prototype.teleport = function(zactionzoneind) {
 					}
 				}
 			}
-			WTW.actionZones[zactionzoneind].status = 0;
 		}
 /* 	remember log off from multiplayer avatars scenes
 	load domain settings

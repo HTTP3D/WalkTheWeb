@@ -37,6 +37,18 @@ function WTWJS() {
 	/* this will be depreciated by the Heads Up Display functionality when implemented */
 	this.uicanvas;
 
+	/* WTW.environment - this is the default environment, required for XR (extended Reality - VR and AR) */
+	this.environment = null;
+	
+	/* WTW.xr - this is the XR experience Helper, required for XR (extended Reality - VR and AR) */
+	this.xrHelper = null;
+
+	/* WTW.isMobile - internal check for if it is a mobile device. Example of use is the activity timer timeout set shorter for mobile devices and camera views using joystick */
+	this.isMobile = false;
+
+	/* WTW.isVRorAR - internal check for VR or AR. Used to turn on XR Experience functionality and set cameras. */
+	this.isVRorAR = false;
+	
 	/* WTW.closestDistance - used to determine the distance from WTW.myAvatar.position and the closest building (compass arrow uses the closest building) */
 	this.closestDistance = null;
 
@@ -50,7 +62,7 @@ function WTWJS() {
 	this.highlightLayer = null;
 
 	/* WTW.babylonVersion - selected Babylon Engine to run - should match the folder name under /core/scripts/engine/ */
-	this.babylonVersion = 'v5.x.x';
+	this.babylonVersion = 'v6.x.x';
 
 	/* WTW.physicsEngine - physics engine when enabled (havok, cannon, oimo, or none) */
 	this.physicsEngine = 'none';
@@ -84,9 +96,6 @@ function WTWJS() {
 
 	/* WTW.showFPS - show or hide the FPS display on the screen - triggered on menu */
 	this.showFPS = 0;
-
-	/* WTW.isMobile - internal check for if it is a mobile device. Example of use is the activity timer timeout set shorter for mobile devices and camera views using joystick */
-	this.isMobile = false;
 
 	/* WTW.gpuSetting - identifies the GPU technology and resources available (preporation for future use) */
 	this.gpuSetting;
