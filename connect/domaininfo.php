@@ -18,6 +18,11 @@ try {
 	$zthing = $wtwconnect->getVal('thing','');
 	$zuserid = $wtwconnect->userid;
 	$zconnectinggridid = "";
+	$zdomaininfo = array();
+	$zbuildinginfo = array();
+	$zcommunityinfo = array();
+	$zstartlocation = array();
+	$zspawnzones = array();
 
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 	

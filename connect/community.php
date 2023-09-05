@@ -22,6 +22,14 @@ try {
 								on u2.websizeid=u1.uploadid 
 						where u2.uploadid=c1.textureid limit 1)
 				end as texturepath,
+			case when c1.textureid = '' then ''
+				else
+					(select u1.filepath 
+						from ".wtw_tableprefix."uploads u2 
+							left join ".wtw_tableprefix."uploads u1 
+								on u2.uploadid=u1.uploadid 
+						where u2.uploadid=c1.textureid limit 1)
+				end as texturepath2,
 			case when c1.skydomeid = '' then ''
 				else
 					(select u1.filepath 
@@ -30,6 +38,14 @@ try {
 								on u2.websizeid=u1.uploadid 
 						where u2.uploadid=c1.skydomeid limit 1)
 				end as skydomepath,
+			case when c1.skydomeid = '' then ''
+				else
+					(select u1.filepath 
+						from ".wtw_tableprefix."uploads u2 
+							left join ".wtw_tableprefix."uploads u1 
+								on u2.uploadid=u1.uploadid 
+						where u2.uploadid=c1.skydomeid limit 1)
+				end as skydomepath2,
 			case when c1.waterbumpid = '' then ''
 				else
 					(select u1.filepath 
@@ -38,6 +54,14 @@ try {
 								on u2.websizeid=u1.uploadid 
 						where u2.uploadid=c1.waterbumpid limit 1)
 				end as waterbumppath,
+			case when c1.waterbumpid = '' then ''
+				else
+					(select u1.filepath 
+						from ".wtw_tableprefix."uploads u2 
+							left join ".wtw_tableprefix."uploads u1 
+								on u2.uploadid=u1.uploadid 
+						where u2.uploadid=c1.waterbumpid limit 1)
+				end as waterbumppath2,
 			case when c1.snapshotid = '' then ''
 				else
 					(select u1.filepath 
@@ -98,12 +122,14 @@ try {
 			'texture'=> array (
 				'id'=> $zrow["textureid"],
 				'path'=> $zrow["texturepath"],
+				'path2'=> $zrow["texturepath2"],
 				'backupid'=>'',
 				'backuppath'=>''
 			),
 			'sky'=> array (
 				'id'=> $zrow["skydomeid"],
 				'path'=> $zrow["skydomepath"],
+				'path2'=> $zrow["skydomepath2"],
 				'backupid'=>''
 			)
 		);
@@ -116,6 +142,7 @@ try {
 			'bump'=> array (
 				'id'=> $zrow["waterbumpid"],
 				'path'=> $zrow["waterbumppath"],
+				'path2'=> $zrow["waterbumppath2"],
 				'height'=> $zrow["waterbumpheight"],
 				'backupid'=>'',
 				'backuppath'=>''

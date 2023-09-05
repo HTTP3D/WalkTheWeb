@@ -357,10 +357,10 @@ try {
 				left join ".wtw_tableprefix."uploads u3
 					on c1.waterbumpid=u3.uploadid
 			where ua1.userid='".$wtwconnect->userid."'
-			   and ua1.deleted=0
+					and ua1.deleted=0
+					and (ua1.useraccess='admin'
+					or ua1.useraccess='architect')
 			   and c1.deleted=0
-			   and (ua1.useraccess='admin'
-			   or ua1.useraccess='architect')
 			group by 
 				ua1.useraccess,
 				c1.communityid,
