@@ -19,9 +19,9 @@ class wtwcoins {
 		}
 	}	
 	
-	public $version = "1.0.2";
+	public $version = "1.0.3";
 	public $dbversion = "1.0.0";
-	public $versiondate = "2020-8-31";
+	public $versiondate = "2023-9-5";
 		
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
