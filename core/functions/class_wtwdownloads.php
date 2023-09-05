@@ -1577,7 +1577,7 @@ class wtwdownloads {
 								}
 							}
 						} catch (Exception $e) {
-							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-js=".$e->getMessage());
+							$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadWeb-getfile-js=".$e->getMessage());
 							$zresponse = array(
 								'serror' => $e->getMessage()
 							);

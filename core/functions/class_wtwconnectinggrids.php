@@ -118,7 +118,7 @@ class wtwconnectinggrids {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveConnectingGrid=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwconnectinggrids.php-saveConnectingGrid=".$e->getMessage());
 		}
 		return $zconnectinggridid;
 	}
@@ -159,7 +159,7 @@ class wtwconnectinggrids {
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-deleteConnectingGrid=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwconnectinggrids.php-deleteConnectingGrid=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
@@ -365,7 +365,7 @@ class wtwconnectinggrids {
 				}				
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-importConnectingGrids=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwconnectinggrids.php-importConnectingGrids=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
@@ -397,7 +397,7 @@ class wtwconnectinggrids {
 						and not t2.loadactionzoneid='';");
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-updateChildConnectingGrid=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwconnectinggrids.php-updateChildConnectingGrid=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

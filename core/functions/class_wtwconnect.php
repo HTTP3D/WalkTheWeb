@@ -150,7 +150,7 @@ class wtwconnect {
 				define("wtw_adminname", '');
 			}
 			if (defined('wtw_babylonversion') == false) {
-				define("wtw_babylonversion", 'v5.x.x');
+				define("wtw_babylonversion", 'v6.x.x');
 			}
 			if (defined('wtw_physicsengine') == false) {
 				define("wtw_physicsengine", '');

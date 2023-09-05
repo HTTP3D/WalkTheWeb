@@ -864,11 +864,13 @@ class wtwdb {
 						and ur1.deleted=0
 						and u1.deleted=0
 					order by r1.rolename, ur1.userinroleid;");
+				$i = 0;
 				foreach ($zresults as $zrow) {
-					$zroles[] = array(
+					$zroles[$i] = array(
 						'userinroleid' => $zrow["userinroleid"],
 						'roleid' => $zrow["roleid"],
 						'rolename' => $zrow["rolename"]);
+					$i += 1;
 				}
 			}
 		} catch (Exception $e) {
