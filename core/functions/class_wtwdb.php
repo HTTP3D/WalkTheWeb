@@ -553,11 +553,15 @@ class wtwdb {
 		try {
 			$zfromurl = str_replace(' ', '%20', $zfromurl);
 			if (ini_get('allow_url_fopen') ) {
-				$zdata1 = file_get_contents($zfromurl);
-				$zsuccess2 = file_put_contents($zfilepath.$zfilename, $zdata1);	
-				/* zsuccess will be the number of bytes or false on fail */
-				if ($zsuccess2 == false) {
+				$zdata1 = @file_get_contents($zfromurl);
+				if ($zdata1 === false) {
 					$zsuccess = false;
+				} else {
+					$zsuccess2 = file_put_contents($zfilepath.$zfilename, $zdata1);	
+					/* zsuccess will be the number of bytes or false on fail */
+					if ($zsuccess2 == false) {
+						$zsuccess = false;
+					}
 				}
 			} else if (extension_loaded('curl')) {
 				$zgetfile = curl_init($zfromurl);
@@ -589,7 +593,7 @@ class wtwdb {
 		try {
 			$zfromurl = str_replace(' ', '%20', $zfromurl);
 			if (ini_get('allow_url_fopen') ) {
-				$zresponse = file_get_contents($zfromurl, $zuseincludepath, $zcontext);
+				$zresponse = @file_get_contents($zfromurl, $zuseincludepath, $zcontext);
 			} else if (extension_loaded('curl')) {
 				$zresponse = curl_init($zfromurl);
 			}
@@ -1454,7 +1458,7 @@ class wtwdb {
 			$zdatepart  = explode('/', $zdate);
 			if (count($zdatepart) == 3) {
 				if (checkdate($zdatepart[0], $zdatepart[1], $zdatepart[2])) {
-					$zdatestring = "'".$zdatepart[2]."-".$zdatepart[1]."-".$zdatepart[0]."'";
+					$zdatestring = "'".$zdatepart[2]."-".$zdatepart[0]."-".$zdatepart[1]."'";
 				}
 			} else {
 				$zformat = 'Y-m-d H:i:s';

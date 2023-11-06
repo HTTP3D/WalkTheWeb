@@ -849,7 +849,7 @@ class wtwadmin {
 
 			/* settings page - email server */
 			$zpagedata .= "		<div id='wtw_emailserversettings' class='wtw-fullpage'>\r\n";
-			$zpagedata .= "			<div class='wtw-dashboardboxleft'>\r\n";
+			$zpagedata .= "			<div class='wtw-dashboardboxlefthalf'>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardboxtitle'>Email Server Settings</div>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardbox'>\r\n";
 			$zpagedata .= "					<div class='wtw-roundedbox'><b>Email Server Settings</b> provide basic connection for sending emails programmatically from WalkTheWeb.<br /></div>\r\n";
