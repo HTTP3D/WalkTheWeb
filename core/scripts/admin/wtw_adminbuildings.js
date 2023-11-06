@@ -391,33 +391,6 @@ WTWJS.prototype.getSelectBuildingsList = async function(zfilter) {
 	}		
 }
 
-WTWJS.prototype.getAddBuildingList = async function() {
-	/* 3D Buildings can be added to 3D Communities */
-	/* this function creates a list of 3D Buildings to add */
-	try {
-		WTW.hide('wtw_buildingbuttonlist');
-		WTW.show('wtw_loadingbuildingbuttonlist');
-		dGet('wtw_buildingbuttonlist').innerHTML = '';
-		WTW.getAsyncJSON('/connect/buildings.php?userid=' + dGet('wtw_tuserid').value, 
-			function(zresponse) {
-				WTW.buildings = JSON.parse(zresponse);
-				if (WTW.buildings != null) {
-					for (var i = 0; i < WTW.buildings.length; i++) {
-						if (WTW.buildings[i] != null) {
-							dGet('wtw_buildingbuttonlist').innerHTML += "<div id='wtw_baddbbuildingmold" + WTW.buildings[i].buildinginfo.buildingid + "' onclick=\"WTW.addConnectingGrid('building', '" + WTW.buildings[i].buildinginfo.buildingid + "', '" + WTW.buildings[i].buildinginfo.buildingname + "');\" class='wtw-menulevel2'>" + WTW.buildings[i].buildinginfo.buildingname + "</div>\r\n";
-						}
-					}
-				}
-				WTW.hide('wtw_loadingbuildingbuttonlist');
-				WTW.show('wtw_buildingbuttonlist');
-				WTW.setWindowSize();
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminbuildings.js-getAddBuildingList=' + ex.message);
-	}		
-}
-
 WTWJS.prototype.editBuilding = function(zbuildingid) {
 	/* load a select 3D Building into the editor */
 	try {

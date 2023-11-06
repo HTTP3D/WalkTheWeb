@@ -190,7 +190,8 @@ WTWJS.prototype.newActionZone = function() {
 			'scripts':[],
 			'shown':'0',
 			'status':'0',
-			'parentname':''
+			'parentname':'',
+			'moldname':''
 		};
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newActionZone=' + ex.message);

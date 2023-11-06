@@ -650,8 +650,12 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 								}
 							}
 						} 
-						if (zsmoke.position.y < -2) {
-							zsmoke.position.y += 2;
+						if (zsmoke != null) {
+							if (zsmoke.position != undefined) {
+								if (zsmoke.position.y < -2) {
+									zsmoke.position.y += 2;
+								}
+							}
 						}
 						if (zdone) {
 							if (zsmoke != null) {
@@ -923,8 +927,12 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 								}
 							}
 						} 
-						if (zsmoke.position.y < -2) {
-							zsmoke.position.y += 2;
+						if (zsmoke != null) {
+							if (zsmoke.position != undefined) {
+								if (zsmoke.position.y < -2) {
+									zsmoke.position.y += 2;
+								}
+							}
 						}
 						if (zdone) {
 							var zmold = WTW.getMeshOrNodeByID(zavatarname + '-sprite');
@@ -1010,8 +1018,12 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 								}
 							}
 						} 
-						if (zsmoke.position.y < -2) {
-							zsmoke.position.y += 2;
+						if (zsmoke != null) {
+							if (zsmoke.position != undefined) {
+								if (zsmoke.position.y < -2) {
+									zsmoke.position.y += 2;
+								}
+							}
 						}
 						if (zdone) {
 							if (zsmoke != null) {
@@ -1266,8 +1278,12 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 					if (zavatarscale != null) {
 						var zsmoke = WTW.getMeshOrNodeByID(zavatarname + '-smoke');
-						if (zsmoke.position.y < -2) {
-							zsmoke.position.y += 2;
+						if (zsmoke != null) {
+							if (zsmoke.position != undefined) {
+								if (zsmoke.position.y < -2) {
+									zsmoke.position.y += 2;
+								}
+							}
 						}
 						var zsetscalingx = zavatarscale.scaling.x;
 						var zsetscalingy = zavatarscale.scaling.y;
@@ -1369,8 +1385,12 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 					if (zavatarscale != null) {
 						var zsmoke = WTW.getMeshOrNodeByID(zavatarname + '-smoke');
-						if (zsmoke.position.y < -2) {
-							zsmoke.position.y += 2;
+						if (zsmoke != null) {
+							if (zsmoke.position != undefined) {
+								if (zsmoke.position.y < -2) {
+									zsmoke.position.y += 2;
+								}
+							}
 						}
 						var zsetscalingx = zavatarscale.scaling.x;
 						var zsetscalingy = zavatarscale.scaling.y;

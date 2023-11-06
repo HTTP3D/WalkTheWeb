@@ -458,24 +458,32 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 									}
 									/* start animation - may be set to weight 0 and not executing, but running */
 									if (zenteranimate) {
-										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
-										if (zonanimationloop != null) {
-											zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
+										try {
+											zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
+											if (zonanimationloop != null) {
+												zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
+											}
+											zavatar.WTW.animations.running[zanimation.animationevent].startframe = zframetotal;
+											zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
+											zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
+											zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
+										} catch (ex) {
+											
 										}
-										zavatar.WTW.animations.running[zanimation.animationevent].startframe = zframetotal;
-										zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
-										zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
-										zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
 									}
 									if (zenteranimate == false) {
-										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
-										if (zonanimationloop != null) {
-											zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
+										try {
+											zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
+											if (zonanimationloop != null) {
+												zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
+											}
+											zavatar.WTW.animations.running[zanimation.animationevent].startframe = zframetotal;
+											zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
+											zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
+											zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
+										} catch (ex) {
+											
 										}
-										zavatar.WTW.animations.running[zanimation.animationevent].startframe = zframetotal;
-										zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
-										zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
-										zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
 									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
 										/* there are more animations to load - so load the next one */
 										if (zanimationind == 11) {

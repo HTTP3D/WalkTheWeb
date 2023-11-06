@@ -405,33 +405,6 @@ WTWJS.prototype.getSelectThingsList = async function(zfilter) {
 	}		
 }
 
-WTWJS.prototype.getAddThingList = async function() {
-	/* 3D Things can be added to 3D Communities and 3D Buildings */
-	/* this function creates a list of 3D Things to add */
-	try {
-		WTW.hide('wtw_thingbuttonlist');
-		WTW.show('wtw_loadingthingbuttonlist');
-		dGet('wtw_thingbuttonlist').innerHTML = '';
-		WTW.getAsyncJSON('/connect/things.php?userid=' + dGet('wtw_tuserid').value, 
-			function(zresponse) {
-				WTW.things = JSON.parse(zresponse);
-				if (WTW.things != null) {
-					for (var i = 0; i < WTW.things.length; i++) {
-						if (WTW.things[i] != null) {
-							dGet("wtw_thingbuttonlist").innerHTML += "<div id='wtw_baddbthingmold" + WTW.things[i].thinginfo.thingid + "' onclick=\"WTW.addConnectingGrid('thing', '" + WTW.things[i].thinginfo.thingid + "', '" + WTW.things[i].thinginfo.thingname + "');\" class='wtw-menulevel2'>" + WTW.things[i].thinginfo.thingname + "</div>\r\n";
-						}
-					}
-				}
-				WTW.hide('wtw_loadingthingbuttonlist');
-				WTW.show('wtw_thingbuttonlist');
-				WTW.setWindowSize();
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminthings.js-getAddThingList=' + ex.message);
-	}		
-}
-
 WTWJS.prototype.editThing = function(zthingid) {
 	/* load a select 3D Thing into the editor */
 	try {

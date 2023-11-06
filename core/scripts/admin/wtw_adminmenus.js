@@ -227,16 +227,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
-					case 'wtw_admincommunityaddbuilding':
-						WTW.hideAdminMenu();
-						WTW.getAddBuildingList();
-						WTW.show('wtw_adminmenu27');
-						break;
-					case 'wtw_admincommunityaddthing':
-						WTW.hideAdminMenu();
-						WTW.getAddThingList();
-						WTW.show('wtw_adminmenu13');
-						break;
 					case 'wtw_admincommunityactionzones':
 						WTW.hideAdminMenu();
 						WTW.openSelectActionZoneForm();
@@ -565,11 +555,6 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.hideAdminMenu();
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
-						break;
-					case 'wtw_adminbuildingaddthing':
-						WTW.hideAdminMenu();
-						WTW.getAddThingList()
-						WTW.show('wtw_adminmenu13');
 						break;
 					case 'wtw_adminbuildingactionzones':
 						WTW.hideAdminMenu();
