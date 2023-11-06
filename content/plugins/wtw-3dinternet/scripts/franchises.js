@@ -17,10 +17,10 @@ WTW_3DINTERNET.prototype.showFranchise = function(zobj, zwebtype) {
 						//WTW.getAddCommunityList();
 						break;
 					case 'building':
-						WTW.getAddBuildingList();
+						wtw3dinternet.getAddBuildingList();
 						break;
 					case 'thing':
-						WTW.getAddThingList();
+						wtw3dinternet.getAddThingList();
 						break;
 				}
 				break;
@@ -34,7 +34,7 @@ WTW_3DINTERNET.prototype.showFranchise = function(zobj, zwebtype) {
 				break;
 		}
 	} catch (ex) {
-		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-showFranchise=' + ex.message);
+		WTW.log('plugins:wtw-3dinternet:scripts-franchises.js-showFranchise=' + ex.message);
 	}		
 }
 
@@ -73,7 +73,7 @@ WTW_3DINTERNET.prototype.getFranchiseList = async function(zwebtype) {
 			}
 		);
 	} catch (ex) {
-		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-getFranchiseList=' + ex.message);
+		WTW.log('plugins:wtw-3dinternet:scripts-franchises.js-getFranchiseList=' + ex.message);
 	}		
 }
 
@@ -139,6 +139,61 @@ WTW_3DINTERNET.prototype.saveAliasForm = async function(zoption, zhostuserid, zw
 			break;
 		}
 	} catch (ex) {
-		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-saveAliasForm=' + ex.message);
+		WTW.log('plugins:wtw-3dinternet:scripts-franchises.js-saveAliasForm=' + ex.message);
 	}		
 }
+
+WTW_3DINTERNET.prototype.getAddBuildingList = async function() {
+	/* 3D Buildings can be added to 3D Communities */
+	/* this function creates a list of 3D Buildings to add */
+	try {
+		WTW.hide('wtw_buildingbuttonlist');
+		WTW.show('wtw_loadingbuildingbuttonlist');
+		dGet('wtw_buildingbuttonlist').innerHTML = '';
+		WTW.getAsyncJSON('/connect/buildings.php?userid=' + dGet('wtw_tuserid').value, 
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
+				if (WTW.buildings != null) {
+					for (var i = 0; i < WTW.buildings.length; i++) {
+						if (WTW.buildings[i] != null) {
+							dGet('wtw_buildingbuttonlist').innerHTML += "<div id='wtw_baddbbuildingmold" + WTW.buildings[i].buildinginfo.buildingid + "' onclick=\"WTW.addConnectingGrid('building', '" + WTW.buildings[i].buildinginfo.buildingid + "', '" + WTW.buildings[i].buildinginfo.buildingname + "');\" class='wtw-menulevel2'>" + WTW.buildings[i].buildinginfo.buildingname + "</div>\r\n";
+						}
+					}
+				}
+				WTW.hide('wtw_loadingbuildingbuttonlist');
+				WTW.show('wtw_buildingbuttonlist');
+				WTW.setWindowSize();
+			}
+		);
+	} catch (ex) {
+		WTW.log('plugins:wtw-3dinternet:scripts-franchises.js-getAddBuildingList=' + ex.message);
+	}		
+}
+
+WTW_3DINTERNET.prototype.getAddThingList = async function() {
+	/* 3D Things can be added to 3D Communities and 3D Buildings */
+	/* this function creates a list of 3D Things to add */
+	try {
+		WTW.hide('wtw_thingbuttonlist');
+		WTW.show('wtw_loadingthingbuttonlist');
+		dGet('wtw_thingbuttonlist').innerHTML = '';
+		WTW.getAsyncJSON('/connect/things.php?userid=' + dGet('wtw_tuserid').value, 
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
+				if (WTW.things != null) {
+					for (var i = 0; i < WTW.things.length; i++) {
+						if (WTW.things[i] != null) {
+							dGet("wtw_thingbuttonlist").innerHTML += "<div id='wtw_baddbthingmold" + WTW.things[i].thinginfo.thingid + "' onclick=\"WTW.addConnectingGrid('thing', '" + WTW.things[i].thinginfo.thingid + "', '" + WTW.things[i].thinginfo.thingname + "');\" class='wtw-menulevel2'>" + WTW.things[i].thinginfo.thingname + "</div>\r\n";
+						}
+					}
+				}
+				WTW.hide('wtw_loadingthingbuttonlist');
+				WTW.show('wtw_thingbuttonlist');
+				WTW.setWindowSize();
+			}
+		);
+	} catch (ex) {
+		WTW.log('plugins:wtw-3dinternet:scripts-franchises.js-getAddThingList=' + ex.message);
+	}		
+}
+

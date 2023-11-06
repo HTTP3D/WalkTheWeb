@@ -5,7 +5,6 @@
 function WTW_3DINTERNET() {
 	/* Add your global variables as needed here */
 	this.ver = '1.1.0';
-	this.checkConnection = null; /* connection heartbeat for Admin Channel */
 	this.masterBroadcasts = '1'; /* toggle off or on WalkTheWeb Broadcasts (server level) */
 	this.masterMove = '0'; /* toggle off or on Multiplayer Movement tracking (server level) */
 	this.masterChat = '0'; /* toggle off or on Chat (server level) */
@@ -15,6 +14,7 @@ function WTW_3DINTERNET() {
 	this.masterSharing = '1'; /* toggle off or on Sharing Templates of 3D Webs - 3D Communities, 3D Buildings, 3D Things, and 3D Avatars (server level) */
 	this.masterFranchising = '1'; /* toggle off or on ability to franchise out your buildings to other server 3D Scenes*/
 	this.masterFranchiseAdditions = '1'; /* toggle off or on ability to add franchised buildings and things to your server 3D Scenes*/
+	this.root = null; /* root channel object - used for socket connect and disconnect */
 	this.admin = null; /* admin channel object - used for connection and checking multiplayer server settings */
 	this.move = null; /* movement channel object - tracks and sends multiplayer movements */
 	this.chat = null; /* chat channel object - processes all chat to and from your user */
@@ -275,7 +275,19 @@ WTW_3DINTERNET.prototype.adminMenuItemSelected = function(zobj) {
 				switch (zobj.id) {
 					case 'wtw_admin3dinternetmenu':
 					case 'wtw_admincommunityaddbuilding':
+						WTW.hideAdminMenu();
 						wtw3dinternet.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
+						WTW.show('wtw_adminmenu27');
+						break;
+					case 'wtw_admincommunityaddthing':
+						WTW.hideAdminMenu();
+						wtw3dinternet.getAddThingList();
+						WTW.show('wtw_adminmenu13');
+						break;
+					case 'wtw_adminbuildingaddthing':
+						WTW.hideAdminMenu();
+						wtw3dinternet.getAddThingList()
+						WTW.show('wtw_adminmenu13');
 						break;
 					case 'wtw_bback29':
 					case 'wtw_cancel29':	
@@ -1212,12 +1224,6 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 				'displayname':btoa(dGet('wtw_tdisplayname').value)
 			});
 			wtw3dinternet.sendCommand('', 'scene command', 'leave scene');
-		}
-		if (wtw3dinternet.admin != null) {
-			wtw3dinternet.admin.emit('disconnect server', {
-				'serverinstanceid':dGet('wtw_serverinstanceid').value,
-				'instanceid':dGet('wtw_tinstanceid').value
-			});
 		}
 	} catch (ex) {
 		/* use for troubleshooting only */

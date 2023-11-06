@@ -155,9 +155,10 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("adminmenuitemselected", "wtw3dinternet.adminMenuItemSelected(zobj);");
 			$wtwplugins->addScriptFunction("toggleadminsubmenu", "wtw3dinternet.toggleAdminSubMenu(zobj);");
 			$wtwplugins->addScriptFunction("closemenus", "wtw3dinternet.closeMenus(zmenuid);");
-			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadVoiceChat();");
-			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadChat();");
+			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadAdmin();");
 			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadMove();");
+			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadChat();");
+			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadVoiceChat();");
 			
 			$wtwplugins->addScriptFunction("onmessage", "wtw3dinternet.onMessage(zevent);");
 			$wtwplugins->addScriptFunction("inputclick", "wtw3dinternet.inputClick(zpickedname);");

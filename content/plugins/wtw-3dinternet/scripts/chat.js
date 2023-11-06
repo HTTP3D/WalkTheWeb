@@ -6,7 +6,43 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 	/* initiate the listeners for WalkTheWeb Chat channel for multiplayer */
 	try {
 		if (wtw3dinternet.chat == null) {
-			wtw3dinternet.chat = io.connect('https://3dnet.walktheweb.network/chat', {});
+			wtw3dinternet.chat = io.connect('https://3dnet.walktheweb.network/chat', {transports: ['websocket', "polling"]});
+
+			wtw3dinternet.chat.emit('wtwconnect', {
+				'serverinstanceid':dGet('wtw_serverinstanceid').value,
+				'serverip':dGet('wtw_serverip').value,
+				'userip':dGet('wtw_tuserip').value,
+				'instanceid':dGet('wtw_tinstanceid').value,
+				'domainurl':wtw_domainurl
+			});
+
+			wtw3dinternet.chat.on('reconnect', function(zdata) {
+				wtw3dinternet.chat.emit('wtwconnect', {
+					'serverinstanceid':dGet('wtw_serverinstanceid').value,
+					'serverip':dGet('wtw_serverip').value,
+					'userip':dGet('wtw_tuserip').value,
+					'instanceid':dGet('wtw_tinstanceid').value,
+					'domainurl':wtw_domainurl
+				});
+				wtw3dinternet.reconnectLoadZones();
+			});
+
+			wtw3dinternet.chat.on('disconnect', function(zdata) {
+				wtw3dinternet.chat.emit('wtwconnect', {
+					'serverinstanceid':dGet('wtw_serverinstanceid').value,
+					'serverip':dGet('wtw_serverip').value,
+					'userip':dGet('wtw_tuserip').value,
+					'instanceid':dGet('wtw_tinstanceid').value,
+					'domainurl':wtw_domainurl
+				});
+			});
+
+			wtw3dinternet.chat.on('user left', function(zdata) {
+
+			});
+
+
+
 
 			wtw3dinternet.chat.on('serror', function(zresponse) {
 				var zcolor = 'white';
@@ -37,14 +73,7 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 				WTW.log(zchannel + ' = ' + zerror, zcolor);
 			});
 			
-			wtw3dinternet.chat.on('user left', function(zdata) {
-
-			});
 /*
-			wtw3dinternet.chat.on('reconnect', function(zdata) {
-//				WTW.log('Chat-RECONNECT=' + JSON.stringify(zdata), 'red');
-
-			});
 			
 			wtw3dinternet.chat.on('reconnect_error', function(zdata) {
 //				WTW.log('Chat-RECONNECT_ERROR=' + JSON.stringify(zdata), 'red');

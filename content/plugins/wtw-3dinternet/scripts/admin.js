@@ -6,52 +6,38 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 	/* initiate the listeners for WalkTheWeb Admin channel communication */
 	try {
 		if (wtw3dinternet.admin == null) {
-			wtw3dinternet.admin = io.connect('https://3dnet.walktheweb.network/admin', {});
+			wtw3dinternet.admin = io.connect('https://3dnet.walktheweb.network/admin', {transports: ['websocket', "polling"]});
 			
-			wtw3dinternet.admin.emit('connect server', {
+			wtw3dinternet.admin.emit('wtwconnect', {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'serverip':dGet('wtw_serverip').value,
-				'instanceid':dGet('wtw_tinstanceid').value
-			});
-
-			wtw3dinternet.admin.emit('check server approval', {
-				'serverinstanceid':dGet('wtw_serverinstanceid').value,
-				'serverip':dGet('wtw_serverip').value,
-				'instanceid':dGet('wtw_tinstanceid').value
-			});
-
-			wtw3dinternet.admin.on('user left', function(zdata) {
-				WTW.log('USER LEFT=' + JSON.stringify(zdata), 'pink');
-			});
-
-
-			wtw3dinternet.admin.on('connect', function() {
-				/* WTW.log('Admin-CONNECT', 'pink'); */
-			});
-
-			wtw3dinternet.admin.on('connect_error', function(zdata) {
-				/* WTW.log('Admin-CONNECT-ERROR=' + JSON.stringify(zdata), 'pink'); */
+				'userip':dGet('wtw_tuserip').value,
+				'instanceid':dGet('wtw_tinstanceid').value,
+				'domainurl':wtw_domainurl
 			});
 
 			wtw3dinternet.admin.on('reconnect', function(zdata) {
-				/* WTW.log('Admin-RECONNECT=' + JSON.stringify(zdata), 'pink'); */
-				wtw3dinternet.admin.emit('connect server', {
+				wtw3dinternet.admin.emit('wtwconnect', {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
-					'instanceid':dGet('wtw_tinstanceid').value
+					'userip':dGet('wtw_tuserip').value,
+					'instanceid':dGet('wtw_tinstanceid').value,
+					'domainurl':wtw_domainurl
 				});
 			});
 
-			wtw3dinternet.admin.on('reconnect_error', function(zdata) {
-				/* WTW.log('Admin-RECONNECT_ERROR=' + JSON.stringify(zdata), 'pink'); */
+			wtw3dinternet.admin.on('disconnect', function(zdata) {
+				wtw3dinternet.admin.emit('wtwconnect', {
+					'serverinstanceid':dGet('wtw_serverinstanceid').value,
+					'serverip':dGet('wtw_serverip').value,
+					'userip':dGet('wtw_tuserip').value,
+					'instanceid':dGet('wtw_tinstanceid').value,
+					'domainurl':wtw_domainurl
+				});
 			});
 
-			wtw3dinternet.admin.on('disconnect user', function(zdata) {
-				/* WTW.log('DISCONNECT USER=' + JSON.stringify(zdata), 'pink'); */
-			});
+			wtw3dinternet.admin.on('user left', function(zdata) {
 
-			wtw3dinternet.admin.on('wtwadminresponse', function(zresponse) {
-				WTW.log('response=' + zresponse);
 			});
 
 			wtw3dinternet.admin.on('receive scene command', function(zdata) {
@@ -69,6 +55,10 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 				}
 			}); 
 			
+			wtw3dinternet.admin.on('wtwadminresponse', function(zresponse) {
+				WTW.log('response=' + zresponse);
+			});
+
 			wtw3dinternet.admin.on('serror', function(zresponse) {
 				var zcolor = 'white';
 				var zchannel = '';
@@ -86,6 +76,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 							case 'chat':
 								zcolor = 'white';
 								break;
+							default:
+								zcolor = 'gray';
+								break;
 						}
 					}
 					if (zresponse.page != undefined) {
@@ -98,29 +91,49 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 				WTW.log(zchannel + ' = ' + zerror, zcolor);
 			});
 
-			/* while web page is active, server will ping 3DNet Hub every 5 seconds (keep alive heartbeat) */
-			if (wtw3dinternet.checkConnection != null) {
-				window.clearInterval(wtw3dinternet.checkConnection);
-				wtw3dinternet.checkConnection = null;
-			}
-			wtw3dinternet.checkConnection = window.setInterval(function() { 
-				wtw3dinternet.admin.emit('connect server check', {
-					'serverinstanceid':dGet('wtw_serverinstanceid').value,
-					'serverip':dGet('wtw_serverip').value,
-					'communityid':communityid,
-					'buildingid':buildingid,
-					'thingid':thingid,
-					'domainurl':wtw_domainurl,
-					'siteurl':wtw_websiteurl,
-					'instanceid':dGet('wtw_tinstanceid').value,
-					'userid':dGet('wtw_tuserid').value,
-					'displayname':btoa(dGet('wtw_tdisplayname').value)
-				}); 
-			}, 5000);
+			wtw3dinternet.admin.on('connect_error', function(zdata) {
+				/* WTW.log('Admin-CONNECT-ERROR=' + JSON.stringify(zdata), 'pink'); */
+			});
 
+			wtw3dinternet.admin.on('reconnect_error', function(zdata) {
+				/* WTW.log('Admin-RECONNECT_ERROR=' + JSON.stringify(zdata), 'pink'); */
+			});
+
+			wtw3dinternet.admin.emit('check server approval', {
+				'serverinstanceid':dGet('wtw_serverinstanceid').value,
+				'serverip':dGet('wtw_serverip').value,
+				'instanceid':dGet('wtw_tinstanceid').value
+			});
 		}
 	} catch (ex) {
 		WTW.log('plugins:wtw-3dinternet:scripts-admin.js-initAdminSocket=' + ex.message);
+	} 
+}
+
+WTW_3DINTERNET.prototype.beforeUnloadAdmin = function() {
+	/* when web page is unloaded perform this first */
+	try {
+		if (wtw3dinternet.admin != null) {
+			wtw3dinternet.admin.emit('wtwdisconnect server', {
+				'serverinstanceid':dGet('wtw_serverinstanceid').value,
+				'instanceid':dGet('wtw_tinstanceid').value
+			});
+		}
+		if (wtw3dinternet.move != null) {
+			wtw3dinternet.move.emit('wtwdisconnect server', {
+				'serverinstanceid':dGet('wtw_serverinstanceid').value,
+				'instanceid':dGet('wtw_tinstanceid').value
+			});
+		}
+		if (wtw3dinternet.chat != null) {
+			wtw3dinternet.chat.emit('wtwdisconnect server', {
+				'serverinstanceid':dGet('wtw_serverinstanceid').value,
+				'instanceid':dGet('wtw_tinstanceid').value
+			});
+		}
+	} catch (ex) {
+		/* use for troubleshooting only */
+		/* WTW.log('plugins:wtw-3dinternet:scripts-admin.js-beforeUnloadMove=' + ex.message); */
 	} 
 }
 
