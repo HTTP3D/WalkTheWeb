@@ -14,6 +14,7 @@ try {
 	/* select community data */
 	$zresults = $wtwconnect->query("
 		select c1.*,
+			az1.actionzoneid as extremeloadzoneid,
 			case when c1.textureid = '' then ''
 				else
 					(select u1.filepath 
@@ -83,6 +84,12 @@ try {
 		from ".wtw_tableprefix."communities c1 
 			left join ".wtw_tableprefix."uploads u3
 				on c1.textureid=u3.uploadid
+			left join (select communityid, actionzoneid 
+				from ".wtw_tableprefix."actionzones 
+				where actionzonename like 'extreme%' 
+					and not actionzonename like '%custom%' 
+					and not communityid='') az1 
+				on c1.communityid=az1.communityid
 		where c1.communityid='".$zcommunityid."'
 		   and c1.deleted=0;");
 
@@ -107,6 +114,7 @@ try {
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["snapshotpath"],
 			'analyticsid'=> $zrow["analyticsid"],
+			'extremeloadzoneid' => $zrow["extremeloadzoneid"],
 			'createdate' => $zrow["createdate"],
 			'createuserid' => $zrow["createuserid"],
 			'updatedate' => $zrow["updatedate"],

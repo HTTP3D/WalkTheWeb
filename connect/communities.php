@@ -128,6 +128,7 @@ try {
 				c1.updateuserid,
 				u1.filepath,
 				u1.filetype,
+				az1.actionzoneid as extremeloadzoneid,
 				max(u1.filedata) as filedata
 			from ".wtw_tableprefix."communities c1
 				left join ".wtw_tableprefix."uploads u1
@@ -136,6 +137,12 @@ try {
 					on c1.textureid=u2.uploadid
 				left join ".wtw_tableprefix."uploads u3
 					on c1.waterbumpid=u3.uploadid
+				left join (select communityid, actionzoneid 
+					from ".wtw_tableprefix."actionzones 
+					where actionzonename like 'extreme%' 
+						and not actionzonename like '%custom%' 
+						and not communityid='') az1 
+					on c1.communityid=az1.communityid
 			where 
 			   c1.deleted=0
 			group by 
@@ -239,7 +246,8 @@ try {
 				c1.updatedate,
 				c1.updateuserid,
 				u1.filepath,
-				u1.filetype
+				u1.filetype,
+				az1.actionzoneid
 			order by c1.communityname, 
 				c1.communityid;");
 	} else {
@@ -346,6 +354,7 @@ try {
 				c1.updateuserid,
 				u1.filepath,
 				u1.filetype,
+				az1.actionzoneid as extremeloadzoneid,
 				max(u1.filedata) as filedata
 			from ".wtw_tableprefix."userauthorizations ua1
 				inner join ".wtw_tableprefix."communities c1
@@ -356,6 +365,12 @@ try {
 					on c1.textureid=u2.uploadid
 				left join ".wtw_tableprefix."uploads u3
 					on c1.waterbumpid=u3.uploadid
+				left join (select communityid, actionzoneid 
+					from ".wtw_tableprefix."actionzones 
+					where actionzonename like 'extreme%' 
+						and not actionzonename like '%custom%' 
+						and not communityid='') az1 
+					on c1.communityid=az1.communityid
 			where ua1.userid='".$wtwconnect->userid."'
 					and ua1.deleted=0
 					and (ua1.useraccess='admin'
@@ -462,7 +477,8 @@ try {
 				c1.updatedate,
 				c1.updateuserid,
 				u1.filepath,
-				u1.filetype
+				u1.filetype,
+				az1.actionzoneid
 			order by c1.communityname, 
 				c1.communityid;");
 	}
@@ -491,6 +507,7 @@ try {
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["filepath"],
 			'analyticsid'=> $zrow["analyticsid"],
+			'extremeloadzoneid' => $zrow["extremeloadzoneid"],
 			'createdate' => $zrow["createdate"],
 			'createuserid' => $zrow["createuserid"],
 			'updatedate' => $zrow["updatedate"],
