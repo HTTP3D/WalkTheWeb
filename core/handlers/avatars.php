@@ -78,9 +78,6 @@ try {
 		case "quicksaveavatar":
 			$zresponse = $wtwavatars->quicksaveAvatar($zinstanceid, $zuserip, $zavatarid, $zdisplayname);
 			break;
-		case "saveavatarcolor":
-			$wtwavatars->saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb);
-			break;
 		case "saveavatardisplayname":
 			$wtwavatars->saveAvatarDisplayName($zuseravatarid, $zinstanceid, $zavatardisplayname);
 			break;
