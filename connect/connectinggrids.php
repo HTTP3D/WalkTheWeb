@@ -5,6 +5,7 @@
 require_once('../core/functions/class_wtwconnect.php');
 global $wtwconnect;
 try {
+	//zresponse
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/connectinggrids.php");
 	

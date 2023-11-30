@@ -66,7 +66,24 @@ try {
 	$zstoreapiurl = $wtwconnect->decode64($zstoreapiurl);
 	$ziframes = $wtwconnect->decode64($ziframes);
 	$zhostuserid = '';
-
+$wtwconnect->serror("zwpinstanceid=".$zwpinstanceid);
+$wtwconnect->serror("zwebsiteurl=".$zwebsiteurl);
+$wtwconnect->serror("zbuildingid=".$zbuildingid);
+$wtwconnect->serror("zcommunityid=".$zcommunityid);
+$wtwconnect->serror("zwtwemail=".$zwtwemail);
+$wtwconnect->serror("zwtwuserid=".$zwtwuserid);
+$wtwconnect->serror("zhosturl=".$zhosturl);
+$wtwconnect->serror("zwtwurl=".$zwtwurl);
+$wtwconnect->serror("zwebname=".$zwebname);
+$wtwconnect->serror("zwtwstorename=".$zwtwstorename);
+$wtwconnect->serror("zwtwsecret=".$zwtwsecret);
+$wtwconnect->serror("zwookey=".$zwookey);
+$wtwconnect->serror("zwoosecret=".$zwoosecret);
+$wtwconnect->serror("zstoreurl=".$zstoreurl);
+$wtwconnect->serror("zstorecarturl=".$zstorecarturl);
+$wtwconnect->serror("zstoreproducturl=".$zstoreproducturl);
+$wtwconnect->serror("zstoreapiurl=".$zstoreapiurl);
+$wtwconnect->serror("ziframes=".$ziframes);
 	try {
 		$zparse = parse_url($zhosturl);
 		$zdomainname = $zparse['host'];
@@ -76,6 +93,7 @@ try {
 	} catch (Exception $e) {
 		
 	}
+$wtwconnect->serror("zforcehttps=".$zforcehttps);
 	$zresponse = array();
 
 	switch ($zfunction) {
@@ -107,8 +125,10 @@ try {
 				'buildingid'=>'',
 				'communityid'=>''
 			);
+$wtwconnect->serror("zwtwusertoken=".$zwtwusertoken);
 
 			if ($wtwconnect->hasValue($zwtwusertoken)) {
+$wtwconnect->serror("HAS zwtwusertoken");
 				/* check is the user with the access token has admin or host access */
 				$zresults = $wtwconnect->query("
 					select u1.*,
@@ -144,6 +164,7 @@ try {
 					$serror = 'User does not have permission on WalkTheWeb Server';
 				}
 			} else if ($wtwconnect->hasValue($zusertoken)) {
+$wtwconnect->serror("HAS zusertoken");
 				/* check is the user with the access token has admin or host access */
 				$zresults = $wtwconnect->query("
 					select u1.*,
@@ -173,8 +194,10 @@ try {
 			if ($wtwconnect->hasValue($zuserid)) {
 				$zauthenticationok = true;
 			}
+$wtwconnect->serror("zauthenticationok=".$zauthenticationok);
 
 			if ($zauthenticationok && isset($zwebname) && !empty($zwebname)) {
+$wtwconnect->serror("HAS auth and webname");
 				/* reserved words can not be any part of the webname - you can add your own reserved words */
 				$zreserved = array('wtw','walktheweb','http3d','https3d');
 
@@ -204,8 +227,10 @@ try {
 					$serror = 'Web Name is already in use.';
 				}
 			}
+$wtwconnect->serror("zwebnameok=".$zwebnameok);
 
 			if ($zauthenticationok && $zwebnameok) {
+$wtwconnect->serror("HAS auth and webnameOK");
 				if ($wtwconnect->isUserInRole("Host")) {
 					$zhostuserid = $zuserid;
 				}
@@ -251,7 +276,7 @@ try {
 					$zbuildingrotationy = $zrow["buildingrotationy"];
 					$zbuildingrotationz = $zrow["buildingrotationz"];
 				}
-
+$wtwconnect->serror("DOWNLOAD BUILDING");
 				/* download building */
 				$zresults = $wtw_3dinternet_downloads->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
 				
@@ -267,7 +292,7 @@ try {
 							limit 1;
 					");
 				}
-				
+$wtwconnect->serror("ADD WEB ALIAS");
 				/* add webalias for new community to map the web url to the new 3D Website */
 				$zwebaliasid = $wtwconnect->getRandomString(16,1);
 				$wtwconnect->query("
@@ -303,7 +328,7 @@ try {
 						'".$zuserid."',
 						now(),
 						'".$zuserid."');");
-				
+$wtwconnect->serror("ADD WEB ALIAS FOR BUILDING");
 				/* add webalias for new 3D Building so it can be opened directly */ 
 				$zwebaliasid = $wtwconnect->getRandomString(16,1);
 				$wtwconnect->query("
@@ -342,6 +367,8 @@ try {
 				
 				/* if store key and secret exist - check if plugin is installed */
 				if ($wtwconnect->hasValue($zstoreurl) && $wtwconnect->hasValue($zwookey) && $wtwconnect->hasValue($zwoosecret)) {
+$wtwconnect->serror("HAS storeurl and wookey and woosecret");
+
 					/* check if store tables exist (3D Shopping Plugin exists) */
 					$zstoretables = 0;
 					$zresults = $wtwconnect->query("
@@ -355,6 +382,7 @@ try {
 					}
 					/* if store tables exist - add permission entries */
 					if ($zstoretables > 1) {
+$wtwconnect->serror("HAS STORE TABLES");
 						$zstoreid = $wtwconnect->getRandomString(16,1);
 						$wtwconnect->query("
 							insert into ".wtw_tableprefix."shopping_stores
@@ -389,7 +417,7 @@ try {
 								 '".$zuserid."',
 								 now(),
 								 '".$zuserid."');");
-						
+$wtwconnect->serror("CONNECT STORE");
 						/* connect store settings to 3D Store Building */
 						$zconnectid = $wtwconnect->getRandomString(16,1);
 						$wtwconnect->query("
@@ -433,6 +461,7 @@ try {
 			}
 			break;
 	}
+$wtwconnect->serror("DONE");
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
 	$wtwconnect->serror("connect-wordpress.php=".$e->getMessage());
