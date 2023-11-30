@@ -16,16 +16,20 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 		var zobjectfolder = '/content/system/babylon/menus/';
 		var zobjectfile = 'wtw-loginmenu.babylon';
 		var zobjectanimations = [];
+		var zheight = 0;
 		if (zhudlogin != null) {
 			WTW.closeLoginHUD();
 		}
 		var zcamerafront = WTW.getMeshOrNodeByID('camerafront');
 		
+		if (zpage == 'Edit My Avatar') {
+			zheight = 1;
+		}
 		zhudlogin = new BABYLON.TransformNode(zmoldname);
 		if (WTW.sizeX < WTW.sizeY) {
-			zhudlogin.position = new BABYLON.Vector3(0,5,0);
+			zhudlogin.position = new BABYLON.Vector3(0,5 + zheight,0);
 		} else {
-			zhudlogin.position = new BABYLON.Vector3(0,0,0);
+			zhudlogin.position = new BABYLON.Vector3(0,zheight,0);
 		}
 		zhudlogin.rotation = new BABYLON.Vector3(0,WTW.getRadians(90),WTW.getRadians(20));
 		zhudlogin.scaling = new BABYLON.Vector3(1,1,1);
@@ -156,8 +160,8 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[0].animationname = 'HUDLOGINonloadusermenu';
 				zobjectanimations[0].moldevent = 'onload';
 				zobjectanimations[0].moldnamepart = '';
-				zobjectanimations[0].startframe = 80;
-				zobjectanimations[0].endframe = 100;
+				zobjectanimations[0].startframe = 100;
+				zobjectanimations[0].endframe = 120;
 				zobjectanimations[0].animationloop = false;
 				zobjectanimations[0].speedratio = 1.00;
 				zobjectanimations[0].additionalscript = '';
@@ -211,8 +215,8 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[5].animationname = 'HUDLOGINbuttonclose';
 				zobjectanimations[5].moldevent = 'onclick';
 				zobjectanimations[5].moldnamepart = 'button-close';
-				zobjectanimations[5].startframe = 100;
-				zobjectanimations[5].endframe = 120;
+				zobjectanimations[5].startframe = 80;
+				zobjectanimations[5].endframe = 100;
 				zobjectanimations[5].animationloop = false;
 				zobjectanimations[5].speedratio = 1.00;
 				zobjectanimations[5].additionalscript = '';
@@ -457,6 +461,176 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[5].additionalparameters = '';
 
 				break;
+			case "Edit My Avatar":
+				zobjectfile = 'wtw-editavatarmenu.babylon';
+				
+				zobjectanimations[0] = WTW.newObjectAnimation();
+				zobjectanimations[0].animationname = 'HUDLOGINonloadeditavatarmenu';
+				zobjectanimations[0].moldevent = 'onload';
+				zobjectanimations[0].moldnamepart = '';
+				zobjectanimations[0].startframe = 280;
+				zobjectanimations[0].endframe = 300;
+				zobjectanimations[0].animationloop = false;
+				zobjectanimations[0].speedratio = 1.00;
+				zobjectanimations[0].additionalscript = '';
+				zobjectanimations[0].additionalparameters = '';
+				
+				zobjectanimations[1] = WTW.newObjectAnimation();
+				zobjectanimations[1].animationname = 'HUDLOGINbuttonpart0';
+				zobjectanimations[1].moldevent = 'onclick';
+				zobjectanimations[1].moldnamepart = 'button-part-0';
+				zobjectanimations[1].startframe = 1;
+				zobjectanimations[1].endframe = 20;
+				zobjectanimations[1].animationloop = false;
+				zobjectanimations[1].speedratio = 1.00;
+				zobjectanimations[1].additionalscript = '';
+				zobjectanimations[1].additionalparameters = '';
+
+				zobjectanimations[2] = WTW.newObjectAnimation();
+				zobjectanimations[2].animationname = 'HUDLOGINbuttonpart1';
+				zobjectanimations[2].moldevent = 'onclick';
+				zobjectanimations[2].moldnamepart = 'button-part-1';
+				zobjectanimations[2].startframe = 20;
+				zobjectanimations[2].endframe = 40;
+				zobjectanimations[2].animationloop = false;
+				zobjectanimations[2].speedratio = 1.00;
+				zobjectanimations[2].additionalscript = '';
+				zobjectanimations[2].additionalparameters = '';
+
+				zobjectanimations[3] = WTW.newObjectAnimation();
+				zobjectanimations[3].animationname = 'HUDLOGINbuttonpart2';
+				zobjectanimations[3].moldevent = 'onclick';
+				zobjectanimations[3].moldnamepart = 'button-part-2';
+				zobjectanimations[3].startframe = 40;
+				zobjectanimations[3].endframe = 60;
+				zobjectanimations[3].animationloop = false;
+				zobjectanimations[3].speedratio = 1.00;
+				zobjectanimations[3].additionalscript = '';
+				zobjectanimations[3].additionalparameters = '';
+
+				zobjectanimations[4] = WTW.newObjectAnimation();
+				zobjectanimations[4].animationname = 'HUDLOGINbuttonpart3';
+				zobjectanimations[4].moldevent = 'onclick';
+				zobjectanimations[4].moldnamepart = 'button-part-3';
+				zobjectanimations[4].startframe = 60;
+				zobjectanimations[4].endframe = 80;
+				zobjectanimations[4].animationloop = false;
+				zobjectanimations[4].speedratio = 1.00;
+				zobjectanimations[4].additionalscript = '';
+				zobjectanimations[4].additionalparameters = '';
+
+				zobjectanimations[5] = WTW.newObjectAnimation();
+				zobjectanimations[5].animationname = 'HUDLOGINbuttonpart4';
+				zobjectanimations[5].moldevent = 'onclick';
+				zobjectanimations[5].moldnamepart = 'button-part-4';
+				zobjectanimations[5].startframe = 80;
+				zobjectanimations[5].endframe = 100;
+				zobjectanimations[5].animationloop = false;
+				zobjectanimations[5].speedratio = 1.00;
+				zobjectanimations[5].additionalscript = '';
+				zobjectanimations[5].additionalparameters = '';
+
+				zobjectanimations[6] = WTW.newObjectAnimation();
+				zobjectanimations[6].animationname = 'HUDLOGINbuttonpart5';
+				zobjectanimations[6].moldevent = 'onclick';
+				zobjectanimations[6].moldnamepart = 'button-part-5';
+				zobjectanimations[6].startframe = 100;
+				zobjectanimations[6].endframe = 120;
+				zobjectanimations[6].animationloop = false;
+				zobjectanimations[6].speedratio = 1.00;
+				zobjectanimations[6].additionalscript = '';
+				zobjectanimations[6].additionalparameters = '';
+
+				zobjectanimations[7] = WTW.newObjectAnimation();
+				zobjectanimations[7].animationname = 'HUDLOGINbuttonpart6';
+				zobjectanimations[7].moldevent = 'onclick';
+				zobjectanimations[7].moldnamepart = 'button-part-6';
+				zobjectanimations[7].startframe = 120;
+				zobjectanimations[7].endframe = 140;
+				zobjectanimations[7].animationloop = false;
+				zobjectanimations[7].speedratio = 1.00;
+				zobjectanimations[7].additionalscript = '';
+				zobjectanimations[7].additionalparameters = '';
+
+				zobjectanimations[8] = WTW.newObjectAnimation();
+				zobjectanimations[8].animationname = 'HUDLOGINbuttonpart7';
+				zobjectanimations[8].moldevent = 'onclick';
+				zobjectanimations[8].moldnamepart = 'button-part-7';
+				zobjectanimations[8].startframe = 140;
+				zobjectanimations[8].endframe = 160;
+				zobjectanimations[8].animationloop = false;
+				zobjectanimations[8].speedratio = 1.00;
+				zobjectanimations[8].additionalscript = '';
+				zobjectanimations[8].additionalparameters = '';
+
+				zobjectanimations[9] = WTW.newObjectAnimation();
+				zobjectanimations[9].animationname = 'HUDLOGINbuttonpart8';
+				zobjectanimations[9].moldevent = 'onclick';
+				zobjectanimations[9].moldnamepart = 'button-part-8';
+				zobjectanimations[9].startframe = 160;
+				zobjectanimations[9].endframe = 180;
+				zobjectanimations[9].animationloop = false;
+				zobjectanimations[9].speedratio = 1.00;
+				zobjectanimations[9].additionalscript = '';
+				zobjectanimations[9].additionalparameters = '';
+
+				zobjectanimations[10] = WTW.newObjectAnimation();
+				zobjectanimations[10].animationname = 'HUDLOGINbuttonpart9';
+				zobjectanimations[10].moldevent = 'onclick';
+				zobjectanimations[10].moldnamepart = 'button-part-9';
+				zobjectanimations[10].startframe = 180;
+				zobjectanimations[10].endframe = 200;
+				zobjectanimations[10].animationloop = false;
+				zobjectanimations[10].speedratio = 1.00;
+				zobjectanimations[10].additionalscript = '';
+				zobjectanimations[10].additionalparameters = '';
+
+				zobjectanimations[11] = WTW.newObjectAnimation();
+				zobjectanimations[11].animationname = 'HUDLOGINbuttoncolor';
+				zobjectanimations[11].moldevent = 'onclick';
+				zobjectanimations[11].moldnamepart = 'button-color';
+				zobjectanimations[11].startframe = 200;
+				zobjectanimations[11].endframe = 220;
+				zobjectanimations[11].animationloop = false;
+				zobjectanimations[11].speedratio = 1.00;
+				zobjectanimations[11].additionalscript = '';
+				zobjectanimations[11].additionalparameters = '';
+
+				zobjectanimations[12] = WTW.newObjectAnimation();
+				zobjectanimations[12].animationname = 'HUDLOGINbuttonsize';
+				zobjectanimations[12].moldevent = 'onclick';
+				zobjectanimations[12].moldnamepart = 'button-size';
+				zobjectanimations[12].startframe = 220;
+				zobjectanimations[12].endframe = 240;
+				zobjectanimations[12].animationloop = false;
+				zobjectanimations[12].speedratio = 1.00;
+				zobjectanimations[12].additionalscript = '';
+				zobjectanimations[12].additionalparameters = '';
+
+				zobjectanimations[13] = WTW.newObjectAnimation();
+				zobjectanimations[13].animationname = 'HUDLOGINbuttonsavecolorscaling';
+				zobjectanimations[13].moldevent = 'onclick';
+				zobjectanimations[13].moldnamepart = 'button-savecolorscaling';
+				zobjectanimations[13].startframe = 240;
+				zobjectanimations[13].endframe = 260;
+				zobjectanimations[13].animationloop = false;
+				zobjectanimations[13].speedratio = 1.00;
+				zobjectanimations[13].additionalscript = '';
+				zobjectanimations[13].additionalparameters = '';
+
+				zobjectanimations[14] = WTW.newObjectAnimation();
+				zobjectanimations[14].animationname = 'HUDLOGINbuttonclose';
+				zobjectanimations[14].moldevent = 'onclick';
+				zobjectanimations[14].moldnamepart = 'button-close';
+				zobjectanimations[14].startframe = 260;
+				zobjectanimations[14].endframe = 280;
+				zobjectanimations[14].animationloop = false;
+				zobjectanimations[14].speedratio = 1.00;
+				zobjectanimations[14].additionalscript = '';
+				zobjectanimations[14].additionalparameters = '';
+
+				break;
+
 		}
 		BABYLON.SceneLoader.ImportMeshAsync('', zobjectfolder, zobjectfile, scene).then(
 			function (zresults) {
@@ -590,6 +764,9 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								case 'password-password2':
 								case 'name-displayname':
 								case 'check-remember':
+								case 'button-color':
+								case 'button-size':
+								case 'button-savecolorscaling':
 								case 'button-next':
 								case 'button-previous':
 								case 'button-save':
@@ -620,6 +797,44 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								case 'loading3dthing':
 								case 'globalserverdecal':
 								case 'localserverdecal':
+								case 'button-part-0':
+								case 'button-part-1':
+								case 'button-part-2':
+								case 'button-part-3':
+								case 'button-part-4':
+								case 'button-part-5':
+								case 'button-part-6':
+								case 'button-part-7':
+								case 'button-part-8':
+								case 'button-part-9':
+								case 'sizelabels':
+								case 'button-scalex':
+								case 'button-scalex0':
+								case 'button-scalex0text':
+								case 'button-scalex1':
+								case 'button-scalex1text':
+								case 'button-scalex2':
+								case 'button-scalex2text':
+								case 'button-scalex3':
+								case 'button-scalex3text':
+								case 'button-scaley':
+								case 'button-scaley0':
+								case 'button-scaley0text':
+								case 'button-scaley1':
+								case 'button-scaley1text':
+								case 'button-scaley2':
+								case 'button-scaley2text':
+								case 'button-scaley3':
+								case 'button-scaley3text':
+								case 'button-scalez':
+								case 'button-scalez0':
+								case 'button-scalez0text':
+								case 'button-scalez1':
+								case 'button-scalez1text':
+								case 'button-scalez2':
+								case 'button-scalez2text':
+								case 'button-scalez3':
+								case 'button-scalez3text':
 									zresults.meshes[i].isPickable = false;
 									zresults.meshes[i].isVisible = false;
 									break;
@@ -787,6 +1002,11 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 							zmoldfocus = 'hudlogin-name-displayname';
 							WTW.hudLoginLoadAvatars();
 							break;
+						case "Edit My Avatar":
+							WTW.cameraDistance = 34;
+							/* open for color changing */
+							WTW.hudLoginLoadEditAvatarColors();
+							break;
 					}
 					if (zmoldfocus != '') {
 						window.setTimeout(function() {
@@ -836,29 +1056,43 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 		var zmoldgreen = WTW.getMeshOrNodeByID('hudlogin-green');
 		var zmoldwhite = WTW.getMeshOrNodeByID('hudlogin-white');
 		var zmoldyellow = WTW.getMeshOrNodeByID('hudlogin-yellow');
+		var zmatcurrent = null;
 		var zmatblue = null;
 		var zmatblack = null;
 		var zmatgray = null;
 		var zmatgreen = null;
 		var zmatwhite = null;
 		var zmatyellow = null;
+		if (zmold != null) {
+			if (zmold.material != null) {
+				if (zmold.material.id != undefined) {
+					zmatcurrent = zmold.material.id;
+				}
+			}
+		}
 		if (zmoldblue != null) {
 			zmatblue = zmoldblue.material.clone();
+			zmatblue.id = 'blue';
 		}
 		if (zmoldblack != null) {
 			zmatblack = zmoldblack.material.clone();
+			zmatblack.id = 'black';
 		}
 		if (zmoldgray != null) {
 			zmatgray = zmoldgray.material.clone();
+			zmatgray.id = 'gray';
 		}
 		if (zmoldgreen != null) {
 			zmatgreen = zmoldgreen.material.clone();
+			zmatgreen.id = 'green';
 		}
 		if (zmoldwhite != null) {
 			zmatwhite = zmoldwhite.material.clone();
+			zmatwhite.id = 'white';
 		}
 		if (zmoldyellow != null) {
 			zmatyellow = zmoldyellow.material.clone();
+			zmatyellow.id = 'yellow';
 		}
 		
 		switch (zmoldname) {
@@ -868,6 +1102,8 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-editprofile':
 			case 'hudlogin-button-avatarselect':
 			case 'hudlogin-button-avataredit':
+			case 'hudlogin-button-color':
+			case 'hudlogin-button-size':
 			case 'hudlogin-button-logout':
 			case 'hudlogin-button-create':
 			case 'hudlogin-button-reset':
@@ -875,20 +1111,46 @@ WTWJS.prototype.mouseOverLoginHUD = function(zmoldname, zhover) {
 			case 'hudlogin-button-enter':
 			case 'hudlogin-button-enterlogin':
 			case 'hudlogin-button-save':
+			case 'hudlogin-button-savecolorscaling':
+			case 'hudlogin-button-part-0':
+			case 'hudlogin-button-part-1':
+			case 'hudlogin-button-part-2':
+			case 'hudlogin-button-part-3':
+			case 'hudlogin-button-part-4':
+			case 'hudlogin-button-part-5':
+			case 'hudlogin-button-part-6':
+			case 'hudlogin-button-part-7':
+			case 'hudlogin-button-part-8':
+			case 'hudlogin-button-part-9':
+			case 'hudlogin-button-scalex0':
+			case 'hudlogin-button-scalex1':
+			case 'hudlogin-button-scalex2':
+			case 'hudlogin-button-scalex3':
+			case 'hudlogin-button-scaley0':
+			case 'hudlogin-button-scaley1':
+			case 'hudlogin-button-scaley2':
+			case 'hudlogin-button-scaley3':
+			case 'hudlogin-button-scalez0':
+			case 'hudlogin-button-scalez1':
+			case 'hudlogin-button-scalez2':
+			case 'hudlogin-button-scalez3':
 				/* larger main buttons */
-				if (zhover == 1) {
-					if (zmatgreen != null && zmold != null) {
-						zmold.material = zmatgreen;
-					}
-					if (zmatyellow != null && zmoldtext != null) {
-						zmoldtext.material = zmatyellow;
-					}
-				} else {
-					if (zmatblue != null && zmold != null) {
-						zmold.material = zmatblue;
-					}
-					if (zmatwhite != null && zmoldtext != null) {
-						zmoldtext.material = zmatwhite;
+				if (zmatcurrent != 'black') {
+					/* if not black background - selected button */
+					if (zhover == 1) {
+						if (zmatgreen != null && zmold != null) {
+							zmold.material = zmatgreen;
+						}
+						if (zmatyellow != null && zmoldtext != null) {
+							zmoldtext.material = zmatyellow;
+						}
+					} else {
+						if (zmatblue != null && zmold != null) {
+							zmold.material = zmatblue;
+						}
+						if (zmatwhite != null && zmoldtext != null) {
+							zmoldtext.material = zmatwhite;
+						}
 					}
 				}
 				break;
@@ -947,6 +1209,42 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 			case 'hudlogin-name-displayname':
 				WTW.changeLoginHUDFocus(zmoldname);
 				break;
+			case 'hudlogin-button-scalex0':
+				WTW.hudLoginUpdateAvatarScaling('x', -.01);
+				break;
+			case 'hudlogin-button-scalex1':
+				WTW.hudLoginUpdateAvatarScaling('x', -.001);
+				break;
+			case 'hudlogin-button-scalex2':
+				WTW.hudLoginUpdateAvatarScaling('x', .001);
+				break;
+			case 'hudlogin-button-scalex3':
+				WTW.hudLoginUpdateAvatarScaling('x', .01);
+				break;
+			case 'hudlogin-button-scalez0':
+				WTW.hudLoginUpdateAvatarScaling('z', -.01);
+				break;
+			case 'hudlogin-button-scalez1':
+				WTW.hudLoginUpdateAvatarScaling('z', -.001);
+				break;
+			case 'hudlogin-button-scalez2':
+				WTW.hudLoginUpdateAvatarScaling('z', .001);
+				break;
+			case 'hudlogin-button-scalez3':
+				WTW.hudLoginUpdateAvatarScaling('z', .01);
+				break;
+			case 'hudlogin-button-scaley0':
+				WTW.hudLoginUpdateAvatarScaling('y', -.01);
+				break;
+			case 'hudlogin-button-scaley1':
+				WTW.hudLoginUpdateAvatarScaling('y', -.001);
+				break;
+			case 'hudlogin-button-scaley2':
+				WTW.hudLoginUpdateAvatarScaling('y', .001);
+				break;
+			case 'hudlogin-button-scaley3':
+				WTW.hudLoginUpdateAvatarScaling('y', .01);
+				break;
 			default:
 				window.setTimeout(function() {
 					if (zmoldname == 'hudlogin-button-loginlocal') {
@@ -966,8 +1264,7 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						WTW.openLoginHUD('Select My Avatar');
 					} else if (zmoldname == 'hudlogin-button-avataredit') {
 						/* edit my avatar */
-						WTW.closeLoginHUD();
-						WTW.openAvatarDesigner();
+						WTW.openLoginHUD('Edit My Avatar');
 					} else if (zmoldname == 'hudlogin-button-logout') {
 						/* logout */
 						WTW.closeLoginHUD();
@@ -1009,10 +1306,26 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 					} else if (zmoldname == 'hudlogin-button-previous') {
 						/* select avatar - show previous avatar */
 						WTW.hudLoginShowAvatar(WTW.selectedAvatar - 1);
+					} else if (zmoldname == 'hudlogin-button-color') {
+						/* open for color changing */
+						WTW.hudLoginLoadEditAvatarColors();
+					} else if (zmoldname.indexOf('hudlogin-button-part') > -1) {
+						/* select part of color change */
+						WTW.hudLoginEditAvatarColors(zmoldname);
+					} else if (zmoldname == 'hudlogin-button-size') {
+						/* open for scaling changing */
+						WTW.hudLoginLoadEditAvatarScaling();
 					} else if (zmoldname == 'hudlogin-button-save' || zmoldname == 'hudlogin-preview') {
 						/* select avatar - save selection and display name */
 						WTW.hudLoginSaveAvatar();
+					} else if (zmoldname == 'hudlogin-button-savecolorscaling') {
+						/* save my avatar colors and scaling */
+						WTW.cameraDistance = WTW.getCookie('cameradistance');
+						WTW.saveMyAvatarColorScaling();
+						WTW.closeLoginHUD();
 					} else if (zmoldname == 'hudlogin-button-close' || zmoldname == 'hudlogin-button-closeloginmenu' || zmoldname == 'hudlogin-button-cancelselect') {
+						/* reset camera distance - from edit avatar */
+						WTW.cameraDistance = WTW.getCookie('cameradistance');
 						WTW.closeLoginHUD();
 					}
 					/* allow plugins to add code */
@@ -1613,15 +1926,17 @@ WTWJS.prototype.hudLoginSaveAvatar = function() {
 		}
 		WTW.openLoginHUD('Loading 3D Avatar');
 		/* save cookie and load avatar */
-		if (WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid != '') {
-			WTW.setCookie('globaluseravatarid', WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid, 365);
-			WTW.onMyAvatarSelect(WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid, '', '');
-		} else if (WTW.selectAvatars[WTW.selectedAvatar].useravatarid != '') {
-			WTW.setCookie('useravatarid', WTW.selectAvatars[WTW.selectedAvatar].useravatarid, 365);
-			WTW.onMyAvatarSelect('', WTW.selectAvatars[WTW.selectedAvatar].useravatarid, '');
-		} else {
-			WTW.setCookie('avatarid', WTW.selectAvatars[WTW.selectedAvatar].avatarid, 365);
-			WTW.onMyAvatarSelect('', '', WTW.selectAvatars[WTW.selectedAvatar].avatarid);
+		if (WTW.selectAvatars[WTW.selectedAvatar] != undefined) {
+			if (WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid != '') {
+				WTW.setCookie('globaluseravatarid', WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid, 365);
+				WTW.onMyAvatarSelect(WTW.selectAvatars[WTW.selectedAvatar].globaluseravatarid, '', '');
+			} else if (WTW.selectAvatars[WTW.selectedAvatar].useravatarid != '') {
+				WTW.setCookie('useravatarid', WTW.selectAvatars[WTW.selectedAvatar].useravatarid, 365);
+				WTW.onMyAvatarSelect('', WTW.selectAvatars[WTW.selectedAvatar].useravatarid, '');
+			} else {
+				WTW.setCookie('avatarid', WTW.selectAvatars[WTW.selectedAvatar].avatarid, 365);
+				WTW.onMyAvatarSelect('', '', WTW.selectAvatars[WTW.selectedAvatar].avatarid);
+			}
 		}
 		/* save displayname */
 		var zrequest = {
@@ -1896,3 +2211,864 @@ WTWJS.prototype.hudLoginShowAvatar = function(zindex) {
 	}
 }
 
+WTWJS.prototype.hudLoginUpdateAvatarScaling = function(zdirection, zinterval) {
+	/* get avatar ready for edit scaling */
+	try {
+		var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
+		
+		var ztextx = '';
+		var ztexty = '';
+		var ztextz = '';
+		var zheight = 1.15;
+		var zvalue = '0';
+		var zmoldname = 'hudlogin-scale-x-text';
+		var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+		if (zmyavatar != null) {
+			ztextx = zmyavatar.scaling.x.toString();
+			ztextz = zmyavatar.scaling.z.toString();
+			ztexty = zmyavatar.scaling.y.toString();
+		}
+		
+		switch (zdirection) {
+			case 'x':
+				zheight = 1.15;
+				zvalue = ztextx;
+				zmoldname = 'hudlogin-scale-x-text';
+				zvalue = Number(zvalue) + zinterval;
+				zmyavatar.scaling.x = zvalue;
+				break;
+			case 'z':
+				zheight = -1.95;
+				zvalue = ztextz;
+				zmoldname = 'hudlogin-scale-z-text';
+				zvalue = Number(zvalue) + zinterval;
+				zmyavatar.scaling.z = zvalue;
+				break;
+			case 'y':
+				zheight = -5.05;
+				zvalue = ztexty;
+				zmoldname = 'hudlogin-scale-y-text';
+				zvalue = Number(zvalue) + zinterval;
+				zmyavatar.scaling.y = zvalue;
+				break;
+		}
+		
+		var ztext = Number(zvalue).toFixed(3);
+		
+		var zwebstyle = {
+			'font-family': 'Arial',
+			'anchor':'center',
+			'letter-height':.6,
+			'letter-thickness':.1,
+			'color':'#000000',
+			'alpha':1.00,
+			'colors':{
+				'diffuse':'#000000',
+				'specular':'#000000',
+				'ambient':'#000000',
+				'emissive':'#000000'
+			}
+		};
+		
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
+		if (zmold != null) {
+			zmold.dispose();
+		}
+		var zdisplaytext = new Writer(ztext, zwebstyle);
+		zmold = zdisplaytext.getMesh();
+		zmold.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, WTW.getRadians(-90));
+		zmold.position.y = zheight;
+		zmold.position.x = 2;
+		zmold.position.z = 5.9;
+		zmold.id = zmoldname;
+		zmold.name = zmoldname;
+		zmold.parent = zhudlogin;
+		zmold.isPickable = false;
+		zmold.renderingGroupId = 3;
+		
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginUpdateAvatarScaling=' + ex.message);
+	}
+}
+
+WTWJS.prototype.hudLoginLoadEditAvatarScaling = function() {
+	/* get avatar ready for edit scaling */
+	try {
+		var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
+		/* select Size button and unselect Color button */
+		var zsize = WTW.getMeshOrNodeByID('hudlogin-button-size');
+		var zsizetext = WTW.getMeshOrNodeByID('hudlogin-button-sizetext');
+		var zcolor = WTW.getMeshOrNodeByID('hudlogin-button-color');
+		var zcolortext = WTW.getMeshOrNodeByID('hudlogin-button-colortext');
+		var zmoldblue = WTW.getMeshOrNodeByID('hudlogin-blue');
+		var zmoldwhite = WTW.getMeshOrNodeByID('hudlogin-white');
+		var zmoldblack = WTW.getMeshOrNodeByID('hudlogin-black');
+		var zmoldyellow = WTW.getMeshOrNodeByID('hudlogin-yellow');
+		var zmatblack = null;
+		var zmatyellow = null;
+		if (zmoldblue != null) {
+			zmatblue = zmoldblue.material.clone();
+			zmatblue.id = 'blue';
+		}
+		if (zmoldwhite != null) {
+			zmatwhite = zmoldwhite.material.clone();
+			zmatwhite.id = 'white';
+		}
+		if (zmoldblack != null) {
+			zmatblack = zmoldblack.material.clone();
+			zmatblack.id = 'black';
+		}
+		if (zmoldyellow != null) {
+			zmatyellow = zmoldyellow.material.clone();
+			zmatyellow.id = 'yellow';
+		}
+		
+		if (zsize != null) {
+			zsize.material = zmatblack;
+		}
+		if (zsizetext != null) {
+			zsizetext.material = zmatyellow;
+		}
+		if (zcolor != null) {
+			zcolor.material = zmatblue;
+		}
+		if (zcolortext != null) {
+			zcolortext.material = zmatwhite;
+		}
+		/* hide parts for color buttons */
+		for (var i=0; i<10; i++) {
+			var zbuttonpart = WTW.getMeshOrNodeByID('hudlogin-button-part-' + i);
+			var zbuttonparttext = WTW.getMeshOrNodeByID('hudlogin-button-part-' + i + 'text');
+			if (zbuttonpart != null) {
+				zbuttonpart.isVisible = false;
+				zbuttonpart.isPickable = false;
+			}
+			if (zbuttonparttext != null) {
+				zbuttonparttext.isVisible = false;
+			}
+		}
+		/* show scaling buttons */
+		var zsizelabels = WTW.getMeshOrNodeByID('hudlogin-sizelabels');
+		var zbuttonscalex = WTW.getMeshOrNodeByID('hudlogin-button-scalex');
+		var zbuttonscalex0 = WTW.getMeshOrNodeByID('hudlogin-button-scalex0');
+		var zbuttonscalex0text = WTW.getMeshOrNodeByID('hudlogin-button-scalex0text');
+		var zbuttonscalex1 = WTW.getMeshOrNodeByID('hudlogin-button-scalex1');
+		var zbuttonscalex1text = WTW.getMeshOrNodeByID('hudlogin-button-scalex1text');
+		var zbuttonscalex2 = WTW.getMeshOrNodeByID('hudlogin-button-scalex2');
+		var zbuttonscalex2text = WTW.getMeshOrNodeByID('hudlogin-button-scalex2text');
+		var zbuttonscalex3 = WTW.getMeshOrNodeByID('hudlogin-button-scalex3');
+		var zbuttonscalex3text = WTW.getMeshOrNodeByID('hudlogin-button-scalex3text');
+		var zbuttonscalez = WTW.getMeshOrNodeByID('hudlogin-button-scalez');
+		var zbuttonscalez0 = WTW.getMeshOrNodeByID('hudlogin-button-scalez0');
+		var zbuttonscalez0text = WTW.getMeshOrNodeByID('hudlogin-button-scalez0text');
+		var zbuttonscalez1 = WTW.getMeshOrNodeByID('hudlogin-button-scalez1');
+		var zbuttonscalez1text = WTW.getMeshOrNodeByID('hudlogin-button-scalez1text');
+		var zbuttonscalez2 = WTW.getMeshOrNodeByID('hudlogin-button-scalez2');
+		var zbuttonscalez2text = WTW.getMeshOrNodeByID('hudlogin-button-scalez2text');
+		var zbuttonscalez3 = WTW.getMeshOrNodeByID('hudlogin-button-scalez3');
+		var zbuttonscalez3text = WTW.getMeshOrNodeByID('hudlogin-button-scalez3text');
+		var zbuttonscaley = WTW.getMeshOrNodeByID('hudlogin-button-scaley');
+		var zbuttonscaley0 = WTW.getMeshOrNodeByID('hudlogin-button-scaley0');
+		var zbuttonscaley0text = WTW.getMeshOrNodeByID('hudlogin-button-scaley0text');
+		var zbuttonscaley1 = WTW.getMeshOrNodeByID('hudlogin-button-scaley1');
+		var zbuttonscaley1text = WTW.getMeshOrNodeByID('hudlogin-button-scaley1text');
+		var zbuttonscaley2 = WTW.getMeshOrNodeByID('hudlogin-button-scaley2');
+		var zbuttonscaley2text = WTW.getMeshOrNodeByID('hudlogin-button-scaley2text');
+		var zbuttonscaley3 = WTW.getMeshOrNodeByID('hudlogin-button-scaley3');
+		var zbuttonscaley3text = WTW.getMeshOrNodeByID('hudlogin-button-scaley3text');
+		var ztextx = '';
+		var ztexty = '';
+		var ztextz = '';
+		
+		var zwebstyle = {
+			'font-family': 'Arial',
+			'anchor':'center',
+			'letter-height':.6,
+			'letter-thickness':.1,
+			'color':'#000000',
+			'alpha':1.00,
+			'colors':{
+				'diffuse':'#000000',
+				'specular':'#000000',
+				'ambient':'#000000',
+				'emissive':'#000000'
+			}
+		};
+
+		var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+		if (zmyavatar != null) {
+			ztextx = Number(zmyavatar.scaling.x.toString()).toFixed(3);
+			ztextz = Number(zmyavatar.scaling.z.toString()).toFixed(3);
+			ztexty = Number(zmyavatar.scaling.y.toString()).toFixed(3);
+		}
+		
+		if (zsizelabels != null) {
+			zsizelabels.isVisible = true;
+			zsizelabels.isPickable = false;
+		}
+		if (zbuttonscalex != null) {
+			zbuttonscalex.isVisible = true;
+			zbuttonscalex.isPickable = false;
+			
+			var zdisplaytextx = WTW.getMeshOrNodeByID('hudlogin-scale-x-text');
+			if (zdisplaytextx != null) {
+				zdisplaytextx.dispose();
+			}
+			var zdisplaytext = new Writer(ztextx, zwebstyle);
+			zdisplaytextx = zdisplaytext.getMesh();
+			zdisplaytextx.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, WTW.getRadians(-90));
+			zdisplaytextx.position.y = 1.15;
+			zdisplaytextx.position.x = 2;
+			zdisplaytextx.position.z = 5.9;
+			zdisplaytextx.id = 'hudlogin-scale-x-text';
+			zdisplaytextx.name = 'hudlogin-scale-x-text';
+			zdisplaytextx.parent = zhudlogin;
+			zdisplaytextx.isPickable = false;
+			zdisplaytextx.renderingGroupId = 3;
+		}
+		if (zbuttonscalex0 != null) {
+			zbuttonscalex0.isVisible = true;
+			zbuttonscalex0.isPickable = true;
+		}
+		if (zbuttonscalex0text != null) {
+			zbuttonscalex0text.isVisible = true;
+		}
+		if (zbuttonscalex1 != null) {
+			zbuttonscalex1.isVisible = true;
+			zbuttonscalex1.isPickable = true;
+		}
+		if (zbuttonscalex1text != null) {
+			zbuttonscalex1text.isVisible = true;
+		}
+		if (zbuttonscalex2 != null) {
+			zbuttonscalex2.isVisible = true;
+			zbuttonscalex2.isPickable = true;
+		}
+		if (zbuttonscalex2text != null) {
+			zbuttonscalex2text.isVisible = true;
+		}
+		if (zbuttonscalex3 != null) {
+			zbuttonscalex3.isVisible = true;
+			zbuttonscalex3.isPickable = true;
+		}
+		if (zbuttonscalex3text != null) {
+			zbuttonscalex3text.isVisible = true;
+		}
+		if (zbuttonscalez != null) {
+			zbuttonscalez.isVisible = true;
+			zbuttonscalez.isPickable = false;
+
+			var zdisplaytextz = WTW.getMeshOrNodeByID('hudlogin-scale-z-text');
+			if (zdisplaytextz != null) {
+				zdisplaytextz.dispose();
+			}
+			var zdisplaytext = new Writer(ztextz, zwebstyle);
+			zdisplaytextz = zdisplaytext.getMesh();
+			zdisplaytextz.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, WTW.getRadians(-90));
+			zdisplaytextz.position.y = -1.95;
+			zdisplaytextz.position.x = 2;
+			zdisplaytextz.position.z = 5.9;
+			zdisplaytextz.id = 'hudlogin-scale-z-text';
+			zdisplaytextz.name = 'hudlogin-scale-z-text';
+			zdisplaytextz.parent = zhudlogin;
+			zdisplaytextz.isPickable = false;
+			zdisplaytextz.renderingGroupId = 3;
+		}
+		if (zbuttonscalez0 != null) {
+			zbuttonscalez0.isVisible = true;
+			zbuttonscalez0.isPickable = true;
+		}
+		if (zbuttonscalez0text != null) {
+			zbuttonscalez0text.isVisible = true;
+		}
+		if (zbuttonscalez1 != null) {
+			zbuttonscalez1.isVisible = true;
+			zbuttonscalez1.isPickable = true;
+		}
+		if (zbuttonscalez1text != null) {
+			zbuttonscalez1text.isVisible = true;
+		}
+		if (zbuttonscalez2 != null) {
+			zbuttonscalez2.isVisible = true;
+			zbuttonscalez2.isPickable = true;
+		}
+		if (zbuttonscalez2text != null) {
+			zbuttonscalez2text.isVisible = true;
+		}
+		if (zbuttonscalez3 != null) {
+			zbuttonscalez3.isVisible = true;
+			zbuttonscalez3.isPickable = true;
+		}
+		if (zbuttonscalez3text != null) {
+			zbuttonscalez3text.isVisible = true;
+		}
+		if (zbuttonscaley != null) {
+			zbuttonscaley.isVisible = true;
+			zbuttonscaley.isPickable = false;
+
+			var zdisplaytexty = WTW.getMeshOrNodeByID('hudlogin-scale-y-text');
+			if (zdisplaytexty != null) {
+				zdisplaytexty.dispose();
+			}
+			var zdisplaytext = new Writer(ztexty, zwebstyle);
+			zdisplaytexty = zdisplaytext.getMesh();
+			zdisplaytexty.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, WTW.getRadians(-90));
+			zdisplaytexty.position.y = -5.05;
+			zdisplaytexty.position.x = 2;
+			zdisplaytexty.position.z = 5.9;
+			zdisplaytexty.id = 'hudlogin-scale-y-text';
+			zdisplaytexty.name = 'hudlogin-scale-y-text';
+			zdisplaytexty.parent = zhudlogin;
+			zdisplaytexty.isPickable = false;
+			zdisplaytexty.renderingGroupId = 3;
+		}
+		if (zbuttonscaley0 != null) {
+			zbuttonscaley0.isVisible = true;
+			zbuttonscaley0.isPickable = true;
+		}
+		if (zbuttonscaley0text != null) {
+			zbuttonscaley0text.isVisible = true;
+		}
+		if (zbuttonscaley1 != null) {
+			zbuttonscaley1.isVisible = true;
+			zbuttonscaley1.isPickable = true;
+		}
+		if (zbuttonscaley1text != null) {
+			zbuttonscaley1text.isVisible = true;
+		}
+		if (zbuttonscaley2 != null) {
+			zbuttonscaley2.isVisible = true;
+			zbuttonscaley2.isPickable = true;
+		}
+		if (zbuttonscaley2text != null) {
+			zbuttonscaley2text.isVisible = true;
+		}
+		if (zbuttonscaley3 != null) {
+			zbuttonscaley3.isVisible = true;
+			zbuttonscaley3.isPickable = true;
+		}
+		if (zbuttonscaley3text != null) {
+			zbuttonscaley3text.isVisible = true;
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginLoadEditAvatarScaling=' + ex.message);
+	}
+}
+
+WTWJS.prototype.hudLoginLoadEditAvatarColors = function() {
+	/* get avatar ready for edit - get parts */
+	try {
+		/* select Color button and unselect Size button */
+		var zsize = WTW.getMeshOrNodeByID('hudlogin-button-size');
+		var zsizetext = WTW.getMeshOrNodeByID('hudlogin-button-sizetext');
+		var zcolor = WTW.getMeshOrNodeByID('hudlogin-button-color');
+		var zcolortext = WTW.getMeshOrNodeByID('hudlogin-button-colortext');
+		var zmoldblue = WTW.getMeshOrNodeByID('hudlogin-blue');
+		var zmoldwhite = WTW.getMeshOrNodeByID('hudlogin-white');
+		var zmoldblack = WTW.getMeshOrNodeByID('hudlogin-black');
+		var zmoldyellow = WTW.getMeshOrNodeByID('hudlogin-yellow');
+		var zmatblack = null;
+		var zmatyellow = null;
+		if (zmoldblue != null) {
+			zmatblue = zmoldblue.material.clone();
+			zmatblue.id = 'blue';
+		}
+		if (zmoldwhite != null) {
+			zmatwhite = zmoldwhite.material.clone();
+			zmatwhite.id = 'white';
+		}
+		if (zmoldblack != null) {
+			zmatblack = zmoldblack.material.clone();
+			zmatblack.id = 'black';
+		}
+		if (zmoldyellow != null) {
+			zmatyellow = zmoldyellow.material.clone();
+			zmatyellow.id = 'yellow';
+		}
+		
+		if (zsize != null) {
+			zsize.material = zmatblue;
+		}
+		if (zsizetext != null) {
+			zsizetext.material = zmatwhite;
+		}
+		if (zcolor != null) {
+			zcolor.material = zmatblack;
+		}
+		if (zcolortext != null) {
+			zcolortext.material = zmatyellow;
+		}
+		/* hide scaling buttons */
+		var zsizelabels = WTW.getMeshOrNodeByID('hudlogin-sizelabels');
+		var zbuttonscalex = WTW.getMeshOrNodeByID('hudlogin-button-scalex');
+		var zbuttonscalex0 = WTW.getMeshOrNodeByID('hudlogin-button-scalex0');
+		var zbuttonscalex0text = WTW.getMeshOrNodeByID('hudlogin-button-scalex0text');
+		var zbuttonscalex1 = WTW.getMeshOrNodeByID('hudlogin-button-scalex1');
+		var zbuttonscalex1text = WTW.getMeshOrNodeByID('hudlogin-button-scalex1text');
+		var zbuttonscalex2 = WTW.getMeshOrNodeByID('hudlogin-button-scalex2');
+		var zbuttonscalex2text = WTW.getMeshOrNodeByID('hudlogin-button-scalex2text');
+		var zbuttonscalex3 = WTW.getMeshOrNodeByID('hudlogin-button-scalex3');
+		var zbuttonscalex3text = WTW.getMeshOrNodeByID('hudlogin-button-scalex3text');
+		var zbuttonscalez = WTW.getMeshOrNodeByID('hudlogin-button-scalez');
+		var zbuttonscalez0 = WTW.getMeshOrNodeByID('hudlogin-button-scalez0');
+		var zbuttonscalez0text = WTW.getMeshOrNodeByID('hudlogin-button-scalez0text');
+		var zbuttonscalez1 = WTW.getMeshOrNodeByID('hudlogin-button-scalez1');
+		var zbuttonscalez1text = WTW.getMeshOrNodeByID('hudlogin-button-scalez1text');
+		var zbuttonscalez2 = WTW.getMeshOrNodeByID('hudlogin-button-scalez2');
+		var zbuttonscalez2text = WTW.getMeshOrNodeByID('hudlogin-button-scalez2text');
+		var zbuttonscalez3 = WTW.getMeshOrNodeByID('hudlogin-button-scalez3');
+		var zbuttonscalez3text = WTW.getMeshOrNodeByID('hudlogin-button-scalez3text');
+		var zbuttonscaley = WTW.getMeshOrNodeByID('hudlogin-button-scaley');
+		var zbuttonscaley0 = WTW.getMeshOrNodeByID('hudlogin-button-scaley0');
+		var zbuttonscaley0text = WTW.getMeshOrNodeByID('hudlogin-button-scaley0text');
+		var zbuttonscaley1 = WTW.getMeshOrNodeByID('hudlogin-button-scaley1');
+		var zbuttonscaley1text = WTW.getMeshOrNodeByID('hudlogin-button-scaley1text');
+		var zbuttonscaley2 = WTW.getMeshOrNodeByID('hudlogin-button-scaley2');
+		var zbuttonscaley2text = WTW.getMeshOrNodeByID('hudlogin-button-scaley2text');
+		var zbuttonscaley3 = WTW.getMeshOrNodeByID('hudlogin-button-scaley3');
+		var zbuttonscaley3text = WTW.getMeshOrNodeByID('hudlogin-button-scaley3text');
+		
+		if (zsizelabels != null) {
+			zsizelabels.isVisible = false;
+			zsizelabels.isPickable = false;
+		}
+		if (zbuttonscalex != null) {
+			zbuttonscalex.isVisible = false;
+			zbuttonscalex.isPickable = false;
+		}
+		if (zbuttonscalex0 != null) {
+			zbuttonscalex0.isVisible = false;
+			zbuttonscalex0.isPickable = false;
+		}
+		if (zbuttonscalex0text != null) {
+			zbuttonscalex0text.isVisible = false;
+			zbuttonscalex0text.isPickable = false;
+		}
+		if (zbuttonscalex1 != null) {
+			zbuttonscalex1.isVisible = false;
+			zbuttonscalex1.isPickable = false;
+		}
+		if (zbuttonscalex1text != null) {
+			zbuttonscalex1text.isVisible = false;
+			zbuttonscalex1text.isPickable = false;
+		}
+		if (zbuttonscalex2 != null) {
+			zbuttonscalex2.isVisible = false;
+			zbuttonscalex2.isPickable = false;
+		}
+		if (zbuttonscalex2text != null) {
+			zbuttonscalex2text.isVisible = false;
+			zbuttonscalex2text.isPickable = false;
+		}
+		if (zbuttonscalex3 != null) {
+			zbuttonscalex3.isVisible = false;
+			zbuttonscalex3.isPickable = false;
+		}
+		if (zbuttonscalex3text != null) {
+			zbuttonscalex3text.isVisible = false;
+			zbuttonscalex3text.isPickable = false;
+		}
+		if (zbuttonscalez != null) {
+			zbuttonscalez.isVisible = false;
+			zbuttonscalez.isPickable = false;
+		}
+		if (zbuttonscalez0 != null) {
+			zbuttonscalez0.isVisible = false;
+			zbuttonscalez0.isPickable = false;
+		}
+		if (zbuttonscalez0text != null) {
+			zbuttonscalez0text.isVisible = false;
+		}
+		if (zbuttonscalez1 != null) {
+			zbuttonscalez1.isVisible = false;
+			zbuttonscalez1.isPickable = false;
+		}
+		if (zbuttonscalez1text != null) {
+			zbuttonscalez1text.isVisible = false;
+		}
+		if (zbuttonscalez2 != null) {
+			zbuttonscalez2.isVisible = false;
+			zbuttonscalez2.isPickable = false;
+		}
+		if (zbuttonscalez2text != null) {
+			zbuttonscalez2text.isVisible = false;
+		}
+		if (zbuttonscalez3 != null) {
+			zbuttonscalez3.isVisible = false;
+			zbuttonscalez3.isPickable = false;
+		}
+		if (zbuttonscalez3text != null) {
+			zbuttonscalez3text.isVisible = false;
+		}
+		if (zbuttonscaley != null) {
+			zbuttonscaley.isVisible = false;
+			zbuttonscaley.isPickable = false;
+		}
+		if (zbuttonscaley0 != null) {
+			zbuttonscaley0.isVisible = false;
+			zbuttonscaley0.isPickable = false;
+		}
+		if (zbuttonscaley0text != null) {
+			zbuttonscaley0text.isVisible = false;
+		}
+		if (zbuttonscaley1 != null) {
+			zbuttonscaley1.isVisible = false;
+			zbuttonscaley1.isPickable = false;
+		}
+		if (zbuttonscaley1text != null) {
+			zbuttonscaley1text.isVisible = false;
+		}
+		if (zbuttonscaley2 != null) {
+			zbuttonscaley2.isVisible = false;
+			zbuttonscaley2.isPickable = false;
+		}
+		if (zbuttonscaley2text != null) {
+			zbuttonscaley2text.isVisible = false;
+		}
+		if (zbuttonscaley3 != null) {
+			zbuttonscaley3.isVisible = false;
+			zbuttonscaley3.isPickable = false;
+		}
+		if (zbuttonscaley3text != null) {
+			zbuttonscaley3text.isVisible = false;
+		}
+		/* load color buttons with parts */
+		var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+		if (zmyavatar != null) {
+			var zwebstyle = {
+				'font-family': 'Arial',
+				'anchor':'center',
+				'letter-height':.8,
+				'letter-thickness':.2,
+				'color':'#ffffff',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#fcfcfc',
+					'specular':'#989e2c',
+					'ambient':'#888722',
+					'emissive':'#ffffff'
+				}
+			};
+			var zavatarparts = zmyavatar.getChildren();
+			for (var i=0;i<zavatarparts.length;i++) {
+				if (zavatarparts[i] != null) {
+					var zpartname = zavatarparts[i].id.replace('myavatar-' + dGet('wtw_tinstanceid').value + '-','');
+					var zbutton = WTW.getMeshOrNodeByID('hudlogin-button-part-' + i);
+					if (zbutton != null) {
+						zbutton.isVisible = true;
+						zbutton.isPickable = true;
+						
+						/* create 3d text menu name */
+						Writer = BABYLON.MeshWriter(scene, {scale:1});
+						if (zpartname != '') {
+							var zmytext = WTW.getMeshOrNodeByID('hudlogin-button-part-' + i + 'text');
+							if (zmytext != null) {
+								zmytext.dispose();
+							}
+							var zdisplaytext = new Writer(zpartname, zwebstyle);
+							zmytext = zdisplaytext.getMesh();
+							zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, WTW.getRadians(-90));
+							zmytext.position.y = 2.6 - (i * 1.01);
+							zmytext.position.x = 2;
+							zmytext.position.z = 5;
+							zmytext.id = 'hudlogin-button-part-' + i + 'text';
+							zmytext.name = 'hudlogin-button-part-' + i + 'text';
+							zmytext.parent = zbutton;
+							zmytext.isPickable = false;
+							zmytext.renderingGroupId = 3;
+						}
+						
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginLoadEditAvatarColors=' + ex.message);
+	}
+}
+
+WTWJS.prototype.hudLoginResetButtonColors = function(zmoldname) {
+	/* Reset button colors for avatar parts */
+	try {
+		for (var i=0; i<10; i++) {
+			var zbutton = WTW.getMeshOrNodeByID('hudlogin-button-part-' + i);
+			if (zbutton != null) {
+				var zmatcurrentid = '';
+				if (zbutton.material != null) {
+					if (zbutton.material.id != undefined) {
+						zmatcurrentid = zbutton.material.id;
+					}
+					if (zmatcurrentid != 'blue') {
+						var zmoldblue = WTW.getMeshOrNodeByID('hudlogin-blue');
+						var zmoldwhite = WTW.getMeshOrNodeByID('hudlogin-white');
+						var zmatblue = null;
+						var zmatwhite = null;
+						if (zmoldblue != null) {
+							zmatblue = zmoldblue.material.clone();
+							zmatblue.id = 'blue';
+						}
+						if (zmoldwhite != null) {
+							zmatwhite = zmoldwhite.material.clone();
+							zmatwhite.id = 'white';
+						}
+						zbutton.material = zmatblue;
+						var zbuttontext = WTW.getMeshOrNodeByID('hudlogin-button-part-' + i + 'text');
+						if (zbuttontext != null) {
+							zbuttontext.material = zmatwhite;
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginResetButtonColors=' + ex.message);
+	}
+}
+
+WTWJS.prototype.hudLoginEditAvatarColors = function(zmoldname) {
+	/* edit color on part */
+	try {
+		WTW.hudLoginResetButtonColors();
+		
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
+		var zmoldtext = WTW.getMeshOrNodeByID(zmoldname + 'text');
+		var zmoldblack = WTW.getMeshOrNodeByID('hudlogin-black');
+		var zmoldyellow = WTW.getMeshOrNodeByID('hudlogin-yellow');
+		var zmatblack = null;
+		var zmatyellow = null;
+		if (zmoldblack != null) {
+			zmatblack = zmoldblack.material.clone();
+			zmatblack.id = 'black';
+		}
+		if (zmoldyellow != null) {
+			zmatyellow = zmoldyellow.material.clone();
+			zmatyellow.id = 'yellow';
+		}
+		
+		if (zmold != null) {
+			zmold.material = zmatblack;
+		}
+		if (zmoldtext != null) {
+			zmoldtext.material = zmatyellow;
+		}
+
+		var zindex = zmoldname.replace('hudlogin-button-part-','');
+		var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+		if (zmyavatar != null) {
+			var zavatarparts = zmyavatar.getChildren();
+			if (zavatarparts[zindex] != null) {
+				var zpartname = zavatarparts[zindex].id.replace('myavatar-' + dGet('wtw_tinstanceid').value + '-','');
+				var zavatarpartname = 'myavatar-' + dGet('wtw_tinstanceid').value + '-' + zpartname;
+				var zavatarpart = WTW.getMeshOrNodeByID(zavatarpartname);
+				if (zavatarpart != null) {
+					WTW.hilightMoldFast(zavatarpartname, 'green');
+
+					if (WTW.guiAdminColors != null) {
+						WTW.guiAdminColors.dispose();
+						WTW.guiAdminColors = null;
+					}
+					var zplane = WTW.getMeshOrNodeByID('UI');
+					if (zplane != null) {
+						zplane.dispose();
+					}
+					var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
+
+					zplane = BABYLON.Mesh.CreatePlane("UI", 2);
+					zplane.position = new BABYLON.Vector3(0,-2.5,-2);
+					zplane.rotation.y = WTW.getRadians(-90);
+					zplane.scaling.x = 6;
+					zplane.scaling.y = 6;
+					//zplane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+					zplane.isPickable = true;
+					zplane.renderingGroupId = 3;
+					zplane.parent = zhudlogin;
+					WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(zplane);
+
+					var zpanel = new BABYLON.GUI.StackPanel();
+					zpanel.width = '300px';
+					zpanel.isVertical = true;
+					zpanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					zpanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					WTW.guiAdminColors.addControl(zpanel);
+
+					var zcoloremissivetitle = new BABYLON.GUI.TextBlock();
+					zcoloremissivetitle.text = 'Emissive Color';
+					zcoloremissivetitle.color = '#FFFFFF';
+					zcoloremissivetitle.fontSize = 20;
+					zcoloremissivetitle.height = '50px';
+					zpanel.addControl(zcoloremissivetitle);     
+
+					var zcoloremissive = new BABYLON.GUI.ColorPicker();
+					zcoloremissive.value = zavatarpart.material.emissiveColor;
+					zcoloremissive.height = '150px';
+					zcoloremissive.width = '150px';
+					zcoloremissive.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					zcoloremissive.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					zcoloremissive.onValueChangedObservable.add(function(value) {
+						if (value != null) {
+							WTW.setMyAvatarColor(zavatarpart, 'emissive', value.r, value.g, value.b);
+						}
+					});
+					zcoloremissive.isPickable = true;
+					zpanel.addControl(zcoloremissive); 
+
+					var zcolordiffusetitle = new BABYLON.GUI.TextBlock();
+					zcolordiffusetitle.text = 'Diffuse Color';
+					zcolordiffusetitle.color = '#FFFFFF';
+					zcolordiffusetitle.fontSize = 20;
+					zcolordiffusetitle.height = '50px';
+					zpanel.addControl(zcolordiffusetitle);     
+
+					var zcolordiffuse = new BABYLON.GUI.ColorPicker();
+					zcolordiffuse.value = zavatarpart.material.diffuseColor;
+					zcolordiffuse.height = '150px';
+					zcolordiffuse.width = '150px';
+					zcolordiffuse.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					zcolordiffuse.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					zcolordiffuse.onValueChangedObservable.add(function(value) {
+						if (value != null) {
+							WTW.setMyAvatarColor(zavatarpart, 'diffuse', value.r, value.g, value.b);
+						}
+					});
+					zcolordiffuse.isPickable = true;
+					zpanel.addControl(zcolordiffuse); 
+
+					var zcolorspeculartitle = new BABYLON.GUI.TextBlock();
+					zcolorspeculartitle.text = 'Specular Color';
+					zcolorspeculartitle.color = '#FFFFFF';
+					zcolorspeculartitle.fontSize = 20;
+					zcolorspeculartitle.height = '50px';
+					zpanel.addControl(zcolorspeculartitle);     
+
+					var zcolorspecular = new BABYLON.GUI.ColorPicker();
+					zcolorspecular.value = zavatarpart.material.specularColor;
+					zcolorspecular.height = '150px';
+					zcolorspecular.width = '150px';
+					zcolorspecular.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					zcolorspecular.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					zcolorspecular.onValueChangedObservable.add(function(value) {
+						if (value != null) {
+							WTW.setMyAvatarColor(zavatarpart, 'specular', value.r, value.g, value.b);
+						}
+					});
+					zcolorspecular.isPickable = true;
+					zpanel.addControl(zcolorspecular); 
+
+					var zcolorambienttitle = new BABYLON.GUI.TextBlock();
+					zcolorambienttitle.text = 'Ambient Color';
+					zcolorambienttitle.color = '#FFFFFF';
+					zcolorambienttitle.fontSize = 20;
+					zcolorambienttitle.height = '50px';
+					zpanel.addControl(zcolorambienttitle);     
+
+					var zcolorambient = new BABYLON.GUI.ColorPicker();
+					zcolorambient.value = zavatarpart.material.ambientColor;
+					zcolorambient.height = '150px';
+					zcolorambient.width = '150px';
+					zcolorambient.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					zcolorambient.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					zcolorambient.onValueChangedObservable.add(function(value) {
+						if (value != null) {
+							WTW.setMyAvatarColor(zavatarpart, 'ambient', value.r, value.g, value.b);
+						}
+					});
+					zcolorambient.isPickable = true;
+					zpanel.addControl(zcolorambient); 
+
+
+				}
+			}
+		}		
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginEditAvatarColors=' + ex.message);
+	}
+}
+
+WTWJS.prototype.setMyAvatarColor = function(zavatarpart, zcolorgroup, zr, zg, zb) {
+	/* set color after change is made on the color wheels */
+	try {
+		if (zavatarpart != null) {
+			var zcovering = zavatarpart.material;
+			if (zcovering != null) {
+				switch (zcolorgroup) {
+					case 'diffuse':
+						zcovering.diffuseColor = new BABYLON.Color3(zr,zg,zb);
+						break;
+					case 'specular':
+						zcovering.specularColor = new BABYLON.Color3(zr,zg,zb);
+						break;
+					case 'emissive':
+						zcovering.emissiveColor = new BABYLON.Color3(zr,zg,zb);
+						break;
+					case 'ambient':
+						zcovering.ambientColor = new BABYLON.Color3(zr,zg,zb);
+						break;
+				}
+				zavatarpart.material.dispose();
+				zavatarpart.material = zcovering;
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-setMyAvatarColor=' + ex.message);
+	}
+}
+
+WTWJS.prototype.saveMyAvatarColorScaling = function() {
+	/* save my avatar - colors and scaling */
+	try {
+		var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+		if (zmyavatar != null) {
+			/* save colors */
+			var zavatarparts = zmyavatar.getChildren();
+			for (var i=0; i<zavatarparts.length; i++) {
+				if (zavatarparts[i] != null) {
+					if (zavatarparts[i].material != null) {
+						if (zavatarparts[i].material.diffuseColor != undefined) {
+							var zavatarpart = zavatarparts[i].id.replace('myavatar-' + dGet('wtw_tinstanceid').value + '-','');
+							var zdiffusecolor = zavatarparts[i].material.diffuseColor.toHexString();
+							var zspecularcolor = zavatarparts[i].material.specularColor.toHexString();
+							var zemissivecolor = zavatarparts[i].material.emissiveColor.toHexString();
+							var zambientcolor = zavatarparts[i].material.ambientColor.toHexString();
+							if (dGet('wtw_tuseravatarid').value != '' && dGet('wtw_tuserid').value != '') {
+								var zrequest = {
+									'useravatarid':dGet('wtw_tuseravatarid').value,
+									'userid':dGet('wtw_tuserid').value,
+									'instanceid':dGet('wtw_tinstanceid').value,
+									'avatarpartid':'',
+									'avatarpart':zavatarpart,
+									'diffusecolor':zdiffusecolor,
+									'specularcolor':zspecularcolor,
+									'emissivecolor':zemissivecolor,
+									'ambientcolor':zambientcolor,
+									'function':'saveavatarcolor'
+								};
+								WTW.postAsyncJSON('/core/handlers/wtwavatars-saveavatar.php', zrequest, 
+									async function(zresponse) {
+										zresponse = JSON.parse(zresponse);
+									}
+								);
+							}
+						}
+					}
+				}
+			}
+			/* save avatar scaling */
+			var zrequest = {
+				'useravatarid':dGet('wtw_tuseravatarid').value,
+				'userid':dGet('wtw_tuserid').value,
+				'instanceid':dGet('wtw_tinstanceid').value,
+				'scalingx':zmyavatar.scaling.x,
+				'scalingz':zmyavatar.scaling.z,
+				'scalingy':zmyavatar.scaling.y,
+				'function':'saveavatarscaling'
+			};
+			WTW.postAsyncJSON('/core/handlers/wtwavatars-saveavatar.php', zrequest, 
+				async function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-hud-wtw_hud_login.js-saveMyAvatarColorScaling=' + ex.message);
+	}
+}

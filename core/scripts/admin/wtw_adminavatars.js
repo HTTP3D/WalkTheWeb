@@ -959,8 +959,6 @@ WTWJS.prototype.openAvatarColorSelector = function(zavatarpartid, zavatarpart) {
 		var zmoldname = 'editavatar-0-' + zavatarpart;
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
-			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-
 			if (WTW.guiAdminColors != null) {
 				WTW.guiAdminColors.dispose();
 				WTW.guiAdminColors = null;

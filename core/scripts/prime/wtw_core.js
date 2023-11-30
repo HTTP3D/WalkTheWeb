@@ -278,6 +278,13 @@ WTWJS.prototype.loadInitSettings = function() {
 		}
 		if (communityid == null) {
 			communityid = '';
+		} else if (communityid != '') {
+			if (dGet('wtw_modecommunity') != null) {
+				dGet('wtw_modecommunity').onclick = function() {
+					var zreturnpath = window.location.href;
+					window.location.href = '/admin.php?communityid=' + communityid + '&returnpath=' + zreturnpath;
+				}
+			}
 		}
 		if (buildingid == null) {
 			buildingid = '';

@@ -2782,7 +2782,7 @@ WTWJS.prototype.setClosestBuilding = function() {
 					dGet('wtw_modecommunitymobile').src = '/content/system/images/menucommunities32.png';
 					dGet('wtw_modecommunity').onclick = function() {
 						var zreturnpath = window.location.href;
-						if (zclosestwebid != '') {
+						if (zclosestwebid != '' || communityid != '') {
 							window.location.href = '/admin.php?communityid=' + communityid + '&returnpath=' + zreturnpath;
 						} else {
 							window.location.href = '/admin.php';
@@ -2827,10 +2827,10 @@ WTWJS.prototype.setClosestBuilding = function() {
 						if (dGet('wtw_returnpath') != null) {
 							zreturnpath = dGet('wtw_returnpath').value;
 						}
-						if (zreturnpath != '') {
+						if (communityid != '') {
+							window.location.href = '/admin.php?communityid=' + communityid;
+						} else if (zreturnpath != '') {
 							window.location.href = zreturnpath;
-						} else if (communityid != '') {
-							window.location.href = '/' + communityid;
 						} else {
 							window.location.href = '/';
 						}
