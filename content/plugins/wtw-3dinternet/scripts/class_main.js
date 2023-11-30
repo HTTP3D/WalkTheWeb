@@ -1468,6 +1468,21 @@ WTW_3DINTERNET.prototype.downloadUserAvatarVersionResponse = function(zobj, zglo
 	/* download and update user avatar by version - process after local response */
 	try {
 		if (zglobaluseravatarid != '') {
+			var zrequest = {
+				'webid': zwebid,
+				'serverinstanceid': dGet('wtw_serverinstanceid').value,
+				'domainurl': wtw_domainurl,
+				'globaluserid': btoa(dGet('wtw_tglobaluserid').value),
+				'globaluseravatarid': zglobaluseravatarid,
+				'useravatarid': zuseravatarid,
+				'userid': dGet('wtw_tuserid').value,
+				'instanceid': dGet('wtw_tinstanceid').value,
+				'updatewebid': zupdatewebid,
+				'versionid': zversionid,
+				'version': zversion,
+				'webtype': zwebtype,
+				'function':'downloadupdateuseravatar'
+			};
 			WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);

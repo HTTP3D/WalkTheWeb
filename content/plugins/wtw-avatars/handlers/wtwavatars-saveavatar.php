@@ -53,6 +53,9 @@ try {
 				'serror'=> ''
 			);
 			break;
+		case "saveavatarscaling":
+			$zresponse = $wtwavatars_functions->saveAvatarScaling($zuseravatarid, $zinstanceid, $zscalingx, $zscalingy, $zscalingz);
+			break;
 		case "saveavatarcolor":
 			$zavatarpartid = $wtwavatars_functions->saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor);
 			$zresponse = array(

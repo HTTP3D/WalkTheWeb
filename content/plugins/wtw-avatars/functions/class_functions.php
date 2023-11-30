@@ -180,6 +180,67 @@ class wtwavatars_functions {
 		return $zfoundavatarpartid;
 	}
 
+	public function saveAvatarScaling($zuseravatarid, $zinstanceid, $zscalingx, $zscalingy, $zscalingz) {
+		/* save the user avatar scaling */
+		global $wtwplugins;
+		$zresponse = array(
+			'serror'=>'',
+			'useravatarid'=>$zuseravatarid
+		);
+		try {
+			if ($wtwplugins->hasValue($zuseravatarid)) {
+				$zfounduseravatarid = '';
+				$zresults = $wtwplugins->query("
+					select * 
+					from ".wtw_tableprefix."useravatars
+					where useravatarid='".$zuseravatarid."'
+						and userid='".$wtwplugins->userid."';");
+				foreach ($zresults as $zrow) {
+					$zfounduseravatarid = $zrow["useravatarid"];
+				}
+				if ($wtwplugins->hasValue($zfounduseravatarid)) {
+					if (!is_numeric($zscalingx)) {
+						$zscalingx = 1;
+					}
+					if (!is_numeric($zscalingy)) {
+						$zscalingy = 1;
+					}
+					if (!is_numeric($zscalingz)) {
+						$zscalingz = 1;
+					}
+					$wtwplugins->query("
+						update ".wtw_tableprefix."useravatars
+						set scalingx=".$zscalingx.",
+							scalingy=".$zscalingy.",
+							scalingz=".$zscalingz.",
+							updatedate=now(),
+							updateuserid='".$wtwplugins->userid."'
+						where useravatarid='".$zfounduseravatarid."'
+							and createuserid='".$wtwplugins->userid."'
+						limit 1;
+					");
+				} else {
+					$zresponse = array(
+						'serror'=>'Avatar ID not found',
+						'useravatarid'=>$zuseravatarid
+					);
+				}
+			} else {
+				$zresponse = array(
+					'serror'=>'Requires An Avatar ID',
+					'useravatarid'=>$zuseravatarid
+				);
+			}
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins:wtw-avatars:functions-class_functions.php-saveAvatarScaling=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage(),
+				'useravatarid'=>$zuseravatarid
+			);
+		}
+		return $zresponse;
+	}
+	
 	public function saveAvatarAnimation($zuseravatarid, $zinstanceid, $zavataranimationid, $zanimationevent) {
 		global $wtwplugins;
 		$zfounduseravataranimationid = '';

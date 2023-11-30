@@ -3,7 +3,7 @@
 #	title = WalkTheWeb Avatars Plugin
 #	description = WalkTheWeb Avatar Creator and Editor
 #	author = Aaron Dishno Ed.D.
-# 	version = 1.0.4
+# 	version = 1.0.5
 #	releasedate = 9/5/2023
 
 /* change the information above for your plugin */
