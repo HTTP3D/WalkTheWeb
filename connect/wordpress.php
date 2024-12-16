@@ -9,7 +9,6 @@ global $wtw_3dinternet_downloads;
 
 try {
 	echo $wtwconnect->addConnectHeader('*');
-
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/wordpress.php");
 	
@@ -109,6 +108,21 @@ try {
 				'communityid'=>''
 			);
 			if ($wtwconnect->hasValue($zwtwusertoken)) {
+				if ($zhosturl == 'https://3d.walktheweb.com/') {
+					/* WalkTheWeb allows all valid users to create a Hosting account */
+					$zresults = $wtwconnect->query("
+						select u1.*
+						from ".wtw_tableprefix."users u1
+						where u1.usertoken='".base64_encode($zwtwusertoken)."'
+							and u1.deleted=0;");
+					foreach ($zresults as $zrow) {
+						$zuserid = $zrow["userid"];
+					}
+					if (isset($zuserid) && !empty($zuserid)) {
+						$wtwconnect->addUserRole($zuserid, "Host");
+					}
+				}
+
 				/* check is the user with the access token has admin or host access */
 				$zresults = $wtwconnect->query("
 					select u1.*,
@@ -118,7 +132,7 @@ try {
 							on u1.userid=ur1.userid
 						inner join ".wtw_tableprefix."roles r1
 							on ur1.roleid=r1.roleid
-					where CONVERT(from_base64(u1.usertoken) USING utf8)='".$zwtwusertoken."'
+					where u1.usertoken='".base64_encode($zwtwusertoken)."'
 						and u1.deleted=0
 						and (r1.rolename like 'admin'
 							or r1.rolename like 'host')
@@ -209,6 +223,7 @@ try {
 				if ($wtwconnect->isUserInRole("Host")) {
 					$zhostuserid = $zuserid;
 				}
+
 				/* download community */
 				$zresults = $wtw_3dinternet_downloads->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
 				
@@ -251,6 +266,7 @@ try {
 					$zbuildingrotationy = $zrow["buildingrotationy"];
 					$zbuildingrotationz = $zrow["buildingrotationz"];
 				}
+
 				/* download building */
 				$zresults = $wtw_3dinternet_downloads->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
 				
@@ -301,6 +317,7 @@ try {
 						'".$zuserid."',
 						now(),
 						'".$zuserid."');");
+
 				/* add webalias for new 3D Building so it can be opened directly */ 
 				$zwebaliasid = $wtwconnect->getRandomString(16,1);
 				$wtwconnect->query("

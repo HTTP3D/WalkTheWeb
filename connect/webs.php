@@ -351,7 +351,10 @@ try {
 	foreach ($zresults as $zrow) {
 		$zimageurl = $zrow["imageurl"];
 		if ($zwebtype == 'avatar') {
-			$zimageurl = "https://3dnet.walktheweb.com/content/uploads/avatars/".$zrow[$zwebtype."id"]."/snapshots/defaultavatar.png";
+			$zimageurl = "/content/uploads/avatars/".$zrow[$zwebtype."id"]."/snapshots/defaultavatar.png";
+			if (file_exists($wtwconnect->rootpath.$zimageurl) == false) {
+				$zimageurl = "https://3dnet.walktheweb.com/content/uploads/avatars/".$zrow[$zwebtype."id"]."/snapshots/defaultavatar.png";
+			}
 		}
 		/* get size of web */
 		$zdirsize = 0;
