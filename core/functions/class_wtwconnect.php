@@ -280,6 +280,12 @@ class wtwconnect {
 		return $wtwdb->getUserRoles($zuserid);
 	}
 	
+	public function addUserRole($zuserid, $zrolename) {
+		/* Adds a user to a role if it is not already there */
+		global $wtwdb;
+		return $wtwdb->addUserRole($zuserid, $zrolename);
+	}
+	
 	public function hasPermission($zaccessrequired) {
 		/* array of access required will be compared to array of current user roles */
 		global $wtwdb;

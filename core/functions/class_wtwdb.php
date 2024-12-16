@@ -883,6 +883,133 @@ class wtwdb {
 		return $zroles;
 	}
 
+	public function userIdIsValid($zuserid) {
+		/* validate user id */
+		$zvalid = false;
+		try {
+			$zresults = $this->query("
+				select userid from ".wtw_tableprefix."users 
+				where userid = '".$zuserid."'
+					and deleted=0 order by createdate limit 1;
+			");
+			foreach ($zresults as $zrow) {
+				$zuserid = $zrow['userid'];
+				$zvalid = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-userIdIsValid=".$e->getMessage());
+		}
+		return $zvalid;
+	}
+
+	public function getRoleId($zrolename) {
+		/* roles are used to access admin.php page and functions for maintaining a 3D Website and Server */
+		$roleid = "";
+		try {			
+			$zresults = $this->query("
+				select roleid from ".wtw_tableprefix."roles 
+				where rolename like '".$zrolename."'
+					and deleted=0 
+				order by createdate limit 1;
+			");
+			foreach ($zresults as $zrow) {
+				$roleid = $zrow['roleid'];
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getRoleId=".$e->getMessage());
+		}
+		return $roleid;
+	}
+
+	public function roleIdIsValid($zroleid) {
+		/* validate user role */
+		$zvalid = false;
+		try {
+			$zresults = $this->query("
+				select roleid from ".wtw_tableprefix."roles 
+				where roleid = '".$zroleid."'
+					and deleted=0 order by createdate limit 1;
+			");
+			foreach ($zresults as $zrow) {
+				$zroleid = $zrow['roleid'];
+				$zvalid = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-roleIdIsValid=".$e->getMessage());
+		}
+		return $zvalid;
+	}
+	
+	public function addUserRole($zuserid, $zrolename) {
+		/* Adds a user to a role if it is not already there */
+		$zsuccess = false;
+		try {
+			if ($this->isUserInRole("admin")) {
+				if (!isset($zuserid) || empty($zuserid)) {
+					$zuserid = $this->getSessionUserID();
+				}
+			} else {
+				$zuserid = $this->getSessionUserID();
+			}
+			if ($this->userIdIsValid($zuserid)) {
+				$zroleid = $this->getRoleId($zrolename);
+				if ($this->hasValue($zroleid)) {
+					$zresults = $this->query("
+						select userinroleid, deleted 
+						from ".wtw_tableprefix."usersinroles 
+						where roleid = '".$zroleid."'
+							and userid = '".$zuserid."' 
+						order by createdate limit 1;
+					");
+					$ztimestamp = date('Y/m/d H:i:s');
+					if (count($zresults) > 0) {
+						$zuserinroleid = "";
+						$zdeleted = 0;
+						foreach ($zresults as $zrow) {
+							$zuserinroleid = $zrow['userinroleid'];
+							$zdeleted = $zrow['deleted'];
+						}
+						if ($this->hasValue($zuserinroleid) && $zdeleted == 1) {
+							$this->query("
+								update ".wtw_tableprefix."usersinroles 
+								set updatedate='".$ztimestamp."',
+									updateuserid='".$zuserid."',
+									deleted=0,
+									deleteddate=null,
+									deleteduserid=''
+								where userinroleid='".$zuserinroleid."';
+							");
+							$zsuccess = true;
+						}
+					} else {
+						$zuserinroleid = $this->getRandomString(16,1);
+						$this->query("
+							insert into ".wtw_tableprefix."usersinroles 
+								(userinroleid,
+								 userid,
+								 roleid,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
+							   values
+								('".$zuserinroleid."',
+								 '".$zuserid."',
+								 '".$zroleid."',
+								 '".$ztimestamp."',
+								 '".$zuserid."',
+								 '".$ztimestamp."',
+								 '".$zuserid."');");
+						$zsuccess = true;
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-addUserRole=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
 	public function hasPermission($zaccessrequired) {
 		/* array of access required will be compared to array of current user roles */
 		$zhaspermission = false;
