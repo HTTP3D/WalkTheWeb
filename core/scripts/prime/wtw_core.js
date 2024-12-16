@@ -985,6 +985,8 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 			}
 			if (WTW.adminView == 1 && communityid != '' && WTW.init.groundPositionY == 0) {
 				WTW.init.waterPositionY = -50;
+			} else {
+				WTW.init.waterPositionY = 0;
 			}
 			/* create water */
 			WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);

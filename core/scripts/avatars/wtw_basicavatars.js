@@ -228,8 +228,8 @@ WTWJS.prototype.addAvatarPlaceholder = function(zavatarname, zavatardef) {
 		/* right foot parents to right foot */
 		var zrightfoot = WTW.getMeshOrNodeByID(zavatarname + '-rightfoot');
 		if (zrightfoot == null) {
-//			zrightfoot = new BABYLON.TransformNode(zavatarname + '-rightfoot');
-			zrightfoot = new BABYLON.MeshBuilder.CreateBox(zavatarname + '-rightfoot', {}, scene);
+			zrightfoot = new BABYLON.TransformNode(zavatarname + '-rightfoot');
+//			zrightfoot = new BABYLON.MeshBuilder.CreateBox(zavatarname + '-rightfoot', {}, scene);
 
 			zrightfoot.position = new BABYLON.Vector3(0, .25, .5);
 			zrightfoot.rotation = new BABYLON.Vector3(0,0,0);
@@ -564,132 +564,33 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 							}
 						} 
 					}
-					/* load skeleton based animations */
+
+
 					if (zresults.skeletons != null)	{
 						var zskeleton = zresults.meshes[0].skeleton;
-						zavatar.WTW.skeleton = zresults.meshes[0].skeleton;
-						for (var i=0; i < zresults.skeletons.length; i++) {
-							if (zresults.skeletons[i] != null) {
-								var zmeshname = zresults.skeletons[i].name;
-								var zchildmoldname = zavatarname + '-' + zmeshname;
-								zresults.skeletons[i].name = zchildmoldname;
-								zresults.skeletons[i].id = zchildmoldname;
-								if (zresults.skeletons[i].parent == null) {
-									zresults.skeletons[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
-								}
-								if (zresults.skeletons[i].bones != null) {
-									/* the following boxes will be attached to various skeleton bones for easy parenting to the animated avatar */
-									/* useful for carrying 3d objects */
-									var zheadtopbone = -1;
-									var zspine2bone = -1;
-									var zrighthandbone = -1;
-									var zlefthandbone = -1;
-									var zrightlegbone = -1;
-									var zleftlegbone = -1;
-									var zrightfootbone = -1;
-									var zleftfootbone = -1;
-									for (var j=0; j < zresults.skeletons[i].bones.length; j++) {
-										if (zresults.skeletons[i].bones[j] != null) {
-											var zbonename = zresults.skeletons[i].bones[j].name.toLowerCase();
-											if (zbonename.indexOf('headtop') > -1 && zheadtopbone == -1) {
-												zheadtopbone = j;
-											} else if (zbonename.indexOf('spine2') > -1 && zspine2bone == -1) {
-												zspine2bone = j;
-											} else if (zbonename.indexOf('righthand') > -1 && zrighthandbone == -1) {
-												zrighthandbone = j;
-											} else if (zbonename.indexOf('lefthand') > -1 && zlefthandbone == -1) {
-												zlefthandbone = j;
-											} else if (zbonename.indexOf('rightupleg') > -1 && zrightlegbone == -1) {
-												zrightlegbone = j;
-											} else if (zbonename.indexOf('leftupleg') > -1 && zleftlegbone == -1) {
-												zleftlegbone = j;
-											} else if (zbonename.indexOf('rightfoot') > -1 && zrightfootbone == -1) {
-												zrightfootbone = j;
-											} else if (zbonename.indexOf('leftfoot') > -1 && zleftfootbone == -1) {
-												zleftfootbone = j;
-											}
-										}
-									}
-									if (zheadtopbone > -1) {
-										/* headtop box parents to top of head */
-										var zheadtop = WTW.getMeshOrNodeByID(zavatarname + '-headtop');
-										if (zheadtop == null) {
-											zheadtop = new BABYLON.TransformNode(zavatarname + '-headtop');
-										}
-										zheadtop.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zheadtop.attachToBone(zresults.skeletons[i].bones[zheadtopbone], zresults.meshes[0]);
-									}
-									if (zspine2bone > -1) {
-										/* chest box parents to chest for carrying 3d objects in front or on back */
-										var zchest = WTW.getMeshOrNodeByID(zavatarname + '-chest');
-										if (zchest == null) {
-											zchest = new BABYLON.TransformNode(zavatarname + '-chest');
-										}
-										zchest.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zchest.attachToBone(zresults.skeletons[i].bones[zspine2bone], zresults.meshes[0]);
-									}
-									if (zrighthandbone > -1) {
-										/* right hand parents to right hand while in t-pose direction */
-										var zrighthand = WTW.getMeshOrNodeByID(zavatarname + '-righthand');
-										if (zrighthand == null) {
-											zrighthand = new BABYLON.TransformNode(zavatarname + '-righthand');
-										}
-										zrighthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zrighthand.attachToBone(zresults.skeletons[i].bones[zrighthandbone], zresults.meshes[0]);
-									}
-									if (zlefthandbone > -1) {
-										/* left hand parents to left hand while in t-pose direction */
-										var zlefthand = WTW.getMeshOrNodeByID(zavatarname + '-lefthand');
-										if (zlefthand == null) {
-											zlefthand = new BABYLON.TransformNode(zavatarname + '-lefthand');
-										}
-										zlefthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zlefthand.attachToBone(zresults.skeletons[i].bones[zlefthandbone], zresults.meshes[0]);
-									}
-									if (zrightlegbone > -1) {
-										/* right hip parents to top right leg */
-										var zrighthip = WTW.getMeshOrNodeByID(zavatarname + '-righthip');
-										if (zrighthip == null) {
-											zrighthip = new BABYLON.TransformNode(zavatarname + '-righthip');
-										}
-										zrighthip.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zrighthip.attachToBone(zresults.skeletons[i].bones[zrightlegbone], zresults.meshes[0]);
-									}
-									if (zleftlegbone > -1) {
-										/* left hip parents to top left leg */
-										var zlefthip = WTW.getMeshOrNodeByID(zavatarname + '-lefthip');
-										if (zlefthip == null) {
-											zlefthip = new BABYLON.TransformNode(zavatarname + '-lefthip');
-										}
-										zlefthip.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zlefthip.attachToBone(zresults.skeletons[i].bones[zleftlegbone], zresults.meshes[0]);
-									}
-									if (zrightfootbone > -1) {
-										/* right foot parents to right foot */
-										var zrightfoot = WTW.getMeshOrNodeByID(zavatarname + '-rightfoot');
-										if (zrightfoot == null) {
-//											zrightfoot = new BABYLON.TransformNode(zavatarname + '-rightfoot');
-											zrightfoot = new BABYLON.MeshBuilder.CreateBox(zavatarname + '-rightfoot', {}, scene);
-										}
-										zrightfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zrightfoot.attachToBone(zresults.skeletons[i].bones[zrightfootbone], zresults.meshes[0]);
-										
-									}
-									if (zleftfootbone > -1) {
-										/* left foot parents to left foot */
-										var zleftfoot = WTW.getMeshOrNodeByID(zavatarname + '-leftfoot');
-										if (zleftfoot == null) {
-											zleftfoot = new BABYLON.TransformNode(zavatarname + '-leftfoot');
-										}
-										zleftfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zleftfoot.attachToBone(zresults.skeletons[i].bones[zleftfootbone], zresults.meshes[0]);
-									}
-								}
-							}
+						if (zskeleton == null && zresults.skeletons[0] != undefined) {
+							/* alternative design where skeleton is not found under meshes[0] */
+//							zskeleton = zresults.skeletons[0];
 						}
-						/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
-						/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
-						WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
+						if (zskeleton != null) {
+							zskeleton.name = (zavatarname + '-' + zskeleton.name).toLowerCase();
+							zskeleton.id = zskeleton.name;
+						}
+						if (WTW.getFileExtension(zobjectfile) == 'glb') {
+							zresults.meshes.forEach((m) => m.sideOrientation = BABYLON.Constants.MATERIAL_CounterClockWiseSideOrientation);
+							zskeleton.bones.forEach((b) => b.linkTransformNode(null));
+						}
+
+						zavatar.WTW.skeleton = zskeleton;
+						zavatar.WTW.meshes = zresults.meshes;
+						
+						WTW.loadAvatarSkeletonBoxes(zavatarname, zskeleton, zresults.meshes[0], zscalingx, zscalingy, zscalingz);
+						
+						if (zskeleton != null) {
+							/* load the avatar animations - note that the idle onwait animation may already be loaded with the initial avatar object */
+							/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
+							WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
+						}
 					} 
 				}
 				zavatar = WTW.getMeshOrNodeByID(zavatarname);
@@ -897,7 +798,6 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 				zavataranimationdefs = zavatardef.avataranimationdefs;
 			}
 		}
-
 		zavatar.WTW = zavatardef;
 		/* make sure the base functions are defined - otherwise adds default for that avatar event */
 		/* basic avatar animation events: (onwait, onwalk, onwalkbackwards, onturnleft, onturnright, onstrafeleft, onstraferight, onrun, onrunbackwards, onrunleft, onrunright, onrunstrafeleft, onrunstraferight) */
@@ -1049,159 +949,32 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 					/* load skeleton based animations */
 					if (zresults.skeletons != null)	{
 						var zskeleton = zresults.meshes[0].skeleton;
-						zavatar.WTW.skeleton = zresults.meshes[0].skeleton;
-						for (var i=0; i < zresults.skeletons.length; i++) {
-							if (zresults.skeletons[i] != null) {
-								var zmeshname = zresults.skeletons[i].name;
-								var zchildmoldname = zavatarname + '-' + zmeshname;
-								zresults.skeletons[i].name = zchildmoldname;
-								zresults.skeletons[i].id = zchildmoldname;
-								if (zresults.skeletons[i].parent == null) {
-									zresults.skeletons[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
-								}
-								if (zresults.skeletons[i].bones != null) {
-									/* the following boxes will be attached to various skeleton bones for easy parenting to the animated avatar */
-									/* useful for carrying 3d objects */
-									var zheadtopbone = -1;
-									var zspine2bone = -1;
-									var zrighthandbone = -1;
-									var zlefthandbone = -1;
-									var zrightlegbone = -1;
-									var zleftlegbone = -1;
-									var zrightfootbone = -1;
-									var zleftfootbone = -1;
-									for (var j=0; j < zresults.skeletons[i].bones.length; j++) {
-										if (zresults.skeletons[i].bones[j] != null) {
-											var zbonename = zresults.skeletons[i].bones[j].name.toLowerCase();
-											if (zbonename.indexOf('headtop') > -1 && zheadtopbone == -1) {
-												zheadtopbone = j;
-											} else if (zbonename.indexOf('spine2') > -1 && zspine2bone == -1) {
-												zspine2bone = j;
-											} else if (zbonename.indexOf('righthand') > -1 && zrighthandbone == -1) {
-												zrighthandbone = j;
-											} else if (zbonename.indexOf('lefthand') > -1 && zlefthandbone == -1) {
-												zlefthandbone = j;
-											} else if (zbonename.indexOf('rightupleg') > -1 && zrightlegbone == -1) {
-												zrightlegbone = j;
-											} else if (zbonename.indexOf('leftupleg') > -1 && zleftlegbone == -1) {
-												zleftlegbone = j;
-											} else if (zbonename.indexOf('rightfoot') > -1 && zrightfootbone == -1) {
-												zrightfootbone = j;
-											} else if (zbonename.indexOf('leftfoot') > -1 && zleftfootbone == -1) {
-												zleftfootbone = j;
-											}
-/*											if (j == 0) {
-												zresults.skeletons[i].bones[j].parent = zavatarparent;
-											} else {
-												if (zresults.skeletons[i].bones[j].parent == null) {
-													zresults.skeletons[i].bones[j].parent = zresults.skeletons[i].bones[0];
-												}
-											}
-*/										}
-									}
-									if (zheadtopbone > -1) {
-										/* headtop box parents to top of head */
-										var zheadtop = WTW.getMeshOrNodeByID(zavatarname + '-headtop');
-										if (zheadtop == null) {
-											zheadtop = BABYLON.MeshBuilder.CreateBox(zavatarname + '-headtop', {}, scene);
-											zheadtop.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-headtop', scene);
-											zheadtop.material.alpha = 0;
-											zheadtop.isPickable = true;
-										}
-										zheadtop.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zheadtop.attachToBone(zresults.skeletons[i].bones[zheadtopbone], zresults.meshes[0]);
-									}
-									if (zspine2bone > -1) {
-										/* chest box parents to chest for carrying 3d objects in front or on back */
-										var zchest = WTW.getMeshOrNodeByID(zavatarname + '-chest');
-										if (zchest == null) {
-											zchest = BABYLON.MeshBuilder.CreateBox(zavatarname + '-chest', {}, scene);
-											zchest.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-chest', scene);
-											zchest.material.alpha = 0;
-											zchest.isPickable = true;
-										}
-										zchest.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zchest.attachToBone(zresults.skeletons[i].bones[zspine2bone], zresults.meshes[0]);
-									}
-									if (zrighthandbone > -1) {
-										/* right hand parents to right hand while in t-pose direction */
-										var zrighthand = WTW.getMeshOrNodeByID(zavatarname + '-righthand');
-										if (zrighthand == null) {
-											zrighthand = BABYLON.MeshBuilder.CreateBox(zavatarname + '-righthand', {}, scene);
-											zrighthand.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-righthand', scene);
-											zrighthand.material.alpha = 0;
-											zrighthand.isPickable = true;
-										}
-										zrighthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zrighthand.attachToBone(zresults.skeletons[i].bones[zrighthandbone], zresults.meshes[0]);
-									}
-									if (zlefthandbone > -1) {
-										/* left hand parents to left hand while in t-pose direction */
-										var zlefthand = WTW.getMeshOrNodeByID(zavatarname + '-lefthand');
-										if (zlefthand == null) {
-											zlefthand = BABYLON.MeshBuilder.CreateBox(zavatarname + '-lefthand', {}, scene);
-											zlefthand.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-lefthand', scene);
-											zlefthand.material.alpha = 0;
-											zlefthand.isPickable = true;
-										}
-										zlefthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zlefthand.attachToBone(zresults.skeletons[i].bones[zlefthandbone], zresults.meshes[0]);
-									}
-									if (zrightlegbone > -1) {
-										/* right hip parents to top right leg */
-										var zrighthip = WTW.getMeshOrNodeByID(zavatarname + '-righthip');
-										if (zrighthip == null) {
-											zrighthip = BABYLON.MeshBuilder.CreateBox(zavatarname + '-righthip', {}, scene);
-											zrighthip.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-righthip', scene);
-											zrighthip.material.alpha = 0;
-											zrighthip.isPickable = true;
-										}
-										zrighthip.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zrighthip.attachToBone(zresults.skeletons[i].bones[zrightlegbone], zresults.meshes[0]);
-									}
-									if (zleftlegbone > -1) {
-										/* left hip parents to top left leg */
-										var zlefthip = WTW.getMeshOrNodeByID(zavatarname + '-lefthip');
-										if (zlefthip == null) {
-											zlefthip = BABYLON.MeshBuilder.CreateBox(zavatarname + '-lefthip', {}, scene);
-											zlefthip.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-lefthip', scene);
-											zlefthip.material.alpha = 0;
-											zlefthip.isPickable = true;
-										}
-										zlefthip.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zlefthip.attachToBone(zresults.skeletons[i].bones[zleftlegbone], zresults.meshes[0]);
-									}
-									if (zrightfootbone > -1) {
-										/* right foot parents to right foot */
-										var zrightfoot = WTW.getMeshOrNodeByID(zavatarname + '-rightfoot');
-										if (zrightfoot == null) {
-											zrightfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + '-rightfoot', {}, scene);
-											zrightfoot.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-rightfoot', scene);
-											zrightfoot.material.alpha = 0;
-											zrightfoot.isPickable = true;
-										}
-										zrightfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zrightfoot.attachToBone(zresults.skeletons[i].bones[zrightfootbone], zresults.meshes[0]);
-									}
-									if (zleftfootbone > -1) {
-										/* left foot parents to left foot */
-										var zleftfoot = WTW.getMeshOrNodeByID(zavatarname + '-leftfoot');
-										if (zleftfoot == null) {
-											zleftfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + '-leftfoot', {}, scene);
-											zleftfoot.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-leftfoot', scene);
-											zleftfoot.material.alpha = 0;
-											zleftfoot.isPickable = true;
-										}
-										zleftfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-										zleftfoot.attachToBone(zresults.skeletons[i].bones[zleftfootbone], zresults.meshes[0]);
-									}
-								}
-							}
+						if (zskeleton == null && zresults.skeletons[0] != undefined) {
+//							/* alternative design where skeleton is not found under meshes[0] * /
+							zskeleton = zresults.skeletons[0];
 						}
-						/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
-						/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
-						WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
+
+						if (zskeleton != null) {
+							zskeleton.name = (zavatarname + '-' + zskeleton.name).toLowerCase();
+							zskeleton.id = zskeleton.name;
+						}
+						if (WTW.getFileExtension(zobjectfile) == 'glb') {
+							zresults.meshes.forEach((m) => m.sideOrientation = BABYLON.Constants.MATERIAL_CounterClockWiseSideOrientation);
+							zskeleton.bones.forEach((b) => b.linkTransformNode(null));
+						}
+
+						zavatar.WTW.skeleton = zskeleton;
+						zavatar.WTW.meshes = zresults.meshes;
+						
+						if (zskeleton != null) {
+							WTW.loadAvatarSkeletonBoxes(zavatarname, zskeleton, zresults.meshes[0], zscalingx, zscalingy, zscalingz);
+
+//							/ * load the avatar animations - note that the idle onwait animation may already be loaded with the initial avatar object * /
+//							/ * zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event * /
+						}
+
 					} 
+					WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
 				}
 				WTW.editAvatar = zavatar;
 				zavatar = WTW.getMeshOrNodeByID(zavatarname);

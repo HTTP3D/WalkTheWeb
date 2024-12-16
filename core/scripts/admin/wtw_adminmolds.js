@@ -563,6 +563,27 @@ WTWJS.prototype.loadMoldForm = function(zmolddef) {
 	}
 }
 
+WTWJS.prototype.openAddNew3DModel = function(zuploadobjectid, zobjectfolder, zobjectfile) {
+	/* open add new mold will create a new mold and open the form using the default values for that type of mold - babylonfile for 3D Models and selecting the 3D Model ID */
+	try {
+		var zshape = 'babylonfile';
+		var zwebtype = '';
+		if (communityid != '') {
+			zwebtype = 'community';
+		} else if (buildingid != '') {
+			zwebtype = 'building';
+		} else if (thingid != '') {
+			zwebtype = 'thing';
+		}
+		if (zwebtype != '') {
+			WTW.openAddNewMold(zwebtype, zshape);
+			WTW.setSelectModel(zuploadobjectid, zobjectfolder, zobjectfile);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminmolds.js-openAddNew3DModel=' + ex.message);
+	}
+}
+
 WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 	/* open add new mold will create a new mold and open the form using the default values for that type of mold */
 	try {

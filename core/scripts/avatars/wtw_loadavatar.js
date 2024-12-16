@@ -331,6 +331,156 @@ WTWJS.prototype.updateAvatarColors = function(zavatarname, zavatardef) {
     }
 }
 
+WTWJS.prototype.loadAvatarSkeletonBoxes = function(zavatarname, zskeleton, zmesh, zscalingx, zscalingy, zscalingz) {
+	try {
+		if (zskeleton != null) {
+			for (var i=0; i < zskeleton.length; i++) {
+				if (zskeleton[i] != null) {
+					var zmeshname = zskeleton[i].name;
+					var zchildmoldname = zavatarname + '-' + zmeshname;
+					zskeleton[i].name = zchildmoldname;
+					zskeleton[i].id = zchildmoldname;
+					if (zskeleton[i].parent == null) {
+						zskeleton[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
+					}
+					if (zskeleton[i].bones != null) {
+						/* the following boxes will be attached to various skeleton bones for easy parenting to the animated avatar */
+						/* useful for carrying 3d objects */
+						var zheadtopbone = -1;
+						var zspine2bone = -1;
+						var zrighthandbone = -1;
+						var zlefthandbone = -1;
+						var zrightlegbone = -1;
+						var zleftlegbone = -1;
+						var zrightfootbone = -1;
+						var zleftfootbone = -1;
+						for (var j=0; j < zskeleton[i].bones.length; j++) {
+							if (zskeleton[i].bones[j] != null) {
+								var zbonename = zskeleton[i].bones[j].name.toLowerCase();
+								if (zbonename.indexOf('headtop') > -1 && zheadtopbone == -1) {
+									zheadtopbone = j;
+								} else if (zbonename.indexOf('spine2') > -1 && zspine2bone == -1) {
+									zspine2bone = j;
+								} else if (zbonename.indexOf('righthand') > -1 && zrighthandbone == -1) {
+									zrighthandbone = j;
+								} else if (zbonename.indexOf('lefthand') > -1 && zlefthandbone == -1) {
+									zlefthandbone = j;
+								} else if (zbonename.indexOf('rightupleg') > -1 && zrightlegbone == -1) {
+									zrightlegbone = j;
+								} else if (zbonename.indexOf('leftupleg') > -1 && zleftlegbone == -1) {
+									zleftlegbone = j;
+								} else if (zbonename.indexOf('rightfoot') > -1 && zrightfootbone == -1) {
+									zrightfootbone = j;
+								} else if (zbonename.indexOf('leftfoot') > -1 && zleftfootbone == -1) {
+									zleftfootbone = j;
+								}
+							}
+						}
+						if (zheadtopbone > -1) {
+							/* headtop box parents to top of head */
+							var zheadtop = WTW.getMeshOrNodeByID(zavatarname + '-headtop');
+							if (zheadtop == null) {
+								zheadtop = BABYLON.MeshBuilder.CreateBox(zavatarname + '-headtop', {}, scene);
+								zheadtop.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-headtop', scene);
+								zheadtop.material.alpha = 0;
+								zheadtop.isPickable = true;
+							}
+							zheadtop.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zheadtop.attachToBone(zskeleton[i].bones[zheadtopbone], zmesh);
+						}
+						if (zspine2bone > -1) {
+							/* chest box parents to chest for carrying 3d objects in front or on back */
+							var zchest = WTW.getMeshOrNodeByID(zavatarname + '-chest');
+							if (zchest == null) {
+								zchest = BABYLON.MeshBuilder.CreateBox(zavatarname + '-chest', {}, scene);
+								zchest.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-chest', scene);
+								zchest.material.alpha = 0;
+								zchest.isPickable = true;
+							}
+							zchest.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zchest.attachToBone(zskeleton[i].bones[zspine2bone], zmesh);
+						}
+						if (zrighthandbone > -1) {
+							/* right hand parents to right hand while in t-pose direction */
+							var zrighthand = WTW.getMeshOrNodeByID(zavatarname + '-righthand');
+							if (zrighthand == null) {
+								zrighthand = BABYLON.MeshBuilder.CreateBox(zavatarname + '-righthand', {}, scene);
+								zrighthand.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-righthand', scene);
+								zrighthand.material.alpha = 0;
+								zrighthand.isPickable = true;
+							}
+							zrighthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zrighthand.attachToBone(zskeleton[i].bones[zrighthandbone], zmesh);
+						}
+						if (zlefthandbone > -1) {
+							/* left hand parents to left hand while in t-pose direction */
+							var zlefthand = WTW.getMeshOrNodeByID(zavatarname + '-lefthand');
+							if (zlefthand == null) {
+								zlefthand = BABYLON.MeshBuilder.CreateBox(zavatarname + '-lefthand', {}, scene);
+								zlefthand.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-lefthand', scene);
+								zlefthand.material.alpha = 0;
+								zlefthand.isPickable = true;
+							}
+							zlefthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zlefthand.attachToBone(zskeleton[i].bones[zlefthandbone], zmesh);
+						}
+						if (zrightlegbone > -1) {
+							/* right hip parents to top right leg */
+							var zrighthip = WTW.getMeshOrNodeByID(zavatarname + '-righthip');
+							if (zrighthip == null) {
+								zrighthip = BABYLON.MeshBuilder.CreateBox(zavatarname + '-righthip', {}, scene);
+								zrighthip.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-righthip', scene);
+								zrighthip.material.alpha = 0;
+								zrighthip.isPickable = true;
+							}
+							zrighthip.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zrighthip.attachToBone(zskeleton[i].bones[zrightlegbone], zmesh);
+						}
+						if (zleftlegbone > -1) {
+							/* left hip parents to top left leg */
+							var zlefthip = WTW.getMeshOrNodeByID(zavatarname + '-lefthip');
+							if (zlefthip == null) {
+								zlefthip = BABYLON.MeshBuilder.CreateBox(zavatarname + '-lefthip', {}, scene);
+								zlefthip.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-lefthip', scene);
+								zlefthip.material.alpha = 0;
+								zlefthip.isPickable = true;
+							}
+							zlefthip.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zlefthip.attachToBone(zskeleton[i].bones[zleftlegbone], zmesh);
+						}
+						if (zrightfootbone > -1) {
+							/* right foot parents to right foot */
+							var zrightfoot = WTW.getMeshOrNodeByID(zavatarname + '-rightfoot');
+							if (zrightfoot == null) {
+								zrightfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + '-rightfoot', {}, scene);
+								zrightfoot.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-rightfoot', scene);
+								zrightfoot.material.alpha = 0;
+								zrightfoot.isPickable = true;
+							}
+							zrightfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zrightfoot.attachToBone(zskeleton[i].bones[zrightfootbone], zmesh);
+						}
+						if (zleftfootbone > -1) {
+							/* left foot parents to left foot */
+							var zleftfoot = WTW.getMeshOrNodeByID(zavatarname + '-leftfoot');
+							if (zleftfoot == null) {
+								zleftfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + '-leftfoot', {}, scene);
+								zleftfoot.material = new BABYLON.StandardMaterial('mat' + zavatarname + '-leftfoot', scene);
+								zleftfoot.material.alpha = 0;
+								zleftfoot.isPickable = true;
+							}
+							zleftfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+							zleftfoot.attachToBone(zskeleton[i].bones[zleftfootbone], zmesh);
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-avatars-wtw_loadavatar.js-loadAvatarSkeletonBoxes=' + ex.message);
+    }
+}
+
 WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationdefs) {
 	/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
 	/* this function starts the onwait animation */
@@ -339,42 +489,133 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
 		var zskeleton = null;
 		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
-			zskeleton = zavatar.WTW.skeleton;
+			var zstartindex = 0;
 			if (zavatar.WTW != undefined) {
-				try {
-					zavatar.WTW.animations = zavataranimationdefs;
-					zavatar.WTW.animations.running = [];
-					zavatar.WTW.animations.running['onrotateup'] = {
-						'weight':0,
-						'active':0
-					};
-					zavatar.WTW.animations.running['onrotatedown'] = {
-						'weight':0,
-						'active':0
-					};
-					/* start the onwait animation */
-					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 0, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
-					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].starttime = null;
-					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].endtime = null;
-					zavatar.WTW.animations[0].totalframes = Number(zavataranimationdefs[0].endframe);
-					zavatar.WTW.animations[0].totalstartframe = Number(zavataranimationdefs[0].startframe);
-					zavatar.WTW.animations[0].totalendframe = Number(zavataranimationdefs[0].endframe);
-					
-					/* start the idle animation */
-					if (zavataranimationdefs[0].animationevent == 'onwait') {
-						zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].weight = 1;
-						if (zavatarname.indexOf('editavatar') > -1) {
-							WTW.avatarShowVisible(zavatarname);
-						}
-					}
-				} catch (ex) {}
+				zavatar.WTW.animations = zavataranimationdefs;
+				zavatar.WTW.animations.running = [];
+				zavatar.WTW.animations.running['onrotateup'] = {
+					'weight':0,
+					'active':0
+				};
+				zavatar.WTW.animations.running['onrotatedown'] = {
+					'weight':0,
+					'active':0
+				};
 			}
-			/* starts loading the rest of the animations starting with index 1 of the zavataranimationdefs */
-			WTW.loadAvatarAnimations(zavatarname, 1);
+			if (zavatar.WTW.skeleton != null) {
+				zskeleton = zavatar.WTW.skeleton;
+				if (zavatar.WTW != undefined) {
+					try {
+						/* start the onwait animation */
+						zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 0, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
+
+						zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].starttime = null;
+						zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].endtime = null;
+						if (WTW.isNumeric(zavataranimationdefs[0].endframe)) {
+							zavatar.WTW.animations[0].totalframes = Number(zavataranimationdefs[0].endframe);
+							zavatar.WTW.animations[0].totalendframe = Number(zavataranimationdefs[0].endframe);
+						}
+						if (WTW.isNumeric(zavataranimationdefs[0].startframe)) {
+							zavatar.WTW.animations[0].totalstartframe = Number(zavataranimationdefs[0].startframe);
+						}
+						
+						/* start the idle animation */
+						if (zavataranimationdefs[0].animationevent == 'onwait') {
+							zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].weight = 1;
+							if (zavatarname.indexOf('editavatar') > -1) {
+								WTW.avatarShowVisible(zavatarname);
+							}
+						}
+						/* idle animation was successfully loaded and started */
+						zstartindex = 1;
+						if (WTW.getFileExtension(zavatar.WTW.objects.file) == 'glb') {
+							zstartindex = 0;
+						}
+					} catch (ex) {
+						/* idle animation was not successfully loaded and started (or not included with initial avatar file) */
+						zstartindex = 0;
+					}
+				}
+			}
+			/* starts loading the rest of the animations */
+			WTW.loadAvatarAnimations(zavatarname, zstartindex);
 		}
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-reloadAvatarAnimations=' + ex.message);
     }
+}
+
+WTWJS.prototype.mergeSkeletonBones = function(zskeleton, zanimationskeleton) {
+	/* adds bones to a base skeleton from an animation that has more bones available */
+	try {
+		if (zskeleton != null) {
+			if (zskeleton.bones.length < zanimationskeleton.bones.length) {
+				for (var i=0;i<zanimationskeleton.bones.length;i++) {
+					if (zanimationskeleton.bones[i] != null) {
+						var zfound = false;
+						var zbone = zanimationskeleton.bones[i];
+						var zboneparent = null;
+						
+						for (var j=0;j<zskeleton.bones.length;j++) {
+							if (zskeleton.bones[j] != null) {
+								if (zskeleton.bones[j].name == zbone.name) {
+									zfound = true;
+								}
+							}
+						}
+						if (zfound == false) {
+							zboneparent = zbone.getParent();
+							if (zboneparent.name != '') {
+								for (var j=0;j<zskeleton.bones.length;j++) {
+									if (zskeleton.bones[j] != null) {
+										if (zskeleton.bones[j].name == zboneparent.name) {
+											var znewbone = new BABYLON.Bone(zbone.name, zskeleton, zskeleton.bones[j]);
+											
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+    } catch (ex) {
+		WTW.log('core-scripts-avatars-wtw_loadavatar.js-mergeSkeletonBones=' + ex.message);
+    }
+	return zskeleton;
+}
+
+WTWJS.prototype.checkAnimationBones = function(zavatar, zanimationskeleton) {
+	/* removes bones from an animation skeleton that are not on the base skeleton (alternate to mergeSkeletonBones function) */
+	try {
+		if (zavatar.WTW.skeleton != undefined && zanimationskeleton != null) {
+			if (zavatar.WTW.skeleton.bones.length < zanimationskeleton.bones.length) {
+				for (var i=zanimationskeleton.bones.length;i>=0;i--) {
+					if (zanimationskeleton.bones[i] != null) {
+						var zfound = false;
+						var zbone = zanimationskeleton.bones[i];
+						var zboneparent = null;
+						
+						for (var j=0;j<zavatar.WTW.skeleton.bones.length;j++) {
+							if (zavatar.WTW.skeleton.bones[j] != null) {
+								if (zavatar.WTW.skeleton.bones[j].name == zbone.name) {
+									zfound = true;
+								}
+							}
+						}
+						if (zfound == false) {
+							zanimationskeleton.bones[i].dispose();
+							zanimationskeleton.bones.splice(i,1);
+						}
+					}
+				}
+			}
+		}
+    } catch (ex) {
+		WTW.log('core-scripts-avatars-wtw_loadavatar.js-checkAnimationBones=' + ex.message);
+    }
+	return zanimationskeleton;
 }
 
 WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zenteranimate) {
@@ -392,7 +633,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
 				/* when avatar is loaded, animations and skeleton objects are set to zavatar.WTW */
-				if (zavatar.WTW.animations != null && zavatar.WTW.skeleton != null) {
+				if (zavatar.WTW.animations != null) {
 					if (zavatar.WTW.animations[zanimationind] != null) {
 						let zanimation = zavatar.WTW.animations[zanimationind];
 						if (zanimation.objectfolder != '' && zanimation.objectfile != '') {
@@ -401,6 +642,12 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 								let zavatarparent = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 								let zframetotal = WTW.getLastAnimationKey(zavatar) + zanimationind;
 								let zskeleton = zresponse.skeletons[0];
+								
+								/* make the original skeleton number of bones match the animation skeleton by adding the missing bones */
+								zavatar.WTW.skeleton = WTW.mergeSkeletonBones(zavatar.WTW.skeleton, zskeleton);
+								/* alternative is to remove extra bones from the animation using:
+								zskeleton = WTW.checkAnimationBones(zavatar, zskeleton);
+								*/
 								let zanimationloop = true;
 								if (zanimation.animationloop != 1) {
 									zanimationloop = false;
@@ -427,6 +674,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 								if (zavatar.WTW.skeleton != undefined) {
 									/* copy the animation frame range to the current avatar */
 									zavatar.WTW.skeleton.copyAnimationRange(zskeleton, zanimation.animationevent, true);
+
 									/* easing function defines how an animation starts and stops */
 									var zeasingfunction = new BABYLON.QuinticEase(); /* alternative is QuadraticEase() */
 									zeasingfunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
@@ -467,9 +715,13 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 											}
 										};
 									}
+
 									/* start animation - may be set to weight 0 and not executing, but running */
 									if (zenteranimate) {
 										try {
+											if (zanimation.animationevent == 'onwait') {
+												zanimation.startweight = 1;
+											}
 											zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimationloop, Number(zanimation.speedratio));
 											if (zonanimationloop != null) {
 												zavatar.WTW.animations.running[zanimation.animationevent].onAnimationLoop = zonanimationloop;
@@ -478,9 +730,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 											zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
 											zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
 											zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
-										} catch (ex) {
-											
-										}
+										} catch (ex) {}
 									}
 									if (zenteranimate == false) {
 										try {
@@ -492,9 +742,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 											zavatar.WTW.animations.running[zanimation.animationevent].endframe = ztotalendframe;
 											zavatar.WTW.animations.running[zanimation.animationevent].starttime = null;
 											zavatar.WTW.animations.running[zanimation.animationevent].endtime = null;
-										} catch (ex) {
-											
-										}
+										} catch (ex) {}
 									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
 										/* there are more animations to load - so load the next one */
 										if (zanimationind == 11) {
@@ -531,6 +779,9 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 											WTW.avatarEnter(zavatarname);
 										}
 									}
+								}
+								if (zskeleton != null) {
+									zskeleton.dispose();
 								}
 							}); 
 						}

@@ -1209,19 +1209,21 @@ WTWJS.prototype.reloadShadows = function() {
 		/* add shadows to molds in the scene */
 		if (WTW.communitiesMolds.length > 0) {
 			for (var i=0;i<WTW.communitiesMolds.length;i++) {
-				if (WTW.communitiesMolds[i].graphics.castshadows == '1') {
-					if (WTW.communitiesMolds[i].moldname != undefined) {
-						var zmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
-						if (zmold != null) {
-							var zchildmeshes = zmold.getChildren();
-							if (zchildmeshes != null) {
-								for (var j=0;j<zchildmeshes.length;j++) {
-									if (zchildmeshes[j] != null) {
-										WTW.shadows.getShadowMap().renderList.push(zchildmeshes[j]);
+				if (WTW.communitiesMolds[i].graphics != undefined) {
+					if (WTW.communitiesMolds[i].graphics.castshadows == '1') {
+						if (WTW.communitiesMolds[i].moldname != undefined) {
+							var zmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
+							if (zmold != null) {
+								var zchildmeshes = zmold.getChildren();
+								if (zchildmeshes != null) {
+									for (var j=0;j<zchildmeshes.length;j++) {
+										if (zchildmeshes[j] != null) {
+											WTW.shadows.getShadowMap().renderList.push(zchildmeshes[j]);
+										}
 									}
+								} else {
+									WTW.shadows.getShadowMap().renderList.push(zmold);
 								}
-							} else {
-								WTW.shadows.getShadowMap().renderList.push(zmold);
 							}
 						}
 					}
@@ -1230,19 +1232,21 @@ WTWJS.prototype.reloadShadows = function() {
 		}
 		if (WTW.buildingMolds.length > 0) {
 			for (var i=0;i<WTW.buildingMolds.length;i++) {
-				if (WTW.buildingMolds[i].graphics.castshadows == '1') {
-					if (WTW.buildingMolds[i].moldname != undefined) {
-						var zmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname);
-						if (zmold != null) {
-							var zchildmeshes = zmold.getChildren();
-							if (zchildmeshes != null) {
-								for (var j=0;j<zchildmeshes.length;j++) {
-									if (zchildmeshes[j] != null) {
-										WTW.shadows.getShadowMap().renderList.push(zchildmeshes[j]);
+				if (WTW.buildingMolds[i].graphics != undefined) {
+					if (WTW.buildingMolds[i].graphics.castshadows == '1') {
+						if (WTW.buildingMolds[i].moldname != undefined) {
+							var zmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname);
+							if (zmold != null) {
+								var zchildmeshes = zmold.getChildren();
+								if (zchildmeshes != null) {
+									for (var j=0;j<zchildmeshes.length;j++) {
+										if (zchildmeshes[j] != null) {
+											WTW.shadows.getShadowMap().renderList.push(zchildmeshes[j]);
+										}
 									}
+								} else {
+									WTW.shadows.getShadowMap().renderList.push(zmold);
 								}
-							} else {
-								WTW.shadows.getShadowMap().renderList.push(zmold);
 							}
 						}
 					}
@@ -1251,19 +1255,21 @@ WTWJS.prototype.reloadShadows = function() {
 		}
 		if (WTW.thingMolds.length > 0) {
 			for (var i=0;i<WTW.thingMolds.length;i++) {
-				if (WTW.thingMolds[i].graphics.castshadows == '1') {
-					if (WTW.thingMolds[i].moldname != undefined) {
-						var zmold = WTW.getMeshOrNodeByID(WTW.thingMolds[i].moldname);
-						if (zmold != null) {
-							var zchildmeshes = zmold.getChildren();
-							if (zchildmeshes != null) {
-								for (var j=0;j<zchildmeshes.length;j++) {
-									if (zchildmeshes[j] != null) {
-										WTW.shadows.getShadowMap().renderList.push(zchildmeshes[j]);
+				if (WTW.thingMolds[i].graphics != undefined) {
+					if (WTW.thingMolds[i].graphics.castshadows == '1') {
+						if (WTW.thingMolds[i].moldname != undefined) {
+							var zmold = WTW.getMeshOrNodeByID(WTW.thingMolds[i].moldname);
+							if (zmold != null) {
+								var zchildmeshes = zmold.getChildren();
+								if (zchildmeshes != null) {
+									for (var j=0;j<zchildmeshes.length;j++) {
+										if (zchildmeshes[j] != null) {
+											WTW.shadows.getShadowMap().renderList.push(zchildmeshes[j]);
+										}
 									}
+								} else {
+									WTW.shadows.getShadowMap().renderList.push(zmold);
 								}
-							} else {
-								WTW.shadows.getShadowMap().renderList.push(zmold);
 							}
 						}
 					}

@@ -1421,8 +1421,8 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 	/* some keys have been assigned with ctrl- combos to trigger admin menu options */
 	try {
 		var e = e || window.event;
-		if (keycode == 90 || keycode == 88 || keycode == 67 || keycode == 86) {
-			// save keys for undo, cut, copy, and paste
+		if (keycode == 90 || keycode == 88 || keycode == 67 || keycode == 86 || keycode == 85) {
+			// save keys for undo, cut, copy, and paste - and u for page source
 		} else {
 			switch(WTW.adminMenu) {
 				case 1:

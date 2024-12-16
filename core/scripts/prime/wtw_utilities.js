@@ -452,6 +452,28 @@ WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
 	return zcolor;
 }
 
+WTWJS.prototype.getFileExtension = function(zfilename) {
+	/* file name can include file path, function returns the extension */
+	var zfileextension = '';
+	try {
+		if (zfilename != null) {
+			if (zfilename != '') {
+				zfilename = zfilename.toLowerCase();
+				if (zfilename.indexOf('?') > -1) {
+					zfilename = zfilename.split('?')[0];
+				}
+				if (zfilename.indexOf('.') > -1) {
+					zfilename = zfilename.split('.');
+					zfileextension = zfilename[zfilename.length-1];
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_utilities.js-getFileExtension=' + ex.message);
+	}
+	return zfileextension;
+}
+
 
 /* fetch and post data or web pages */
 

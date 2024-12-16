@@ -225,6 +225,7 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext /*, args 
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-executeFunctionByName=' + ex.message);
+		
 	}
 	return zfunction;
 }
