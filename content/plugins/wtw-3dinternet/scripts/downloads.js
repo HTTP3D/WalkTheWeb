@@ -451,6 +451,7 @@ WTW_3DINTERNET.prototype.updateCols = function(zobj, zcols) {
 
 WTW_3DINTERNET.prototype.downloadWeb = async function(ztrigger, ztemplatename, zwebid, znewwebid, zwebtype, zusertoken, zparentwebid, zparentwebtype, zoriginalnewwebid, zoriginalwebtype) {
 	/* This process takes the selected 3D Web and downloads a copy to the local instance */
+//wtw3dinternet.downloadWeb('community', 'U2VyZW5lIElzbGFuZA==', 'enkrw34q7sxajg5p', 'enkrw34q7sxajg5p', 'community');
 	try {
 		if (zusertoken == undefined) {
 			zusertoken = '';

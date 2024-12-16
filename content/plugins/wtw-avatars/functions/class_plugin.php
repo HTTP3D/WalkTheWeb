@@ -559,7 +559,7 @@ class wtwavatars {
 		$zformdata = "";
 		try {
 			$zformdata .= "<h2>Avatar Animations</h2>\r\n";
-			$zformdata .= "<input type=\"file\" id=\"wtw_avatarfilesupload2\" name=\"wtw_avatarfilesupload2[]\" class=\"wtw-hide\" multiple=\"true\" onchange=\"WTW.uploadQuickAvatarFiles();\" />";
+			$zformdata .= "<input type=\"file\" id=\"wtw_avatarfilesupload2\" name=\"wtw_avatarfilesupload2[]\" class=\"wtw-hide\" multiple=\"true\" onchange=\"wtwreadyplayerme.uploadQuickAvatarFiles();\" />";
 			$zformdata .= "<div id=\"wtw_tanimationsavatarerror\" class=\"wtw-error\"></div>\r\n";
 			$zformdata .= "<div id=\"wtw_avataranimationslist\"></div>\r\n";
 			$zformdata .= "<div id=\"wtw_cancelavataranimationsform\" class=\"wtw-yellowbutton\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_bbackwtw_adminEditAvatarAnimationsDiv'));\">Cancel</div><br /><br />\r\n";
