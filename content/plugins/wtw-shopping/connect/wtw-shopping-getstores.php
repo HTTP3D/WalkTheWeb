@@ -12,7 +12,7 @@ try {
 	if ($wtwconnect->hasPermission(array("admin"))) {
 		$zresults = $wtwconnect->query("
 			select *
-			from ".WTWSHOPPING_PREFIX."stores  
+			from ".WTWSHOPPING_PREFIX."stores 
 			where deleted=0;");
 	} else if ($wtwconnect->hasPermission(array("host"))) {
 		$zresults = $wtwconnect->query("
@@ -32,6 +32,7 @@ try {
 			'storeurl'=> $zrow["storeurl"],
 			'storecarturl'=> $zrow["storecarturl"],
 			'storeproducturl'=> $zrow["storeproducturl"],
+			'approveddate'=> $zrow["approveddate"],
 			'wtwkey'=> $zrow["wtwkey"],
 			'wtwsecret'=> $zrow["wtwsecret"],
 			'woocommerceapiurl'=> $zrow["woocommerceapiurl"],

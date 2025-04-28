@@ -154,15 +154,17 @@ wtwshopping.prototype.getStores = function() {
 					for (var i=0;i<zresponse.length;i++) {
 						if (zresponse[i] != null) {
 							WTWShopping.stores[i] = zresponse[i];
-							var zwtwkey = '';
+							var zapproved = '';
 							var znewkey = '';
-							if (zresponse[i].wtwkey == '') {
-								zwtwkey = "<div class='wtw-greenbuttonright' onclick=\"dGet('wtw_tstoreid').value='" + zresponse[i].storeid + "';WTWShopping.deleteStore();\">Deny Connection</div><div class='wtw-greenbuttonright' onclick=\"WTWShopping.allowConnection('" + zresponse[i].storeid + "');\">Allow Connection</div>";
+							if (zresponse[i].approveddate == '') {
+								zapproved = "<div class='wtw-greenbuttonright' onclick=\"WTWShopping.allowConnection('" + zresponse[i].storeid + "');\">Not Approved</div>";
+							} else {
+								zapproved = "<div class='wtw-greenbuttonright' onclick=\"dGet('wtw_tstoreid').value='" + zresponse[i].storeid + "';WTWShopping.deleteStore();\">Approved</div>";
 							}
 							if (zresponse[i].woocommercekey != zresponse[i].woocommercekeynew && zresponse[i].woocommercekeynew != '') {
 								znewkey = "<div class='wtw-greenbuttonright' onclick=\"WTWShopping.updateStoreKey('" + zresponse[i].storeid + "');\">Update Key</div>";
 							}
-							zliststores += "<tr><td class='wtw-tablecolumns'>" + atob(zresponse[i].storename) + "</td><td class='wtw-tablecolumns'><a href='" + zresponse[i].storeurl + "' target='_blank'>" + zresponse[i].storeurl + "</a></td><td class='wtw-tablecolumns'><div class='wtw-bluebuttonright' onclick=\"WTWShopping.editStore('" + zresponse[i].storeid + "');\">Edit</div>" + znewkey + zwtwkey + "</td></tr>";
+							zliststores += "<tr><td class='wtw-tablecolumns'>" + atob(zresponse[i].storename) + "</td><td class='wtw-tablecolumns'><a href='" + zresponse[i].storeurl + "' target='_blank'>" + zresponse[i].storeurl + "</a></td><td class='wtw-tablecolumns'><div class='wtw-bluebuttonright' onclick=\"WTWShopping.editStore('" + zresponse[i].storeid + "');\">Edit</div>" + znewkey + zapproved + "</td></tr>";
 						}
 					}
 				}
