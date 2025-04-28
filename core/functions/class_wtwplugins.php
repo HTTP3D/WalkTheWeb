@@ -722,6 +722,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsHudLoginLoadChoiceAvatarsArray = function(zfilter, zdefaultdisplayname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('hudloginloadchoiceavatarsarray');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsHudLoginLoadChoiceAvatarsArray=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsOnMessage = function(zevent) {\r\n";
 			$jsdata .= "		var zsafe = false;\r\n";
 			$jsdata .= "		try {\r\n";
@@ -748,12 +756,33 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsGetSavedAvatar = function(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsInitializeAvatar = function(zloaddefault) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= $this->getScriptFunction('getsavedavatar');
+			$jsdata .= $this->returnScriptFunction('initializeavatar', 'zloaddefault');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsInitializeAvatar=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zloaddefault;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsOnMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {\r\n";
+			$jsdata .= "		var zloaddefault = true;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('onmyavatarselect', 'zloaddefault');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsOnMyAvatarSelect=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zloaddefault;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsGetSavedAvatar = function(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh) {\r\n";
+			$jsdata .= "		var zloaddefault = true;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->returnScriptFunction('getsavedavatar', 'zloaddefault');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsGetSavedAvatar=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zloaddefault;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsSavedAvatarRetrieved = function(zavatarname, zsendrefresh) {\r\n";
@@ -1231,16 +1260,6 @@ class wtwplugins {
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsProcessMoldQueueAdd=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsOnMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {\r\n";
-			$jsdata .= "		var zloading = false;\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('onmyavatarselect', 'zloading');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('core-functions-class_wtwplugins.php-pluginsOnMyAvatarSelect=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "		return zloading;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsBeforeUnload = function() {\r\n";

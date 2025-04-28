@@ -65,6 +65,7 @@ try {
 	$zavatargroupid = $wtwhandlers->getPost('avatargroupid','');
 	$zavatarsingroupid = $wtwhandlers->getPost('avatarsingroupid','');
 	$zavatargroup = $wtwhandlers->getPost('avatargroup','');
+	$zsource = $wtwhandlers->getPost('source','default');
 	$zanimationeventid = $wtwhandlers->getPost('animationeventid','');
 	$zanimationevent = $wtwhandlers->getPost('animationevent','');
 

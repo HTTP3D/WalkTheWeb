@@ -38,7 +38,7 @@ try {
 ?>
 	</div>
 	<div style="clear:both;"></div>
-	<script src="/core/scripts/engine/v7.x.x/babylon.viewer.js"></script>
+	<script src="/core/scripts/engine/v8.x.x/babylon.viewer.js"></script>
 </body>
 </html>
 <?php

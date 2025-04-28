@@ -22,9 +22,9 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = '3.8.1';
-	public $dbversion = '1.2.26';
-	public $versiondate = '2024-11-11';
-	public $defaultbabylonversion = 'v7.x.x';
+	public $dbversion = '1.2.27';
+	public $versiondate = '2025-04-01';
+	public $defaultbabylonversion = 'v8.x.x';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -2753,15 +2753,6 @@ class wtw {
 				switch (wtw_physicsengine) {
 					case 'havok':
 						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/HavokPhysics_umd.js?x=".$zver."'></script>\r\n";
-/*
-$zjsdata .= "<script type='module'>\r\n";
-$zjsdata .= "  import HavokPhysics from '/core/scripts/engine/".$zbabylonversion."/HavokPhysics_umd.js';\r\n";
-$zjsdata .= "  let havokInstance;\r\n";
-$zjsdata .= "  HavokPhysics().then((havok) => {\r\n";
-$zjsdata .= "    havokInstance = havok;\r\n";
-$zjsdata .= "  });\r\n";
-$zjsdata .= "</script>\r\n";
-*/
 						break;
 					case 'cannon':
 						$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/cannon.js?x=".$zver."'></script>\r\n";
@@ -2775,6 +2766,7 @@ $zjsdata .= "</script>\r\n";
 				$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/oimo.js?x=".$zver."'></script>\r\n"; 
 			}
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/earcut.js?x=".$zver."'></script>\r\n";
+
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
@@ -2784,6 +2776,7 @@ $zjsdata .= "</script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/babylon.accessibility.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/pep.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/".$zbabylonversion."/meshwriter.min.js?x=".$zver."'></script>\r\n";
+
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_input.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."'></script>\r\n";			
