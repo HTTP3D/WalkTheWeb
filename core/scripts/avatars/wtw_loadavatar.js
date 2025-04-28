@@ -78,27 +78,30 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 		if (zavatarid == 'undefined') {
 			zavatarid = '';
 		}
-		if (zglobaluseravatarid != '' || zuseravatarid != '' || zavatarid != '') {
-			var zinstanceid = '';
-			if (zavatarname.indexOf('-') > -1) {
-				zinstanceid = zavatarname.split('-')[1];
-			}
-			if (zglobaluseravatarid == '') {
-				/* Local or Anonymous avatar - uses a get method to current server */
-				WTW.getAsyncJSON('/connect/useravatar.php?avatarid=' + btoa(zavatarid) + '&useravatarid=' + btoa(zuseravatarid) + '&instanceid=' + btoa(zinstanceid), 
-					function(zresponse) {
-						zresponse = JSON.parse(zresponse);
-						if (zresponse != null) {
-							if (zresponse.avatar != null) {
-								WTW.updateAvatar(zavatarname, zresponse.avatar, zsendrefresh);
+		var zloaddefault = true;
+		zloaddefault = WTW.pluginsGetSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);
+		if (zloaddefault) {
+			if (zglobaluseravatarid != '' || zuseravatarid != '' || zavatarid != '') {
+				var zinstanceid = '';
+				if (zavatarname.indexOf('-') > -1) {
+					zinstanceid = zavatarname.split('-')[1];
+				}
+				if (zglobaluseravatarid == '') {
+					/* Local or Anonymous avatar - uses a get method to current server */
+					WTW.getAsyncJSON('/connect/useravatar.php?avatarid=' + btoa(zavatarid) + '&useravatarid=' + btoa(zuseravatarid) + '&instanceid=' + btoa(zinstanceid), 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							if (zresponse != null) {
+								if (zresponse.avatar != null) {
+									WTW.updateAvatar(zavatarname, zresponse.avatar, zsendrefresh);
+								}
 							}
-						}
-					}	
-				);
+						}	
+					);
+				}
+			} else {
+				WTW.openLoginHUD('Select My Avatar');
 			}
-			WTW.pluginsGetSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);
-		} else {
-			WTW.openLoginHUD('Select My Avatar');
 		}
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-getSavedAvatar=' + ex.message);
@@ -215,7 +218,7 @@ WTWJS.prototype.disposeAvatar = function(zavatarname) {
 	try {
 		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 		if (zavatarscale != null) {
-			var zchildmeshes = zavatarscale.getChildren();
+			var zchildmeshes = zavatarscale.getChildMeshes(false);
 			if (zchildmeshes != null) {
 				for (var i=0; i < zchildmeshes.length; i++) {
 					if (zchildmeshes[i] != null) {
@@ -237,7 +240,7 @@ WTWJS.prototype.transferAvatar = function(zavatarname) {
 		var zavatarscaleold = WTW.getMeshOrNodeByID(zavatarname + '-scaleold');
 		if (zavatarscale != null && zavatarscaleold != null) {
 			zavatarscaleold.scaling = zavatarscale.scaling;
-			var zchildmeshes = zavatarscale.getChildren();
+			var zchildmeshes = zavatarscale.getChildMeshes(false);
 			if (zchildmeshes != null) {
 				for (var i=0; i < zchildmeshes.length; i++) {
 					if (zchildmeshes[i] != null) {
@@ -293,7 +296,7 @@ WTWJS.prototype.updateAvatarColors = function(zavatarname, zavatardef) {
 			}			
 			var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 			if (zavatarscale != null) {
-				var zavatarparts = zavatarscale.getChildren();
+				var zavatarparts = zavatarscale.getChildMeshes(false);
 				for (var i=0; i<zavatarparts.length;i++) {
 					if (zavatarparts[i] != null) {
 						var zmeshname = '';
@@ -578,12 +581,51 @@ WTWJS.prototype.mergeSkeletonBones = function(zskeleton, zanimationskeleton) {
 						}
 					}
 				}
+			} else if (zskeleton.bones.length > zanimationskeleton.bones.length) {
+				for (var i=0;i<zskeleton.bones.length;i++) {
+					if (zskeleton.bones[i] != null) {
+						var zfound = false;
+						var zbone = zskeleton.bones[i];
+						if (zbone.name != undefined) {
+							var zboneparent = null;
+							
+							for (var j=0;j<zanimationskeleton.bones.length;j++) {
+								if (zanimationskeleton.bones[j] != null) {
+									if (zanimationskeleton.bones[j].name.replace("mixamorig:","") == zbone.name.replace("mixamorig:","")) {
+										zfound = true;
+									}
+								}
+							}
+							if (zfound == false) {
+								zboneparent = zbone.getParent();
+								if (zboneparent != null) {
+									if (zboneparent.name != undefined) {
+										if (zboneparent.name.replace("mixamorig:","") != '') {
+											for (var j=0;j<zanimationskeleton.bones.length;j++) {
+												if (zanimationskeleton.bones[j] != null) {
+													if (zanimationskeleton.bones[j].name.replace("mixamorig:","") == zboneparent.name.replace("mixamorig:","")) {
+														var znewbone = new BABYLON.Bone(zbone.name.replace("mixamorig:",""), zanimationskeleton, zanimationskeleton.bones[j]);
+														
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				
 			}
 		}
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-mergeSkeletonBones=' + ex.message);
     }
-	return zskeleton;
+	return {
+		'skeleton': zskeleton,
+		'animationskeleton': zanimationskeleton
+	};
 }
 
 WTWJS.prototype.checkAnimationBones = function(zavatar, zanimationskeleton) {
@@ -644,10 +686,12 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 								let zskeleton = zresponse.skeletons[0];
 								
 								/* make the original skeleton number of bones match the animation skeleton by adding the missing bones */
-								zavatar.WTW.skeleton = WTW.mergeSkeletonBones(zavatar.WTW.skeleton, zskeleton);
-								/* alternative is to remove extra bones from the animation using:
-								zskeleton = WTW.checkAnimationBones(zavatar, zskeleton);
-								*/
+								var zmergebones = WTW.mergeSkeletonBones(zavatar.WTW.skeleton, zskeleton);
+								zavatar.WTW.skeleton = zmergebones.skeleton;
+								zskeleton = zmergebones.animationskeleton;
+								/* alternative is to remove extra bones from the animation using: */
+								/* zskeleton = WTW.checkAnimationBones(zavatar, zskeleton); */
+								
 								let zanimationloop = true;
 								if (zanimation.animationloop != 1) {
 									zanimationloop = false;
@@ -770,7 +814,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 										var zavatarparts = [];
 										if (zavatarscale != null) {
-											zavatarparts = zavatarscale.getChildren();
+											zavatarparts = zavatarscale.getChildMeshes(false);
 										}
 										if (zavatarparts.length == 0) {
 											/* clean up the old avatar meshes if there were any */
@@ -1237,10 +1281,7 @@ WTWJS.prototype.logoutMyAvatar = function() {
 	try {
 		WTW.hide('wtw_menuloggedin');
 		WTW.show('wtw_menulogin');
-		if (dGet('wtw_tavatarid').value != '3b9bt5c70igtmqux') {
-			dGet('wtw_tavatarid').value = '3b9bt5c70igtmqux';
-			WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, '', '', dGet('wtw_tavatarid').value, false);
-		}
+		WTW.initializeAvatar();
 	} catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-logoutMyAvatar=' + ex.message);
 	}

@@ -474,7 +474,7 @@ WTWJS.prototype.teleport = function(zactionzoneind) {
 						var zavatarparts = [];
 						var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
 						if (zavatarscale != null) {
-							zavatarparts = zavatarscale.getChildren();
+							zavatarparts = zavatarscale.getChildMeshes(false);
 						}
 						for (var i=0; i<zavatarparts.length; i++) {
 							if (zavatarparts[i] != null) {
@@ -522,7 +522,7 @@ WTWJS.prototype.teleport = function(zactionzoneind) {
 								var zavatarparts = [];
 								var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
 								if (zavatarscale != null) {
-									zavatarparts = zavatarscale.getChildren();
+									zavatarparts = zavatarscale.getChildMeshes(false);
 								}
 								for (var i=0; i<zavatarparts.length; i++) {
 									if (zavatarparts[i] != null) {

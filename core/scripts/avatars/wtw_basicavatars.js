@@ -568,9 +568,9 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 
 					if (zresults.skeletons != null)	{
 						var zskeleton = zresults.meshes[0].skeleton;
-						if (zskeleton == null && zresults.skeletons[0] != undefined) {
+						if ((zskeleton == null || zskeleton == undefined) && zresults.skeletons[0] != undefined) {
 							/* alternative design where skeleton is not found under meshes[0] */
-//							zskeleton = zresults.skeletons[0];
+							zskeleton = zresults.skeletons[0];
 						}
 						if (zskeleton != null) {
 							zskeleton.name = (zavatarname + '-' + zskeleton.name).toLowerCase();
@@ -578,7 +578,9 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 						}
 						if (WTW.getFileExtension(zobjectfile) == 'glb') {
 							zresults.meshes.forEach((m) => m.sideOrientation = BABYLON.Constants.MATERIAL_CounterClockWiseSideOrientation);
-							zskeleton.bones.forEach((b) => b.linkTransformNode(null));
+							if (zskeleton.bones != undefined) {
+								zskeleton.bones.forEach((b) => b.linkTransformNode(null));
+							}
 						}
 
 						zavatar.WTW.skeleton = zskeleton;

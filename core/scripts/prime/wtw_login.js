@@ -124,9 +124,7 @@ WTWJS.prototype.openLoginMenu = function() {
 		if (dGet('wtw_tuserid').value != '') {
 			WTW.openLoginHUD('User Menu');
 		} else {
-			if (WTW.isInitCycle == 1) {
-				WTW.openLoginHUD('Enter Menu');
-			} else {
+			if (WTW.isInitCycle != 1) {
 				WTW.openLoginHUDLogin();
 			}
 		}
@@ -404,9 +402,10 @@ WTWJS.prototype.updateVersionDisplay = async function(zobj, zversion, zoldversio
 		WTW.log('core-scripts-prime-wtw_login.js-updateVersionDisplay=' + ex.message);
 	} 
 }
-		
+
+/*		
 WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuseravatarid, zavatarid) {
-	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
+//	/ * process to enter the 3D Scene when the avatar is selected (save my selection) * /
 	try {
 		WTW.openLoginHUD('Loading 3D Avatar');
 		if (dGet('wtw_tnewavatardisplayname') != null) {
@@ -432,18 +431,18 @@ WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuser
 		WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
+//				/ * note serror would contain errors * /
 				if (zresponse.useravatarid != undefined) {
 					if (zresponse.useravatarid == '') {
-						/* avatar could not be created, send back to selection */
+//						/ * avatar could not be created, send back to selection * /
 						WTW.openLoginHUD('Select My Avatar');
 					} else {
-						/* avatar created, continue to loading the avatar */
+//						/ * avatar created, continue to loading the avatar * /
 						zuseravatarid = zresponse.useravatarid;
 						WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
 					}
 				} else {
-					/* avatar could not be created, send back to selection */
+//					/ * avatar could not be created, send back to selection * /
 					WTW.openLoginHUD('Select My Avatar');
 				}
 			}
@@ -452,6 +451,7 @@ WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuser
 		WTW.log('core-scripts-prime-wtw_login.js-onMyAvatarSaveSelect=' + ex.message);
 	}
 }
+*/
 
 WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	/* after the avatar is saved, this process loads the avatar */
@@ -476,8 +476,8 @@ WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, 
 			WTW.setCookie('avatarlocation', 'local', 365);
 		}
 		WTW.closeIFrame();
-		var zloading = WTW.pluginsOnMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
-		if (zloading == false) {
+		var zloaddefault = WTW.pluginsOnMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
+		if (zloaddefault) {
 			WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
 		} 
 	} catch (ex) {

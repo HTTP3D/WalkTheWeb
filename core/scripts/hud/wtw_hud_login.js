@@ -126,7 +126,6 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 				zobjectanimations[5].additionalscript = '';
 				zobjectanimations[5].additionalparameters = '';
 				break;
-			case "Enter":
 			case "Enter Menu":
 				zobjectfile = 'wtw-entermenu.babylon';
 				
@@ -788,7 +787,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								case 'button-enterlogin':
 									if (zpage == 'Enter Menu') {
 										zresults.meshes[i].isPickable = true;
-										zresults.meshes[i].isVisible = true;
+										zresults.meshes[i].isVisible = false;
 									} else if (WTW.isInitCycle == 1) {
 										zresults.meshes[i].isPickable = true;
 										zresults.meshes[i].isVisible = false;
@@ -800,7 +799,7 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								case 'button-enterlogintext':
 									zresults.meshes[i].isPickable = false;
 									if (zpage == 'Enter Menu') {
-										zresults.meshes[i].isVisible = true;
+										zresults.meshes[i].isVisible = false;
 									} else {
 										zresults.meshes[i].isVisible = false;
 									}
@@ -1478,6 +1477,8 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 WTWJS.prototype.hudLoginShowEnter = function() {
 	/* show enter button */
 	try {
+		var zenterbutton = WTW.getMeshOrNodeByID('hudlogin-button-enterlogin');
+		var zenterbuttontext = WTW.getMeshOrNodeByID('hudlogin-button-enterlogintext');
 		if (WTW.placeHolder == 1) {
 			var zentermenubox = WTW.getMeshOrNodeByID('hudlogin-entermenubox');
 			if (zentermenubox != null) {
@@ -1502,6 +1503,14 @@ WTWJS.prototype.hudLoginShowEnter = function() {
 			} else {
 				WTW.openLoginHUD('Enter Menu');
 			}
+		} else if (zenterbutton != null && zenterbuttontext != null && dGet('wtw_tuserid').value == '') {
+			if (dGet('wtw_menuexpanded').style.display == 'none') {
+				zenterbutton.isVisible = false;
+				zenterbuttontext.isVisible = false;
+			} else {
+				zenterbutton.isVisible = false;
+				zenterbuttontext.isVisible = false;
+			}
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginShowEnter=' + ex.message);
@@ -1509,7 +1518,7 @@ WTWJS.prototype.hudLoginShowEnter = function() {
 }
 
 WTWJS.prototype.hudLoginEnter = function() {
-	/* enter button - random select avatar, rando name, and enter scene */
+	/* enter button - random select avatar, random name, and enter scene */
 	try {
 		var zavatarid = WTW.getCookie('avatarid');
 		if (zavatarid == '' || zavatarid == null) {
@@ -2260,7 +2269,7 @@ WTWJS.prototype.hudLoginLoadAvatars = function() {
 }
 
 WTWJS.prototype.hudLoginLoadAvatarsArray = function(zfilter) {
-	/* get Anonymous avatars for selection */
+	/* get avatars for selection */
 	try {
 		if (zfilter == undefined) {
 			zfilter = 'anonymous';
@@ -2289,6 +2298,7 @@ WTWJS.prototype.hudLoginLoadAvatarsArray = function(zfilter) {
 									'useravatarid': zresponse.avatars[i].useravatarid,
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
+									'source': 'default',
 									'avatargroups': zresponse.avatars[i].avatargroups,
 									'displayname': zresponse.avatars[i].displayname,
 									'defaultdisplayname': zresponse.avatars[i].defaultdisplayname,
@@ -2344,7 +2354,7 @@ WTWJS.prototype.hudLoginLoadAvatarsArray = function(zfilter) {
 }
 
 WTWJS.prototype.hudLoginLoadChoiceAvatarsArray = function(zfilter, zdefaultdisplayname) {
-	/* get Anonymous avatars for selection */
+	/* get any additional choices for avatars, add to selection */
 	try {
 		if (zfilter == undefined) {
 			zfilter = 'anonymous';
@@ -2366,6 +2376,7 @@ WTWJS.prototype.hudLoginLoadChoiceAvatarsArray = function(zfilter, zdefaultdispl
 										'useravatarid': zresponse.avatars[i].useravatarid,
 										'avatarid': zresponse.avatars[i].avatarid,
 										'avatargroup': zresponse.avatars[i].avatargroup,
+										'source': 'default',
 										'avatargroups': zresponse.avatars[i].avatargroups,
 										'displayname': zresponse.avatars[i].displayname,
 										'defaultdisplayname': zresponse.avatars[i].defaultdisplayname,
@@ -2407,6 +2418,7 @@ WTWJS.prototype.hudLoginLoadChoiceAvatarsArray = function(zfilter, zdefaultdispl
 				}
 			);
 		}
+		WTW.pluginsHudLoginLoadChoiceAvatarsArray(zfilter, zdefaultdisplayname);
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginLoadChoiceAvatarsArray=' + ex.message);
 	}

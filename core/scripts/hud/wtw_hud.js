@@ -1280,7 +1280,7 @@ WTWJS.prototype.reloadShadows = function() {
 		var zavatarparts = [];
 		var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
 		if (zavatarscale != null) {
-			zavatarparts = zavatarscale.getChildren();
+			zavatarparts = zavatarscale.getChildMeshes(false);
 		}
 		for (var i=0; i<zavatarparts.length; i++) {
 			if (zavatarparts[i] != null) {
@@ -1575,17 +1575,7 @@ WTWJS.prototype.showSettingsMenu = function(zmenuitem) {
 		WTW.toggleBrowseMenu(0);
 		switch (zmenuitem) {
 			case 'wtw_menuprofile':
-				var zentervisible = false;
-				var zhudlogin = WTW.getMeshOrNodeByID('hudlogin');
-				var zenter = WTW.getMeshOrNodeByID('hudlogin-button-enter');
-				if (zenter != null) {
-					zentervisible = zenter.isVisible;
-				}
-				if (zhudlogin == null || zentervisible) {
-					WTW.openLoginMenu();WTW.closeMenus();
-				} else {
-					WTW.closeLoginHUD();
-				}
+				WTW.openLoginMenu();WTW.closeMenus();
 				return true;
 				break;
 		}

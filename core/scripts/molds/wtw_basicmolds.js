@@ -1661,9 +1661,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									zresults.meshes[i].id = zchildmoldname;
 									zresults.meshes[i].name = zchildmoldname;
 									zresults.meshes[i].renderingGroupId = 1;
-//									zresults.meshes[i].convertToUnIndexedMesh();
-									zresults.meshes[i].cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY; //BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION;
-									
+									zresults.meshes[i].cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY; 									
 									var zcovering = null;
 									
 									if (zresults.meshes[i].material != null) {

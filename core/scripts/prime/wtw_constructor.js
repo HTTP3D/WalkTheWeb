@@ -65,7 +65,7 @@ function WTWJS() {
 	this.highlightLayer = null;
 
 	/* WTW.babylonVersion - selected Babylon Engine to run - should match the folder name under /core/scripts/engine/ */
-	this.babylonVersion = 'v7.x.x';
+	this.babylonVersion = 'v8.x.x';
 
 	/* WTW.physicsEngine - physics engine when enabled (havok, cannon, oimo, or none) */
 	this.physicsEngine = 'none';

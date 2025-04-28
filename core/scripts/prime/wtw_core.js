@@ -373,7 +373,7 @@ WTWJS.prototype.initEnvironment = async function() {
 		/* initialize physics engine if it is enabled */
 		switch (WTW.physicsEngine) {
 			case 'havok':
-				if (WTW.babylonVersion == 'v7.x.x' || WTW.babylonVersion == 'v6.x.x') {
+				if (WTW.babylonVersion == 'v8.x.x' || WTW.babylonVersion == 'v7.x.x' || WTW.babylonVersion == 'v6.x.x') {
 					havokInstance = await HavokPhysics();
 					// pass the engine to the plugin
 					hk = await new BABYLON.HavokPlugin(true, havokInstance);
@@ -731,46 +731,59 @@ WTWJS.prototype.responseLoadLoginSettings = async function(zsettings, zparameter
 		zloaddefault = WTW.pluginsLoadLoginSettings(zloaddefault);
 		if (zloaddefault) {
 			/* if no plugin returns false, continue default loading */
-			WTW.loadLoginAvatarSelect();
+			WTW.initializeAvatar();
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-responseLoadLoginSettings=' + ex.message);
 	} 
 }
-
-WTWJS.prototype.loadLoginAvatarSelect = function() {
+		
+WTWJS.prototype.initializeAvatar = function() {
 	/* check login and open login or avatar select window if needed */
 	try {
-		if (dGet('wtw_tuserid').value == '') {
-			/* user not logged in - open login window */
-			WTW.openLoginMenu();
-			WTW.hide('wtw_menuloggedin');
-			WTW.show('wtw_menulogin');
-			dGet('wtw_tavatarid').value = '3b9bt5c70igtmqux';
-			WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, '', '', dGet('wtw_tavatarid').value, false);
-		} else {
-			/* logged in, set login values */
-			WTW.setLoginValues();
-			/* check cookie and load Avatar OR open select Avatar list */
-			WTW.hide('wtw_menulogin');
-			WTW.hide('wtw_menuloggedin');
-
-			if (dGet('wtw_tglobaluseravatarid').value != '' || dGet('wtw_tuseravatarid').value != '' || dGet('wtw_tavatarid').value != '') {
-				var zavatarserver = WTW.getCookie('avatarlocation');
-				var zglobaluseravatarid = dGet('wtw_tglobaluseravatarid').value;
-				if (zavatarserver == 'local') {
-					zglobaluseravatarid = '';
-				}
-				WTW.openLoginHUD('Loading 3D Avatar');
-				/* if avatar saved, load avatar */
-				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, dGet('wtw_tuseravatarid').value, dGet('wtw_tavatarid').value, false);
+		WTW.hide('wtw_menuloggedin');
+		var zloaddefault = true;
+		zloaddefault = WTW.pluginsInitializeAvatar(zloaddefault);
+		if (zloaddefault) {
+			if (dGet('wtw_tuserid').value == '') {
+				/* user not logged in - open login window */
+				WTW.show('wtw_menulogin');
+				/* get a list of available avatars in the database, then select a random one to load as anonymous */
+				WTW.getAsyncJSON('/connect/avatars.php?groups=all', 
+					function(zresponse) {
+						if (zresponse != null) {
+							zresponse = JSON.parse(zresponse);
+							if (zresponse.avatars != null) {
+								var i = Math.floor(Math.random() * (zresponse.avatars.length + 1));
+								dGet('wtw_tavatarid').value = zresponse.avatars[i].avatarid;
+								WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, '', '', dGet('wtw_tavatarid').value, false);
+							}
+						}
+					}
+				);
 			} else {
-				/* avatar not saved, select random avatar */
-				WTW.hudLoginEnter();
+				/* logged in, set login values */
+				WTW.setLoginValues();
+				/* check cookie and load Avatar OR open select Avatar list */
+				WTW.hide('wtw_menulogin');
+
+				if (dGet('wtw_tglobaluseravatarid').value != '' || dGet('wtw_tuseravatarid').value != '' || dGet('wtw_tavatarid').value != '') {
+					var zavatarserver = WTW.getCookie('avatarlocation');
+					var zglobaluseravatarid = dGet('wtw_tglobaluseravatarid').value;
+					if (zavatarserver == 'local') {
+						zglobaluseravatarid = '';
+					}
+					WTW.openLoginHUD('Loading 3D Avatar');
+					/* if avatar saved, load avatar */
+					WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, dGet('wtw_tuseravatarid').value, dGet('wtw_tavatarid').value, false);
+				} else {
+					/* avatar not saved, select random avatar */
+					WTW.hudLoginEnter();
+				}
 			}
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_core.js-loadLoginAvatarSelect=' + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-initializeAvatar=' + ex.message);
 	} 
 }
 

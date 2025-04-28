@@ -466,7 +466,7 @@ WTWJS.prototype.avatarEnter = function(zavatarname) {
 			}
 			var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 			if (zavatarscale != null) {
-				zavatarparts = zavatarscale.getChildren();
+				zavatarparts = zavatarscale.getChildMeshes(false);
 			}
 		}
 		if (zenteranimation == 0) {
@@ -515,7 +515,9 @@ WTWJS.prototype.avatarEnter = function(zavatarname) {
 		if (havokInstance != null) {
 			for (var i=0; i<zavatarparts.length; i++) {
 				if (zavatarparts[i] != null) {
-					zavatarparts[i].aggregate = new BABYLON.PhysicsAggregate(zavatarparts[i], BABYLON.PhysicsShapeType.MESH, { mass:0 }, scene);
+					try {
+						zavatarparts[i].aggregate = new BABYLON.PhysicsAggregate(zavatarparts[i], BABYLON.PhysicsShapeType.MESH, { mass:0 }, scene);
+					} catch (ex) {}
 				}
 			}
 		}
@@ -532,7 +534,7 @@ WTWJS.prototype.avatarMinLoadEnter = function(zavatarname) {
 		if (zavatar != null) {
 			var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 			if (zavatarscale != null) {
-				zavatarparts = zavatarscale.getChildren();
+				zavatarparts = zavatarscale.getChildMeshes(false);
 			}
 		}
 		WTW.avatarShowVisible(zavatarname, zavatarparts);
@@ -558,7 +560,7 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 				}
 				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 				if (zavatarscale != null) {
-					zavatarparts = zavatarscale.getChildren();
+					zavatarparts = zavatarscale.getChildMeshes(false);
 				}
 			}
 		}
@@ -592,7 +594,7 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 			if (zavatar != null) {
 				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 				if (zavatarscale != null) {
-					var zavatarparts = zavatarscale.getChildren();
+					var zavatarparts = zavatarscale.getChildMeshes(false);
 					var zdone = false;
 					for (var i=0; i<zavatarparts.length;i++) {
 						if (zavatarparts[i] != null) {
@@ -642,7 +644,7 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 					var zsmoke = WTW.getMeshOrNodeByID(zavatarname + '-smoke');
 					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 					if (zavatarscale != null) {
-						var zavatarparts = zavatarscale.getChildren();
+						var zavatarparts = zavatarscale.getChildMeshes(false);
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
@@ -715,7 +717,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 				if (zavatarscale != null) {
 					var ztorus1 = WTW.getMeshOrNodeByID(zavatarname + '-torus1');
 					var ztorus2 = WTW.getMeshOrNodeByID(zavatarname + '-torus2');
-					var zavatarparts = zavatarscale.getChildren();
+					var zavatarparts = zavatarscale.getChildMeshes(false);
 					var zdone = false;
 					if (ztorus1 != null) {
 						if (WTW.getDegrees(ztorus1.rotation.y) > 340 || zavatarparts[0].visibility > 0) {
@@ -821,7 +823,7 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 				if (zavatarscale != null) {
 					var ztorus1 = WTW.getMeshOrNodeByID(zavatarname + '-torus1');
 					var ztorus2 = WTW.getMeshOrNodeByID(zavatarname + '-torus2');
-					var zavatarparts = zavatarscale.getChildren();
+					var zavatarparts = zavatarscale.getChildMeshes(false);
 					var zdone = false;
 					if (ztorus1 != null) {
 						if (WTW.getDegrees(ztorus1.rotation.y) > 340 || zavatarparts[0].visibility > 0) {
@@ -919,7 +921,7 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 					if (zavatarscale != null) {
 						var zsmoke = WTW.getMeshOrNodeByID(zavatarname + '-smoke');
-						var zavatarparts = zavatarscale.getChildren();
+						var zavatarparts = zavatarscale.getChildMeshes(false);
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
@@ -1010,7 +1012,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 				if (zavatar != null) {
 					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 					if (zavatarscale != null) {
-						var zavatarparts = zavatarscale.getChildren();
+						var zavatarparts = zavatarscale.getChildMeshes(false);
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
@@ -1211,7 +1213,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 					}
 					if (zsetscalingx == zscalingx && zsetscalingy == zscalingy && zsetscalingz == zscalingz) {
 						window.setTimeout(function(){
-							var zavatarparts = zavatarscale.getChildren();
+							var zavatarparts = zavatarscale.getChildMeshes(false);
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
 									try {
@@ -1426,7 +1428,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + '-smoke');},7000);
 							}
-							var zavatarparts = zavatarscale.getChildren();
+							var zavatarparts = zavatarscale.getChildMeshes(false);
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
 									try {
@@ -1467,7 +1469,7 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 				if (zavatar != null) {
 					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
 					if (zavatarscale != null) {
-						var zavatarparts = zavatarscale.getChildren();
+						var zavatarparts = zavatarscale.getChildMeshes(false);
 						var zdone = false;
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {

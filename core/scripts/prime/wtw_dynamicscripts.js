@@ -203,7 +203,7 @@ WTWJS.prototype.checkMoldFunctionAndExecute = function(zmoldname) {
 	return zfound;
 }
 
-WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext /*, args */) {
+WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext = window /*, args */) {
 	/* allows a name of a javascript function to be passed (even with class like WTW.testScript) with parameters string (zcontext) to be executed */
 	/* example: WTW.executeFunctionByName('WTW.testScript', 'arg1', 'arg2', 'arg3', 'arg4');   executes: WTW.testScript('arg1', 'arg2', 'arg3', 'arg4'); */
 	var zfunc = null;
