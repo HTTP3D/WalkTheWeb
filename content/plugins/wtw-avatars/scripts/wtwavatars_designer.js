@@ -658,6 +658,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 												WTW.avatars[i] = {
 													'avatarid': zresponse2.avatars[i].avatarid,
 													'avatargroup': zresponse2.avatars[i].avatargroup,
+													'source': 'default',
 													'displayname': zresponse2.avatars[i].displayname,
 													'avatardescription': zresponse2.avatars[i].avatardescription,
 													'gender': zresponse2.avatars[i].gender,
@@ -728,6 +729,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 													WTW.avatars[i] = {
 														'avatarid': zresponse2.avatars[i].avatarid,
 														'avatargroup': zresponse2.avatars[i].avatargroup,
+														'source': 'default',
 														'displayname': zresponse2.avatars[i].displayname,
 														'avatardesciption': zresponse2.avatars[i].avatardesciption,
 														'gender': zresponse2.avatars[i].gender,
@@ -1862,6 +1864,7 @@ WTWJS.prototype.chooseAvatar = async function() {
 								WTW.avatars[i] = {
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
+									'source': 'default',
 									'displayname': zresponse.avatars[i].displayname,
 									'avatardescription': zresponse.avatars[i].avatardescription,
 									'gender': zresponse.avatars[i].gender,

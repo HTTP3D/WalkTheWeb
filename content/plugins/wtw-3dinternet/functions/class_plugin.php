@@ -23,9 +23,9 @@ class wtw3dinternet {
 		}
 	}	
 	
-	public $version = "1.2.1";
-	public $dbversion = "1.0.8";
-	public $versiondate = "2023-9-5";
+	public $version = "1.2.2";
+	public $dbversion = "1.0.9";
+	public $versiondate = "2025-4-28";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -191,8 +191,8 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("resetactivitytimer", "wtw3dinternet.resetActivityTimer();");
 			$wtwplugins->addScriptFunction("loadloginsettings", "wtw3dinternet.loadLoginSettings(zloaddefault);");
 
-			$wtwplugins->addScriptFunction("onmyavatarselect", "wtw3dinternet.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);");
-			$wtwplugins->addScriptFunction("getsavedavatar", "wtw3dinternet.getSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);");
+			$wtwplugins->addScriptFunction("onmyavatarselect", "wtw3dinternet.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid, zloaddefault);");
+			$wtwplugins->addScriptFunction("getsavedavatar", "wtw3dinternet.getSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh, zloaddefault);");
 			$wtwplugins->addScriptFunction("savedavatarretrieved", "wtw3dinternet.savedAvatarRetrieved(zavatarname, zsendrefresh);");
 			$wtwplugins->addScriptFunction("myavataranimationsloaded", "wtw3dinternet.activateMultiplayer();");
 			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname);");
@@ -508,6 +508,7 @@ class wtw3dinternet {
 						  `versionorder` int DEFAULT '1000000',
 						  `versiondesc` varchar(255) DEFAULT '',
 						  `avatargroup` varchar(64) DEFAULT 'Default',
+						  `source` varchar(64) DEFAULT 'default',
 						  `objectfolder` varchar(256) DEFAULT '',
 						  `objectfile` varchar(256) DEFAULT '',
 						  `domain` varchar(256) DEFAULT '3d.walktheweb.com',

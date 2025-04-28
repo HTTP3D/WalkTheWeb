@@ -82,7 +82,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 								zdata.placeholder = 0;
 								var zavatarscale = WTW.getMeshOrNodeByID('person-' + zdata.instanceid + '-scale');
 								if (zavatarscale != null) {
-									var zchildmeshes = zavatarscale.getChildren();
+									var zchildmeshes = zavatarscale.getChildMeshes(false);
 									if (zchildmeshes != null) {
 										if (zchildmeshes.length > 0) {
 											/* if zchildmeshes exist, avatar is loaded */

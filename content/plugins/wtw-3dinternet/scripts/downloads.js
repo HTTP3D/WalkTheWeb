@@ -33,12 +33,16 @@ WTW_3DINTERNET.prototype.communitySearchReply = function(zresponse) {
 		dGet('wtw_commtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var ztotaldownloads = 0;
 			var zbuttonstyle = '';
 			var zcommunityid = zresponse[i].servercommunityid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			var zdirsize = WTW.formatNumber(Math.round(Number(zresponse[i].dirsize)/1000000),0);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
+			}
+			if (WTW.isNumeric(zresponse[i].totaldownloads)) {
+				ztotaldownloads = zresponse[i].totaldownloads;
 			}
 			if (zformat > 1) {
 				var zcols = '';
@@ -65,6 +69,7 @@ WTW_3DINTERNET.prototype.communitySearchReply = function(zresponse) {
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>File Count: <b>" + zresponse[i].filecount + "</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>Folder Size: <b>" + zdirsize + " MB</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>All Versions Downloaded: <b>" + ztotaldownloads + "</b> times.</div><br />";
 			if (zformat > 1) {
 				ztempsearchresults += "</div>";
 			} else {
@@ -110,12 +115,16 @@ WTW_3DINTERNET.prototype.buildingSearchReply = function(zresponse) {
 		dGet('wtw_buildtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var ztotaldownloads = 0;
 			var zbuttonstyle = '';
 			var zbuildingid = zresponse[i].serverbuildingid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			var zdirsize = WTW.formatNumber(Math.round(Number(zresponse[i].dirsize)/1000000),0);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
+			}
+			if (WTW.isNumeric(zresponse[i].totaldownloads)) {
+				ztotaldownloads = zresponse[i].totaldownloads;
 			}
 			if (zformat > 1) {
 				var zcols = '';
@@ -143,6 +152,7 @@ WTW_3DINTERNET.prototype.buildingSearchReply = function(zresponse) {
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>File Count: <b>" + zresponse[i].filecount + "</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>Folder Size: <b>" + zdirsize + " MB</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>All Versions Downloaded: <b>" + ztotaldownloads + "</b> times.</div><br />";
 			if (zformat > 1) {
 				ztempsearchresults += "</div>";
 			} else {
@@ -184,12 +194,16 @@ WTW_3DINTERNET.prototype.thingSearchReply = function(zresponse) {
 		dGet('wtw_thingtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var ztotaldownloads = 0;
 			var zbuttonstyle = '';
 			var zthingid = zresponse[i].serverthingid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			var zdirsize = WTW.formatNumber(Math.round(Number(zresponse[i].dirsize)/1000000),0);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
+			}
+			if (WTW.isNumeric(zresponse[i].totaldownloads)) {
+				ztotaldownloads = zresponse[i].totaldownloads;
 			}
 			if (zformat > 1) {
 				var zcols = '';
@@ -217,6 +231,7 @@ WTW_3DINTERNET.prototype.thingSearchReply = function(zresponse) {
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>File Count: <b>" + zresponse[i].filecount + "</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>Folder Size: <b>" + zdirsize + " MB</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>All Versions Downloaded: <b>" + ztotaldownloads + "</b> times.</div><br />";
 			if (zformat > 1) {
 				ztempsearchresults += "</div>";
 			} else {
@@ -259,12 +274,16 @@ WTW_3DINTERNET.prototype.avatarSearchReply = function(zresponse) {
 		dGet('wtw_avatartempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var ztotaldownloads = 0;
 			var zbuttonstyle = '';
 			var zavatarid = zresponse[i].serveravatarid;
 			var zcreatedate  = WTW.formatDate(zresponse[i].createdate);
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
+			}
+			if (WTW.isNumeric(zresponse[i].totaldownloads)) {
+				ztotaldownloads = zresponse[i].totaldownloads;
 			}
 			if (zformat > 1) {
 				var zcols = '';
@@ -296,6 +315,7 @@ WTW_3DINTERNET.prototype.avatarSearchReply = function(zresponse) {
 			}
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>All VErsions Downloaded: <b>" + ztotaldownloads + "</b> times.</div><br />";
 			if (zformat > 1) {
 				ztempsearchresults += "</div>";
 			} else {
