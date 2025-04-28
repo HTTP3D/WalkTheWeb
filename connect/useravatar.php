@@ -103,6 +103,7 @@ try {
 	$zdisplayname = 'Anonymous';
 	$zavatardescription = '';
 	$zavatargroup = 'Custom';
+	$zsource = 'default';
 	$zanonymous = '0';
 	$zprivacy = 0;
 	$zversionid = '';
@@ -155,6 +156,7 @@ try {
 			$zavatardescription = $zrow["avatardescription"];
 			$zgender = $zrow["gender"];
 			$zavatargroup = $zrow["avatargroup"];
+			$zsource = $zrow["source"];
 			$zprivacy = $zrow["privacy"];
 			$zenteranimation = $zrow["enteranimation"];
 			$zexitanimation = $zrow["exitanimation"];
@@ -329,6 +331,7 @@ try {
 			$zdisplayname = 'Anonymous';
 			$zavatardescription = $zrow["avatardescription"];
 			$zavatargroup = $zrow["avatargroup"];
+			$zsource = $zrow["source"];
 			$zgender = $zrow["gender"];
 			$zprivacy = '0';
 			$zenteranimation = '0';
@@ -538,6 +541,7 @@ try {
 		'avatardescription'=> addslashes($zavatardescription),
 		'gender'=> addslashes($zgender),
 		'avatargroup'=> addslashes($zavatargroup),
+		'source'=> addslashes($zsource),
 		'avatargroups'=> array(),
 		'privacy'=> $zprivacy,
 		'scalingx'=> $zscalingx,

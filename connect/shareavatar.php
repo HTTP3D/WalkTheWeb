@@ -334,7 +334,6 @@ try {
 	
 		$zfiles = $wtwconnect->getAvatarFilesList($zfiles, wtw_rootpath.$zrow["objectfolder"]);
 		
-		
 		$zresponse = array(
 			'serverinstanceid'=>wtw_serverinstanceid,
 			'domainurl'=>$wtwconnect->domainurl,
@@ -345,6 +344,7 @@ try {
 			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> $wtwconnect->escapeHTML($zrow["versiondesc"]),
 			'avatargroup' => $zrow["avatargroup"],
+			'source' => $zrow["source"],
 			'avatargroups' => array(),
 			'displayname' => $wtwconnect->escapeHTML($zrow["displayname"]),
 			'avatardescription' => $wtwconnect->escapeHTML($zrow["avatardescription"]),

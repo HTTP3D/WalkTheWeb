@@ -6,6 +6,7 @@ require_once('../core/functions/class_wtwconnect.php');
 global $wtwconnect;
 
 try {
+$wtwconnect->serror("apikeys.php");
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/apikeys.php");
 	
@@ -24,7 +25,7 @@ try {
 	$zwtwkey = $wtwconnect->decode64($zwtwkey);
 	$zwtwsecret = $wtwconnect->decode64($zwtwsecret);
 	$zapikeyid = $wtwconnect->decode64($zapikeyid);
-	
+
 	$zreferer = $_SERVER['HTTP_REFERER'];
 	
 	if (substr($zhosturl, -1) == '/') {
@@ -152,7 +153,8 @@ try {
 							now());");
 					$zresponse = array(
 						'serror'=>'',
-						'hostid'=>$zapikeyid
+						'hostid'=>$zapikeyid,
+						'wtwkey'=>''
 					);
 				} else {
 					if ($zdeleted == '1') {
@@ -167,15 +169,20 @@ try {
 						);
 					} else if ($zapproved != '1') {
 						$zresponse = array(
-							'serror'=>'Access has not been approved yet.',
+							'serror'=>'Access in Settings-API Keys has not been approved yet.',
 							'hostid'=>''
+						);
+					} else {
+						$zresponse = array(
+							'serror'=>'',
+							'hostid'=>$zapikeyid,
+							'wtwkey'=>''
 						);
 					}
 				}
 			}
 			break;
 	}
-
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
 	$wtwconnect->serror("connect-apikeys.php=".$e->getMessage());

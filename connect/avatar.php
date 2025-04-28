@@ -220,6 +220,7 @@ try {
 			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> $wtwconnect->escapeHTML($zrow["versiondesc"]),
 			'avatargroup'=> $zrow["avatargroup"],
+			'source'=> $zrow["source"],
 			'avatargroups'=> $zavatargroups,
 			'avatargroupsall'=> $zavatargroupsall,
 			'displayname'=> $wtwconnect->escapeHTML($zrow["displayname"]),
