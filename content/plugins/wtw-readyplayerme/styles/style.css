@@ -1,0 +1,15 @@
+.wtwrpm-animlist {
+	text-align:left;
+	color:#c0c0c0;
+	border:1px solid gray;
+	border-radius:10px;
+}
+.wtwrpm-animlistitem {
+	margin-left:20px;
+	text-align:left;
+	color:#c0c0c0;
+}
+.wtwrpm-animlistvalue {
+	float:right;
+	margin-right:20px;
+}
