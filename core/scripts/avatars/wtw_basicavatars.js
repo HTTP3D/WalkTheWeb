@@ -448,7 +448,6 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 		/* make sure the base functions are defined - otherwise adds default for that avatar event */
 		/* basic avatar animation events: (onwait, onwalk, onwalkbackwards, onturnleft, onturnright, onstrafeleft, onstraferight, onrun, onrunbackwards, onrunleft, onrunright, onrunstrafeleft, onrunstraferight) */
 		zavatardef = WTW.pluginsAvatarBeforeCreate(zavatarname, zavatardef);
-
 		BABYLON.SceneLoader.ImportMeshAsync('', zobjectfolder, zobjectfile, scene).then(
 			function (zresults) {
 				var zavatar = WTW.getMeshOrNodeByID(zavatarname);

@@ -164,6 +164,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		zavatardef.start.rotation.x = 0;
 		zavatardef.start.rotation.y = WTW.init.startRotationY;
 		zavatardef.start.rotation.z = 0;
+
 		if (zavatarid != zavataridold) {
 			/* if the previously loaded avatar is not the same as the new avatar meshes - fully reload */
 			WTW.disposeAnimations(zavatarname);
