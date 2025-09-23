@@ -2259,7 +2259,15 @@ class wtwtables {
 				$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
 					(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 					VALUES 
-					('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0); ");
+					('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('wtw-readyplayerme',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0); ");
+
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."settings
+					(settingname, settingvalue, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					VALUES 
+					('wtwreadyplayerme_enableavatars','1','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0), 
+					('wtwreadyplayerme_enableanonymous','1','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0), 
+					('wtwreadyplayerme_usewtwaccount','1','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
 			}
 			
 			/* add roles */

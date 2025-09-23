@@ -23,7 +23,7 @@ class wtw {
 	/* declare public $wtw variables */
 	public $version = '3.8.1';
 	public $dbversion = '1.2.27';
-	public $versiondate = '2025-04-01';
+	public $versiondate = '2025-07-14';
 	public $defaultbabylonversion = 'v8.x.x';
 	public $oldversion = '';
 	public $olddbversion = '';
@@ -538,6 +538,12 @@ class wtw {
 		/* validates or creates wtw_config.php, database, and initial admin user */
 		try {
 			$zsetupstep = 0;
+			$zinstall = 'default';
+			if (isset($_GET['install']) && !empty($_GET['install'])) {
+				$zinstall = $_GET['install'];
+			} else if (isset($_POST['wtw_tinstall']) && !empty($_POST['wtw_tinstall'])) {
+				$zinstall = $_POST['wtw_tinstall'];
+			}
 			/* setup up /config/wtw_config.php file if it does not exist */
 			if (!defined('wtw_dbserver') || !defined('wtw_dbname') || !defined('wtw_dbusername') || !defined('wtw_dbpassword') || !defined('wtw_tableprefix')) {
 				$zsetupstep = 1;
@@ -851,7 +857,7 @@ class wtw {
 						}
 						/* set user as admin role */
 						$wtwusers->addUserRole($zuserid, 'Admin');
-						header("Location: ".$this->domainurl."/"); 
+						header("Location: ".$this->domainurl."/?install=".$zpreloaded); 
 						exit();
 					} catch (Exception $e){}
 				}
@@ -1031,7 +1037,11 @@ class wtw {
 					/* check for settings optional services offered - once */
 					$zoptservices = $wtwdb->getSetting("OptionalServicesOffered", null);
 					if (empty($zoptservices)) {
-						$zsetupstep = 8;
+						if ($zinstall == 'default') {
+							$zsetupstep = 9;
+						} else {
+							$zsetupstep = 8;
+						}
 					}
 				}
 			} 
@@ -1105,7 +1115,7 @@ class wtw {
 
 					echo "<h2 class='wtw-login'>Admin Account</h2>";
 					echo "<div class='wtw-label'><b>Admin Email:</b></div>";
-					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' class='wtw-textbox' />";
+					echo "<input name='wtw_tadminemail' type='email' value='' size='20' maxlength='255' autocomplete='email' class='wtw-textbox' />";
 					echo "<div class='wtw-clearspace'></div>";
 					echo "<div class='wtw-label'><b>Admin Password:</b></div>";
 					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='new-password' class='wtw-textbox' />";
@@ -1127,8 +1137,9 @@ class wtw {
 					echo "<div class='wtw-label'><b>Install Method:</b></div>";
 					echo "<div class='wtw-clearspace'></div>";
 					echo "<input name='wtw_installmethod' id='wtw_installmethodpreloaded' type='radio' value='default' class='wtw-textbox' checked /> <span class='wtw-whitetext'>Default - Use preloaded 3D Building and 3D Community.</span><br />";
-					echo "<div class='wtw-whitetext' style='margin-left:100px;'>(no download required).</div><br /><br />";
-					echo "<input name='wtw_installmethod' id='wtw_installmethoddefault' type='radio' value='custom' class='wtw-textbox' /> <span class='wtw-whitetext'>Custom - Select 3D Building and 3D Community to download.</span><br /><br />";
+					echo "<div class='wtw-whitetext' style='margin-left:100px;'>(No Internet or downloads required).</div><br /><br />";
+					echo "<input name='wtw_installmethod' id='wtw_installmethoddefault' type='radio' value='custom' class='wtw-textbox' /> <span class='wtw-whitetext'>Custom - Select 3D Building and 3D Community to download.</span><br />";
+					echo "<div class='wtw-whitetext' style='margin-left:100px;'>(Requires Internet and downloads from WalkTheWeb).</div><br /><br />";
 					echo "<div class='wtw-clearspace'></div>";
 					echo "<div class='wtw-icenter'><input name='wtw_bsave' type='submit' value='Save and Continue' class='wtw-button' /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
@@ -1149,6 +1160,7 @@ class wtw {
 					echo "define(\"wtw_tableprefix\", \"YourTablePrefix\");<br /><br /><br />";
 					echo "<b>OR</b><br /><br /><span class='wtw-error'>CONFIRM you wish to add new tables to this database.</span><br /><br /><br />";
 					echo "<input id='wtw_tconfirm' name='wtw_tconfirm' type='hidden' value='' />";
+					echo "<input id='wtw_tinstall' name='wtw_tinstall' type='hidden' value='".$zinstall."' />";
 					echo "</div></div><div class='wtw-icenter'><input name='wtw_bconfirmsubmit' type='submit' value='Confirm and Continue'  class='wtw-button' onclick=\"dGet('wtw_tconfirm').value='YES';\" /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;
@@ -1162,11 +1174,12 @@ class wtw {
 
 					echo "<h2 class='wtw-login'>Admin Login</h2>";
 					echo "<div class='wtw-label'><b>Admin Email:</b></div>";
-					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' class='wtw-textbox' />";
+					echo "<input name='wtw_tadminemail' type='email' value='' size='20' maxlength='255' autocomplete='email' class='wtw-textbox' />";
 					echo "<div class='wtw-clearspace'></div>";
 					echo "<div class='wtw-label'><b>Admin Password:</b></div>";
 					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='current-password' class='wtw-textbox' />";
 					echo "<div class='wtw-clearspace'></div>";
+					echo "<input id='wtw_tinstall' name='wtw_tinstall' type='hidden' value='".$zinstall."' />";
 
 					echo "<div class='wtw-icenter'><input name='wtw_blogin' type='submit' value='Login'  class='wtw-button' /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
@@ -1202,6 +1215,7 @@ class wtw {
 					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"wtw3dinternet.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "</div><div class='wtw-clearspace'></div>";
+					echo "<input id='wtw_tinstall' name='wtw_tinstall' type='hidden' value='".$zinstall."' />";
 					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
 
 					echo "<br /><hr /><div id='wtw_buildtempsearchresults' class='wtw-indentmore'></div>";
@@ -1243,6 +1257,7 @@ class wtw {
 					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"wtw3dinternet.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "</div><div class='wtw-clearspace'></div>";
+					echo "<input id='wtw_tinstall' name='wtw_tinstall' type='hidden' value='".$zinstall."' />";
 					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
 					
 					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
@@ -1309,7 +1324,7 @@ class wtw {
 					echo "		</div>";
 					echo "	</div>";
 					echo "	<div class='wtw-clearspace'></div>";
-					echo "	<div class='wtw-logincancel' onclick='window.location.href=window.location.href;'>No Thanks</div>";
+					echo "	<div class='wtw-logincancel' onclick='window.location.href=window.location.href;'>No Thanks, Continue without Multiplayer at this time.</div>";
 					echo "</div>";
 					
 					echo "</div></div>";
